@@ -87,7 +87,7 @@ create_app_structure() {
 NODE_ENV=production
 PORT=$APP_PORT
 DATABASE_URL=postgresql://heloc:heloc_secure_2025@localhost:5432/heloc_accelerator
-NEXTAUTH_URL=https://your-domain.com
+NEXTAUTH_URL=https://your-domain.com/heloc
 NEXTAUTH_SECRET=change_this_in_production
 JWT_SECRET=change_this_in_production
 EOF

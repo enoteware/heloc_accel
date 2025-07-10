@@ -74,7 +74,7 @@ if [ ! -f "$APP_DIR/config/.env.production" ]; then
 NODE_ENV=production
 PORT=3000
 DATABASE_URL=postgresql://heloc:heloc_secure_2025@localhost:5432/heloc_accelerator
-NEXTAUTH_URL=https://50.28.106.254
+NEXTAUTH_URL=https://50.28.106.254/heloc
 NEXTAUTH_SECRET=heloc_secure_secret_2025_change_in_production
 JWT_SECRET=heloc_jwt_secret_2025_change_in_production
 ENVEOF
@@ -189,7 +189,7 @@ cat > /opt/heloc-accelerator/config/.env.production << 'EOF'
 NODE_ENV=production
 PORT=3000
 DATABASE_URL=postgresql://heloc:heloc_secure_2025@localhost:5432/heloc_accelerator
-NEXTAUTH_URL=https://50.28.106.254
+NEXTAUTH_URL=https://50.28.106.254/heloc
 NEXTAUTH_SECRET=heloc_secure_secret_2025_change_in_production
 JWT_SECRET=heloc_jwt_secret_2025_change_in_production
 EOF
