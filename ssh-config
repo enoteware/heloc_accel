@@ -1,0 +1,113 @@
+# SSH Configuration for HELOC Accelerator VPS
+# This file can be used with VS Code Remote-SSH extension
+# 
+# To use this config:
+# 1. Copy this file to ~/.ssh/config (or append to existing config)
+# 2. Make sure you have SSH key authentication set up
+# 3. Use "heloc-accelerator" as the host name in VS Code Remote-SSH
+#
+# For password authentication (less secure):
+# - Remove the IdentityFile line
+# - VS Code will prompt for password
+
+Host heloc-accelerator
+    HostName 50.28.106.254
+    Port 22
+    User root
+    # Uncomment and set path to your SSH private key
+    # IdentityFile ~/.ssh/id_rsa
+    
+    # Connection settings
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ConnectTimeout 10
+    
+    # Security settings
+    StrictHostKeyChecking ask
+    UserKnownHostsFile ~/.ssh/known_hosts
+    
+    # Performance optimizations
+    Compression yes
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+    
+    # Forward agent for git operations
+    ForwardAgent yes
+    
+    # X11 forwarding (if needed for GUI apps)
+    ForwardX11 no
+    
+    # Keep connection alive
+    TCPKeepAlive yes
+
+# Alternative configuration for the heloc user (application user)
+Host heloc-app
+    HostName 50.28.106.254
+    Port 22
+    User heloc
+    # Uncomment and set path to your SSH private key
+    # IdentityFile ~/.ssh/id_rsa
+    
+    # Connection settings
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ConnectTimeout 10
+    
+    # Security settings
+    StrictHostKeyChecking ask
+    UserKnownHostsFile ~/.ssh/known_hosts
+    
+    # Performance optimizations
+    Compression yes
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+    
+    # Forward agent for git operations
+    ForwardAgent yes
+    
+    # Keep connection alive
+    TCPKeepAlive yes
+
+# Tunnel configuration for local development
+Host heloc-tunnel
+    HostName 50.28.106.254
+    Port 22
+    User root
+    # Uncomment and set path to your SSH private key
+    # IdentityFile ~/.ssh/id_rsa
+    
+    # Local port forwarding for development
+    # Forward local port 3000 to remote port 3000 (Next.js app)
+    LocalForward 3000 localhost:3000
+    
+    # Forward local port 5432 to remote port 5432 (PostgreSQL)
+    LocalForward 5432 localhost:5432
+    
+    # Forward local port 8080 to remote port 80 (Nginx HTTP)
+    LocalForward 8080 localhost:80
+    
+    # Forward local port 8443 to remote port 443 (Nginx HTTPS)
+    LocalForward 8443 localhost:443
+    
+    # Connection settings
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ConnectTimeout 10
+    
+    # Security settings
+    StrictHostKeyChecking ask
+    UserKnownHostsFile ~/.ssh/known_hosts
+    
+    # Performance optimizations
+    Compression yes
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+    
+    # Forward agent for git operations
+    ForwardAgent yes
+    
+    # Keep connection alive
+    TCPKeepAlive yes

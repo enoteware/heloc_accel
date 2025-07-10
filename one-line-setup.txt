@@ -1,0 +1,22 @@
+# HELOC Accelerator Directory Setup - Single Command
+# Copy and paste this entire block into your SSH session:
+
+echo "🚀 Setting up HELOC Accelerator directory structure..." && \
+useradd -r -s /bin/bash -d /opt/heloc-accelerator -m heloc && \
+mkdir -p /opt/heloc-accelerator/{app,logs,backups,uploads,scripts,ssl,config} && \
+chown -R heloc:heloc /opt/heloc-accelerator && \
+chmod 755 /opt/heloc-accelerator && \
+chmod 755 /opt/heloc-accelerator/{app,scripts,config} && \
+chmod 750 /opt/heloc-accelerator/{logs,backups,uploads,ssl} && \
+touch /opt/heloc-accelerator/logs/{app.log,error.log,access.log} && \
+chown heloc:heloc /opt/heloc-accelerator/logs/*.log && \
+chmod 640 /opt/heloc-accelerator/logs/*.log && \
+mkdir -p /home/heloc/.config/systemd/user && \
+chown -R heloc:heloc /home/heloc/.config && \
+touch /opt/heloc-accelerator/config/.env.production && \
+chown heloc:heloc /opt/heloc-accelerator/config/.env.production && \
+chmod 600 /opt/heloc-accelerator/config/.env.production && \
+echo "✅ Setup complete! Verifying..." && \
+echo "User created:" && id heloc && \
+echo -e "\nDirectory structure:" && ls -la /opt/heloc-accelerator/ && \
+echo -e "\n🎉 HELOC Accelerator directory setup complete!"

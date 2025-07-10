@@ -1,0 +1,23 @@
+Host aca-prod
+    HostName 7d8c739c63.nxcli.io
+    User ad74a3db_2
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+Host heloc-prod
+    HostName 50.28.106.254
+    User root
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+Host heloc-app
+    HostName 50.28.106.254
+    User heloc
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
