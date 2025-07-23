@@ -4,6 +4,14 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Configure for subdirectory deployment
+  basePath: '/heloc',
+  assetPrefix: '/heloc',
+  trailingSlash: true,
+
+  // Output configuration for standalone deployment
+  output: 'standalone',
+
   // Performance optimizations
   compiler: {
     // Remove console.log in production
