@@ -1,0 +1,284 @@
+/* HELOC Accelerator Design System CSS */
+
+/* Typography Utilities */
+.text-display {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.text-h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.text-h2 {
+  font-size: 2.25rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 1.875rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-h4 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-h5 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.text-h6 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.text-body-lg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-body-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Component Base Classes */
+.btn-base {
+  @apply inline-flex items-center justify-center rounded-lg border font-medium transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+}
+
+.btn-primary {
+  @apply btn-base bg-primary-500 hover:bg-primary-600 focus:bg-primary-600 text-white border-transparent;
+}
+
+.btn-secondary {
+  @apply btn-base bg-secondary-500 hover:bg-secondary-600 focus:bg-secondary-600 text-white border-transparent;
+}
+
+.btn-outline {
+  @apply btn-base bg-transparent hover:bg-primary-50 focus:bg-primary-50 text-primary-700 border-primary-300 hover:border-primary-400;
+}
+
+.btn-ghost {
+  @apply btn-base bg-transparent hover:bg-neutral-100 focus:bg-neutral-100 text-neutral-700 border-transparent;
+}
+
+.btn-danger {
+  @apply btn-base bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white border-transparent;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm;
+}
+
+.btn-md {
+  @apply px-4 py-2 text-body;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-body-lg;
+}
+
+.btn-xl {
+  @apply px-8 py-4 text-h6;
+}
+
+/* Input Base Classes */
+.input-base {
+  @apply block w-full rounded-lg border px-3 py-2 transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  @apply disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply placeholder-neutral-400 bg-white text-neutral-900;
+}
+
+.input-default {
+  @apply input-base border-neutral-300 hover:border-neutral-400;
+}
+
+.input-error {
+  @apply input-base border-red-300 focus:border-red-500 focus:ring-red-500;
+}
+
+/* Card Base Classes */
+.card-base {
+  @apply rounded-lg transition-all duration-200;
+}
+
+.card-default {
+  @apply card-base bg-white border border-neutral-200;
+}
+
+.card-elevated {
+  @apply card-base bg-white shadow-lg border border-neutral-100;
+}
+
+.card-outlined {
+  @apply card-base bg-white border-2 border-neutral-300;
+}
+
+/* Badge Base Classes */
+.badge-base {
+  @apply inline-flex items-center rounded-full border font-medium;
+}
+
+.badge-default {
+  @apply badge-base bg-neutral-100 text-neutral-800 border-neutral-200;
+}
+
+.badge-primary {
+  @apply badge-base bg-primary-100 text-primary-800 border-primary-200;
+}
+
+.badge-secondary {
+  @apply badge-base bg-secondary-100 text-secondary-800 border-secondary-200;
+}
+
+.badge-success {
+  @apply badge-base bg-green-100 text-green-800 border-green-200;
+}
+
+.badge-warning {
+  @apply badge-base bg-yellow-100 text-yellow-800 border-yellow-200;
+}
+
+.badge-danger {
+  @apply badge-base bg-red-100 text-red-800 border-red-200;
+}
+
+.badge-info {
+  @apply badge-base bg-blue-100 text-blue-800 border-blue-200;
+}
+
+.badge-sm {
+  @apply px-2 py-0.5 text-xs;
+}
+
+.badge-md {
+  @apply px-2.5 py-1 text-body-sm;
+}
+
+.badge-lg {
+  @apply px-3 py-1.5 text-body;
+}
+
+/* Alert Base Classes */
+.alert-base {
+  @apply rounded-lg border p-4;
+}
+
+.alert-info {
+  @apply alert-base bg-blue-50 border-blue-200 text-blue-800;
+}
+
+.alert-success {
+  @apply alert-base bg-green-50 border-green-200 text-green-800;
+}
+
+.alert-warning {
+  @apply alert-base bg-yellow-50 border-yellow-200 text-yellow-800;
+}
+
+.alert-danger {
+  @apply alert-base bg-red-50 border-red-200 text-red-800;
+}
+
+/* Layout Utilities */
+.container-responsive {
+  @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-sm {
+  @apply container-responsive max-w-container-sm;
+}
+
+.container-md {
+  @apply container-responsive max-w-container-md;
+}
+
+.container-lg {
+  @apply container-responsive max-w-container-lg;
+}
+
+.container-xl {
+  @apply container-responsive max-w-container-xl;
+}
+
+.container-2xl {
+  @apply container-responsive max-w-container-2xl;
+}
+
+/* Spacing Utilities */
+.space-xs {
+  @apply space-y-1;
+}
+
+.space-sm {
+  @apply space-y-2;
+}
+
+.space-md {
+  @apply space-y-4;
+}
+
+.space-lg {
+  @apply space-y-6;
+}
+
+.space-xl {
+  @apply space-y-8;
+}
+
+/* Focus Utilities */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.focus-ring-danger {
+  @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+}
+
+/* Animation Utilities */
+.transition-base {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.hover-lift {
+  @apply transition-base hover:transform hover:-translate-y-1 hover:shadow-lg;
+}
+
+/* Accessibility Utilities */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+}
+
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50;
+  @apply bg-primary-600 text-white px-4 py-2 rounded-br-lg;
+}
