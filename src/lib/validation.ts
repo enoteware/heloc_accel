@@ -12,7 +12,7 @@ export interface ValidationResult {
 }
 
 // Validation rules
-const VALIDATION_RULES = {
+export const VALIDATION_RULES = {
   mortgageBalance: {
     min: 1000,
     max: 10000000,

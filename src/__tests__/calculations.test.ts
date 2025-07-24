@@ -4,7 +4,7 @@ import {
   calculateHELOCAcceleration,
   compareStrategies,
   calculateRemainingBalance,
-  calculateAcceleratedPayoff,
+  // calculateAcceleratedPayoff, // Function not available in current implementation
   type MortgageInput,
   type HELOCInput,
   type AmortizationSchedule,

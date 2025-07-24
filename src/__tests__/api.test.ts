@@ -218,7 +218,7 @@ describe('API Integration Tests', () => {
 
         const response = await getScenario(
           new NextRequest('http://localhost:3000/api/scenario/scenario-1'),
-          { params: { id: 'scenario-1' } }
+          { params: Promise.resolve({ id: 'scenario-1' }) }
         )
         const data = await response.json()
 
@@ -232,7 +232,7 @@ describe('API Integration Tests', () => {
 
         const response = await getScenario(
           new NextRequest('http://localhost:3000/api/scenario/non-existent'),
-          { params: { id: 'non-existent' } }
+          { params: Promise.resolve({ id: 'non-existent' }) }
         )
         const data = await response.json()
 
@@ -251,7 +251,7 @@ describe('API Integration Tests', () => {
 
         const response = await deleteScenario(
           new NextRequest('http://localhost:3000/api/scenario/scenario-1', { method: 'DELETE' }),
-          { params: { id: 'scenario-1' } }
+          { params: Promise.resolve({ id: 'scenario-1' }) }
         )
         const data = await response.json()
 
@@ -265,7 +265,7 @@ describe('API Integration Tests', () => {
 
         const response = await deleteScenario(
           new NextRequest('http://localhost:3000/api/scenario/non-existent', { method: 'DELETE' }),
-          { params: { id: 'non-existent' } }
+          { params: Promise.resolve({ id: 'non-existent' }) }
         )
         const data = await response.json()
 
@@ -293,7 +293,7 @@ describe('API Integration Tests', () => {
           body: JSON.stringify({ enable: true })
         })
 
-        const response = await shareScenario(request, { params: { id: 'scenario-1' } })
+        const response = await shareScenario(request, { params: Promise.resolve({ id: 'scenario-1' }) })
         const data = await response.json()
 
         expect(response.status).toBe(200)
@@ -317,7 +317,7 @@ describe('API Integration Tests', () => {
           body: JSON.stringify({ enable: false })
         })
 
-        const response = await shareScenario(request, { params: { id: 'scenario-1' } })
+        const response = await shareScenario(request, { params: Promise.resolve({ id: 'scenario-1' }) })
         const data = await response.json()
 
         expect(response.status).toBe(200)
@@ -343,7 +343,7 @@ describe('API Integration Tests', () => {
 
         const response = await getSharedScenario(
           new NextRequest('http://localhost:3000/api/shared/valid-token'),
-          { params: { token: 'valid-token' } }
+          { params: Promise.resolve({ token: 'valid-token' }) }
         )
         const data = await response.json()
 
@@ -358,7 +358,7 @@ describe('API Integration Tests', () => {
 
         const response = await getSharedScenario(
           new NextRequest('http://localhost:3000/api/shared/invalid-token'),
-          { params: { token: 'invalid-token' } }
+          { params: Promise.resolve({ token: 'invalid-token' }) }
         )
         const data = await response.json()
 
