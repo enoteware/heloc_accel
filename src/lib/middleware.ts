@@ -25,7 +25,8 @@ export async function authMiddleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Demo mode - bypass all authentication
-  if (process.env.DEMO_MODE === 'true') {
+  const isDemoMode = process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+  if (isDemoMode) {
     // Add demo user info to headers for API routes
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('x-user-id', 'demo-user-default')
@@ -130,7 +131,8 @@ export function getUserFromHeaders(request: NextRequest) {
 // Helper function to require authentication in API routes
 export function requireAuth(request: NextRequest) {
   // Demo mode - return demo user
-  if (process.env.DEMO_MODE === 'true') {
+  const isDemoMode = process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+  if (isDemoMode) {
     return {
       id: 'demo-user-default',
       email: 'demo@example.com'

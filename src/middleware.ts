@@ -136,7 +136,8 @@ export function middleware(request: NextRequest) {
   }
   
   // Authentication check for protected routes (skip in demo mode)
-  if (!isPublicRoute(pathname) && process.env.DEMO_MODE !== 'true') {
+  const isDemoMode = process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+  if (!isPublicRoute(pathname) && !isDemoMode) {
     const token = getTokenFromRequest(request)
 
     if (!token || !verifyToken(token)) {

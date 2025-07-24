@@ -7,11 +7,11 @@ import { randomBytes } from 'crypto'
 // GET /api/scenario/[id] - Get a specific scenario
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = requireAuth(request)
-    const scenarioId = params.id
+    const { id: scenarioId } = await params
 
     const result = await query(
       `SELECT id, name, description, current_mortgage_balance, current_interest_rate,
@@ -66,11 +66,11 @@ export async function GET(
 // DELETE /api/scenario/[id] - Delete a specific scenario
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = requireAuth(request)
-    const scenarioId = params.id
+    const { id: scenarioId } = await params
 
     // Check if scenario exists and belongs to user
     const existingResult = await query(
@@ -116,11 +116,11 @@ export async function DELETE(
 // PUT /api/scenario/[id] - Update a specific scenario
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = requireAuth(request)
-    const scenarioId = params.id
+    const { id: scenarioId } = await params
     const body = await request.json()
 
     // Check if scenario exists and belongs to user

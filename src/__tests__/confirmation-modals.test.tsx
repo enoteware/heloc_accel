@@ -25,8 +25,8 @@ jest.mock('@/components/design-system/Modal', () => ({
   ModalFooter: ({ children }: any) => <div data-testid="modal-footer">{children}</div>
 }))
 
-jest.mock('@/components/design-system/Button', () => ({
-  Button: React.forwardRef<HTMLButtonElement, any>(({ children, onClick, disabled, loading, variant, ...props }, ref) => (
+jest.mock('@/components/design-system/Button', () => {
+  const Button = React.forwardRef<HTMLButtonElement, any>(({ children, onClick, disabled, loading, variant, ...props }, ref) => (
     <button 
       ref={ref}
       onClick={onClick} 
@@ -38,10 +38,12 @@ jest.mock('@/components/design-system/Button', () => ({
       {loading ? 'Loading...' : children}
     </button>
   ))
-}))
+  Button.displayName = 'Button'
+  return { Button }
+})
 
-jest.mock('@/components/design-system/Input', () => ({
-  Input: React.forwardRef<HTMLInputElement, any>(({ onChange, onKeyDown, error, ...props }, ref) => (
+jest.mock('@/components/design-system/Input', () => {
+  const Input = React.forwardRef<HTMLInputElement, any>(({ onChange, onKeyDown, error, ...props }, ref) => (
     <div>
       <input 
         ref={ref}
@@ -52,7 +54,9 @@ jest.mock('@/components/design-system/Input', () => ({
       {error && <span data-testid="input-error">{error}</span>}
     </div>
   ))
-}))
+  Input.displayName = 'Input'
+  return { Input }
+})
 
 describe('FirstConfirmationModal', () => {
   const defaultProps = {

@@ -5,10 +5,10 @@ import { ApiResponse } from '@/lib/types'
 // GET /api/shared/[token] - Get a publicly shared scenario by token
 export async function GET(
   request: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
   try {
-    const shareToken = params.token
+    const { token: shareToken } = await params
 
     if (!shareToken) {
       return NextResponse.json<ApiResponse>({

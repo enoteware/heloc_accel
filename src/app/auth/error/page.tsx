@@ -52,7 +52,7 @@ function AuthErrorContent() {
               <div className="ml-3">
                 <h3 className="text-sm font-semibold text-green-800 mb-2">Demo Mode Active</h3>
                 <p className="text-sm text-green-700 mb-3">
-                  Don't worry! In demo mode, authentication is optional. You can access all features without signing in.
+                  Don&apos;t worry! In demo mode, authentication is optional. You can access all features without signing in.
                 </p>
                 <div className="bg-white rounded border border-green-200 p-3 mb-3">
                   <p className="text-sm font-medium text-green-800 mb-1">Demo Credentials:</p>

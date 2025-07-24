@@ -7,11 +7,11 @@ import { randomBytes } from 'crypto'
 // POST /api/scenario/[id]/share - Generate or toggle sharing for a scenario
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = requireAuth(request)
-    const scenarioId = params.id
+    const { id: scenarioId } = await params
     const body = await request.json()
     const { enable } = body
 
@@ -90,11 +90,11 @@ export async function POST(
 // GET /api/scenario/[id]/share - Get sharing status for a scenario
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = requireAuth(request)
-    const scenarioId = params.id
+    const { id: scenarioId } = await params
 
     // Check if scenario exists and belongs to user
     const result = await query(
