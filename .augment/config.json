@@ -1,0 +1,89 @@
+{
+  "project": {
+    "name": "HELOC Accelerator",
+    "type": "nextjs-typescript",
+    "description": "A web application for calculating and optimizing Home Equity Line of Credit payments",
+    "version": "0.1.0"
+  },
+  "indexing": {
+    "priority_paths": [
+      "src/",
+      "package.json",
+      "tsconfig.json",
+      "next.config.js",
+      "tailwind.config.js",
+      "README.md",
+      "DESIGN_SYSTEM.md"
+    ],
+    "exclude_patterns": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/coverage/**",
+      "**/*.log",
+      "**/.env*"
+    ],
+    "include_file_types": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".json",
+      ".md",
+      ".sql",
+      ".css"
+    ]
+  },
+  "context": {
+    "key_concepts": [
+      "HELOC calculations",
+      "Financial modeling",
+      "User authentication",
+      "Dashboard analytics",
+      "Payment optimization",
+      "Interest calculations",
+      "Amortization schedules"
+    ],
+    "business_domain": "financial-services",
+    "tech_stack": [
+      "Next.js 15",
+      "TypeScript",
+      "React 18",
+      "PostgreSQL",
+      "Tailwind CSS",
+      "NextAuth.js",
+      "Recharts"
+    ]
+  },
+  "code_patterns": {
+    "component_structure": "src/components/",
+    "api_routes": "src/app/api/",
+    "pages": "src/app/",
+    "utilities": "src/lib/",
+    "types": "src/lib/types.ts",
+    "styles": "src/styles/",
+    "tests": "src/__tests__/"
+  },
+  "quality_gates": {
+    "typescript_strict": true,
+    "test_coverage_threshold": 80,
+    "lint_on_save": true,
+    "format_on_save": true
+  },
+  "security": {
+    "sensitive_patterns": [
+      "password",
+      "secret",
+      "token",
+      "api_key",
+      "private_key",
+      "database_url",
+      "jwt_secret"
+    ],
+    "financial_data_protection": true,
+    "pii_handling": true
+  }
+}

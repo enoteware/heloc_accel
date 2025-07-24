@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/middleware'
+import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { ApiResponse } from '@/lib/types'
 import bcrypt from 'bcryptjs'
@@ -7,7 +7,13 @@ import bcrypt from 'bcryptjs'
 // PUT /api/profile/password - Change user password
 export async function PUT(request: NextRequest) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const body = await request.json()
 
     const { currentPassword, newPassword, confirmPassword } = body
@@ -40,7 +46,7 @@ export async function PUT(request: NextRequest) {
     // Get current user data
     const userResult = await query(
       'SELECT password_hash FROM users WHERE id = $1',
-      [user.id]
+      [session.user.id]
     )
 
     if (userResult.rows.length === 0) {
@@ -77,7 +83,7 @@ export async function PUT(request: NextRequest) {
     // Update password
     await query(
       'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-      [newPasswordHash, user.id]
+      [newPasswordHash, session.user.id]
     )
 
     return NextResponse.json<ApiResponse>({
@@ -87,14 +93,6 @@ export async function PUT(request: NextRequest) {
 
   } catch (error) {
     console.error('Change password error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to change password'

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, Suspense, lazy } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getDemoScenarios, deleteDemoScenario, updateDemoScenario, generateSampleScenarios, clearDemoScenarios, getStorageInfo } from '@/lib/demo-storage'
@@ -63,7 +63,7 @@ export default function Dashboard() {
       }
       return 'demo-user-default'
     }
-    return (session?.user as any)?.id || session?.user?.email
+    return session?.user?.id || session?.user?.email
   }
 
   // Initialize demo data if in demo mode
@@ -71,24 +71,24 @@ export default function Dashboard() {
     if (isDemoMode) {
       const userId = getUserId()
       // Check storage availability
-      const info = getStorageInfo(userId)
+      const info = getStorageInfo(userId || 'demo-user-default')
       setStorageInfo(info)
 
       if (info.available) {
-        generateSampleScenarios(userId)
+        generateSampleScenarios(userId || 'demo-user-default')
         loadScenarios()
       } else {
         setError(info.error || 'localStorage is not available')
       }
     }
-  }, [isDemoMode, session?.user?.email])
+  }, [isDemoMode]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Redirect to login if not authenticated (unless in demo mode)
   useEffect(() => {
     if (isDemoMode) return // Skip auth check in demo mode
     if (status === 'loading') return
     if (!session) {
-      router.push('/auth/signin?callbackUrl=/dashboard')
+      router.push('/login?callbackUrl=/dashboard')
     }
   }, [session, status, router, isDemoMode])
 
@@ -106,7 +106,7 @@ export default function Dashboard() {
       if (isDemoMode) {
         // Load from localStorage in demo mode
         const userId = getUserId()
-        const demoScenarios = getDemoScenarios(userId)
+        const demoScenarios = getDemoScenarios(userId || 'demo-user-default')
         // Convert demo scenarios to dashboard format
         const formattedScenarios = demoScenarios.map(scenario => ({
           id: scenario.id,
@@ -123,7 +123,7 @@ export default function Dashboard() {
         setScenarios(formattedScenarios)
       } else {
         // Load from API in normal mode
-        const response = await fetch('/api/scenario', {
+        const response = await fetch('/heloc/api/scenario', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -194,13 +194,13 @@ export default function Dashboard() {
       if (isDemoMode) {
         // Delete from localStorage in demo mode
         const userId = getUserId()
-        const success = deleteDemoScenario(scenarioToDelete, userId)
+        const success = deleteDemoScenario(scenarioToDelete, userId || 'demo-user-default')
         if (!success) {
           throw new Error('Scenario not found')
         }
       } else {
         // Delete via API in normal mode
-        const response = await fetch(`/api/scenario/${scenarioToDelete}`, {
+        const response = await fetch(`/heloc/api/scenario/${scenarioToDelete}`, {
           method: 'DELETE',
         })
 
@@ -264,7 +264,7 @@ export default function Dashboard() {
   const toggleScenarioSharing = async (scenarioId: string, enable: boolean) => {
     try {
       setSharingLoading(true)
-      const response = await fetch(`/api/scenario/${scenarioId}/share`, {
+      const response = await fetch(`/heloc/api/scenario/${scenarioId}/share`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ export default function Dashboard() {
 
       // Clear all demo scenarios
       const userId = getUserId()
-      clearDemoScenarios(userId)
+      clearDemoScenarios(userId || 'demo-user-default')
 
       // Update local state
       setScenarios([])
@@ -391,7 +391,7 @@ export default function Dashboard() {
 
   const handleRegenerateSampleData = () => {
     const userId = getUserId()
-    generateSampleScenarios(userId)
+    generateSampleScenarios(userId || 'demo-user-default')
     loadScenarios()
     setShowSuccessModal(false)
   }
@@ -407,95 +407,19 @@ export default function Dashboard() {
     )
   }
 
-  if (!isDemoMode && !session) {
-    return null
+  if (!isDemoMode && !session && status !== 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Redirecting to login...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Navigation Header */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
-                HELOC Accelerator
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/style-guide"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
-              >
-                Style Guide
-              </Link>
-              <Link
-                href="/calculator"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
-              >
-                New Calculation
-              </Link>
-
-              <div className="relative group">
-                <button className="flex items-center text-sm text-gray-700 hover:text-gray-900">
-                  <span className="mr-2">
-                    {isDemoMode ? 'Demo User' : (session?.user?.name || session?.user?.email)}
-                  </span>
-                  {isDemoMode && (
-                    <span className="mr-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
-                      DEMO
-                    </span>
-                  )}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-                  {isDemoMode ? (
-                    <>
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="text-sm font-medium text-gray-900">Demo Mode Active</p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          Demo Credentials (if needed):
-                        </p>
-                        <div className="text-xs text-gray-500 mt-1 font-mono">
-                          <p>Email: demo@helocaccel.com</p>
-                          <p>Password: DemoUser123!</p>
-                        </div>
-                      </div>
-                      <div className="px-4 py-2">
-                        <p className="text-xs text-gray-600">
-                          ✅ All features available<br/>
-                          💾 Data stored locally<br/>
-                          🔄 No account required
-                        </p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Profile Settings
-                      </Link>
-                      <button
-                        onClick={() => signOut({ callbackUrl: '/' })}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Sign Out
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Demo Mode Banner */}
         {isDemoMode && (

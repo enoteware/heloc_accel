@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/middleware'
+import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { validateCalculatorInputs, sanitizeCalculatorInputs } from '@/lib/validation'
 import { ApiResponse, CreateScenarioInput, Scenario } from '@/lib/types'
@@ -7,7 +7,13 @@ import { ApiResponse, CreateScenarioInput, Scenario } from '@/lib/types'
 // GET /api/scenario - Get all scenarios for authenticated user
 export async function GET(request: NextRequest) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
 
     const result = await query(
       `SELECT id, name, description, current_mortgage_balance, current_interest_rate,
@@ -20,7 +26,7 @@ export async function GET(request: NextRequest) {
        FROM scenarios
        WHERE user_id = $1
        ORDER BY updated_at DESC`,
-      [user.id]
+      [session.user.id]
     )
 
     const scenarios = result.rows.map((row: any) => ({
@@ -37,14 +43,6 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Get scenarios error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to retrieve scenarios'
@@ -55,7 +53,13 @@ export async function GET(request: NextRequest) {
 // POST /api/scenario - Create new scenario
 export async function POST(request: NextRequest) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const body = await request.json()
 
     // Extract scenario metadata and calculation inputs
@@ -83,7 +87,7 @@ export async function POST(request: NextRequest) {
     // Check if scenario name already exists for this user
     const existingResult = await query(
       'SELECT id FROM scenarios WHERE user_id = $1 AND name = $2',
-      [user.id, scenarioName.trim()]
+      [session.user.id, scenarioName.trim()]
     )
 
     if (existingResult.rows.length > 0) {
@@ -134,7 +138,7 @@ export async function POST(request: NextRequest) {
         $19, $20, $21, $22, $23, $24
       ) RETURNING id, name, description, created_at, updated_at`,
       [
-        user.id,
+        session.user.id,
         scenarioName.trim(),
         description?.trim() || null,
         sanitizedInputs.currentMortgageBalance,
@@ -177,14 +181,6 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Save scenario error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to save scenario'

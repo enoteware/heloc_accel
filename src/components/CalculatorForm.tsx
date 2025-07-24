@@ -129,7 +129,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="currentMortgageBalance"
                 value={formData.currentMortgageBalance || ''}
                 onChange={(e) => handleInputChange('currentMortgageBalance', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="350,000"
                 required
               />
@@ -149,7 +149,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="currentInterestRate"
                 value={formData.currentInterestRate || ''}
                 onChange={(e) => handleInputChange('currentInterestRate', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="6.5"
                 step="0.01"
                 min="0"
@@ -172,7 +172,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               id="remainingTermMonths"
               value={formData.remainingTermMonths || ''}
               onChange={(e) => handleInputChange('remainingTermMonths', parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               placeholder="300"
               min="1"
               max="480"
@@ -197,7 +197,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyPayment"
                 value={formData.monthlyPayment || ''}
                 onChange={(e) => handleInputChange('monthlyPayment', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="2,200"
                 required
               />
@@ -224,7 +224,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="helocLimit"
                 value={formData.helocLimit || ''}
                 onChange={(e) => handleInputChange('helocLimit', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="100,000"
                 required
               />
@@ -244,7 +244,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="helocInterestRate"
                 value={formData.helocInterestRate || ''}
                 onChange={(e) => handleInputChange('helocInterestRate', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="7.5"
                 step="0.01"
                 min="0"
@@ -275,7 +275,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyGrossIncome"
                 value={formData.monthlyGrossIncome || ''}
                 onChange={(e) => handleInputChange('monthlyGrossIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="8,500"
                 required
               />
@@ -296,7 +296,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyNetIncome"
                 value={formData.monthlyNetIncome || ''}
                 onChange={(e) => handleInputChange('monthlyNetIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="6,800"
                 required
               />
@@ -317,7 +317,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyExpenses"
                 value={formData.monthlyExpenses || ''}
                 onChange={(e) => handleInputChange('monthlyExpenses', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="4,500"
                 required
               />
@@ -338,7 +338,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyDiscretionaryIncome"
                 value={formData.monthlyDiscretionaryIncome || ''}
                 onChange={(e) => handleInputChange('monthlyDiscretionaryIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="2,300"
                 required
               />
@@ -368,7 +368,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="propertyValue"
                 value={formData.propertyValue || ''}
                 onChange={(e) => handleInputChange('propertyValue', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="500,000"
               />
             </div>
@@ -385,7 +385,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="propertyTaxMonthly"
                 value={formData.propertyTaxMonthly || ''}
                 onChange={(e) => handleInputChange('propertyTaxMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="850"
               />
             </div>
@@ -402,7 +402,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="insuranceMonthly"
                 value={formData.insuranceMonthly || ''}
                 onChange={(e) => handleInputChange('insuranceMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="250"
               />
             </div>
@@ -419,7 +419,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="hoaFeesMonthly"
                 value={formData.hoaFeesMonthly || ''}
                 onChange={(e) => handleInputChange('hoaFeesMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="0"
               />
             </div>

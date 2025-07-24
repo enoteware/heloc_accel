@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
+import Logo from '@/components/Logo'
 
 export default function Home() {
   const router = useRouter()
@@ -20,13 +21,22 @@ export default function Home() {
     if (isDemoMode || session) {
       router.push('/calculator')
     } else {
-      router.push('/auth/signin?callbackUrl=/calculator')
+      router.push('/login?callbackUrl=/calculator')
     }
   }
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
+          <div className="flex justify-center mb-8">
+            <Logo
+              size="xl"
+              showText={false}
+              clickable={false}
+              priority={true}
+              className="drop-shadow-lg"
+            />
+          </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
             HELOC Accelerator
           </h1>
@@ -77,12 +87,22 @@ export default function Home() {
         </div>
 
         <div className="text-center mt-16">
-          <button
-            onClick={handleGetStarted}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition duration-200"
-          >
-            {isDemoMode ? 'Try the Calculator (Demo Mode)' : session ? 'Calculate Your Savings' : 'Get Started - Sign In to Calculate'}
-          </button>
+          <div className="space-y-4">
+            <button
+              onClick={handleGetStarted}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition duration-200"
+            >
+              {isDemoMode ? 'Try the Calculator (Demo Mode)' : session ? 'Calculate Your Savings' : 'Get Started - Sign In to Calculate'}
+            </button>
+            <div>
+              <button
+                onClick={() => router.push('/formulas')}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg text-sm transition duration-200 ml-4"
+              >
+                📊 View Formulas & Logic
+              </button>
+            </div>
+          </div>
           {!isDemoMode && !session && (
             <p className="mt-2 text-sm text-gray-600">
               Sign in to access the HELOC calculator and save your scenarios

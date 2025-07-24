@@ -39,40 +39,59 @@ function ComparePageContent() {
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated (skip in demo mode)
   useEffect(() => {
+    if (isDemoMode) return // Skip auth check in demo mode
     if (status === 'loading') return
     if (!session) {
-      router.push('/auth/signin?callbackUrl=/compare')
+      router.push('/login?callbackUrl=/compare')
     }
-  }, [session, status, router])
+  }, [session, status, router, isDemoMode])
 
   // Load scenarios and pre-select from URL params
   useEffect(() => {
-    if (session) {
+    if (isDemoMode || session) {
       loadScenarios()
       
       // Pre-select scenarios from URL params
       const preSelected = searchParams.get('scenarios')?.split(',') || []
       setSelectedScenarios(preSelected.slice(0, 3)) // Max 3 scenarios
     }
-  }, [session, searchParams])
+  }, [session, searchParams, isDemoMode])
 
   const loadScenarios = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/scenario')
       
-      if (!response.ok) {
-        throw new Error('Failed to load scenarios')
-      }
-
-      const data = await response.json()
-      if (data.success) {
-        setScenarios(data.data)
+      if (isDemoMode) {
+        // In demo mode, load scenarios from localStorage
+        const demoUserId = session?.user?.id || 'demo-user-001'
+        const storageKey = `heloc_demo_user_${demoUserId}_scenarios`
+        const storedScenarios = localStorage.getItem(storageKey)
+        
+        if (storedScenarios) {
+          const parsedScenarios = JSON.parse(storedScenarios)
+          setScenarios(parsedScenarios)
+        } else {
+          setScenarios([])
+        }
       } else {
-        throw new Error(data.error || 'Failed to load scenarios')
+        // Production mode - fetch from API
+        const response = await fetch('/api/scenario')
+        
+        if (!response.ok) {
+          throw new Error('Failed to load scenarios')
+        }
+
+        const data = await response.json()
+        if (data.success) {
+          setScenarios(data.data)
+        } else {
+          throw new Error(data.error || 'Failed to load scenarios')
+        }
       }
     } catch (err) {
       console.error('Error loading scenarios:', err)
@@ -133,7 +152,7 @@ function ComparePageContent() {
     )
   }
 
-  if (!session) {
+  if (!isDemoMode && !session) {
     return null
   }
 
@@ -142,6 +161,25 @@ function ComparePageContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
+        {/* Demo Mode Banner */}
+        {isDemoMode && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-semibold text-green-800">Demo Mode - Scenario Comparison</h3>
+                <p className="text-sm text-green-700">
+                  Comparing scenarios stored locally in your browser. Data will not be saved to a database.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">

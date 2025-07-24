@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/middleware'
+import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { ApiResponse } from '@/lib/types'
 import { randomBytes } from 'crypto'
@@ -10,7 +10,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const { id: scenarioId } = await params
 
     const result = await query(
@@ -24,7 +30,7 @@ export async function GET(
               created_at, updated_at, is_public, public_share_token
        FROM scenarios
        WHERE id = $1 AND (user_id = $2 OR is_public = true)`,
-      [scenarioId, user.id]
+      [scenarioId, session.user.id]
     )
 
     if (result.rows.length === 0) {
@@ -48,14 +54,6 @@ export async function GET(
 
   } catch (error) {
     console.error('Get scenario error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to retrieve scenario'
@@ -69,13 +67,19 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const { id: scenarioId } = await params
 
     // Check if scenario exists and belongs to user
     const existingResult = await query(
       'SELECT id FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, user.id]
+      [scenarioId, session.user.id]
     )
 
     if (existingResult.rows.length === 0) {
@@ -88,7 +92,7 @@ export async function DELETE(
     // Delete the scenario (cascade will delete related calculation_results)
     await query(
       'DELETE FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, user.id]
+      [scenarioId, session.user.id]
     )
 
     return NextResponse.json<ApiResponse>({
@@ -98,14 +102,6 @@ export async function DELETE(
 
   } catch (error) {
     console.error('Delete scenario error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to delete scenario'
@@ -119,14 +115,20 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const { id: scenarioId } = await params
     const body = await request.json()
 
     // Check if scenario exists and belongs to user
     const existingResult = await query(
       'SELECT id FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, user.id]
+      [scenarioId, session.user.id]
     )
 
     if (existingResult.rows.length === 0) {
@@ -148,7 +150,7 @@ export async function PUT(
            updated_at = CURRENT_TIMESTAMP
        WHERE id = $4 AND user_id = $5
        RETURNING id, name, description, updated_at`,
-      [name, description, is_public, scenarioId, user.id]
+      [name, description, is_public, scenarioId, session.user.id]
     )
 
     const updatedScenario = result.rows[0]
@@ -166,14 +168,6 @@ export async function PUT(
 
   } catch (error) {
     console.error('Update scenario error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to update scenario'

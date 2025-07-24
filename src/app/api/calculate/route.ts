@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/middleware'
+import { auth } from '@/auth'
 import { validateCalculatorInputs, sanitizeCalculatorInputs } from '@/lib/validation'
 import { compareStrategies } from '@/lib/calculations'
 import { ApiResponse } from '@/lib/types'
@@ -14,8 +14,19 @@ export async function POST(request: NextRequest) {
       return rateLimitResponse
     }
 
-    // Require authentication
-    const user = requireAuth(request)
+    // Check authentication (skip in demo mode)
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+    let user = null
+    if (!isDemoMode) {
+      const session = await auth()
+      if (!session?.user) {
+        return NextResponse.json<ApiResponse>({
+          success: false,
+          error: 'Authentication required'
+        }, { status: 401 })
+      }
+      user = session.user
+    }
 
     const body = await request.json()
 
@@ -114,7 +125,7 @@ export async function POST(request: NextRequest) {
       },
       metadata: {
         calculatedAt: new Date().toISOString(),
-        userId: user.id,
+        userId: user?.id || 'demo',
         inputs: sanitizedInputs
       }
     }

@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/database'
-import { hashPassword, generateRandomToken } from '@/lib/auth'
+import { hashPassword, generateRandomToken } from '@/lib/auth-utils'
 import { CreateUserInput, ApiResponse } from '@/lib/types'
-import { applyRateLimit, registrationRateLimit } from '@/lib/rate-limit'
-import { sanitizeUserInput } from '@/lib/sanitization'
-import { applySecurityHeaders, defaultSecurityHeaders } from '@/lib/security-headers'
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -14,17 +11,8 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
 
 export async function POST(request: NextRequest) {
   try {
-    // Apply rate limiting
-    const rateLimitResponse = applyRateLimit(request, registrationRateLimit)
-    if (rateLimitResponse) {
-      return rateLimitResponse
-    }
-
     const body = await request.json()
-
-    // Sanitize input
-    const sanitizedInput = sanitizeUserInput(body)
-    const { email, password, firstName, lastName } = sanitizedInput
+    const { email, password, firstName, lastName } = body
 
     // Validate required fields
     if (!email || !password) {
@@ -98,7 +86,7 @@ export async function POST(request: NextRequest) {
     // For now, we'll just log the token
     console.log(`Email verification token for ${email}: ${emailVerificationToken}`)
 
-    const response = NextResponse.json<ApiResponse>({
+    return NextResponse.json<ApiResponse>({
       success: true,
       data: {
         id: newUser.id,
@@ -111,17 +99,11 @@ export async function POST(request: NextRequest) {
       message: 'User created successfully. Please check your email for verification instructions.'
     }, { status: 201 })
 
-    // Apply security headers
-    return applySecurityHeaders(response, defaultSecurityHeaders)
-
   } catch (error) {
     console.error('Registration error:', error)
-    const response = NextResponse.json<ApiResponse>({
+    return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Internal server error'
     }, { status: 500 })
-
-    // Apply security headers even to error responses
-    return applySecurityHeaders(response, defaultSecurityHeaders)
   }
 }

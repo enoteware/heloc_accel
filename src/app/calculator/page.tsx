@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import CalculatorForm from '@/components/CalculatorForm'
 import { CalculatorValidationInput } from '@/lib/validation'
 import { getDemoScenario, generateSampleScenarios } from '@/lib/demo-storage'
+import { getApiUrl } from '@/lib/api-url'
+import Logo from '@/components/Logo'
 
 // Lazy load heavy components that are only shown after calculation
 const ResultsDisplay = lazy(() => import('@/components/ResultsDisplay'))
@@ -59,8 +61,8 @@ function CalculatorPageContent() {
   useEffect(() => {
     if (isDemoMode) return // Skip auth check in demo mode
     if (status === 'loading') return // Still loading
-    if (!session) {
-      router.push('/auth/signin?callbackUrl=/calculator')
+    if (!session?.user) {
+      router.push('/login?callbackUrl=/calculator')
     }
   }, [session, status, router, isDemoMode])
 
@@ -92,7 +94,8 @@ function CalculatorPageContent() {
         }
       } else {
         // Load from API in normal mode
-        const response = await fetch(`/api/scenario/${scenarioId}`)
+        const basePath = process.env.NODE_ENV === 'production' ? '/heloc' : '';
+        const response = await fetch(`${basePath}/api/scenario/${scenarioId}`)
         if (!response.ok) {
           throw new Error('Failed to load scenario')
         }
@@ -161,7 +164,7 @@ function CalculatorPageContent() {
     setError(null)
 
     try {
-      const response = await fetch('/api/calculate', {
+      const response = await fetch(getApiUrl('api/calculate'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -236,7 +239,7 @@ function CalculatorPageContent() {
     )
   }
 
-  if (!isDemoMode && !session) {
+  if (!isDemoMode && !session?.user) {
     return null // Will redirect to login
   }
 
@@ -245,6 +248,15 @@ function CalculatorPageContent() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-6">
+            <Logo
+              size="lg"
+              showText={false}
+              clickable={true}
+              priority={true}
+              className="drop-shadow-md"
+            />
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             {editingScenarioId ? 'Edit Scenario' : 'HELOC Accelerator Calculator'}
           </h1>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/database'
-import { verifyPassword, generateToken } from '@/lib/auth'
+import { verifyPassword, generateToken } from '@/lib/auth-utils'
 import { getDummyUserAccount } from '@/lib/dummy-users'
 import { User, ApiResponse } from '@/lib/types'
 

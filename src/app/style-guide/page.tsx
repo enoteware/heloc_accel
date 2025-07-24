@@ -40,6 +40,7 @@ import {
   FormActions,
   ValidationMessage
 } from '@/components/design-system';
+import Logo from '@/components/Logo';
 
 export default function StyleGuidePage() {
   const [showCode, setShowCode] = useState<string | null>(null);
@@ -70,10 +71,10 @@ export default function StyleGuidePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <img
-                  src="/heloc_accel.svg"
-                  alt="HELOC Accelerator Logo"
-                  className="h-12 w-auto"
+                <Logo
+                  size="md"
+                  showText={false}
+                  clickable={false}
                 />
                 <div>
                   <h1 className="text-h1 text-neutral-900 dark:text-neutral-100">Design System</h1>
@@ -96,6 +97,7 @@ export default function StyleGuidePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <a href="#logo" className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">Logo</a>
               <a href="#colors" className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">Colors</a>
               <a href="#typography" className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">Typography</a>
               <a href="#spacing" className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">Spacing</a>
@@ -115,6 +117,105 @@ export default function StyleGuidePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Logo Section */}
+        <section id="logo" className="mb-12">
+          <h2 className="text-h2 text-neutral-900 mb-6">Logo</h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Logo Variants */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Logo Variants</CardTitle>
+                <CardDescription>Different logo styles for various contexts</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Default Logo</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo variant="default" size="lg" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Logo with Text</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo variant="default" size="md" showText={true} clickable={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-body font-medium mb-3">White Logo (on dark background)</h4>
+                    <div className="p-4 bg-neutral-800 rounded-lg">
+                      <Logo variant="white" size="lg" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Logo Sizes */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Logo Sizes</CardTitle>
+                <CardDescription>Different logo sizes for various use cases</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Small (32px)</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo size="sm" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Medium (48px)</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo size="md" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Large (64px)</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo size="lg" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-body font-medium mb-3">Extra Large (96px)</h4>
+                    <div className="p-4 bg-neutral-50 rounded-lg">
+                      <Logo size="xl" showText={false} clickable={false} />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <CodeBlock
+            title="Logo Usage"
+            code={`// Basic logo
+<Logo />
+
+// Logo with text
+<Logo showText={true} />
+
+// Different sizes
+<Logo size="sm" />
+<Logo size="md" />
+<Logo size="lg" />
+<Logo size="xl" />
+
+// Different variants
+<Logo variant="default" />
+<Logo variant="white" />
+<Logo variant="dark" />
+
+// Non-clickable logo
+<Logo clickable={false} />
+
+// Priority loading (for above-the-fold)
+<Logo priority={true} />`}
+          />
+        </section>
 
         {/* Colors Section */}
         <section id="colors" className="mb-12">

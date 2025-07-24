@@ -24,6 +24,8 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  
+  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
   // Profile form state
   const [profileForm, setProfileForm] = useState({
@@ -40,40 +42,65 @@ export default function ProfilePage() {
   })
   const [showPasswordForm, setShowPasswordForm] = useState(false)
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated (skip in demo mode)
   useEffect(() => {
+    if (isDemoMode) return // Skip auth check in demo mode
     if (status === 'loading') return
     if (!session) {
-      router.push('/auth/signin?callbackUrl=/profile')
+      router.push('/login?callbackUrl=/profile')
     }
-  }, [session, status, router])
+  }, [session, status, router, isDemoMode])
 
   // Load profile data
   useEffect(() => {
-    if (session) {
+    if (isDemoMode || session) {
       loadProfile()
     }
-  }, [session])
+  }, [session, isDemoMode])
 
   const loadProfile = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/profile')
       
-      if (!response.ok) {
-        throw new Error('Failed to load profile')
-      }
-
-      const data = await response.json()
-      if (data.success) {
-        setProfile(data.data)
+      if (isDemoMode) {
+        // In demo mode, create mock profile data
+        const demoUser = session?.user || { id: 'demo-user-001', email: 'demo@helocaccel.com', name: 'Demo User' }
+        const mockProfile: UserProfile = {
+          id: demoUser.id,
+          email: demoUser.email || 'demo@helocaccel.com',
+          firstName: demoUser.name?.split(' ')[0] || 'Demo',
+          lastName: demoUser.name?.split(' ')[1] || 'User',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          emailVerified: true
+        }
+        
+        setProfile(mockProfile)
         setProfileForm({
-          firstName: data.data.firstName || '',
-          lastName: data.data.lastName || '',
-          email: data.data.email || ''
+          firstName: mockProfile.firstName,
+          lastName: mockProfile.lastName,
+          email: mockProfile.email
         })
       } else {
-        throw new Error(data.error || 'Failed to load profile')
+        // Production mode - fetch from API
+        const response = await fetch('/api/profile')
+        
+        if (!response.ok) {
+          throw new Error('Failed to load profile')
+        }
+
+        const data = await response.json()
+        if (data.success) {
+          setProfile(data.data)
+          setProfileForm({
+            firstName: data.data.firstName || '',
+            lastName: data.data.lastName || '',
+            email: data.data.email || ''
+          })
+        } else {
+          throw new Error(data.error || 'Failed to load profile')
+        }
       }
     } catch (err) {
       console.error('Error loading profile:', err)
@@ -90,20 +117,35 @@ export default function ProfilePage() {
 
     try {
       setSaving(true)
-      const response = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileForm)
-      })
-
-      const data = await response.json()
-      if (data.success) {
-        setProfile(prev => prev ? { ...prev, ...data.data } : null)
-        setSuccess('Profile updated successfully')
+      
+      if (isDemoMode) {
+        // In demo mode, simulate profile update
+        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate network delay
+        setProfile(prev => prev ? { 
+          ...prev, 
+          firstName: profileForm.firstName,
+          lastName: profileForm.lastName,
+          email: profileForm.email,
+          updatedAt: new Date().toISOString()
+        } : null)
+        setSuccess('Profile updated successfully (Demo Mode)')
       } else {
-        throw new Error(data.error || 'Failed to update profile')
+        // Production mode - send to API
+        const response = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(profileForm)
+        })
+
+        const data = await response.json()
+        if (data.success) {
+          setProfile(prev => prev ? { ...prev, ...data.data } : null)
+          setSuccess('Profile updated successfully')
+        } else {
+          throw new Error(data.error || 'Failed to update profile')
+        }
       }
     } catch (err) {
       console.error('Error updating profile:', err)
@@ -120,25 +162,39 @@ export default function ProfilePage() {
 
     try {
       setSaving(true)
-      const response = await fetch('/api/profile/password', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(passwordForm)
-      })
-
-      const data = await response.json()
-      if (data.success) {
+      
+      if (isDemoMode) {
+        // In demo mode, simulate password change
+        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate network delay
         setPasswordForm({
           currentPassword: '',
           newPassword: '',
           confirmPassword: ''
         })
         setShowPasswordForm(false)
-        setSuccess('Password changed successfully')
+        setSuccess('Password changed successfully (Demo Mode)')
       } else {
-        throw new Error(data.error || 'Failed to change password')
+        // Production mode - send to API
+        const response = await fetch('/api/profile/password', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(passwordForm)
+        })
+
+        const data = await response.json()
+        if (data.success) {
+          setPasswordForm({
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+          })
+          setShowPasswordForm(false)
+          setSuccess('Password changed successfully')
+        } else {
+          throw new Error(data.error || 'Failed to change password')
+        }
       }
     } catch (err) {
       console.error('Error changing password:', err)
@@ -169,13 +225,32 @@ export default function ProfilePage() {
     )
   }
 
-  if (!session) {
+  if (!isDemoMode && !session) {
     return null
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
+        {/* Demo Mode Banner */}
+        {isDemoMode && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-semibold text-green-800">Demo Mode - Profile Settings</h3>
+                <p className="text-sm text-green-700">
+                  Profile changes are simulated and will not be saved to a database. Password changes are for demonstration only.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/middleware'
+import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { ApiResponse } from '@/lib/types'
 import bcrypt from 'bcryptjs'
@@ -7,14 +7,20 @@ import bcrypt from 'bcryptjs'
 // GET /api/profile - Get user profile information
 export async function GET(request: NextRequest) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
 
     const result = await query(
       `SELECT id, email, first_name, last_name, created_at, updated_at, 
               last_login, email_verified
        FROM users 
        WHERE id = $1`,
-      [user.id]
+      [session.user.id]
     )
 
     if (result.rows.length === 0) {
@@ -43,14 +49,6 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Get profile error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to retrieve profile'
@@ -61,7 +59,13 @@ export async function GET(request: NextRequest) {
 // PUT /api/profile - Update user profile information
 export async function PUT(request: NextRequest) {
   try {
-    const user = requireAuth(request)
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
     const body = await request.json()
 
     const { firstName, lastName, email } = body
@@ -84,10 +88,10 @@ export async function PUT(request: NextRequest) {
     }
 
     // Check if email is already taken by another user
-    if (email !== user.email) {
+    if (email !== session.user.email) {
       const existingUser = await query(
         'SELECT id FROM users WHERE email = $1 AND id != $2',
-        [email, user.id]
+        [email, session.user.id]
       )
 
       if (existingUser.rows.length > 0) {
@@ -104,7 +108,7 @@ export async function PUT(request: NextRequest) {
        SET first_name = $1, last_name = $2, email = $3, updated_at = CURRENT_TIMESTAMP
        WHERE id = $4
        RETURNING id, email, first_name, last_name, updated_at`,
-      [firstName.trim(), lastName.trim(), email.trim(), user.id]
+      [firstName.trim(), lastName.trim(), email.trim(), session.user.id]
     )
 
     const updatedUser = result.rows[0]
@@ -123,14 +127,6 @@ export async function PUT(request: NextRequest) {
 
   } catch (error) {
     console.error('Update profile error:', error)
-
-    if (error instanceof Error && error.message === 'Authentication required') {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-
     return NextResponse.json<ApiResponse>({
       success: false,
       error: 'Failed to update profile'
