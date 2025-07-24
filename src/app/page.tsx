@@ -148,6 +148,13 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Deployment verification timestamp */}
+        <div className="text-center mt-16 pt-8 border-t border-gray-200">
+          <p className="text-xs text-gray-400">
+            Pipeline Test - Deployed: {new Date().toISOString()}
+          </p>
+        </div>
       </div>
     </main>
   )
