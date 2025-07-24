@@ -47,6 +47,8 @@
     "@next/bundle-analyzer": "^15.4.3",
     "@playwright/test": "^1.54.1",
     "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.6.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
