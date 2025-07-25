@@ -4,12 +4,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configure for subdirectory deployment (only in production)
-  ...(process.env.NODE_ENV === 'production' && {
-    basePath: '/heloc',
-    assetPrefix: '/heloc',
-    trailingSlash: true,
-  }),
+  // No basePath needed since we're using a subdomain
+  // If deploying to a subdirectory, uncomment:
+  // basePath: '/heloc',
+  // assetPrefix: '/heloc',
 
   // Output configuration for standalone deployment
   output: 'standalone',

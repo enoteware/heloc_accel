@@ -18,6 +18,13 @@ HELOC Accelerator is a Next.js 15 financial web application that helps homeowner
 - `npm run test:coverage` - Run tests with coverage report (70% threshold required)
 - `npm run analyze` - Analyze bundle size
 
+### Before Building or Deploying
+**IMPORTANT**: Always check `BUILD_LOG.md` for recent build issues and their resolutions before running builds or deployments. This log contains:
+- Common build failures and their fixes
+- Pre-deployment checklist
+- Environment configuration issues
+- Deployment-specific troubleshooting
+
 ### Database
 - Database schema is in `database/schema.sql`
 - Uses PostgreSQL in production, local storage in demo mode
@@ -115,3 +122,81 @@ cd deployment
 4. **TypeScript**: Strict mode enabled, use type-safe patterns
 5. **Path Aliases**: Use `@/` for imports from `src/` directory
 6. **API Routes**: In Next.js 15, params are Promises - use `const { id } = await params`
+
+## Code Quality Standards
+
+### TypeScript Enforcement
+- All new code must be written in TypeScript with strict type checking
+- Use proper type definitions for all function parameters and return values
+- Avoid `any` types; use proper interfaces and type unions instead
+- Import types using `import type` syntax when importing only types
+
+### Component Architecture
+- Keep components small and focused on single responsibilities
+- Use proper prop typing with TypeScript interfaces
+- Implement proper error boundaries for client components
+- Use React hooks appropriately and avoid unnecessary re-renders
+
+### Financial Calculations
+- All financial calculations must be precise using appropriate decimal handling
+- Validate all financial inputs for reasonable ranges and formats
+- Include proper error handling for edge cases in calculations
+- Document complex financial formulas with comments
+
+### Security Requirements
+- Always use parameterized queries to prevent SQL injection
+- Implement proper authentication checks for all protected routes
+- Validate all user inputs on both client and server side
+- Never commit secrets or API keys to version control
+- Sensitive patterns to watch: password, secret, token, api_key, private_key, database_url, jwt_secret
+
+### Testing Requirements
+- Write unit tests for all utility functions and calculations
+- Test API endpoints with various input scenarios
+- Include integration tests for critical user flows
+- Maintain test coverage above 80% for core business logic
+
+### Performance Guidelines
+- Optimize database queries and avoid N+1 problems
+- Use proper caching strategies for expensive calculations
+- Implement loading states for async operations
+- Optimize bundle size and use code splitting where appropriate
+
+## MCP Tool Workflows
+
+### Code Exploration & Development
+**Primary: Serena MCP** - Use for semantic code understanding, symbol-level editing, and project context
+
+### Library & API Research
+**Primary: Context7 MCP** - Get up-to-date documentation for React, Next.js, TypeScript, and external libraries
+
+### UI Testing & Browser Automation
+**Primary: Playwright MCP** - E2E testing of calculator functionality and cross-browser compatibility
+
+### Database Operations
+**Primary: PostgreSQL MCP** - Direct SQL queries, schema inspection, read-only data analysis
+**Secondary: Supabase MCP** - API-level operations, real-time features, schema changes
+
+### Complex Problem Solving
+**Primary: Sequential Thinking MCP** - Multi-step feature planning and architecture decisions
+
+### Feature Development Workflow:
+1. Sequential Thinking: Plan the feature implementation
+2. Serena: Explore existing code structure
+3. PostgreSQL: Analyze database schema (if data-related)
+4. Context7: Research any new libraries/APIs needed
+5. Serena: Implement changes semantically
+6. Playwright: Create E2E tests
+
+### Debugging Workflow:
+1. Sequential Thinking: Analyze problem systematically
+2. Serena: Find relevant code symbols
+3. PostgreSQL: Check database state (if data-related)
+4. Playwright: Reproduce in browser (if UI-related)
+5. Context7: Check library docs for known issues
+6. Serena: Implement fix
+
+### Business Context
+- Domain: Financial services with strict security and accuracy requirements
+- Key concepts: HELOC calculations, financial modeling, payment optimization, interest calculations
+- User data: Handle financial PII with appropriate protection measures

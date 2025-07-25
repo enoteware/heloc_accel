@@ -1,0 +1,92 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"🔍 Running TypeScript check before code changes...\" && npm run lint --silent || echo \"⚠️ Linting issues found\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"✅ Code change completed. Running type check...\" && npx tsc --noEmit --skipLibCheck || echo \"⚠️ TypeScript errors found\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ \"$CLAUDE_TOOL_INPUT\" == *\"npm test\"* ]]; then echo \"🧪 Tests completed. Coverage threshold: 80%\"; fi"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"🚀 HELOC Accelerator Project - Next.js TypeScript Financial Calculator\" && echo \"📋 Context: Financial services domain with strict security requirements\""
+          }
+        ]
+      }
+    ]
+  },
+  "quality_gates": {
+    "typescript_strict": true,
+    "test_coverage_threshold": 80,
+    "lint_on_save": true,
+    "format_on_save": true
+  },
+  "security": {
+    "sensitive_patterns": [
+      "password",
+      "secret", 
+      "token",
+      "api_key",
+      "private_key",
+      "database_url",
+      "jwt_secret"
+    ],
+    "financial_data_protection": true,
+    "pii_handling": true
+  },
+  "workflow_preferences": {
+    "default_mcp_workflow": {
+      "code_exploration": "serena",
+      "library_research": "context7", 
+      "ui_testing": "playwright",
+      "complex_planning": "sequential-thinking",
+      "database_queries": "postgres",
+      "database_api": "supabase"
+    },
+    "feature_development": [
+      "sequential-thinking: Plan implementation",
+      "serena: Explore code structure", 
+      "postgres: Analyze database schema (if data-related)",
+      "context7: Research libraries/APIs",
+      "serena: Implement changes",
+      "playwright: Create E2E tests"
+    ],
+    "debugging_workflow": [
+      "sequential-thinking: Analyze problem systematically",
+      "serena: Find relevant code symbols",
+      "postgres: Check database state (if data-related)",
+      "playwright: Reproduce in browser (if UI-related)",
+      "context7: Check library docs for known issues",
+      "serena: Implement fix"
+    ]
+  },
+  "enableAllProjectMcpServers": true
+}

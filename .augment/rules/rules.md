@@ -71,6 +71,17 @@ This is a HELOC (Home Equity Line of Credit) accelerator application built with 
 - Run all tests and linting before deployment
 - Use proper CI/CD pipelines for automated testing and deployment
 
+## Build Process and Deployment
+- **ALWAYS check BUILD_LOG.md before running builds or deployments**
+- The BUILD_LOG.md contains:
+  - Recent build failures and their resolutions
+  - Pre-deployment checklist
+  - Common issues and fixes
+  - Environment configuration notes
+- Run `npm test` and `npm run lint` before every build
+- Use `./deploy-standalone.sh` for creating production deployments
+- Monitor GitHub Actions for CI/CD status
+
 ## File Organization
 - Group related components in appropriate directories
 - Keep utility functions in the lib/ directory

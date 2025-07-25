@@ -1,0 +1,160 @@
+# Build Log
+
+## 2025-07-24 - Augment to Claude Code Migration
+
+### Overview
+Successfully migrated Augment configuration and rules to Claude Code, establishing consistent development workflows across both AI assistants.
+
+### Changes Made
+
+#### 1. MCP Server Configuration (`.mcp.json`)
+- **Added 5 MCP servers:**
+  - `serena`: Code exploration and semantic understanding
+  - `context7`: Library and API documentation research
+  - `playwright`: UI testing and browser automation
+  - `sequential-thinking`: Complex problem solving and planning
+  - `supabase`: Supabase API operations
+  - `postgres`: Direct PostgreSQL database access (read-only)
+
+#### 2. Claude Code Settings (`.claude/settings.json`)
+- **Pre/Post hooks:**
+  - Pre-edit: TypeScript linting check
+  - Post-edit: TypeScript compilation check
+  - Test completion: Coverage threshold reminder (80%)
+  - User prompt: Project context reminder
+- **Quality gates:** TypeScript strict mode, 80% test coverage, lint/format on save
+- **Security patterns:** Password, secret, token, API key detection
+- **Workflow preferences:** Default MCP tool selection by task type
+
+#### 3. CLAUDE.md Updates
+- Added comprehensive code quality standards section
+- Integrated MCP tool workflow documentation
+- Added debugging workflow with database state checks
+- Enhanced security requirements and financial calculation guidelines
+
+#### 4. Augment Rules Updates (`.augment/rules/`)
+- Updated MCP orchestration rules to include PostgreSQL MCP
+- Modified debugging workflow to check database state
+- Added PostgreSQL as primary tool for database operations
+
+### Technical Notes
+
+#### PostgreSQL MCP
+- **Package:** `@modelcontextprotocol/server-postgres@0.6.2`
+- **Status:** ⚠️ Deprecated but functional
+- **Mode:** Read-only (safe for production)
+- **Connection:** Via `DATABASE_URL` environment variable
+
+#### Environment Variables Required
+```bash
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
+SUPABASE_URL=https://project.supabase.co
+SUPABASE_KEY=your-anon-key
+```
+
+### Next Steps
+- Monitor PostgreSQL MCP deprecation status
+- Consider alternative PostgreSQL MCP implementations if needed
+- Test all MCP integrations with actual connections
+
+### Agent Instructions
+When working on this project:
+1. Use Sequential Thinking MCP for complex planning
+2. Use Serena MCP for code exploration and editing
+3. Use PostgreSQL MCP for database queries and schema inspection
+4. Use Context7 MCP for library/API documentation
+5. Use Playwright MCP for UI testing
+6. Follow the workflows defined in CLAUDE.md and .augment/rules/mcp_rules.md
+
+---
+*This log is maintained for agent context and project history*
+
+## 2025-07-25 - Production Build & Deployment
+
+### Status: ✅ Success
+**Type:** Production standalone build  
+**Domain:** https://heloc.noteware.dev/
+
+### Changes Deployed
+- Fixed "Get Started" button functionality by removing automatic redirect
+- Updated button text to "Get Started - Calculate Your Savings"
+- Simplified navigation flow
+
+### Build & Deployment Process
+1. **Local Build**: `npm run build` - Successful
+2. **Deployment**: Manual via SSH
+3. **Server**: VPS with nginx reverse proxy
+4. **PM2 Status**: Running successfully
+
+### Issues Resolved
+1. **Static Assets 404** 
+   - Fixed by configuring nginx to serve `.next/static` directly
+   - Added nginx location block for `/_next/static/`
+   
+2. **Button Not Working**
+   - Removed automatic redirect to calculator in demo mode
+   - Button now properly navigates to `/calculator`
+
+### Deployment Notes
+- Using Next.js 15 standalone mode
+- PM2 configured with explicit `NODE_ENV=production`
+- Nginx serving static files directly for performance
+
+---
+
+## 2025-07-24 - VPS Auto-Deployment Setup
+
+### Initial Status
+⚠️ **Auto-deployment was FAILING** - Missing test dependencies
+
+### Issues & Resolutions
+
+#### 1. CI/CD Pipeline Failure
+- **Error**: TypeScript compilation failed in GitHub Actions
+- **Cause**: Missing `@testing-library/react` and `@testing-library/user-event`
+- **Fix**: Added dependencies to package.json
+- **Result**: ✅ CI/CD now passing
+
+#### 2. Server Configuration Issues
+- **NODE_ENV**: Was set to development, fixed in ecosystem.config.js
+- **Port Mismatch**: Nginx upstream was 3001, app was on 3000
+- **Directory Structure**: Fixed nested deployment structure
+
+#### 3. basePath Configuration
+- **Issue**: Conflict between subdomain and basePath
+- **Fix**: Removed basePath since using subdomain (heloc.noteware.dev)
+
+### Deployment Configuration
+- **Trigger**: Pushes to `main` branch automatically trigger deployment
+- **Workflow**: `.github/workflows/deploy.yml`
+- **Server**: Deploys to VPS at `/opt/heloc-accelerator/`
+- **Process Manager**: PM2 with standalone Next.js build
+
+### Common Build Commands
+```bash
+# Development
+npm run dev
+
+# Production build
+npm run build
+./deploy-standalone.sh
+
+# Tests (run before deployment)
+npm test
+npm run lint
+
+# Manual deployment
+ssh root@server
+cd /opt/heloc-accelerator/app/heloc-accelerator
+git pull
+npm install
+npm run build
+pm2 restart heloc-accelerator
+```
+
+### Pre-deployment Checklist
+- [ ] Run `npm test` - all tests pass
+- [ ] Run `npm run lint` - no errors
+- [ ] Check BUILD_LOG.md for recent issues
+- [ ] Verify environment variables
+- [ ] Test "Get Started" button functionality

@@ -34,10 +34,14 @@ type: "always_apply"
 - Breaking down large tasks
 
 ### 🗄️ DATABASE OPERATIONS
-**Primary: Supabase MCP**
-- Database schema changes
-- Query optimization
-- Data management
+**Primary: PostgreSQL MCP**
+- Direct SQL queries and schema inspection
+- Read-only data analysis and reporting
+- Database performance analysis
+**Secondary: Supabase MCP**
+- API-level database operations
+- Real-time features and subscriptions
+- Database schema changes via Supabase dashboard
 
 ## 🔄 WORKFLOW ORCHESTRATION
 
@@ -52,9 +56,10 @@ type: "always_apply"
 ### Debugging Workflow:
 1. **Sequential Thinking**: Analyze the problem systematically
 2. **Serena**: Find relevant code symbols and references
-3. **Playwright**: Reproduce the issue in browser (if UI-related)
-4. **Context7**: Check library documentation for known issues
-5. **Serena**: Implement fix at symbol level
+3. **PostgreSQL MCP**: Check database state and query performance (if data-related)
+4. **Playwright**: Reproduce the issue in browser (if UI-related)
+5. **Context7**: Check library documentation for known issues
+6. **Serena**: Implement fix at symbol level
 
 ### Research & Learning:
 1. **Context7**: Get latest documentation
@@ -68,6 +73,7 @@ type: "always_apply"
 - **Always use Serena** for code operations (reading, editing, exploring)
 - **Always use Context7** when mentioning external libraries
 - **Always use Playwright** for UI/browser-related testing
+- **Always use PostgreSQL MCP** for database queries, schema inspection, and data analysis
 - **Chain MCPs together** for comprehensive solutions
 
 ## 🚀 PROJECT CONTEXT

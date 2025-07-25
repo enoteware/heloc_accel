@@ -1,0 +1,20 @@
+{
+  "app/calculator/page.tsx -> @/components/PayoffChart": {
+    "id": 91166,
+    "files": [
+      "static/chunks/common-225ae7e3bd352f88.js"
+    ]
+  },
+  "app/calculator/page.tsx -> @/components/ResultsDisplay": {
+    "id": 85428,
+    "files": [
+      "static/chunks/common-225ae7e3bd352f88.js"
+    ]
+  },
+  "app/dashboard/page.tsx -> @/components/PayoffChart": {
+    "id": 91166,
+    "files": [
+      "static/chunks/common-225ae7e3bd352f88.js"
+    ]
+  }
+}

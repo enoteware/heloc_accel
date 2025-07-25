@@ -10,12 +10,7 @@ export default function Home() {
   const { data: session } = useSession()
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-  // In demo mode, redirect directly to calculator
-  useEffect(() => {
-    if (isDemoMode) {
-      router.push('/calculator')
-    }
-  }, [isDemoMode, router])
+  // Removed automatic redirect to allow users to see the homepage
 
   const handleGetStarted = () => {
     if (isDemoMode || session) {
@@ -92,7 +87,7 @@ export default function Home() {
               onClick={handleGetStarted}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition duration-200"
             >
-              {isDemoMode ? 'Try the Calculator (Demo Mode)' : session ? 'Calculate Your Savings' : 'Get Started - Sign In to Calculate'}
+              Get Started - Calculate Your Savings
             </button>
             <div>
               <button
