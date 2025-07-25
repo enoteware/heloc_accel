@@ -266,13 +266,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       })
 
       // Business logic validations (same as API)
-      if (processedData.propertyValue && processedData.currentMortgageBalance > processedData.propertyValue) {
-        newErrors.currentMortgageBalance = 'Mortgage balance cannot exceed property value'
-        addDebugLog('Business logic validation failed: mortgage > property value', {
-          mortgage: processedData.currentMortgageBalance,
-          property: processedData.propertyValue
-        })
-      }
+      // Note: Removed mortgage vs property value check - underwater mortgages are valid scenarios
 
       if (processedData.helocLimit && processedData.helocAvailableCredit && processedData.helocAvailableCredit > processedData.helocLimit) {
         newErrors.helocAvailableCredit = 'HELOC available credit cannot exceed HELOC limit'

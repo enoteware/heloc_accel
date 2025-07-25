@@ -402,17 +402,7 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
     })
   }
 
-  if (input.propertyValue && input.currentMortgageBalance > input.propertyValue) {
-    console.log('Property value validation failed:', { 
-      mortgageBalance: input.currentMortgageBalance, 
-      propertyValue: input.propertyValue,
-      difference: input.currentMortgageBalance - input.propertyValue
-    })
-    errors.push({
-      field: 'currentMortgageBalance',
-      message: 'Mortgage balance cannot exceed property value'
-    })
-  }
+  // Note: Removed mortgage vs property value check - underwater mortgages are valid scenarios
 
   // Validate scenario name if provided
   if (input.scenarioName !== undefined && input.scenarioName.trim().length === 0) {
