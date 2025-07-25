@@ -162,6 +162,11 @@ function CalculatorPageContent() {
     setLoading(true)
     setError(null)
 
+    console.log('=== CALCULATION REQUEST START ===')
+    console.log('Form data received:', formData)
+    console.log('API URL:', getApiUrl('api/calculate'))
+    console.log('Request body:', JSON.stringify(formData, null, 2))
+
     try {
       const response = await fetch(getApiUrl('api/calculate'), {
         method: 'POST',
@@ -171,22 +176,45 @@ function CalculatorPageContent() {
         body: JSON.stringify(formData),
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()))
+
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (!response.ok) {
+        console.error('API Error Response:', data)
+        if (data.data?.validationErrors) {
+          console.error('Validation Errors:', data.data.validationErrors)
+        }
         throw new Error(data.error || 'Calculation failed')
       }
 
       if (data.success) {
+        console.log('Calculation successful!')
         setResults(data.data)
       } else {
+        console.error('API returned unsuccessful result:', data)
         throw new Error(data.error || 'Calculation failed')
       }
     } catch (err) {
-      console.error('Calculation error:', err)
-      setError(err instanceof Error ? err.message : 'An error occurred during calculation')
+      console.error('=== CALCULATION ERROR ===')
+      console.error('Error type:', err?.constructor?.name)
+      console.error('Error message:', err instanceof Error ? err.message : err)
+      console.error('Error stack:', err instanceof Error ? err.stack : 'No stack trace')
+      
+      let errorMessage = 'An error occurred during calculation'
+      if (err instanceof Error) {
+        errorMessage = err.message
+        if (err.message.includes('fetch')) {
+          errorMessage = 'Network error - please check your connection'
+        }
+      }
+      
+      setError(errorMessage)
     } finally {
       setLoading(false)
+      console.log('=== CALCULATION REQUEST END ===')
     }
   }
 

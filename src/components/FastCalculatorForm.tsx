@@ -96,10 +96,24 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const [debugLogs, setDebugLogs] = useState<string[]>([])
+  
+  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
+
+  // Debug logging function
+  const addDebugLog = (message: string, data?: any) => {
+    const timestamp = new Date().toLocaleTimeString()
+    const logMessage = `[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}`
+    console.log(logMessage)
+    if (isDemoMode) {
+      setDebugLogs(prev => [...prev.slice(-10), logMessage]) // Keep last 10 logs
+    }
+  }
 
   // Update form data when initialData changes
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
+      addDebugLog('Updating form data with initialData', initialData)
       setFormData({
         currentMortgageBalance: initialData.currentMortgageBalance || 0,
         currentInterestRate: initialData.currentInterestRate || 0,
@@ -144,6 +158,8 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   }, [])
 
   const handleInputChange = useCallback((field: keyof CalculatorValidationInput, value: string | number) => {
+    addDebugLog(`Input change for ${field}`, { value, type: typeof value })
+    
     let processedValue: string | number = value
     
     // Handle string inputs - keep as string during typing for better UX
@@ -158,10 +174,16 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       }
     }
 
-    setFormData(prev => ({
-      ...prev,
-      [field]: processedValue
-    }))
+    addDebugLog(`Processed value for ${field}`, { processedValue, type: typeof processedValue })
+
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [field]: processedValue
+      }
+      addDebugLog('Updated form data', newData)
+      return newData
+    })
 
     // Clear error when user starts typing
     if (errors[field]) {
@@ -200,51 +222,63 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Convert all form data to proper types and validate
-    const processedData: CalculatorValidationInput = {
-      // Required numeric fields - ensure they're numbers
-      currentMortgageBalance: Number(formData.currentMortgageBalance) || 0,
-      currentInterestRate: Number(formData.currentInterestRate) || 0,
-      remainingTermMonths: Number(formData.remainingTermMonths) || 0,
-      monthlyPayment: Number(formData.monthlyPayment) || 0,
-      helocLimit: Number(formData.helocLimit) || 0,
-      helocInterestRate: Number(formData.helocInterestRate) || 0,
-      monthlyGrossIncome: Number(formData.monthlyGrossIncome) || 0,
-      monthlyNetIncome: Number(formData.monthlyNetIncome) || 0,
-      monthlyExpenses: Number(formData.monthlyExpenses) || 0,
-      monthlyDiscretionaryIncome: Number(formData.monthlyDiscretionaryIncome) || 0,
-      
-      // Optional numeric fields - only include if they have values
-      ...(formData.propertyValue && Number(formData.propertyValue) > 0 && { propertyValue: Number(formData.propertyValue) }),
-      ...(formData.propertyTaxMonthly && Number(formData.propertyTaxMonthly) > 0 && { propertyTaxMonthly: Number(formData.propertyTaxMonthly) }),
-      ...(formData.insuranceMonthly && Number(formData.insuranceMonthly) > 0 && { insuranceMonthly: Number(formData.insuranceMonthly) }),
-      ...(formData.hoaFeesMonthly && Number(formData.hoaFeesMonthly) > 0 && { hoaFeesMonthly: Number(formData.hoaFeesMonthly) }),
-      ...(formData.helocAvailableCredit && Number(formData.helocAvailableCredit) > 0 && { helocAvailableCredit: Number(formData.helocAvailableCredit) }),
-      
-      // Text fields
-      ...(formData.scenarioName && formData.scenarioName.trim() && { scenarioName: formData.scenarioName.trim() }),
-      ...(formData.description && formData.description.trim() && { description: formData.description.trim() })
-    }
+    addDebugLog('Form submission started', formData)
     
-    const newErrors: Record<string, string> = {}
-    const requiredFields = Object.keys(validationRules) as Array<keyof typeof validationRules>
-    
-    requiredFields.forEach(field => {
-      const value = processedData[field] as number
-      const error = validateField(field, value)
-      if (error) {
-        newErrors[field] = error
+    try {
+      // Convert all form data to proper types and validate
+      const processedData: CalculatorValidationInput = {
+        // Required numeric fields - ensure they're numbers
+        currentMortgageBalance: Number(formData.currentMortgageBalance) || 0,
+        currentInterestRate: Number(formData.currentInterestRate) || 0,
+        remainingTermMonths: Number(formData.remainingTermMonths) || 0,
+        monthlyPayment: Number(formData.monthlyPayment) || 0,
+        helocLimit: Number(formData.helocLimit) || 0,
+        helocInterestRate: Number(formData.helocInterestRate) || 0,
+        monthlyGrossIncome: Number(formData.monthlyGrossIncome) || 0,
+        monthlyNetIncome: Number(formData.monthlyNetIncome) || 0,
+        monthlyExpenses: Number(formData.monthlyExpenses) || 0,
+        monthlyDiscretionaryIncome: Number(formData.monthlyDiscretionaryIncome) || 0,
+        
+        // Optional numeric fields - only include if they have values
+        ...(formData.propertyValue && Number(formData.propertyValue) > 0 && { propertyValue: Number(formData.propertyValue) }),
+        ...(formData.propertyTaxMonthly && Number(formData.propertyTaxMonthly) > 0 && { propertyTaxMonthly: Number(formData.propertyTaxMonthly) }),
+        ...(formData.insuranceMonthly && Number(formData.insuranceMonthly) > 0 && { insuranceMonthly: Number(formData.insuranceMonthly) }),
+        ...(formData.hoaFeesMonthly && Number(formData.hoaFeesMonthly) > 0 && { hoaFeesMonthly: Number(formData.hoaFeesMonthly) }),
+        ...(formData.helocAvailableCredit && Number(formData.helocAvailableCredit) > 0 && { helocAvailableCredit: Number(formData.helocAvailableCredit) }),
+        
+        // Text fields
+        ...(formData.scenarioName && formData.scenarioName.trim() && { scenarioName: formData.scenarioName.trim() }),
+        ...(formData.description && formData.description.trim() && { description: formData.description.trim() })
       }
-    })
+      
+      addDebugLog('Processed form data for submission', processedData)
+      
+      const newErrors: Record<string, string> = {}
+      const requiredFields = Object.keys(validationRules) as Array<keyof typeof validationRules>
+      
+      requiredFields.forEach(field => {
+        const value = processedData[field] as number
+        const error = validateField(field, value)
+        if (error) {
+          newErrors[field] = error
+          addDebugLog(`Validation error for ${field}`, { value, error })
+        }
+      })
 
-    console.log('Form submission data:', processedData)
-    console.log('Validation errors:', newErrors)
+      addDebugLog('Final validation errors', newErrors)
 
-    setErrors(newErrors)
-    setTouched(Object.fromEntries(requiredFields.map(field => [field, true])))
+      setErrors(newErrors)
+      setTouched(Object.fromEntries(requiredFields.map(field => [field, true])))
 
-    if (Object.keys(newErrors).length === 0) {
-      onSubmit(processedData)
+      if (Object.keys(newErrors).length === 0) {
+        addDebugLog('Submitting valid data to onSubmit callback')
+        onSubmit(processedData)
+      } else {
+        addDebugLog('Form submission blocked due to validation errors')
+      }
+    } catch (error) {
+      addDebugLog('Error during form submission', error)
+      console.error('Form submission error:', error)
     }
   }
 
@@ -392,8 +426,36 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Debug Console (Demo Mode Only) */}
+      {isDemoMode && debugLogs.length > 0 && (
+        <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs">
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="text-green-300 font-bold">Debug Console</h4>
+            <button
+              type="button"
+              onClick={() => setDebugLogs([])}
+              className="text-gray-400 hover:text-white text-xs"
+            >
+              Clear
+            </button>
+          </div>
+          <div className="max-h-40 overflow-y-auto space-y-1">
+            {debugLogs.map((log, index) => (
+              <div key={index} className="whitespace-pre-wrap break-all">{log}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Demo Fill Button */}
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="text-sm text-gray-600">
+          {isDemoMode && (
+            <span className="text-green-600 font-medium">
+              🎮 Debug mode active - errors shown above
+            </span>
+          )}
+        </div>
         <button
           type="button"
           onClick={handlePrefillDemo}
