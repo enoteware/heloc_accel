@@ -437,13 +437,52 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs">
           <div className="flex justify-between items-center mb-2">
             <h4 className="text-green-300 font-bold">Debug Console</h4>
-            <button
-              type="button"
-              onClick={() => setDebugLogs([])}
-              className="text-gray-400 hover:text-white text-xs"
-            >
-              Clear
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const logText = debugLogs.join('\n')
+                  navigator.clipboard.writeText(logText).then(() => {
+                    // Temporarily show copied feedback
+                    const btn = document.activeElement as HTMLButtonElement
+                    const originalText = btn.textContent
+                    btn.textContent = 'Copied!'
+                    btn.style.color = '#10b981'
+                    setTimeout(() => {
+                      btn.textContent = originalText
+                      btn.style.color = '#9ca3af'
+                    }, 1000)
+                  }).catch(() => {
+                    // Fallback for browsers that don't support clipboard API
+                    const textArea = document.createElement('textarea')
+                    textArea.value = logText
+                    document.body.appendChild(textArea)
+                    textArea.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(textArea)
+                    
+                    const btn = document.activeElement as HTMLButtonElement
+                    const originalText = btn.textContent
+                    btn.textContent = 'Copied!'
+                    btn.style.color = '#10b981'
+                    setTimeout(() => {
+                      btn.textContent = originalText
+                      btn.style.color = '#9ca3af'
+                    }, 1000)
+                  })
+                }}
+                className="text-gray-400 hover:text-white text-xs px-2 py-1 border border-gray-600 rounded hover:border-gray-500"
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                onClick={() => setDebugLogs([])}
+                className="text-gray-400 hover:text-white text-xs px-2 py-1 border border-gray-600 rounded hover:border-gray-500"
+              >
+                Clear
+              </button>
+            </div>
           </div>
           <div className="max-h-40 overflow-y-auto space-y-1">
             {debugLogs.map((log, index) => (
