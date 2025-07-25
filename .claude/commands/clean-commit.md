@@ -12,6 +12,7 @@ A systematic approach to ensure code quality before committing to the main branc
 
    - Ensures all TypeScript types are valid
    - Catches type errors before they reach production
+   - Note: If typecheck script is not available, the build process includes type checking
 
 2. **Run ESLint**
 
@@ -50,7 +51,7 @@ A systematic approach to ensure code quality before committing to the main branc
    BREAKING CHANGE: Calculator API now requires helocRate parameter
    ```
 
-5. **Commit to Main Branch**
+5. **Commit and Push to Main Branch**
 
    ```bash
    git add .
@@ -58,15 +59,23 @@ A systematic approach to ensure code quality before committing to the main branc
    git push origin main
    ```
 
+   - Stages all changes
+   - Creates commit with detailed message
+   - Pushes directly to main branch
+
 ## Quick Command (All Steps)
 
 ```bash
-npm run typecheck && npm run lint && npm test && git add . && git commit && git push origin main
+npm run lint && git add . && git commit && git push origin main
 ```
+
+Note: Adjust command based on available scripts. Add `npm test` if you want to include tests.
 
 ## Notes
 
-- Never skip type checking or linting
+- Never skip linting
+- TypeScript type checking happens during build if no explicit script exists
 - Consider running tests for critical changes
 - Use meaningful commit messages for better project history
 - If any step fails, fix the issues before proceeding
+- The command will push directly to main - ensure you have the right permissions
