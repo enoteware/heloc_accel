@@ -123,7 +123,7 @@ export default function Dashboard() {
         setScenarios(formattedScenarios)
       } else {
         // Load from API in normal mode
-        const response = await fetch('/heloc/api/scenario', {
+        const response = await fetch('/api/scenario', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

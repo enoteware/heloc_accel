@@ -94,8 +94,7 @@ function CalculatorPageContent() {
         }
       } else {
         // Load from API in normal mode
-        const basePath = process.env.NODE_ENV === 'production' ? '/heloc' : '';
-        const response = await fetch(`${basePath}/api/scenario/${scenarioId}`)
+        const response = await fetch(`/api/scenario/${scenarioId}`)
         if (!response.ok) {
           throw new Error('Failed to load scenario')
         }

@@ -1,17 +1,11 @@
 /**
  * Get the correct API URL based on environment
- * In production, APIs are served from /heloc/api
- * In development, APIs are served from /api
+ * For Vercel deployment, APIs are served from /api in all environments
  */
 export function getApiUrl(path: string): string {
   // Remove leading slash if present
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
-  
-  // In production, use the basePath
-  if (process.env.NODE_ENV === 'production') {
-    return `/heloc/${cleanPath}`
-  }
-  
-  // In development, use root path
+
+  // Always use root path for Vercel deployment
   return `/${cleanPath}`
 }

@@ -9,8 +9,8 @@ const nextConfig = {
   // basePath: '/heloc',
   // assetPrefix: '/heloc',
 
-  // Output configuration for standalone deployment
-  output: 'standalone',
+  // Output configuration removed for Vercel deployment
+  // output: 'standalone', // Only needed for self-hosting
 
   // Performance optimizations
   compiler: {

@@ -48,7 +48,7 @@ export default function SharedScenarioPage() {
   const loadSharedScenario = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/heloc/api/shared/${token}`)
+      const response = await fetch(`/api/shared/${token}`)
 
       if (!response.ok) {
         if (response.status === 404) {

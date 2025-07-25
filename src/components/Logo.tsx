@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export interface LogoProps {
   /** Logo variant to display */
@@ -40,16 +41,15 @@ export const Logo: React.FC<LogoProps> = ({
 }) => {
   // Determine which logo file to use based on variant
   const getLogoSrc = () => {
-    const basePath = process.env.NODE_ENV === 'production' ? '/heloc' : '';
-
+    // No basePath needed for Vercel deployment
     switch (variant) {
       case 'white':
-        return `${basePath}/ha_logo_w.svg`;
+        return '/ha_logo_w.svg';
       case 'dark':
-        return `${basePath}/heloc_accel.svg`;
+        return '/heloc_accel.svg';
       case 'default':
       default:
-        return `${basePath}/heloc_accel.svg`;
+        return '/heloc_accel.svg';
     }
   };
 
@@ -72,17 +72,15 @@ export const Logo: React.FC<LogoProps> = ({
   );
 
   if (clickable) {
-    // Use base path only in production
-    const basePath = process.env.NODE_ENV === 'production' ? '/heloc/' : '/';
-
+    // Always use root path for Vercel deployment
     return (
-      <a
-        href={basePath}
+      <Link
+        href="/"
         className="inline-flex items-center hover:opacity-80 transition-opacity duration-200"
         aria-label="HELOC Accelerator - Go to homepage"
       >
         {logoElement}
-      </a>
+      </Link>
     );
   }
 
