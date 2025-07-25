@@ -265,6 +265,43 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         }
       })
 
+      // Business logic validations (same as API)
+      if (processedData.propertyValue && processedData.currentMortgageBalance > processedData.propertyValue) {
+        newErrors.currentMortgageBalance = 'Mortgage balance cannot exceed property value'
+        addDebugLog('Business logic validation failed: mortgage > property value', {
+          mortgage: processedData.currentMortgageBalance,
+          property: processedData.propertyValue
+        })
+      }
+
+      if (processedData.helocLimit && processedData.helocAvailableCredit && processedData.helocAvailableCredit > processedData.helocLimit) {
+        newErrors.helocAvailableCredit = 'HELOC available credit cannot exceed HELOC limit'
+        addDebugLog('Business logic validation failed: HELOC credit > limit', {
+          credit: processedData.helocAvailableCredit,
+          limit: processedData.helocLimit
+        })
+      }
+
+      // Income validation
+      if (processedData.monthlyNetIncome && processedData.monthlyGrossIncome && processedData.monthlyNetIncome > processedData.monthlyGrossIncome) {
+        newErrors.monthlyNetIncome = 'Net income cannot exceed gross income'
+        addDebugLog('Business logic validation failed: net > gross income')
+      }
+
+      // Discretionary income validation
+      if (processedData.monthlyNetIncome && processedData.monthlyExpenses && processedData.monthlyDiscretionaryIncome) {
+        const calculatedDiscretionary = processedData.monthlyNetIncome - processedData.monthlyExpenses
+        const tolerance = 50
+        if (Math.abs(processedData.monthlyDiscretionaryIncome - calculatedDiscretionary) > tolerance) {
+          newErrors.monthlyDiscretionaryIncome = `Discretionary income should equal net income minus expenses ($${calculatedDiscretionary.toLocaleString()})`
+          addDebugLog('Business logic validation failed: discretionary income mismatch', {
+            provided: processedData.monthlyDiscretionaryIncome,
+            calculated: calculatedDiscretionary,
+            difference: Math.abs(processedData.monthlyDiscretionaryIncome - calculatedDiscretionary)
+          })
+        }
+      }
+
       addDebugLog('Final validation errors', newErrors)
 
       setErrors(newErrors)
