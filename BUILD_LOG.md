@@ -277,3 +277,121 @@ Vercel build failing with multiple errors:
 - Pre-deployment check script already validates builds
 - Added note in CLAUDE.md about checking BUILD_LOG.md before builds
 - CSS processing dependencies now correctly categorized
+
+---
+
+## 2025-07-25 - Production Demo Mode & Authentication Fixes
+
+### Status: ✅ Complete
+**Type:** Authentication system overhaul and production demo mode implementation
+
+### Issues Resolved
+
+#### 1. VPS Database Connectivity
+- **Issue**: Database tables existed but heloc user lacked permissions
+- **Fix**: Connected via SSH and granted proper permissions
+  ```sql
+  GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO heloc;
+  ```
+- **Credentials**: SSH root@50.28.106.254 with provided password
+
+#### 2. NextAuth.js 500 Errors
+- **Issue**: NEXTAUTH_URL environment variable showing as "null"
+- **Fix**: Removed and re-added environment variables in Vercel
+- **Result**: Authentication now working in production
+
+#### 3. Form Field Visibility Issues
+- **Issue**: White text on white background in input fields
+- **Fix**: Added CSS overrides with !important declarations
+  ```css
+  !text-neutral-900 dark:!text-neutral-100
+  ```
+- **Location**: `src/components/design-system/Input.tsx:42`
+
+#### 4. Authentication Redirect Loop
+- **Issue**: Server-side auth checks causing infinite redirects
+- **Fix**: Converted login page to client-side authentication
+- **Key change**: Removed server-side auth validation, implemented client-side session management
+
+#### 5. Login Flow Problems
+- **Issue**: Login would succeed but show errors and not redirect
+- **Fix**: Complete rewrite of login page using client-side authentication
+  ```typescript
+  const result = await signIn('credentials', {
+    email, password, redirect: false
+  })
+  if (result?.ok) router.push(callbackUrl)
+  ```
+
+### New Features Implemented
+
+#### 1. Production Demo Mode
+- **Environment detection**: `NEXT_PUBLIC_DEMO_MODE=true` enables demo mode
+- **Demo users**: Pre-configured accounts (demo@example.com, john@example.com, jane@example.com)
+- **Local storage**: Demo data stored locally with pattern `heloc_demo_user_[userId]_scenarios`
+
+#### 2. Environment Banner System
+- **Global component**: `src/components/EnvironmentBanner.tsx`
+- **Persistent display**: Shows on all pages via layout integration
+- **Mode indicators**: 
+  - 🎮 Demo Mode (green)
+  - 🔧 Development (blue) 
+  - 🚀 Production (purple)
+
+#### 3. Quick Demo Login
+- **One-click login**: Added quick login buttons for demo accounts
+- **Context information**: Clear demo credentials display
+- **User experience**: Seamless demo access without manual entry
+
+#### 4. Enhanced Calculator Form
+- **Comprehensive validation**: All financial inputs validated with proper ranges
+- **Performance optimization**: Removed heavy real-time formatting to eliminate typing delays
+- **Context descriptions**: Added helpful text below each field label
+- **Error handling**: Clear validation messages for all field types
+
+### Technical Implementation
+
+#### Authentication Flow Changes
+- **Before**: Server-side authentication with middleware redirects
+- **After**: Client-side authentication with session management
+- **Environment handling**: Proper string trimming for environment variables
+- **Debug logging**: Comprehensive auth flow debugging in demo mode
+
+#### Environment Variable Parsing
+- **Issue**: `NEXT_PUBLIC_DEMO_MODE` was "true\n" instead of "true"
+- **Fix**: `.trim().toLowerCase() === 'true'` across all components
+- **Applied to**: auth.ts, login page, calculator page, environment banner
+
+#### Default Route Changes
+- **Before**: Login redirect to `/dashboard`
+- **After**: Login redirect to `/calculator`
+- **Reason**: Calculator is more complete and primary use case
+
+### Files Modified
+- `src/auth.ts` - Demo user credentials and environment detection
+- `src/app/login/page.tsx` - Complete client-side rewrite
+- `src/components/design-system/Input.tsx` - Text color visibility fixes
+- `src/components/EnvironmentBanner.tsx` - New global environment indicator
+- `src/app/layout.tsx` - Environment banner integration
+- `src/components/FastCalculatorForm.tsx` - Performance and validation enhancements
+
+### Deployment
+- **Commit**: `c1834ae` - "feat: implement production demo mode with client-side authentication"
+- **Branch**: main
+- **Status**: Successfully pushed to GitHub
+- **Features**: All authentication fixes and demo mode functionality deployed
+
+### Verification Steps
+✅ VPS database connectivity restored  
+✅ Production authentication working  
+✅ Demo mode functional with environment indicators  
+✅ Form fields readable with proper contrast  
+✅ Quick demo login buttons working  
+✅ Calculator as default landing page  
+✅ No redirect loops or authentication errors  
+✅ Environment banner showing correct mode on all pages
+
+### Next Steps
+- Monitor production performance and user feedback
+- Consider implementing database-backed user management for production mode
+- Evaluate demo mode usage analytics for optimization

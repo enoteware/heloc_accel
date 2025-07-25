@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import type { CalculatorValidationInput } from '@/lib/validation'
 
 interface CalculatorFormProps {
@@ -74,28 +74,55 @@ const validationRules = {
 }
 
 export default function FastCalculatorForm({ onSubmit, loading = false, initialData = {} }: CalculatorFormProps) {
-  const [formData, setFormData] = useState<CalculatorValidationInput>({
+  const [formData, setFormData] = useState<CalculatorValidationInput>(() => ({
     currentMortgageBalance: initialData.currentMortgageBalance || 0,
     currentInterestRate: initialData.currentInterestRate || 0,
     remainingTermMonths: initialData.remainingTermMonths || 0,
     monthlyPayment: initialData.monthlyPayment || 0,
-    propertyValue: initialData.propertyValue,
-    propertyTaxMonthly: initialData.propertyTaxMonthly,
-    insuranceMonthly: initialData.insuranceMonthly,
-    hoaFeesMonthly: initialData.hoaFeesMonthly,
+    propertyValue: initialData.propertyValue || 0,
+    propertyTaxMonthly: initialData.propertyTaxMonthly || 0,
+    insuranceMonthly: initialData.insuranceMonthly || 0,
+    hoaFeesMonthly: initialData.hoaFeesMonthly || 0,
     helocLimit: initialData.helocLimit || 0,
     helocInterestRate: initialData.helocInterestRate || 0,
-    helocAvailableCredit: initialData.helocAvailableCredit,
+    helocAvailableCredit: initialData.helocAvailableCredit || 0,
     monthlyGrossIncome: initialData.monthlyGrossIncome || 0,
     monthlyNetIncome: initialData.monthlyNetIncome || 0,
     monthlyExpenses: initialData.monthlyExpenses || 0,
     monthlyDiscretionaryIncome: initialData.monthlyDiscretionaryIncome || 0,
-    scenarioName: initialData.scenarioName,
-    description: initialData.description
-  })
+    scenarioName: initialData.scenarioName || '',
+    description: initialData.description || ''
+  }))
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  // Update form data when initialData changes
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setFormData({
+        currentMortgageBalance: initialData.currentMortgageBalance || 0,
+        currentInterestRate: initialData.currentInterestRate || 0,
+        remainingTermMonths: initialData.remainingTermMonths || 0,
+        monthlyPayment: initialData.monthlyPayment || 0,
+        propertyValue: initialData.propertyValue || 0,
+        propertyTaxMonthly: initialData.propertyTaxMonthly || 0,
+        insuranceMonthly: initialData.insuranceMonthly || 0,
+        hoaFeesMonthly: initialData.hoaFeesMonthly || 0,
+        helocLimit: initialData.helocLimit || 0,
+        helocInterestRate: initialData.helocInterestRate || 0,
+        helocAvailableCredit: initialData.helocAvailableCredit || 0,
+        monthlyGrossIncome: initialData.monthlyGrossIncome || 0,
+        monthlyNetIncome: initialData.monthlyNetIncome || 0,
+        monthlyExpenses: initialData.monthlyExpenses || 0,
+        monthlyDiscretionaryIncome: initialData.monthlyDiscretionaryIncome || 0,
+        scenarioName: initialData.scenarioName || '',
+        description: initialData.description || ''
+      })
+      setErrors({})
+      setTouched({})
+    }
+  }, [initialData])
 
   const validateField = useCallback((field: keyof CalculatorValidationInput, value: number): string => {
     const rule = validationRules[field as keyof typeof validationRules]
@@ -117,11 +144,23 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   }, [])
 
   const handleInputChange = useCallback((field: keyof CalculatorValidationInput, value: string | number) => {
-    const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value
+    let processedValue: string | number = value
+    
+    // Handle string inputs - keep as string during typing for better UX
+    if (typeof value === 'string') {
+      // Allow empty string during typing
+      if (value === '') {
+        processedValue = ''
+      } else {
+        // Only convert to number if it's a valid number
+        const numericValue = parseFloat(value)
+        processedValue = isNaN(numericValue) ? '' : numericValue
+      }
+    }
 
     setFormData(prev => ({
       ...prev,
-      [field]: numericValue
+      [field]: processedValue
     }))
 
     // Clear error when user starts typing
@@ -139,7 +178,19 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       [field]: true
     }))
 
-    const error = validateField(field, formData[field] as number)
+    // Convert string to number for validation
+    const value = formData[field]
+    const numericValue = typeof value === 'string' ? (value === '' ? 0 : parseFloat(value)) : value
+    
+    // Update formData to ensure numeric value
+    if (typeof value === 'string' && value !== '') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: numericValue
+      }))
+    }
+
+    const error = validateField(field, numericValue || 0)
     setErrors(prev => ({
       ...prev,
       [field]: error
@@ -149,12 +200,19 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Validate all fields
+    // Convert all form data to numbers and validate
+    const processedData: CalculatorValidationInput = { ...formData }
     const newErrors: Record<string, string> = {}
     const requiredFields = Object.keys(validationRules) as Array<keyof typeof validationRules>
     
     requiredFields.forEach(field => {
-      const error = validateField(field, formData[field] as number)
+      const value = formData[field]
+      const numericValue = typeof value === 'string' ? (value === '' ? 0 : parseFloat(value)) : (value || 0)
+      
+      // Ensure numeric values in final data
+      processedData[field] = numericValue
+      
+      const error = validateField(field, numericValue)
       if (error) {
         newErrors[field] = error
       }
@@ -164,7 +222,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
     setTouched(Object.fromEntries(requiredFields.map(field => [field, true])))
 
     if (Object.keys(newErrors).length === 0) {
-      onSubmit(formData)
+      onSubmit(processedData)
     }
   }
 
@@ -214,7 +272,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         <input
           type="number"
           id={field}
-          value={formData[field] || ''}
+          value={formData[field] === 0 ? '' : formData[field] || ''}
           onChange={(e) => handleInputChange(field, e.target.value)}
           onBlur={() => handleBlur(field)}
           className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
@@ -251,7 +309,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         <input
           type="number"
           id={field}
-          value={formData[field] || ''}
+          value={formData[field] === 0 ? '' : formData[field] || ''}
           onChange={(e) => handleInputChange(field, e.target.value)}
           onBlur={() => handleBlur(field)}
           className={`w-full px-3 py-2 pr-8 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
@@ -289,7 +347,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       <input
         type="number"
         id={field}
-        value={formData[field] || ''}
+        value={formData[field] === 0 ? '' : formData[field] || ''}
         onChange={(e) => handleInputChange(field, e.target.value)}
         onBlur={() => handleBlur(field)}
         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
