@@ -26,6 +26,19 @@ const nextConfig = {
   // },
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
+    // Force module resolution for problematic imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@/components/DemoAccountsInfo': require.resolve('./src/components/DemoAccountsInfo.tsx'),
+      '@/components/CalculatorForm': require.resolve('./src/components/CalculatorForm.tsx'),
+      '@/components/Logo': require.resolve('./src/components/Logo.tsx'),
+      '@/lib/demo-storage': require.resolve('./src/lib/demo-storage.ts'),
+      '@/lib/api-url': require.resolve('./src/lib/api-url.ts'),
+    }
+
+    // Ensure module resolution works properly
+    config.resolve.extensions = ['.tsx', '.ts', '.jsx', '.js', '.json']
+    
     // Production optimizations
     if (!dev && !isServer) {
       // Split chunks for better caching
