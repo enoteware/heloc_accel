@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tooltip } from '@/components/design-system/Tooltip'
+import { Tooltip } from '../design-system/Tooltip'
 import { CurrencyInput, PercentageInput, NumericInput, FormInput } from './FormInput'
 
 interface FormFieldWithTooltipProps {

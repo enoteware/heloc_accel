@@ -11,7 +11,7 @@ import {
   slideInRightKeyframes,
   scaleInKeyframes,
   UseAnimationOptions
-} from '@/hooks/useAnimation';
+} from '../../hooks/useAnimation';
 
 export interface AnimatedComponentProps extends React.HTMLAttributes<HTMLDivElement> {
   animation?: 'fadeIn' | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight' | 'scaleIn';

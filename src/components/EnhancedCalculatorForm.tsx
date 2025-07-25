@@ -4,9 +4,9 @@ import React from 'react'
 import { CalculationInput } from '@/lib/types'
 import { useCalculatorForm } from '@/hooks/useCalculatorForm'
 import { CurrencyFieldWithTooltip, PercentageFieldWithTooltip, NumericFieldWithTooltip } from '@/components/form/FormFieldWithTooltip'
-import { Button } from '@/components/design-system/Button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/design-system/Card'
-import { Progress } from '@/components/design-system/Progress'
+import { Button } from './design-system/Button'
+import { Card, CardContent, CardHeader, CardTitle } from './design-system/Card'
+import { Progress } from './design-system/Progress'
 
 interface EnhancedCalculatorFormProps {
   onSubmit: (data: CalculationInput) => void | Promise<void>
