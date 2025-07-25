@@ -1,7 +1,3 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // No basePath needed since we're using a subdomain
@@ -85,4 +81,17 @@ const nextConfig = {
   },
 }
 
-module.exports = withBundleAnalyzer(nextConfig)
+// Only use bundle analyzer in development when explicitly enabled
+if (process.env.ANALYZE === 'true' && process.env.NODE_ENV === 'development') {
+  try {
+    const withBundleAnalyzer = require('@next/bundle-analyzer')({
+      enabled: true,
+    })
+    module.exports = withBundleAnalyzer(nextConfig)
+  } catch (error) {
+    console.warn('Bundle analyzer not available, using default config')
+    module.exports = nextConfig
+  }
+} else {
+  module.exports = nextConfig
+}
