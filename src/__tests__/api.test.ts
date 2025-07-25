@@ -8,14 +8,13 @@ import { NextRequest } from 'next/server'
 
 // Mock the database and auth before importing API routes
 const mockQuery = jest.fn()
-const mockAuth = jest.fn()
 
 jest.mock('../lib/database', () => ({
   query: mockQuery
 }))
 
 jest.mock('@/auth', () => ({
-  auth: mockAuth
+  auth: jest.fn()
 }))
 
 jest.mock('crypto', () => ({
@@ -29,6 +28,9 @@ jest.mock('bcryptjs', () => ({
   hash: jest.fn()
 }))
 
+// Import auth after mocking to get the mocked version
+import { auth } from '@/auth'
+
 // Import API routes after mocking
 import { GET as getScenarios, POST as createScenario } from '../app/api/scenario/route'
 import { GET as getScenario, DELETE as deleteScenario } from '../app/api/scenario/[id]/route'
@@ -37,7 +39,8 @@ import { GET as getSharedScenario } from '../app/api/shared/[token]/route'
 import { GET as getProfile, PUT as updateProfile } from '../app/api/profile/route'
 import { PUT as changePassword } from '../app/api/profile/password/route'
 
-// Use the mocked functions directly
+// Get mocked auth function
+const mockedAuth = auth as jest.MockedFunction<typeof auth>
 
 // Mock user for authentication
 const mockUser = {
@@ -55,7 +58,7 @@ const mockSession = {
 describe('API Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockAuth.mockResolvedValue(mockSession)
+    mockedAuth.mockResolvedValue(mockSession)
   })
 
   describe('Scenario API', () => {
@@ -95,7 +98,7 @@ describe('API Integration Tests', () => {
       })
 
       test('should handle authentication error', async () => {
-        mockAuth.mockResolvedValueOnce(null)
+        mockedAuth.mockResolvedValueOnce(null)
 
         const request = new NextRequest('http://localhost:3000/api/scenario')
         const response = await getScenarios(request)
