@@ -20,7 +20,7 @@ export default async function LoginPage({
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Demo accounts: demo@example.com / demo123
+            Demo accounts: demo@helocaccel.com / DemoUser123!
           </p>
         </div>
         
@@ -60,7 +60,7 @@ export default async function LoginPage({
                 autoComplete="email"
                 required
                 className="mt-1"
-                placeholder="demo@example.com"
+                placeholder="demo@helocaccel.com"
               />
             </div>
 
@@ -75,7 +75,7 @@ export default async function LoginPage({
                 autoComplete="current-password"
                 required
                 className="mt-1"
-                placeholder="demo123"
+                placeholder="DemoUser123!"
               />
             </div>
 
