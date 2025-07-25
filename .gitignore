@@ -67,3 +67,4 @@ temp/
 # Project specific
 /public/uploads/
 /storage/
+/deployment/
