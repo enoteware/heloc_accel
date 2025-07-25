@@ -4,7 +4,6 @@
  * including registration, login, logout, and protected route access.
  */
 
-// import { requireAuth } from '../lib/middleware' // Commented out as middleware is not available in test environment
 import { NextRequest } from 'next/server'
 
 // Mock the database

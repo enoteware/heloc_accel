@@ -26,7 +26,10 @@
     "db:create-user": "node scripts/create-test-user.js",
     "db:cli": "node scripts/db-cli.js",
     "db:users": "node scripts/db-cli.js list-users",
-    "db:migrate": "node scripts/db-cli.js migrate"
+    "db:migrate": "node scripts/db-cli.js migrate",
+    "check:imports": "node scripts/validate-imports.js",
+    "check:deploy": "node scripts/pre-deploy-check.js",
+    "pre-deploy": "node scripts/pre-deploy-check.js"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
