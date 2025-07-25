@@ -26,14 +26,45 @@ const nextConfig = {
   // },
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
-    // Force module resolution for problematic imports
+    // Force module resolution for ALL @/ imports to prevent Vercel build issues
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@/components/DemoAccountsInfo': require.resolve('./src/components/DemoAccountsInfo.tsx'),
+      '@/app/actions/auth': require.resolve('./src/app/actions/auth.ts'),
+      '@/app/dashboard/page': require.resolve('./src/app/dashboard/page.tsx'),
+      '@/auth': require.resolve('./src/auth.ts'),
+      '@/components/AuthProvider': require.resolve('./src/components/AuthProvider.tsx'),
       '@/components/CalculatorForm': require.resolve('./src/components/CalculatorForm.tsx'),
+      '@/components/ConfirmationModals': require.resolve('./src/components/ConfirmationModals.tsx'),
+      '@/components/DemoAccountsInfo': require.resolve('./src/components/DemoAccountsInfo.tsx'),
+      '@/components/EnhancedCalculatorForm': require.resolve('./src/components/EnhancedCalculatorForm.tsx'),
       '@/components/Logo': require.resolve('./src/components/Logo.tsx'),
-      '@/lib/demo-storage': require.resolve('./src/lib/demo-storage.ts'),
+      '@/components/PayoffChart': require.resolve('./src/components/PayoffChart.tsx'),
+      '@/components/ResultsDisplay': require.resolve('./src/components/ResultsDisplay.tsx'),
+      '@/components/design-system': require.resolve('./src/components/design-system/index.ts'),
+      '@/components/design-system/Alert': require.resolve('./src/components/design-system/Alert.tsx'),
+      '@/components/design-system/Button': require.resolve('./src/components/design-system/Button.tsx'),
+      '@/components/design-system/Card': require.resolve('./src/components/design-system/Card.tsx'),
+      '@/components/design-system/Input': require.resolve('./src/components/design-system/Input.tsx'),
+      '@/components/design-system/Modal': require.resolve('./src/components/design-system/Modal.tsx'),
+      '@/components/design-system/Progress': require.resolve('./src/components/design-system/Progress.tsx'),
+      '@/components/design-system/Tooltip': require.resolve('./src/components/design-system/Tooltip.tsx'),
+      '@/components/design-system/ValidatedInput': require.resolve('./src/components/design-system/ValidatedInput.tsx'),
+      '@/components/form/FormFieldWithTooltip': require.resolve('./src/components/form/FormFieldWithTooltip.tsx'),
+      '@/components/navigation': require.resolve('./src/components/navigation/index.ts'),
+      '@/hooks/useCalculatorForm': require.resolve('./src/hooks/useCalculatorForm.ts'),
+      '@/hooks/useFormValidation': require.resolve('./src/hooks/useFormValidation.ts'),
       '@/lib/api-url': require.resolve('./src/lib/api-url.ts'),
+      '@/lib/auth-utils': require.resolve('./src/lib/auth-utils.ts'),
+      '@/lib/calculations': require.resolve('./src/lib/calculations.ts'),
+      '@/lib/database': require.resolve('./src/lib/database.ts'),
+      '@/lib/demo-storage': require.resolve('./src/lib/demo-storage.ts'),
+      '@/lib/dummy-users': require.resolve('./src/lib/dummy-users.ts'),
+      '@/lib/form-validation': require.resolve('./src/lib/form-validation.ts'),
+      '@/lib/rate-limit': require.resolve('./src/lib/rate-limit.ts'),
+      '@/lib/security-headers': require.resolve('./src/lib/security-headers.ts'),
+      '@/lib/types': require.resolve('./src/lib/types.ts'),
+      '@/lib/utils': require.resolve('./src/lib/utils.ts'),
+      '@/lib/validation': require.resolve('./src/lib/validation.ts'),
     }
 
     // Ensure module resolution works properly
