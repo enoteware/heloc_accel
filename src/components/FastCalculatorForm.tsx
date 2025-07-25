@@ -309,6 +309,8 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       description: 'Sample data for testing the HELOC acceleration strategy'
     }
 
+    addDebugLog('Loading demo data with proper values', demoData)
+
     setFormData(demoData)
     setErrors({})
   }

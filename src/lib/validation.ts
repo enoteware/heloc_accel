@@ -392,7 +392,10 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
   errors.push(...incomeValidation.errors)
 
   // Cross-validation between sections
+  console.log('Performing cross-validation checks...')
+  
   if (input.helocLimit && input.helocAvailableCredit && input.helocAvailableCredit > input.helocLimit) {
+    console.log('HELOC credit validation failed:', { limit: input.helocLimit, available: input.helocAvailableCredit })
     errors.push({
       field: 'helocAvailableCredit',
       message: 'HELOC available credit cannot exceed HELOC limit'
@@ -400,6 +403,11 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
   }
 
   if (input.propertyValue && input.currentMortgageBalance > input.propertyValue) {
+    console.log('Property value validation failed:', { 
+      mortgageBalance: input.currentMortgageBalance, 
+      propertyValue: input.propertyValue,
+      difference: input.currentMortgageBalance - input.propertyValue
+    })
     errors.push({
       field: 'currentMortgageBalance',
       message: 'Mortgage balance cannot exceed property value'
