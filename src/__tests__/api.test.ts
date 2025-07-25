@@ -7,14 +7,14 @@
 import { NextRequest } from 'next/server'
 
 // Mock the database and auth before importing API routes
-const mockQuery = jest.fn()
-
 jest.mock('../lib/database', () => ({
-  query: mockQuery
+  query: jest.fn()
 }))
 
+const mockQuery = require('../lib/database').query
+
 jest.mock('@/auth', () => ({
-  auth: jest.fn()
+  auth: jest.fn() as jest.MockedFunction<any>
 }))
 
 jest.mock('crypto', () => ({
@@ -40,7 +40,7 @@ import { GET as getProfile, PUT as updateProfile } from '../app/api/profile/rout
 import { PUT as changePassword } from '../app/api/profile/password/route'
 
 // Get mocked auth function
-const mockedAuth = auth as jest.MockedFunction<typeof auth>
+const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<any>>
 
 // Mock user for authentication
 const mockUser = {
