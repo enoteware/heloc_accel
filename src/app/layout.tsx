@@ -4,6 +4,7 @@ import './globals.css'
 import { AuthProvider } from '@/components/AuthProvider'
 import { NavigationProvider, NavigationBar } from '@/components/navigation'
 import { ThemeProvider } from '../components/design-system/ThemeProvider'
+import EnvironmentBanner from '@/components/EnvironmentBanner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <NavigationProvider>
+              <EnvironmentBanner />
               <NavigationBar />
               <main className="min-h-screen">
                 {children}

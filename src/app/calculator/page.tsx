@@ -48,7 +48,7 @@ function CalculatorPageContent() {
   const [error, setError] = useState<string | null>(null)
   const [initialData, setInitialData] = useState<Partial<CalculatorValidationInput>>({})
   const [editingScenarioId, setEditingScenarioId] = useState<string | null>(null)
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
 
   // Initialize demo data if in demo mode
   useEffect(() => {
@@ -267,9 +267,9 @@ function CalculatorPageContent() {
           </p>
         </div>
 
-        {/* Demo Mode Banner */}
-        {isDemoMode && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 mb-8">
+        {/* Environment Banner */}
+        {isDemoMode ? (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-4 mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -278,7 +278,7 @@ function CalculatorPageContent() {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">Demo Mode Active</h3>
+                  <h3 className="text-sm font-medium text-green-800">🎮 Demo Mode Active</h3>
                   <p className="text-sm text-green-700">
                     Try all features without signing up • Data saved locally • Sample scenarios included
                   </p>
@@ -288,7 +288,48 @@ function CalculatorPageContent() {
                 onClick={() => router.push('/dashboard')}
                 className="text-green-600 hover:text-green-700 font-medium text-sm"
               >
-                View Saved Scenarios →
+                View Dashboard →
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className={`rounded-lg p-4 mb-8 border-2 ${
+            process.env.NODE_ENV === 'development'
+              ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
+              : 'bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200'
+          }`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className={`w-6 h-6 ${
+                    process.env.NODE_ENV === 'development' ? 'text-blue-600' : 'text-purple-600'
+                  }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className={`text-sm font-medium ${
+                    process.env.NODE_ENV === 'development' ? 'text-blue-800' : 'text-purple-800'
+                  }`}>
+                    {process.env.NODE_ENV === 'development' ? '🔧 Development Environment' : '🚀 Production Environment'}
+                  </h3>
+                  <p className={`text-sm ${
+                    process.env.NODE_ENV === 'development' ? 'text-blue-700' : 'text-purple-700'
+                  }`}>
+                    {process.env.NODE_ENV === 'development'
+                      ? 'Development build • Debug mode enabled • Local database'
+                      : 'Production build • Optimized performance • Live database'
+                    }
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => router.push('/dashboard')}
+                className={`font-medium text-sm hover:opacity-80 ${
+                  process.env.NODE_ENV === 'development' ? 'text-blue-600' : 'text-purple-600'
+                }`}
+              >
+                View Dashboard →
               </button>
             </div>
           </div>

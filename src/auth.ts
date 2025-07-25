@@ -6,20 +6,26 @@ import type { NextAuthConfig } from "next-auth"
 const DEMO_USERS = [
   {
     id: "demo-user-001",
-    email: "demo@helocaccel.com",
+    email: "demo@example.com",
     name: "Demo User",
-    password: "DemoUser123!", // In production, this would be hashed
+    password: "demo123",
   },
   {
     id: "demo-user-002",
-    email: "john.smith@example.com",
+    email: "john@example.com",
     name: "John Smith",
-    password: "password123", // In production, this would be hashed
+    password: "password123",
+  },
+  {
+    id: "demo-user-003",
+    email: "jane@example.com",
+    name: "Jane Doe",
+    password: "password123",
   },
 ]
 
 export const config: NextAuthConfig = {
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true',
   theme: {
     logo: "/heloc_accel.svg",
   },
@@ -31,9 +37,12 @@ export const config: NextAuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
+        
         console.log('[AUTH DEBUG] Authorize called with:', {
           email: credentials?.email,
           passwordProvided: !!credentials?.password,
+          isDemoMode,
           demoUsers: DEMO_USERS.map(u => u.email)
         })
 
@@ -42,27 +51,31 @@ export const config: NextAuthConfig = {
           return null
         }
 
-        // In demo mode, check against demo users
-        // In production, this would query your database
-        const user = DEMO_USERS.find(
-          (u) =>
-            u.email === credentials.email &&
-            u.password === credentials.password
-        )
+        if (isDemoMode) {
+          // Demo mode: check against hardcoded demo users
+          const user = DEMO_USERS.find(
+            (u) =>
+              u.email === credentials.email &&
+              u.password === credentials.password
+          )
 
-        console.log('[AUTH DEBUG] User lookup result:', {
-          found: !!user,
-          email: credentials.email,
-          userId: user?.id
-        })
+          console.log('[AUTH DEBUG] Demo mode user lookup:', {
+            found: !!user,
+            email: credentials.email,
+            userId: user?.id
+          })
 
-        if (user) {
-          // Return user object that will be saved in JWT
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
+          if (user) {
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+            }
           }
+        } else {
+          // Production mode: query database
+          // TODO: Implement database user lookup with bcrypt password verification
+          console.log('[AUTH DEBUG] Production mode - database lookup not implemented')
         }
 
         return null
