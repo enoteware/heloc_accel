@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { CalculatorValidationInput } from '@/lib/validation'
+import type { CalculatorValidationInput } from '@/lib/validation'
 
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
