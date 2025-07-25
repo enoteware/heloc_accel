@@ -116,6 +116,15 @@ const checks = [
     name: 'Production Build Test',
     command: 'NODE_ENV=production npm run build',
     critical: true
+  },
+  {
+    name: 'Vercel Deployment Check',
+    command: 'node scripts/vercel-check.js',
+    critical: true,
+    preCheck: () => {
+      const vercelCheckPath = path.join(process.cwd(), 'scripts', 'vercel-check.js');
+      return fs.existsSync(vercelCheckPath);
+    }
   }
 ];
 

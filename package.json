@@ -29,6 +29,7 @@
     "db:migrate": "node scripts/db-cli.js migrate",
     "check:imports": "node scripts/validate-imports.js",
     "check:deploy": "node scripts/pre-deploy-check.js",
+    "check:vercel": "node scripts/vercel-check.js",
     "pre-deploy": "node scripts/pre-deploy-check.js"
   },
   "dependencies": {
