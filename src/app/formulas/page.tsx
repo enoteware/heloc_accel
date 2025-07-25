@@ -40,10 +40,10 @@ export default function FormulasPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Monthly Payment Formula</h3>
-                <div className="bg-primary-100 p-4 rounded-lg font-mono text-sm mb-3">
+                <div className="bg-primary-100 p-4 rounded-lg font-mono text-sm mb-3 text-primary-900">
                   M = P × [r(1+r)^n] / [(1+r)^n - 1]
                 </div>
-                <div className="text-primary-700">
+                <div className="text-primary-900">
                   <p className="mb-2"><strong>Where:</strong></p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li><strong>M</strong> = Monthly payment amount</li>
@@ -56,7 +56,7 @@ export default function FormulasPage() {
 
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Monthly Payment Breakdown</h3>
-                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm">
+                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm text-primary-900">
                   <div className="font-mono">Interest Payment = Beginning Balance × Monthly Rate</div>
                   <div className="font-mono">Principal Payment = Monthly Payment - Interest Payment</div>
                   <div className="font-mono">Ending Balance = Beginning Balance - Principal Payment</div>
@@ -65,10 +65,10 @@ export default function FormulasPage() {
 
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Remaining Balance Formula</h3>
-                <div className="bg-primary-100 p-4 rounded-lg font-mono text-sm mb-3">
+                <div className="bg-primary-100 p-4 rounded-lg font-mono text-sm mb-3 text-primary-900">
                   RB = M × [(1+r)^(n-p) - 1] / [r × (1+r)^(n-p)]
                 </div>
-                <div className="text-primary-700">
+                <div className="text-primary-900">
                   <p className="mb-2"><strong>Where:</strong></p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li><strong>RB</strong> = Remaining balance</li>
@@ -87,7 +87,7 @@ export default function FormulasPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Core Strategy Logic</h3>
-                <div className="text-primary-700 space-y-3">
+                <div className="text-primary-900 space-y-3">
                   <p>The HELOC acceleration strategy works by leveraging the difference between mortgage and HELOC interest rates, combined with disciplined use of discretionary income:</p>
                   <ol className="list-decimal list-inside space-y-2 ml-4">
                     <li><strong>Chunking Strategy:</strong> Use HELOC funds to make large principal payments on the mortgage</li>
@@ -100,7 +100,7 @@ export default function FormulasPage() {
 
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Monthly Calculation Process</h3>
-                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm">
+                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm text-primary-900">
                   <div className="font-bold">Step 1: Calculate Interest Payments</div>
                   <div className="font-mono ml-4">Mortgage Interest = Mortgage Balance × (Mortgage Rate ÷ 12)</div>
                   <div className="font-mono ml-4">HELOC Interest = HELOC Balance × (HELOC Rate ÷ 12)</div>
@@ -110,7 +110,7 @@ export default function FormulasPage() {
                   <div className="font-mono ml-4">Additional Principal = min(Discretionary Income, Remaining Balance)</div>
                   
                   <div className="font-bold mt-4">Step 3: HELOC Utilization Decision</div>
-                  <div className="text-xs ml-4 text-primary-600">
+                  <div className="text-xs ml-4 text-primary-700">
                     Use HELOC when: Mortgage Rate ≥ HELOC Rate OR Mortgage Balance &lt; 10% of HELOC Limit
                   </div>
                   
@@ -122,7 +122,7 @@ export default function FormulasPage() {
 
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Key Performance Metrics</h3>
-                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm">
+                <div className="bg-primary-100 p-4 rounded-lg space-y-2 text-sm text-primary-900">
                   <div className="font-mono">Total Interest Saved = Traditional Total Interest - HELOC Total Interest</div>
                   <div className="font-mono">Time Saved = Traditional Payoff Months - HELOC Payoff Months</div>
                   <div className="font-mono">Interest Savings % = (Interest Saved ÷ Traditional Interest) × 100</div>
@@ -141,7 +141,7 @@ export default function FormulasPage() {
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Decision Tree for HELOC Usage</h3>
                 <div className="bg-primary-100 p-4 rounded-lg">
-                  <div className="font-mono text-sm space-y-2">
+                  <div className="font-mono text-sm space-y-2 text-primary-900">
                     <div>IF (discretionary_income &gt; 0) THEN</div>
                     <div className="ml-4">use_for_additional_principal = min(discretionary_income, remaining_mortgage)</div>
                     <div className="ml-4">IF (remaining_discretionary &gt; 0) THEN</div>
@@ -156,7 +156,7 @@ export default function FormulasPage() {
 
               <div>
                 <h3 className="text-xl font-semibold text-primary-800 mb-3">Strategy Beneficial Conditions</h3>
-                <div className="text-primary-700 space-y-2">
+                <div className="text-primary-900 space-y-2">
                   <p>The algorithm determines HELOC usage is beneficial when:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li><strong>Rate Advantage:</strong> Mortgage rate ≥ HELOC rate</li>
@@ -192,31 +192,31 @@ export default function FormulasPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-primary-100">
-                        <th className="text-left p-3 font-semibold">Metric</th>
-                        <th className="text-left p-3 font-semibold">Formula</th>
-                        <th className="text-left p-3 font-semibold">Interpretation</th>
+                        <th className="text-left p-3 font-semibold text-primary-900">Metric</th>
+                        <th className="text-left p-3 font-semibold text-primary-900">Formula</th>
+                        <th className="text-left p-3 font-semibold text-primary-900">Interpretation</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-primary-200">
                       <tr>
-                        <td className="p-3 font-mono">Time Saved</td>
-                        <td className="p-3 font-mono text-xs">Traditional Months - HELOC Months</td>
-                        <td className="p-3">Months earlier payoff is achieved</td>
+                        <td className="p-3 font-mono text-primary-900">Time Saved</td>
+                        <td className="p-3 font-mono text-xs text-primary-900">Traditional Months - HELOC Months</td>
+                        <td className="p-3 text-primary-900">Months earlier payoff is achieved</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-mono">Interest Saved</td>
-                        <td className="p-3 font-mono text-xs">Traditional Interest - HELOC Interest</td>
-                        <td className="p-3">Total dollar amount saved in interest</td>
+                        <td className="p-3 font-mono text-primary-900">Interest Saved</td>
+                        <td className="p-3 font-mono text-xs text-primary-900">Traditional Interest - HELOC Interest</td>
+                        <td className="p-3 text-primary-900">Total dollar amount saved in interest</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-mono">Savings %</td>
-                        <td className="p-3 font-mono text-xs">(Interest Saved ÷ Traditional) × 100</td>
-                        <td className="p-3">Percentage reduction in total interest</td>
+                        <td className="p-3 font-mono text-primary-900">Savings %</td>
+                        <td className="p-3 font-mono text-xs text-primary-900">(Interest Saved ÷ Traditional) × 100</td>
+                        <td className="p-3 text-primary-900">Percentage reduction in total interest</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-mono">Payment Difference</td>
-                        <td className="p-3 font-mono text-xs">Avg HELOC Payment - Traditional Payment</td>
-                        <td className="p-3">Average monthly payment difference</td>
+                        <td className="p-3 font-mono text-primary-900">Payment Difference</td>
+                        <td className="p-3 font-mono text-xs text-primary-900">Avg HELOC Payment - Traditional Payment</td>
+                        <td className="p-3 text-primary-900">Average monthly payment difference</td>
                       </tr>
                     </tbody>
                   </table>
@@ -241,7 +241,7 @@ export default function FormulasPage() {
           <Card className="p-8">
             <h2 className="text-2xl font-bold text-primary-900 mb-6">Mathematical Assumptions</h2>
             
-            <div className="text-primary-700 space-y-4">
+            <div className="text-primary-900 space-y-4">
               <div>
                 <h3 className="text-lg font-semibold text-primary-800 mb-2">Calculation Assumptions</h3>
                 <ul className="list-disc list-inside space-y-1 ml-4">
@@ -268,7 +268,7 @@ export default function FormulasPage() {
         </main>
 
         <div className="mt-12 text-center">
-          <p className="text-primary-600">
+          <p className="text-primary-800">
             These calculations are for educational purposes. Consult with a financial advisor before implementing any debt payoff strategy.
           </p>
         </div>
