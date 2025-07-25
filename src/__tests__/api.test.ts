@@ -6,16 +6,16 @@
 
 import { NextRequest } from 'next/server'
 
-// Mock the database and middleware before importing API routes
+// Mock the database and auth before importing API routes
 const mockQuery = jest.fn()
-const mockRequireAuth = jest.fn()
+const mockAuth = jest.fn()
 
 jest.mock('../lib/database', () => ({
   query: mockQuery
 }))
 
-jest.mock('../lib/middleware', () => ({
-  requireAuth: mockRequireAuth
+jest.mock('@/auth', () => ({
+  auth: mockAuth
 }))
 
 jest.mock('crypto', () => ({
@@ -47,10 +47,15 @@ const mockUser = {
   lastName: 'User'
 }
 
+const mockSession = {
+  user: mockUser,
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+}
+
 describe('API Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockRequireAuth.mockReturnValue(mockUser)
+    mockAuth.mockResolvedValue(mockSession)
   })
 
   describe('Scenario API', () => {
@@ -90,9 +95,7 @@ describe('API Integration Tests', () => {
       })
 
       test('should handle authentication error', async () => {
-        mockRequireAuth.mockImplementationOnce(() => {
-          throw new Error('Authentication required')
-        })
+        mockAuth.mockResolvedValueOnce(null)
 
         const request = new NextRequest('http://localhost:3000/api/scenario')
         const response = await getScenarios(request)

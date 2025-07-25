@@ -45,6 +45,13 @@ describe('Demo Data Clearing Functionality', () => {
     // Clear localStorage before each test
     localStorageMock.clear()
     jest.clearAllMocks()
+    // Mock console.error to prevent error logs in tests
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    // Restore console.error
+    jest.restoreAllMocks()
   })
 
   describe('getDemoScenarios', () => {

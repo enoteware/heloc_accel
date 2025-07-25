@@ -71,7 +71,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Current mortgage balance must be positive')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Current mortgage balance must be positive' })
+      ]))
     })
 
     test('should reject invalid interest rate', () => {
@@ -90,7 +92,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Interest rate must be between 0 and 30%')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+      ]))
     })
 
     test('should reject extremely high interest rate', () => {
@@ -109,7 +113,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Interest rate must be between 0 and 30%')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+      ]))
     })
 
     test('should reject invalid term length', () => {
@@ -128,7 +134,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Remaining term must be between 1 and 600 months')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'remainingTermMonths', message: 'Remaining term must be between 1 and 600 months' })
+      ]))
     })
 
     test('should reject inconsistent income data', () => {
@@ -147,7 +155,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Net income cannot be higher than gross income')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'monthlyNetIncome', message: 'Net income cannot be higher than gross income' })
+      ]))
     })
 
     test('should reject inconsistent expense data', () => {
@@ -166,7 +176,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Monthly expenses cannot exceed net income')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'monthlyExpenses', message: 'Monthly expenses cannot exceed net income' })
+      ]))
     })
 
     test('should reject empty scenario name', () => {
@@ -185,7 +197,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(invalidInput)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Scenario name is required')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'scenarioName', message: 'Scenario name is required' })
+      ]))
     })
 
     test('should handle HELOC validation when provided', () => {
@@ -206,7 +220,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(inputWithHeloc)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('HELOC limit must be positive')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'helocLimit', message: 'HELOC limit must be positive' })
+      ]))
     })
 
     test('should validate HELOC available credit consistency', () => {
@@ -228,7 +244,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(inputWithHeloc)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('HELOC available credit cannot exceed HELOC limit')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'helocAvailableCredit', message: 'HELOC available credit cannot exceed HELOC limit' })
+      ]))
     })
 
     test('should validate property value consistency', () => {
@@ -248,7 +266,9 @@ describe('Input Validation Integration Tests', () => {
       const result = validateCalculatorInput(inputWithProperty)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors).toContain('Mortgage balance cannot exceed property value')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Mortgage balance cannot exceed property value' })
+      ]))
     })
 
     test('should accumulate multiple validation errors', () => {
@@ -268,22 +288,30 @@ describe('Input Validation Integration Tests', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors.length).toBeGreaterThanOrEqual(5) // Should have multiple errors
-      expect(result.errors).toContain('Current mortgage balance must be positive')
-      expect(result.errors).toContain('Interest rate must be between 0 and 30%')
-      expect(result.errors).toContain('Remaining term must be between 1 and 600 months')
-      expect(result.errors).toContain('Scenario name is required')
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Current mortgage balance must be positive' })
+      ]))
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+      ]))
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'remainingTermMonths', message: 'Remaining term must be between 1 and 600 months' })
+      ]))
+      expect(result.errors).toEqual(expect.arrayContaining([
+        expect.objectContaining({ field: 'scenarioName', message: 'Scenario name is required' })
+      ]))
     })
 
     test('should handle edge case values correctly', () => {
       const edgeCaseInput: CalculatorValidationInput = {
-        currentMortgageBalance: 1, // Minimum valid value
-        currentInterestRate: 0, // Zero interest
-        remainingTermMonths: 1, // Minimum term
-        monthlyPayment: 1, // Minimum payment
-        monthlyGrossIncome: 1,
-        monthlyNetIncome: 1,
+        currentMortgageBalance: 1000, // Minimum valid value per VALIDATION_RULES
+        currentInterestRate: 0.001, // Minimum interest rate
+        remainingTermMonths: 12, // Minimum term (1 year)
+        monthlyPayment: 100, // Minimum payment
+        monthlyGrossIncome: 1000, // Minimum income
+        monthlyNetIncome: 1000,
         monthlyExpenses: 0, // Zero expenses
-        monthlyDiscretionaryIncome: 1,
+        monthlyDiscretionaryIncome: 1000, // Net income - expenses
         scenarioName: 'Edge Case Test'
       }
 
