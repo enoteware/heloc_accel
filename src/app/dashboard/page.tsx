@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getDemoScenarios, deleteDemoScenario, updateDemoScenario, generateSampleScenarios, clearDemoScenarios, getStorageInfo } from '@/lib/demo-storage'
 import { FirstConfirmationModal, SecondConfirmationModal, SuccessModal } from '@/components/ConfirmationModals'
-import { Modal, ModalBody, ModalFooter } from '@/components/design-system/Modal'
-import { Button } from '@/components/design-system/Button'
+import { Modal, ModalBody, ModalFooter } from '../../components/design-system/Modal'
+import { Button } from '../../components/design-system/Button'
 
 // Lazy load heavy components
 const PayoffChart = lazy(() => import('@/components/PayoffChart'))

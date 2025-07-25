@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal, ModalBody, ModalFooter } from '@/components/design-system/Modal';
-import { Button } from '@/components/design-system/Button';
-import { Input } from '@/components/design-system/Input';
+import { Modal, ModalBody, ModalFooter } from './design-system/Modal';
+import { Button } from './design-system/Button';
+import { Input } from './design-system/Input';
 
 export interface FirstConfirmationModalProps {
   isOpen: boolean;

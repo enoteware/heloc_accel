@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Button } from '@/components/design-system/Button'
-import { Alert } from '@/components/design-system/Alert'
+import { Button } from '../components/design-system/Button'
+import { Alert } from '../components/design-system/Alert'
 
 interface ErrorProps {
   error: Error & { digest?: string }
