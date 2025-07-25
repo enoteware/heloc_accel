@@ -6,7 +6,7 @@ import {
   Path,
   get
 } from 'react-hook-form'
-import { ValidatedInput, ValidatedInputProps } from '@/components/design-system/ValidatedInput'
+import { ValidatedInput, ValidatedInputProps } from '../design-system/ValidatedInput'
 import { getValidationHint } from '@/lib/form-validation'
 
 interface FormInputProps<T extends FieldValues> extends Omit<ValidatedInputProps, 'error' | 'helperText' | 'success'> {

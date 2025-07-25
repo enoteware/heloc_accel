@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
 import { signIn } from "@/auth"
-import { Card } from "@/components/design-system/Card"
-import { Button } from "@/components/design-system/Button"
-import { Input } from "@/components/design-system/Input"
+import { Card } from "../../components/design-system/Card"
+import { Button } from "../../components/design-system/Button"
+import { Input } from "../../components/design-system/Input"
 import { Logo } from "@/components/Logo"
 
 export default async function LoginPage({

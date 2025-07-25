@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/design-system/Button'
+import { Button } from '../components/design-system/Button'
 
 export default function NotFound() {
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
