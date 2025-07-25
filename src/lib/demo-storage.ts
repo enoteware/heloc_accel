@@ -133,23 +133,32 @@ export function getDemoScenarios(userId?: string): DemoScenario[] {
 
 // Save scenarios to localStorage for a specific user
 export function saveDemoScenarios(scenarios: DemoScenario[], userId?: string): void {
+  console.log('=== SAVE DEMO SCENARIOS ===')
+  console.log('Scenarios count:', scenarios.length)
+  console.log('User ID:', userId || 'default')
+  
   if (!isLocalStorageAvailable()) {
+    console.log('❌ localStorage not available')
     throw new Error('localStorage is not available in this browser. Demo data cannot be saved.')
   }
 
   const storageKey = getStorageKey(userId)
+  console.log('Storage key:', storageKey)
 
   try {
     const dataString = JSON.stringify(scenarios)
+    console.log('Data size:', dataString.length, 'characters')
 
     // Check data size before saving (rough estimate of 5MB limit)
     if (dataString.length > 5 * 1024 * 1024) {
+      console.log('❌ Data size too large:', dataString.length)
       throw new Error('Data size too large. Please reduce the number of scenarios.')
     }
 
     localStorage.setItem(storageKey, dataString)
+    console.log('✅ Scenarios saved to localStorage successfully')
   } catch (error) {
-    console.error('Error saving scenarios to localStorage:', error)
+    console.error('❌ Error saving scenarios to localStorage:', error)
 
     // Check if it's a quota exceeded error
     if (error instanceof Error && (
@@ -157,6 +166,7 @@ export function saveDemoScenarios(scenarios: DemoScenario[], userId?: string): v
       error.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
       error.message.includes('quota')
     )) {
+      console.log('Error type: Quota exceeded')
       throw new Error('Storage quota exceeded. Please clear some data or use fewer scenarios.')
     }
 
@@ -165,22 +175,36 @@ export function saveDemoScenarios(scenarios: DemoScenario[], userId?: string): v
       throw error
     }
 
+    console.log('Error type: Generic localStorage failure')
     throw new Error('Failed to save demo data. Your browser may not support localStorage.')
   }
 }
 
 // Add a new scenario for a specific user
 export function addDemoScenario(scenario: Omit<DemoScenario, 'id' | 'createdAt' | 'updatedAt'>, userId?: string): DemoScenario {
+  console.log('=== ADD DEMO SCENARIO ===')
+  console.log('Input scenario:', scenario)
+  console.log('User ID:', userId || 'default')
+  
   const scenarios = getDemoScenarios(userId)
+  console.log('Existing scenarios count:', scenarios.length)
+  
   const newScenario: DemoScenario = {
     ...scenario,
     id: `demo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
+  
+  console.log('New scenario created:', newScenario)
 
   scenarios.push(newScenario)
+  console.log('Total scenarios after adding:', scenarios.length)
+  
+  console.log('Saving scenarios to localStorage...')
   saveDemoScenarios(scenarios, userId)
+  
+  console.log('✅ Demo scenario added successfully')
   return newScenario
 }
 

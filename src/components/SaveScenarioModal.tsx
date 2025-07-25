@@ -24,26 +24,37 @@ export default function SaveScenarioModal({
   const [nameError, setNameError] = useState('')
 
   const handleSave = async () => {
+    console.log('=== SAVE SCENARIO MODAL ===')
+    console.log('Scenario name:', scenarioName.trim())
+    console.log('Description length:', description.trim().length)
+    
     if (!scenarioName.trim()) {
+      console.log('❌ Validation failed: Scenario name is required')
       setNameError('Scenario name is required')
       return
     }
 
     if (scenarioName.trim().length < 3) {
+      console.log('❌ Validation failed: Scenario name too short:', scenarioName.trim().length)
       setNameError('Scenario name must be at least 3 characters')
       return
     }
 
+    console.log('✅ Modal validation passed, calling onSave...')
     try {
       await onSave(scenarioName.trim(), description.trim())
+      console.log('✅ Save successful, clearing form and closing modal')
       setScenarioName('')
       setDescription('')
       setNameError('')
       onClose()
     } catch (error) {
+      console.error('❌ Save failed:', error)
       if (error instanceof Error && error.message.includes('already exists')) {
+        console.log('Error type: Duplicate scenario name')
         setNameError('A scenario with this name already exists')
       } else {
+        console.log('Error type: Generic save failure')
         setNameError('Failed to save scenario. Please try again.')
       }
     }

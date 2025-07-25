@@ -224,16 +224,37 @@ function CalculatorPageContent() {
   }
 
   const handleSaveScenario = async () => {
-    if (!results || !currentFormData) return
+    console.log('=== SAVE SCENARIO BUTTON CLICKED ===')
+    console.log('Results available:', !!results)
+    console.log('Form data available:', !!currentFormData)
+    
+    if (!results || !currentFormData) {
+      console.log('❌ Cannot save: Missing results or form data')
+      return
+    }
+    
+    console.log('✅ Opening save modal')
     setShowSaveModal(true)
   }
 
   const handleSaveConfirm = async (scenarioName: string, description: string) => {
-    if (!results || !currentFormData) return
+    console.log('=== SAVE SCENARIO CONFIRM ===')
+    console.log('Scenario name:', scenarioName)
+    console.log('Description:', description)
+    console.log('Demo mode:', isDemoMode)
+    console.log('Results available:', !!results)
+    console.log('Form data available:', !!currentFormData)
+    
+    if (!results || !currentFormData) {
+      console.log('❌ Cannot save: Missing results or form data')
+      return
+    }
 
     setIsSaving(true)
     try {
       if (isDemoMode) {
+        console.log('📱 Demo mode: Saving to localStorage')
+        
         // Save to localStorage in demo mode
         const scenarioData = {
           name: scenarioName,
@@ -260,11 +281,19 @@ function CalculatorPageContent() {
           interestSaved: results.comparison.interestSaved
         }
         
-        addDemoScenario(scenarioData)
+        console.log('Demo scenario data:', scenarioData)
+        console.log('Calling addDemoScenario...')
+        
+        const savedScenario = addDemoScenario(scenarioData)
+        
+        console.log('✅ Demo scenario saved:', savedScenario)
+        console.log('🔄 Redirecting to dashboard...')
         
         // Redirect to dashboard to see saved scenarios
         router.push('/dashboard')
       } else {
+        console.log('🗄️ Production mode: Saving to database via API')
+        
         // Save to database via API
         const payload = {
           scenarioName,
@@ -272,6 +301,9 @@ function CalculatorPageContent() {
           calculationResults: results,
           ...currentFormData
         }
+
+        console.log('API payload:', payload)
+        console.log('Making POST request to /api/scenario...')
 
         const response = await fetch('/api/scenario', {
           method: 'POST',
@@ -281,23 +313,37 @@ function CalculatorPageContent() {
           body: JSON.stringify(payload),
         })
 
+        console.log('API response status:', response.status)
+        
         const data = await response.json()
+        console.log('API response data:', data)
 
         if (!response.ok) {
+          console.log('❌ API request failed with status:', response.status)
           throw new Error(data.error || 'Failed to save scenario')
         }
 
         if (!data.success) {
+          console.log('❌ API returned unsuccessful result')
           throw new Error(data.error || 'Failed to save scenario')
         }
 
+        console.log('✅ Database scenario saved successfully')
+        console.log('🔄 Redirecting to dashboard...')
+        
         // Redirect to dashboard to see saved scenarios
         router.push('/dashboard')
       }
     } catch (error) {
-      console.error('Save scenario error:', error)
+      console.error('❌ Save scenario error:', error)
+      console.error('Error details:', {
+        name: error instanceof Error ? error.name : 'Unknown',
+        message: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      })
       throw error // Let the modal handle the error display
     } finally {
+      console.log('🔄 Setting isSaving to false')
       setIsSaving(false)
     }
   }
