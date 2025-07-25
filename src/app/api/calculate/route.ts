@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check authentication (skip in demo mode)
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
     let user = null
     if (!isDemoMode) {
       const session = await auth()
@@ -29,14 +29,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    console.log('Raw request body:', body)
 
     // Sanitize inputs
     const sanitizedInputs = sanitizeCalculatorInputs(body)
+    console.log('Sanitized inputs:', sanitizedInputs)
 
     // Validate inputs
     const validation = validateCalculatorInputs(sanitizedInputs)
+    console.log('Validation result:', validation)
 
     if (!validation.isValid) {
+      console.log('Validation failed with errors:', validation.errors)
       return NextResponse.json<ApiResponse>({
         success: false,
         error: 'Invalid input data',

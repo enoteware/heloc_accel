@@ -200,23 +200,45 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Convert all form data to numbers and validate
-    const processedData: CalculatorValidationInput = { ...formData }
+    // Convert all form data to proper types and validate
+    const processedData: CalculatorValidationInput = {
+      // Required numeric fields - ensure they're numbers
+      currentMortgageBalance: Number(formData.currentMortgageBalance) || 0,
+      currentInterestRate: Number(formData.currentInterestRate) || 0,
+      remainingTermMonths: Number(formData.remainingTermMonths) || 0,
+      monthlyPayment: Number(formData.monthlyPayment) || 0,
+      helocLimit: Number(formData.helocLimit) || 0,
+      helocInterestRate: Number(formData.helocInterestRate) || 0,
+      monthlyGrossIncome: Number(formData.monthlyGrossIncome) || 0,
+      monthlyNetIncome: Number(formData.monthlyNetIncome) || 0,
+      monthlyExpenses: Number(formData.monthlyExpenses) || 0,
+      monthlyDiscretionaryIncome: Number(formData.monthlyDiscretionaryIncome) || 0,
+      
+      // Optional numeric fields - only include if they have values
+      ...(formData.propertyValue && Number(formData.propertyValue) > 0 && { propertyValue: Number(formData.propertyValue) }),
+      ...(formData.propertyTaxMonthly && Number(formData.propertyTaxMonthly) > 0 && { propertyTaxMonthly: Number(formData.propertyTaxMonthly) }),
+      ...(formData.insuranceMonthly && Number(formData.insuranceMonthly) > 0 && { insuranceMonthly: Number(formData.insuranceMonthly) }),
+      ...(formData.hoaFeesMonthly && Number(formData.hoaFeesMonthly) > 0 && { hoaFeesMonthly: Number(formData.hoaFeesMonthly) }),
+      ...(formData.helocAvailableCredit && Number(formData.helocAvailableCredit) > 0 && { helocAvailableCredit: Number(formData.helocAvailableCredit) }),
+      
+      // Text fields
+      ...(formData.scenarioName && formData.scenarioName.trim() && { scenarioName: formData.scenarioName.trim() }),
+      ...(formData.description && formData.description.trim() && { description: formData.description.trim() })
+    }
+    
     const newErrors: Record<string, string> = {}
     const requiredFields = Object.keys(validationRules) as Array<keyof typeof validationRules>
     
     requiredFields.forEach(field => {
-      const value = formData[field]
-      const numericValue = typeof value === 'string' ? (value === '' ? 0 : parseFloat(value)) : (value || 0)
-      
-      // Ensure numeric values in final data
-      processedData[field] = numericValue
-      
-      const error = validateField(field, numericValue)
+      const value = processedData[field] as number
+      const error = validateField(field, value)
       if (error) {
         newErrors[field] = error
       }
     })
+
+    console.log('Form submission data:', processedData)
+    console.log('Validation errors:', newErrors)
 
     setErrors(newErrors)
     setTouched(Object.fromEntries(requiredFields.map(field => [field, true])))
