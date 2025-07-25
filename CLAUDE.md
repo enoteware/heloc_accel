@@ -25,6 +25,13 @@ HELOC Accelerator is a Next.js 15 financial web application that helps homeowner
 - Environment configuration issues
 - Deployment-specific troubleshooting
 
+### Emergency Deployment
+If GitHub-based deployments fail due to caching or module resolution issues:
+```bash
+npm run force-deploy    # Direct Vercel deployment bypassing GitHub
+```
+See `FORCE_DEPLOY.md` for detailed instructions.
+
 ### Database
 - Database schema is in `database/schema.sql`
 - Uses PostgreSQL in production, local storage in demo mode

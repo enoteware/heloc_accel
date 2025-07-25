@@ -30,7 +30,9 @@
     "check:imports": "node scripts/validate-imports.js",
     "check:deploy": "node scripts/pre-deploy-check.js",
     "check:vercel": "node scripts/vercel-check.js",
-    "pre-deploy": "node scripts/pre-deploy-check.js"
+    "pre-deploy": "node scripts/pre-deploy-check.js",
+    "force-deploy": "./scripts/force-vercel-deploy.sh",
+    "vercel:force": "./scripts/force-vercel-deploy.sh"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
