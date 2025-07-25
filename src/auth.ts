@@ -31,7 +31,14 @@ export const config: NextAuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        console.log('[AUTH DEBUG] Authorize called with:', {
+          email: credentials?.email,
+          passwordProvided: !!credentials?.password,
+          demoUsers: DEMO_USERS.map(u => u.email)
+        })
+
         if (!credentials?.email || !credentials?.password) {
+          console.log('[AUTH DEBUG] Missing credentials')
           return null
         }
 
@@ -42,6 +49,12 @@ export const config: NextAuthConfig = {
             u.email === credentials.email &&
             u.password === credentials.password
         )
+
+        console.log('[AUTH DEBUG] User lookup result:', {
+          found: !!user,
+          email: credentials.email,
+          userId: user?.id
+        })
 
         if (user) {
           // Return user object that will be saved in JWT
