@@ -369,18 +369,26 @@ export function validateIncomeInputs(input: IncomeValidationInput): ValidationRe
 export function validateCalculatorInputs(input: CalculatorValidationInput): ValidationResult {
   const errors: ValidationError[] = []
 
+  console.log('=== API VALIDATION START ===', input)
+
   // Validate mortgage inputs
+  console.log('Validating mortgage inputs...')
   const mortgageValidation = validateMortgageInputs(input)
+  console.log('Mortgage validation result:', mortgageValidation)
   errors.push(...mortgageValidation.errors)
 
   // Validate HELOC inputs only if provided
   if (input.helocLimit !== undefined || input.helocInterestRate !== undefined) {
+    console.log('Validating HELOC inputs...')
     const helocValidation = validateHELOCInputs(input as HELOCValidationInput)
+    console.log('HELOC validation result:', helocValidation)
     errors.push(...helocValidation.errors)
   }
 
   // Validate income inputs
+  console.log('Validating income inputs...')
   const incomeValidation = validateIncomeInputs(input)
+  console.log('Income validation result:', incomeValidation)
   errors.push(...incomeValidation.errors)
 
   // Cross-validation between sections
@@ -412,6 +420,10 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
       message: 'Scenario name must be less than 255 characters'
     })
   }
+
+  console.log('=== API VALIDATION END ===')
+  console.log('Total validation errors:', errors.length)
+  console.log('All validation errors:', errors)
 
   return {
     isValid: errors.length === 0,
