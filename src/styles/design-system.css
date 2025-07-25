@@ -296,29 +296,29 @@ input[type="time"],
 input[type="datetime-local"],
 input[type="month"],
 input[type="week"],
+select,
 textarea {
   color: rgb(23 23 23) !important; /* neutral-900 */
   -webkit-text-fill-color: rgb(23 23 23) !important; /* Fix for Safari/Chrome autofill */
 }
 
 /* Dark mode text color */
-@media (prefers-color-scheme: dark) {
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="tel"],
-  input[type="url"],
-  input[type="search"],
-  input[type="date"],
-  input[type="time"],
-  input[type="datetime-local"],
-  input[type="month"],
-  input[type="week"],
-  textarea {
-    color: rgb(245 245 245) !important; /* neutral-100 */
-    -webkit-text-fill-color: rgb(245 245 245) !important;
-  }
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark input[type="url"],
+.dark input[type="search"],
+.dark input[type="date"],
+.dark input[type="time"],
+.dark input[type="datetime-local"],
+.dark input[type="month"],
+.dark input[type="week"],
+.dark select,
+.dark textarea {
+  color: rgb(245 245 245) !important; /* neutral-100 */
+  -webkit-text-fill-color: rgb(245 245 245) !important;
 }
 
 /* Autofill background color fix */
@@ -332,12 +332,10 @@ input:-webkit-autofill:active {
 }
 
 /* Dark mode autofill */
-@media (prefers-color-scheme: dark) {
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px rgb(38 38 38) inset !important; /* neutral-800 */
-    -webkit-text-fill-color: rgb(245 245 245) !important;
-  }
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px rgb(38 38 38) inset !important; /* neutral-800 */
+  -webkit-text-fill-color: rgb(245 245 245) !important;
 }

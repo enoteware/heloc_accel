@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/components/AuthProvider'
 import { NavigationProvider, NavigationBar } from '@/components/navigation'
+import { ThemeProvider } from '../components/design-system/ThemeProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,14 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-          <NavigationProvider>
-            <NavigationBar />
-            <main className="min-h-screen">
-              {children}
-            </main>
-          </NavigationProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <NavigationProvider>
+              <NavigationBar />
+              <main className="min-h-screen">
+                {children}
+              </main>
+            </NavigationProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
