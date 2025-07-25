@@ -74,7 +74,7 @@ export default function SaveScenarioModal({
       size="md"
     >
       <div className="space-y-6">
-        <div className="text-sm text-blue-gray-600">
+        <div className="text-sm text-neutral-600">
           Save your calculation results as a scenario for future reference and comparison.
         </div>
 
@@ -103,14 +103,14 @@ export default function SaveScenarioModal({
             rows={3}
             maxLength={500}
             disabled={isLoading}
-            className="w-full px-3 py-2 border border-blue-gray-300 rounded-lg text-blue-gray-900 placeholder-blue-gray-500 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-coral-500 disabled:bg-blue-gray-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-coral-500 disabled:bg-neutral-50 disabled:cursor-not-allowed"
           />
-          <div className="mt-1 text-xs text-blue-gray-500">
+          <div className="mt-1 text-xs text-neutral-500">
             {description.length}/500 characters
           </div>
         </FormField>
 
-        <div className="flex justify-end space-x-3 pt-4 border-t border-blue-gray-200">
+        <div className="flex justify-end space-x-3 pt-4 border-t border-neutral-200">
           <Button
             variant="outline"
             onClick={handleClose}
