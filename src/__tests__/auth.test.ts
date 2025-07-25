@@ -237,10 +237,10 @@ describe('Authentication Flow Tests', () => {
       // Mock JWT verification success
       mockJwt.verify.mockReturnValueOnce(mockUser)
 
+      const headers = new Headers()
+      headers.set('Authorization', 'Bearer valid-jwt-token')
       const request = new NextRequest('http://localhost:3000/api/protected', {
-        headers: {
-          'Authorization': 'Bearer valid-jwt-token'
-        }
+        headers
       })
 
       // Test requireAuth middleware - commented out as middleware not available in test environment
@@ -250,7 +250,9 @@ describe('Authentication Flow Tests', () => {
     })
 
     test('should reject access without authorization header', () => {
-      const request = new NextRequest('http://localhost:3000/api/protected')
+      const request = new NextRequest('http://localhost:3000/api/protected', {
+        headers: new Headers()
+      })
 
       // expect(() => {
       //   requireAuth(request)
@@ -258,10 +260,10 @@ describe('Authentication Flow Tests', () => {
     })
 
     test('should reject access with invalid token format', () => {
+      const headers = new Headers()
+      headers.set('Authorization', 'InvalidFormat token')
       const request = new NextRequest('http://localhost:3000/api/protected', {
-        headers: {
-          'Authorization': 'InvalidFormat token'
-        }
+        headers
       })
 
       // expect(() => {
@@ -275,10 +277,10 @@ describe('Authentication Flow Tests', () => {
         throw new Error('Token expired')
       })
 
+      const headers = new Headers()
+      headers.set('Authorization', 'Bearer expired-token')
       const request = new NextRequest('http://localhost:3000/api/protected', {
-        headers: {
-          'Authorization': 'Bearer expired-token'
-        }
+        headers
       })
 
       // expect(() => {
@@ -292,10 +294,10 @@ describe('Authentication Flow Tests', () => {
         throw new Error('Invalid token')
       })
 
+      const headers = new Headers()
+      headers.set('Authorization', 'Bearer malformed-token')
       const request = new NextRequest('http://localhost:3000/api/protected', {
-        headers: {
-          'Authorization': 'Bearer malformed-token'
-        }
+        headers
       })
 
       // expect(() => {

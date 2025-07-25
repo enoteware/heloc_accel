@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, Suspense, lazy } from 'react'
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import CalculatorForm from '@/components/CalculatorForm'
@@ -66,21 +66,7 @@ function CalculatorPageContent() {
     }
   }, [session, status, router, isDemoMode])
 
-  // Load scenario data if editing or duplicating
-  useEffect(() => {
-    const editId = searchParams.get('edit')
-    const duplicateId = searchParams.get('duplicate')
-    const scenarioName = searchParams.get('name')
-
-    if (editId || duplicateId) {
-      const scenarioId = editId || duplicateId
-      if (scenarioId) {
-        loadScenarioData(scenarioId, !!editId, scenarioName)
-      }
-    }
-  }, [searchParams])
-
-  const loadScenarioData = async (scenarioId: string, isEdit: boolean, customName?: string | null) => {
+  const loadScenarioData = useCallback(async (scenarioId: string, isEdit: boolean, customName?: string | null) => {
     try {
       setLoading(true)
 
@@ -156,7 +142,21 @@ function CalculatorPageContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isDemoMode])
+
+  // Load scenario data if editing or duplicating
+  useEffect(() => {
+    const editId = searchParams.get('edit')
+    const duplicateId = searchParams.get('duplicate')
+    const scenarioName = searchParams.get('name')
+
+    if (editId || duplicateId) {
+      const scenarioId = editId || duplicateId
+      if (scenarioId) {
+        loadScenarioData(scenarioId, !!editId, scenarioName)
+      }
+    }
+  }, [searchParams, loadScenarioData])
 
   const handleCalculation = async (formData: CalculatorValidationInput) => {
     setLoading(true)

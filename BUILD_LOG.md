@@ -153,8 +153,82 @@ pm2 restart heloc-accelerator
 ```
 
 ### Pre-deployment Checklist
-- [ ] Run `npm test` - all tests pass
-- [ ] Run `npm run lint` - no errors
-- [ ] Check BUILD_LOG.md for recent issues
+- [ ] Run `npm run pre-deploy` - all checks pass
+- [ ] Check CLEAN_COMMIT.md for validation details
 - [ ] Verify environment variables
 - [ ] Test "Get Started" button functionality
+
+---
+
+## 2025-07-25 - Pre-Deployment Validation System
+
+### Status: ✅ Implemented
+**Type:** Development tooling enhancement
+
+### Overview
+Created comprehensive pre-deployment validation system to catch build errors before deployment, with specific support for Vercel deployments.
+
+### New Features
+
+#### 1. Import Validation Script (`scripts/validate-imports.js`)
+- Scans all TypeScript/JavaScript files for import statements
+- Validates module resolution including:
+  - Path alias resolution (@/ mappings)
+  - File existence checks
+  - Case sensitivity detection
+  - Circular dependency warnings
+- Provides detailed error reporting with file:line information
+
+#### 2. Pre-Deployment Check Script (`scripts/pre-deploy-check.js`)
+- Orchestrates all validation checks:
+  - Node.js version compatibility (>= 18)
+  - TypeScript compilation (`tsc --noEmit`)
+  - ESLint validation
+  - Import resolution verification
+  - Test suite execution
+  - Production build test
+  - Vercel deployment checks
+
+#### 3. Vercel-Specific Validation (`scripts/vercel-check.js`)
+- Validates Vercel compatibility:
+  - Checks for incompatible `output: 'standalone'` mode
+  - Validates vercel.json configuration
+  - Enforces 50MB file size limit
+  - Detects hardcoded localhost URLs
+  - Identifies server code in client components
+  - Simulates Vercel build environment
+  - Lists required environment variables
+
+### NPM Commands Added
+```bash
+npm run check:imports    # Validate import statements only
+npm run check:vercel     # Vercel-specific checks only
+npm run pre-deploy       # Full pre-deployment validation
+```
+
+### Documentation Created
+- **CLEAN_COMMIT.md** - Comprehensive guide for clean commits
+  - Pre-commit checklist
+  - Error resolution examples
+  - Deployment workflows
+  - CI/CD integration guide
+
+### Usage
+Before any deployment (traditional or Vercel):
+```bash
+npm run pre-deploy
+```
+
+This single command ensures:
+- ✅ All imports resolve correctly
+- ✅ TypeScript compiles without errors
+- ✅ ESLint passes
+- ✅ Tests pass (when present)
+- ✅ Production build succeeds
+- ✅ Vercel compatibility (if deploying to Vercel)
+
+### Impact
+- Prevents "Module not found" errors in production
+- Catches configuration issues before deployment
+- Provides clear guidance for fixing issues
+- Supports both VPS and Vercel deployment strategies

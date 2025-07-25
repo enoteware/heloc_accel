@@ -200,9 +200,15 @@ describe('Demo Data Clearing Functionality', () => {
     })
 
     it('should handle quota exceeded error', () => {
-      // Temporarily override setItem to throw quota error
+      // Temporarily override setItem to throw quota error after first call (for availability check)
       const originalSetItem = localStorageMock.setItem
-      localStorageMock.setItem.mockImplementation(() => {
+      let callCount = 0
+      localStorageMock.setItem.mockImplementation((key: string, value: string) => {
+        callCount++
+        // Allow the first call (localStorage availability check)
+        if (callCount === 1 && key === '__localStorage_test__') {
+          return
+        }
         const error = new Error('QuotaExceededError')
         error.name = 'QuotaExceededError'
         throw error
@@ -246,9 +252,15 @@ describe('Demo Data Clearing Functionality', () => {
     })
 
     it('should handle removeItem errors gracefully', () => {
-      // Temporarily override removeItem to throw error
+      // We need to allow the availability check to pass first
       const originalRemoveItem = localStorageMock.removeItem
-      localStorageMock.removeItem.mockImplementation(() => {
+      let callCount = 0
+      localStorageMock.removeItem.mockImplementation((key: string) => {
+        callCount++
+        // Allow the first call (localStorage availability check)
+        if (callCount === 1 && key === '__localStorage_test__') {
+          return
+        }
         throw new Error('Storage error')
       })
 
@@ -263,6 +275,20 @@ describe('Demo Data Clearing Functionality', () => {
 
   describe('getStorageInfo', () => {
     it('should return storage information when available', () => {
+      // First ensure the mock setItem/removeItem work for availability check
+      const originalSetItem = localStorageMock.setItem
+      const originalRemoveItem = localStorageMock.removeItem
+      
+      localStorageMock.setItem.mockImplementation((key: string, value: string) => {
+        localStorageMock.setItem = originalSetItem
+        localStorageMock.setItem(key, value)
+      })
+      
+      localStorageMock.removeItem.mockImplementation((key: string) => {
+        localStorageMock.removeItem = originalRemoveItem  
+        localStorageMock.removeItem(key)
+      })
+      
       const scenarios = [
         {
           id: 'test-1',

@@ -83,7 +83,9 @@ describe('API Integration Tests', () => {
 
         mockQuery.mockResolvedValueOnce({ rows: mockScenarios })
 
-        const request = new NextRequest('http://localhost:3000/api/scenario')
+        const request = new NextRequest('http://localhost:3000/api/scenario', {
+          headers: new Headers()
+        })
         const response = await getScenarios(request)
         const data = await response.json()
 
@@ -100,7 +102,9 @@ describe('API Integration Tests', () => {
       test('should handle authentication error', async () => {
         mockedAuth.mockResolvedValueOnce(null)
 
-        const request = new NextRequest('http://localhost:3000/api/scenario')
+        const request = new NextRequest('http://localhost:3000/api/scenario', {
+          headers: new Headers()
+        })
         const response = await getScenarios(request)
         const data = await response.json()
 
@@ -112,7 +116,9 @@ describe('API Integration Tests', () => {
       test('should handle database error', async () => {
         mockQuery.mockRejectedValueOnce(new Error('Database error'))
 
-        const request = new NextRequest('http://localhost:3000/api/scenario')
+        const request = new NextRequest('http://localhost:3000/api/scenario', {
+          headers: new Headers()
+        })
         const response = await getScenarios(request)
         const data = await response.json()
 
@@ -223,7 +229,9 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [mockScenario] })
 
         const response = await getScenario(
-          new NextRequest('http://localhost:3000/api/scenario/scenario-1'),
+          new NextRequest('http://localhost:3000/api/scenario/scenario-1', {
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ id: 'scenario-1' }) }
         )
         const data = await response.json()
@@ -237,7 +245,9 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [] })
 
         const response = await getScenario(
-          new NextRequest('http://localhost:3000/api/scenario/non-existent'),
+          new NextRequest('http://localhost:3000/api/scenario/non-existent', {
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ id: 'non-existent' }) }
         )
         const data = await response.json()
@@ -256,7 +266,10 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [] })
 
         const response = await deleteScenario(
-          new NextRequest('http://localhost:3000/api/scenario/scenario-1', { method: 'DELETE' }),
+          new NextRequest('http://localhost:3000/api/scenario/scenario-1', {
+            method: 'DELETE',
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ id: 'scenario-1' }) }
         )
         const data = await response.json()
@@ -270,7 +283,10 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [] })
 
         const response = await deleteScenario(
-          new NextRequest('http://localhost:3000/api/scenario/non-existent', { method: 'DELETE' }),
+          new NextRequest('http://localhost:3000/api/scenario/non-existent', {
+            method: 'DELETE',
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ id: 'non-existent' }) }
         )
         const data = await response.json()
@@ -348,7 +364,9 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [mockSharedScenario] })
 
         const response = await getSharedScenario(
-          new NextRequest('http://localhost:3000/api/shared/valid-token'),
+          new NextRequest('http://localhost:3000/api/shared/valid-token', {
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ token: 'valid-token' }) }
         )
         const data = await response.json()
@@ -363,7 +381,9 @@ describe('API Integration Tests', () => {
         mockQuery.mockResolvedValueOnce({ rows: [] })
 
         const response = await getSharedScenario(
-          new NextRequest('http://localhost:3000/api/shared/invalid-token'),
+          new NextRequest('http://localhost:3000/api/shared/invalid-token', {
+            headers: new Headers()
+          }),
           { params: Promise.resolve({ token: 'invalid-token' }) }
         )
         const data = await response.json()
@@ -391,7 +411,9 @@ describe('API Integration Tests', () => {
 
         mockQuery.mockResolvedValueOnce({ rows: [mockProfile] })
 
-        const request = new NextRequest('http://localhost:3000/api/profile')
+        const request = new NextRequest('http://localhost:3000/api/profile', {
+          headers: new Headers()
+        })
         const response = await getProfile(request)
         const data = await response.json()
 

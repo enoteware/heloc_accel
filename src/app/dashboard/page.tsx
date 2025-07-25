@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, Suspense, lazy } from 'react'
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -92,14 +92,7 @@ export default function Dashboard() {
     }
   }, [session, status, router, isDemoMode])
 
-  // Load user scenarios
-  useEffect(() => {
-    if (isDemoMode || session) {
-      loadScenarios()
-    }
-  }, [session, isDemoMode])
-
-  const loadScenarios = async () => {
+  const loadScenarios = useCallback(async () => {
     try {
       setLoading(true)
 
@@ -147,7 +140,14 @@ export default function Dashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isDemoMode, getUserId])
+
+  // Load user scenarios
+  useEffect(() => {
+    if (isDemoMode || session) {
+      loadScenarios()
+    }
+  }, [session, isDemoMode, loadScenarios])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

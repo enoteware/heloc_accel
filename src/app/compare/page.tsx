@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, Suspense, lazy } from 'react'
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -51,18 +51,7 @@ function ComparePageContent() {
     }
   }, [session, status, router, isDemoMode])
 
-  // Load scenarios and pre-select from URL params
-  useEffect(() => {
-    if (isDemoMode || session) {
-      loadScenarios()
-      
-      // Pre-select scenarios from URL params
-      const preSelected = searchParams.get('scenarios')?.split(',') || []
-      setSelectedScenarios(preSelected.slice(0, 3)) // Max 3 scenarios
-    }
-  }, [session, searchParams, isDemoMode])
-
-  const loadScenarios = async () => {
+  const loadScenarios = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -99,7 +88,18 @@ function ComparePageContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isDemoMode, session?.user?.id])
+
+  // Load scenarios and pre-select from URL params
+  useEffect(() => {
+    if (isDemoMode || session) {
+      loadScenarios()
+      
+      // Pre-select scenarios from URL params
+      const preSelected = searchParams.get('scenarios')?.split(',') || []
+      setSelectedScenarios(preSelected.slice(0, 3)) // Max 3 scenarios
+    }
+  }, [session, searchParams, isDemoMode, loadScenarios])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -51,14 +51,7 @@ export default function ProfilePage() {
     }
   }, [session, status, router, isDemoMode])
 
-  // Load profile data
-  useEffect(() => {
-    if (isDemoMode || session) {
-      loadProfile()
-    }
-  }, [session, isDemoMode])
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -108,7 +101,14 @@ export default function ProfilePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isDemoMode, session?.user])
+
+  // Load profile data
+  useEffect(() => {
+    if (isDemoMode || session) {
+      loadProfile()
+    }
+  }, [session, isDemoMode, loadProfile])
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

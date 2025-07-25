@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface TooltipProps {
@@ -28,24 +28,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const showTooltip = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setIsVisible(true);
-      updatePosition();
-    }, delay);
-  };
-
-  const hideTooltip = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setIsVisible(false);
-  };
-
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     if (!triggerRef.current || !tooltipRef.current) return;
 
     const triggerRect = triggerRef.current.getBoundingClientRect();
@@ -84,13 +67,30 @@ export const Tooltip: React.FC<TooltipProps> = ({
     top = Math.max(padding, Math.min(top, maxTop));
 
     setPosition({ top, left });
+  }, [placement]);
+
+  const showTooltip = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setIsVisible(true);
+      updatePosition();
+    }, delay);
+  };
+
+  const hideTooltip = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsVisible(false);
   };
 
   useEffect(() => {
     if (isVisible) {
       updatePosition();
     }
-  }, [isVisible, placement]);
+  }, [isVisible, placement, updatePosition]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -109,7 +109,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isVisible]);
+  }, [isVisible, updatePosition]);
 
   const handleTriggerEvents = () => {
     const events: Record<string, () => void> = {};

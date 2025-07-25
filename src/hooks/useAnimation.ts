@@ -185,7 +185,9 @@ export function useStaggeredAnimation(
 
   useEffect(() => {
     return () => {
-      animationsRef.current.forEach((animation) => {
+      // Copy the ref value to avoid issues with cleanup
+      const animations = animationsRef.current;
+      animations.forEach((animation) => {
         if (animation) {
           animation.cancel();
         }
