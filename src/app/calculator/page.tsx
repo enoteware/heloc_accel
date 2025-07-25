@@ -4,8 +4,9 @@ import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FastCalculatorForm from '@/components/FastCalculatorForm'
+import SaveScenarioModal from '@/components/SaveScenarioModal'
 import type { CalculatorValidationInput } from '@/lib/validation'
-import { getDemoScenario, generateSampleScenarios } from '@/lib/demo-storage'
+import { getDemoScenario, generateSampleScenarios, addDemoScenario } from '@/lib/demo-storage'
 import { getApiUrl } from '@/lib/api-url'
 import Logo from '@/components/Logo'
 
@@ -48,6 +49,9 @@ function CalculatorPageContent() {
   const [error, setError] = useState<string | null>(null)
   const [initialData, setInitialData] = useState<Partial<CalculatorValidationInput>>({})
   const [editingScenarioId, setEditingScenarioId] = useState<string | null>(null)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [currentFormData, setCurrentFormData] = useState<CalculatorValidationInput | null>(null)
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
 
   // Initialize demo data if in demo mode
@@ -161,6 +165,7 @@ function CalculatorPageContent() {
   const handleCalculation = async (formData: CalculatorValidationInput) => {
     setLoading(true)
     setError(null)
+    setCurrentFormData(formData) // Store form data for saving
 
     console.log('=== CALCULATION REQUEST START ===')
     console.log('Form data received:', formData)
@@ -219,10 +224,82 @@ function CalculatorPageContent() {
   }
 
   const handleSaveScenario = async () => {
-    if (!results) return
+    if (!results || !currentFormData) return
+    setShowSaveModal(true)
+  }
 
-    // TODO: Implement scenario saving
-    alert('Scenario saving will be implemented in the next phase')
+  const handleSaveConfirm = async (scenarioName: string, description: string) => {
+    if (!results || !currentFormData) return
+
+    setIsSaving(true)
+    try {
+      if (isDemoMode) {
+        // Save to localStorage in demo mode
+        const scenarioData = {
+          name: scenarioName,
+          description,
+          currentMortgageBalance: currentFormData.currentMortgageBalance,
+          currentInterestRate: currentFormData.currentInterestRate / 100, // Convert back to decimal
+          remainingTermMonths: currentFormData.remainingTermMonths,
+          monthlyPayment: currentFormData.monthlyPayment,
+          helocLimit: currentFormData.helocLimit,
+          helocInterestRate: currentFormData.helocInterestRate ? currentFormData.helocInterestRate / 100 : 0,
+          monthlyGrossIncome: currentFormData.monthlyGrossIncome,
+          monthlyNetIncome: currentFormData.monthlyNetIncome,
+          monthlyExpenses: currentFormData.monthlyExpenses,
+          monthlyDiscretionaryIncome: currentFormData.monthlyDiscretionaryIncome,
+          propertyValue: currentFormData.propertyValue,
+          propertyTaxMonthly: currentFormData.propertyTaxMonthly,
+          insuranceMonthly: currentFormData.insuranceMonthly,
+          hoaFeesMonthly: currentFormData.hoaFeesMonthly,
+          traditionalPayoffMonths: results.traditional.payoffMonths,
+          traditionalTotalInterest: results.traditional.totalInterest,
+          helocPayoffMonths: results.heloc.payoffMonths,
+          helocTotalInterest: results.heloc.totalInterest,
+          timeSavedMonths: results.comparison.timeSavedMonths,
+          interestSaved: results.comparison.interestSaved
+        }
+        
+        addDemoScenario(scenarioData)
+        
+        // Redirect to dashboard to see saved scenarios
+        router.push('/dashboard')
+      } else {
+        // Save to database via API
+        const payload = {
+          scenarioName,
+          description,
+          calculationResults: results,
+          ...currentFormData
+        }
+
+        const response = await fetch('/api/scenario', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to save scenario')
+        }
+
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to save scenario')
+        }
+
+        // Redirect to dashboard to see saved scenarios
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      console.error('Save scenario error:', error)
+      throw error // Let the modal handle the error display
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleNewCalculation = () => {
@@ -445,6 +522,14 @@ function CalculatorPageContent() {
             </Suspense>
           </div>
         )}
+
+        {/* Save Scenario Modal */}
+        <SaveScenarioModal
+          isOpen={showSaveModal}
+          onClose={() => setShowSaveModal(false)}
+          onSave={handleSaveConfirm}
+          isLoading={isSaving}
+        />
       </div>
     </div>
   )
