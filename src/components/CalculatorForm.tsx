@@ -116,7 +116,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Mortgage Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Mortgage Information</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Current Mortgage Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="currentMortgageBalance" className="block text-sm font-medium text-gray-700 mb-1">
@@ -129,8 +129,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="currentMortgageBalance"
                 value={formData.currentMortgageBalance || ''}
                 onChange={(e) => handleInputChange('currentMortgageBalance', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="350,000"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -149,8 +149,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="currentInterestRate"
                 value={formData.currentInterestRate || ''}
                 onChange={(e) => handleInputChange('currentInterestRate', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="6.5"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 step="0.01"
                 min="0"
                 max="30"
@@ -172,8 +172,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               id="remainingTermMonths"
               value={formData.remainingTermMonths || ''}
               onChange={(e) => handleInputChange('remainingTermMonths', parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-              placeholder="300"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+              placeholder=""
               min="1"
               max="480"
               required
@@ -197,8 +197,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyPayment"
                 value={formData.monthlyPayment || ''}
                 onChange={(e) => handleInputChange('monthlyPayment', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="2,200"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -211,7 +211,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* HELOC Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">HELOC Information</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">HELOC Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="helocLimit" className="block text-sm font-medium text-gray-700 mb-1">
@@ -224,8 +224,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="helocLimit"
                 value={formData.helocLimit || ''}
                 onChange={(e) => handleInputChange('helocLimit', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="100,000"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -244,8 +244,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="helocInterestRate"
                 value={formData.helocInterestRate || ''}
                 onChange={(e) => handleInputChange('helocInterestRate', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="7.5"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 step="0.01"
                 min="0"
                 max="30"
@@ -262,7 +262,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* Income and Expenses Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Income & Expenses</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Monthly Income & Expenses</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="monthlyGrossIncome" className="block text-sm font-medium text-gray-700 mb-1">
@@ -275,8 +275,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyGrossIncome"
                 value={formData.monthlyGrossIncome || ''}
                 onChange={(e) => handleInputChange('monthlyGrossIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="8,500"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -296,8 +296,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyNetIncome"
                 value={formData.monthlyNetIncome || ''}
                 onChange={(e) => handleInputChange('monthlyNetIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="6,800"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -317,8 +317,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyExpenses"
                 value={formData.monthlyExpenses || ''}
                 onChange={(e) => handleInputChange('monthlyExpenses', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="4,500"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -338,8 +338,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="monthlyDiscretionaryIncome"
                 value={formData.monthlyDiscretionaryIncome || ''}
                 onChange={(e) => handleInputChange('monthlyDiscretionaryIncome', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="2,300"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
                 required
               />
             </div>
@@ -355,7 +355,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* Optional Property Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Property Information (Optional)</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Property Information (Optional)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">
@@ -368,8 +368,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="propertyValue"
                 value={formData.propertyValue || ''}
                 onChange={(e) => handleInputChange('propertyValue', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="500,000"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
               />
             </div>
           </div>
@@ -385,8 +385,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="propertyTaxMonthly"
                 value={formData.propertyTaxMonthly || ''}
                 onChange={(e) => handleInputChange('propertyTaxMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="850"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
               />
             </div>
           </div>
@@ -402,8 +402,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="insuranceMonthly"
                 value={formData.insuranceMonthly || ''}
                 onChange={(e) => handleInputChange('insuranceMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="250"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
               />
             </div>
           </div>
@@ -419,8 +419,8 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 id="hoaFeesMonthly"
                 value={formData.hoaFeesMonthly || ''}
                 onChange={(e) => handleInputChange('hoaFeesMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                placeholder="0"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                placeholder=""
               />
             </div>
           </div>

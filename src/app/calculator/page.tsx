@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import CalculatorForm from '@/components/CalculatorForm'
+import FastCalculatorForm from '@/components/FastCalculatorForm'
 import type { CalculatorValidationInput } from '@/lib/validation'
 import { getDemoScenario, generateSampleScenarios } from '@/lib/demo-storage'
 import { getApiUrl } from '@/lib/api-url'
@@ -335,7 +335,7 @@ function CalculatorPageContent() {
 
         {/* Main Content */}
         {!results ? (
-          <CalculatorForm
+          <FastCalculatorForm
             onSubmit={handleCalculation}
             loading={loading}
             initialData={initialData}
