@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { getAllDummyUsers } from '@/lib/dummy-users'
 
+// Component for displaying demo account information in development mode
+
 export default function DemoAccountsInfo() {
   const [showAccounts, setShowAccounts] = useState(false)
   const dummyUsers = getAllDummyUsers()
