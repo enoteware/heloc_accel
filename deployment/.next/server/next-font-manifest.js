@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator/src/app/layout":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator/src/app/test-validation/page":["static/media/e4af272ccee01ff0-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';
