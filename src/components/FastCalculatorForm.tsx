@@ -272,7 +272,13 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
       if (Object.keys(newErrors).length === 0) {
         addDebugLog('Submitting valid data to onSubmit callback')
-        onSubmit(processedData)
+        addDebugLog('About to call onSubmit with data', processedData)
+        try {
+          onSubmit(processedData)
+          addDebugLog('onSubmit callback completed successfully')
+        } catch (error) {
+          addDebugLog('Error in onSubmit callback', error)
+        }
       } else {
         addDebugLog('Form submission blocked due to validation errors')
       }
