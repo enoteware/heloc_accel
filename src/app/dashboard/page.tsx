@@ -54,7 +54,7 @@ export default function Dashboard() {
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
   // Get user ID for demo storage (use session user email hash or fallback to demo user)
-  const getUserId = () => {
+  const getUserId = useCallback(() => {
     if (isDemoMode) {
       if (session?.user?.email) {
         // Create consistent user ID from email
@@ -64,7 +64,7 @@ export default function Dashboard() {
       return 'demo-user-default'
     }
     return session?.user?.id || session?.user?.email
-  }
+  }, [isDemoMode, session?.user?.email, session?.user?.id])
 
   // Initialize demo data if in demo mode
   useEffect(() => {

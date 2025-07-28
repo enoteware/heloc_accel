@@ -195,6 +195,8 @@ export interface HELOCInput {
   helocRate: number
   discretionaryIncome: number
   helocAvailableCredit?: number
+  propertyValue?: number
+  pmiMonthly?: number
 }
 
 export interface HELOCMonthlyPayment extends MonthlyPayment {
@@ -203,6 +205,8 @@ export interface HELOCMonthlyPayment extends MonthlyPayment {
   helocInterest: number
   totalMonthlyPayment: number
   discretionaryUsed: number
+  pmiPayment: number
+  currentEquityPercentage?: number
 }
 
 export interface HELOCCalculationResult {
@@ -228,7 +232,9 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
     helocLimit,
     helocRate,
     discretionaryIncome,
-    helocAvailableCredit = helocLimit
+    helocAvailableCredit = helocLimit,
+    propertyValue,
+    pmiMonthly = 0
   } = input
 
   const mortgageMonthlyRate = mortgageRate / 12
@@ -252,6 +258,18 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
 
     // Calculate HELOC interest for this month
     const helocInterest = helocBalance * helocMonthlyRate
+
+    // Calculate PMI payment and equity percentage
+    let currentPmiPayment = pmiMonthly
+    let currentEquityPercentage = 0
+    
+    if (propertyValue && propertyValue > 0) {
+      currentEquityPercentage = ((propertyValue - mortgageBalanceRemaining) / propertyValue) * 100
+      // PMI is removed when equity reaches 20%
+      if (currentEquityPercentage >= 20) {
+        currentPmiPayment = 0
+      }
+    }
 
     // Determine how much discretionary income to use
     let discretionaryUsed = discretionaryIncome
@@ -318,8 +336,10 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
       helocBalance: beginningHelocBalance,
       helocPayment: Math.max(0, beginningHelocBalance - helocBalance),
       helocInterest,
-      totalMonthlyPayment: totalMortgagePayment + helocInterest,
-      discretionaryUsed
+      totalMonthlyPayment: totalMortgagePayment + helocInterest + currentPmiPayment,
+      discretionaryUsed,
+      pmiPayment: currentPmiPayment,
+      currentEquityPercentage
     })
 
     month++

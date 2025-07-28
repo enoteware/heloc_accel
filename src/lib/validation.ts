@@ -65,6 +65,7 @@ export interface MortgageValidationInput {
   propertyTaxMonthly?: number
   insuranceMonthly?: number
   hoaFeesMonthly?: number
+  pmiMonthly?: number
 }
 
 export interface HELOCValidationInput {
@@ -241,6 +242,15 @@ export function validateMortgageInputs(input: MortgageValidationInput): Validati
       input.hoaFeesMonthly,
       'hoaFeesMonthly',
       { min: 0, max: 5000, message: 'HOA fees must be between $0 and $5,000' },
+      false
+    ))
+  }
+
+  if (input.pmiMonthly !== undefined) {
+    errors.push(...validateNumber(
+      input.pmiMonthly,
+      'pmiMonthly',
+      { min: 0, max: 2000, message: 'PMI must be between $0 and $2,000' },
       false
     ))
   }
@@ -444,6 +454,7 @@ export function sanitizeCalculatorInputs(input: any): CalculatorValidationInput 
     propertyTaxMonthly: input.propertyTaxMonthly ? parseFloat(input.propertyTaxMonthly) : undefined,
     insuranceMonthly: input.insuranceMonthly ? parseFloat(input.insuranceMonthly) : undefined,
     hoaFeesMonthly: input.hoaFeesMonthly ? parseFloat(input.hoaFeesMonthly) : undefined,
+    pmiMonthly: input.pmiMonthly ? parseFloat(input.pmiMonthly) : undefined,
     helocLimit: parseFloat(input.helocLimit) || 0,
     helocInterestRate: parseFloat(input.helocInterestRate) || 0,
     helocAvailableCredit: input.helocAvailableCredit ? parseFloat(input.helocAvailableCredit) : undefined,

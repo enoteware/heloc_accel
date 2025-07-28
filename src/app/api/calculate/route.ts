@@ -73,7 +73,9 @@ export async function POST(request: NextRequest) {
       helocLimit: sanitizedInputs.helocLimit || 0,
       helocRate: helocInterestRate,
       discretionaryIncome: sanitizedInputs.monthlyDiscretionaryIncome,
-      helocAvailableCredit: sanitizedInputs.helocAvailableCredit || sanitizedInputs.helocLimit || 0
+      helocAvailableCredit: sanitizedInputs.helocAvailableCredit || sanitizedInputs.helocLimit || 0,
+      propertyValue: sanitizedInputs.propertyValue,
+      pmiMonthly: sanitizedInputs.pmiMonthly
     }
 
     // Perform calculations
@@ -117,7 +119,9 @@ export async function POST(request: NextRequest) {
           helocPayment: Math.round(payment.helocPayment * 100) / 100,
           helocInterest: Math.round(payment.helocInterest * 100) / 100,
           totalMonthlyPayment: Math.round(payment.totalMonthlyPayment * 100) / 100,
-          discretionaryUsed: Math.round(payment.discretionaryUsed * 100) / 100
+          discretionaryUsed: Math.round(payment.discretionaryUsed * 100) / 100,
+          pmiPayment: Math.round(payment.pmiPayment * 100) / 100,
+          currentEquityPercentage: payment.currentEquityPercentage ? Math.round(payment.currentEquityPercentage * 100) / 100 : undefined
         }))
       },
       comparison: {

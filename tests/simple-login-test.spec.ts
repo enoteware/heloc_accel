@@ -140,7 +140,7 @@ test.describe('Simple Login Test', () => {
       });
       
       console.log(`Auth API Response: ${response.status()}`);
-      console.log(`Response Headers:`, JSON.stringify(Object.fromEntries(response.headers()), null, 2));
+      console.log(`Response Headers:`, JSON.stringify(Object.fromEntries(Object.entries(response.headers())), null, 2));
       
       const responseText = await response.text();
       console.log(`Response Body: ${responseText}`);

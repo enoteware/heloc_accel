@@ -339,3 +339,27 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px rgb(38 38 38) inset !important; /* neutral-800 */
   -webkit-text-fill-color: rgb(245 245 245) !important;
 }
+
+/* Custom placeholder color for HELOC Calculator */
+.placeholder-custom {
+  --tw-placeholder-opacity: 1;
+  color: rgb(208 209 213) !important;
+}
+
+.placeholder-custom::placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgb(208 209 213) !important;
+}
+
+.placeholder-custom::-webkit-input-placeholder {
+  color: rgb(208 209 213) !important;
+}
+
+.placeholder-custom::-moz-placeholder {
+  color: rgb(208 209 213) !important;
+  opacity: 1;
+}
+
+.placeholder-custom:-ms-input-placeholder {
+  color: rgb(208 209 213) !important;
+}

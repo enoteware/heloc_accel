@@ -42,7 +42,7 @@ test.describe('Login Authentication Debug', () => {
           status: response.status(),
           statusText: response.statusText(),
           method: response.request().method(),
-          headers: Object.fromEntries(response.headers())
+          headers: Object.fromEntries(Object.entries(response.headers()))
         };
         networkResponses.push(responseData);
         console.log(`Response: ${response.status()} ${response.request().method()} ${response.url()}`);
@@ -182,7 +182,7 @@ test.describe('Login Authentication Debug', () => {
     });
     
     console.log(`Auth API Response Status: ${response.status()}`);
-    console.log(`Auth API Response Headers:`, Object.fromEntries(response.headers()));
+    console.log(`Auth API Response Headers:`, Object.fromEntries(Object.entries(response.headers())));
     
     try {
       const responseText = await response.text();

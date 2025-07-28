@@ -16,6 +16,15 @@ interface CalculationResults {
     totalHelocInterest: number
     maxHelocUsed: number
     averageHelocBalance: number
+    schedule: Array<{
+      month: number
+      helocPayment: number
+      helocBalance: number
+      helocInterest: number
+      discretionaryUsed: number
+      pmiPayment?: number
+      totalMonthlyPayment: number
+    }>
   }
   comparison: {
     timeSavedMonths: number
@@ -215,6 +224,172 @@ export default function ResultsDisplay({ results, onSaveScenario, onNewCalculati
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Monthly HELOC Payment Strategy */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+          <h3 className="text-lg font-semibold text-blue-900 flex items-center">
+            <svg className="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            Monthly HELOC Payment Strategy
+          </h3>
+          <p className="text-sm text-blue-700 mt-1">
+            Here's how your monthly HELOC payments will work
+          </p>
+        </div>
+
+        <div className="p-6">
+          {(() => {
+            // Find key months for HELOC payment timing
+            const helocSchedule = results.heloc.schedule || []
+            const firstHelocDrawMonth = helocSchedule.find(m => m.helocBalance > 0)
+            const maxHelocMonth = helocSchedule.reduce((max, current) => 
+              current.helocBalance > max.helocBalance ? current : max, 
+              helocSchedule[0] || { month: 1, helocBalance: 0, helocPayment: 0, helocInterest: 0, discretionaryUsed: 0, totalMonthlyPayment: 0 }
+            )
+            const firstPaydownMonth = helocSchedule.find(m => m.helocPayment > 0)
+            
+            // Calculate average payments
+            const activeMonths = helocSchedule.filter(m => m.helocBalance > 0)
+            const avgHelocInterest = activeMonths.length > 0 
+              ? activeMonths.reduce((sum, m) => sum + m.helocInterest, 0) / activeMonths.length
+              : 0
+            const avgDiscretionaryUsed = helocSchedule.length > 0
+              ? helocSchedule.reduce((sum, m) => sum + m.discretionaryUsed, 0) / helocSchedule.length
+              : 0
+
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+                      <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
+                        STEP 1
+                      </span>
+                      Initial HELOC Draw
+                    </h4>
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <p className="text-sm text-blue-800 mb-2">
+                        <strong>Month {firstHelocDrawMonth?.month || 1}:</strong> Start using HELOC to accelerate mortgage payoff
+                      </p>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Initial draw amount:</span>
+                          <span className="font-medium text-blue-900">
+                            {formatCurrency(firstHelocDrawMonth?.helocBalance || 0)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Monthly discretionary income:</span>
+                          <span className="font-medium text-blue-900">
+                            {formatCurrency(avgDiscretionaryUsed)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+                      <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
+                        STEP 2
+                      </span>
+                      Monthly HELOC Payments
+                    </h4>
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Average monthly HELOC interest:</span>
+                          <span className="font-medium text-green-900">
+                            {formatCurrency(avgHelocInterest)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Discretionary income for paydown:</span>
+                          <span className="font-medium text-green-900">
+                            {formatCurrency(avgDiscretionaryUsed)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between border-t border-green-200 pt-2">
+                          <span className="text-green-700 font-medium">Net monthly HELOC reduction:</span>
+                          <span className="font-semibold text-green-900">
+                            {formatCurrency(Math.max(0, avgDiscretionaryUsed - avgHelocInterest))}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+                      <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
+                        TIMING
+                      </span>
+                      Key Milestones
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">Peak HELOC Usage</p>
+                          <p className="text-xs text-gray-600">Month {maxHelocMonth.month}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-purple-900">
+                            {formatCurrency(maxHelocMonth.helocBalance)}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {firstPaydownMonth && (
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">First HELOC Paydown</p>
+                            <p className="text-xs text-gray-600">Month {firstPaydownMonth.month}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-semibold text-green-900">
+                              -{formatCurrency(firstPaydownMonth.helocPayment)}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">Full Payoff</p>
+                          <p className="text-xs text-gray-600">Month {results.heloc.payoffMonths}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-green-900">
+                            🎉 Debt Free!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
+                    <h5 className="text-sm font-semibold text-orange-800 mb-2 flex items-center">
+                      <svg className="w-4 h-4 text-orange-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Payment Strategy Tip
+                    </h5>
+                    <p className="text-xs text-orange-700">
+                      Use your discretionary income each month to pay down the HELOC balance. 
+                      This reduces interest charges and accelerates your path to being debt-free. 
+                      The key is consistency - treat the HELOC payment like any other monthly bill.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </div>
 

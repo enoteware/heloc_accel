@@ -18,6 +18,14 @@ Project development tracking and task management.
 ## 🎯 Feature Development
 
 ### Calculator Enhancements
+- [ ] **🧮 HELOC Calculator UI Enhancement Checklist** - Comprehensive front-end UI/UX improvements including:
+  - Typography & font sizing for key numeric inputs
+  - Visual hierarchy with section grouping and cards
+  - Progress bar for completion tracking (non-blocking)
+  - Mobile responsiveness and accessibility improvements
+  - Input field styling with comma formatting and placeholders
+  - Inline validation feedback and hover animations
+  - Icons & tooltips for user guidance
 - [ ] Add scenario comparison visualizations
 - [ ] Implement scenario saving (TODO in src/app/calculator/page.tsx:196)
 - [ ] Implement save/load calculation presets
