@@ -10,7 +10,7 @@ import { Card, CardHeader, CardTitle, CardContent } from './design-system/Card'
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
   loading?: boolean
-  initialData?: Partial<CalculatorValidationInput>
+  initialData?: Partial<CalculatorValidationInput & { remainingTermYears?: number; pmiMonthly?: number }>
 }
 
 // Validation rules
@@ -152,7 +152,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
     }
   }, [initialData])
 
-  const validateField = useCallback((field: keyof CalculatorValidationInput, value: number): string => {
+  const validateField = useCallback((field: keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number }), value: number): string => {
     const rule = validationRules[field as keyof typeof validationRules]
     if (!rule) return ''
 
@@ -288,8 +288,11 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       const requiredFields = Object.keys(validationRules) as Array<keyof typeof validationRules>
       
       requiredFields.forEach(field => {
-        const value = processedData[field] as number
-        const error = validateField(field, value)
+        // Skip remainingTermYears as it's not in processedData (we use remainingTermMonths)
+        if (field === 'remainingTermYears') return
+        
+        const value = processedData[field as keyof CalculatorValidationInput] as number
+        const error = validateField(field as keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number }), value)
         if (error) {
           newErrors[field] = error
           addDebugLog(`Validation error for ${field}`, { value, error })
@@ -593,7 +596,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
             </CardTitle>
             <SectionCompletionIndicator 
               formData={formData}
-              requiredFields={['currentMortgageBalance', 'currentInterestRate', 'remainingTermYears', 'monthlyPayment']}
+              requiredFields={['currentMortgageBalance', 'currentInterestRate', 'remainingTermMonths', 'monthlyPayment']}
               color="blue"
               size="md"
             />
@@ -629,19 +632,40 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               tooltip="Check your latest mortgage statement for this rate"
             />
             
-            <EnhancedNumberInput
-              field="remainingTermYears"
-              label="Remaining Term (years)"
-              description="Number of years left on your current mortgage"
-              required
-              priority="high"
-              value={formData.remainingTermYears || 0}
-              error={errors.remainingTermYears}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              placeholder="e.g. 25"
-              tooltip="Check your mortgage statement or amortization schedule"
-            />
+            <div>
+              <label htmlFor="remainingTermYears" className="block text-sm font-medium text-gray-700 mb-1">
+                Remaining Term (years) <span className="text-red-500">*</span>
+              </label>
+              <p className="text-xs text-gray-500 mb-2">Number of years left on your current mortgage</p>
+              <div className="relative">
+                <input
+                  type="number"
+                  id="remainingTermYears"
+                  value={formData.remainingTermYears === 0 ? '' : formData.remainingTermYears || ''}
+                  onChange={(e) => handleInputChange('remainingTermYears', e.target.value)}
+                  onBlur={() => handleBlur('remainingTermYears')}
+                  className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
+                    errors.remainingTermYears ? 'border-red-300' : 'border-gray-300'
+                  }`}
+                  placeholder="e.g. 25"
+                  min="1"
+                  max="40"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              {formData.remainingTermYears && (
+                <p className="mt-1 text-xs text-gray-500">
+                  = {formData.remainingTermYears * 12} months
+                </p>
+              )}
+              {errors.remainingTermYears && (
+                <p className="mt-1 text-sm text-red-600">{errors.remainingTermYears}</p>
+              )}
+            </div>
             
             <EnhancedCurrencyInput
               field="monthlyPayment"

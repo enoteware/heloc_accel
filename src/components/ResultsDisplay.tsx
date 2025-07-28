@@ -237,7 +237,7 @@ export default function ResultsDisplay({ results, onSaveScenario, onNewCalculati
             Monthly HELOC Payment Strategy
           </h3>
           <p className="text-sm text-blue-700 mt-1">
-            Here's how your monthly HELOC payments will work
+            Here&apos;s how your monthly HELOC payments will work
           </p>
         </div>
 
