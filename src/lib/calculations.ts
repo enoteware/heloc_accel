@@ -1,5 +1,7 @@
 // Mortgage and HELOC calculation utilities
 
+import { CalculationError, ErrorCode, createErrorResponse } from './errors'
+
 export interface MortgageInput {
   principal: number
   annualInterestRate: number
@@ -59,6 +61,21 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
     monthlyPayment: providedPayment
   } = input
 
+  // Validate inputs
+  if (annualInterestRate < 0 || annualInterestRate > 1) {
+    const errorDetails = createErrorResponse(ErrorCode.INVALID_INTEREST_RATE, {
+      value: (annualInterestRate * 100).toFixed(2) + '%'
+    })
+    throw new CalculationError(errorDetails)
+  }
+
+  if (termInMonths < 1 || termInMonths > 600) {
+    const errorDetails = createErrorResponse(ErrorCode.INVALID_LOAN_TERM, {
+      value: termInMonths
+    })
+    throw new CalculationError(errorDetails)
+  }
+
   const monthlyRate = annualInterestRate / 12
   const monthlyPayment = providedPayment || calculateMonthlyPayment(principal, annualInterestRate, termInMonths)
 
@@ -71,6 +88,16 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
   while (balance > 0.01 && month <= termInMonths) {
     const interestPayment = balance * monthlyRate
     let principalPayment = monthlyPayment - interestPayment
+
+    // Check for negative amortization
+    if (principalPayment < 0) {
+      // Payment is less than interest - loan balance would increase
+      const errorDetails = createErrorResponse(ErrorCode.NEGATIVE_AMORTIZATION, {
+        payment: monthlyPayment.toFixed(2),
+        interest: interestPayment.toFixed(2)
+      })
+      throw new CalculationError(errorDetails)
+    }
 
     // Handle final payment
     if (principalPayment > balance) {
@@ -96,6 +123,11 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
 
     balance = endingBalance
     month++
+  }
+
+  // Check if the calculation hit the maximum term limit
+  if (month > termInMonths && balance > 0.01) {
+    console.warn(`Warning: Loan not fully paid off after ${termInMonths} months. Remaining balance: $${balance.toFixed(2)}`)
   }
 
   return {

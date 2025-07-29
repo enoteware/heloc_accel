@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Check for contrast issues before commit
+echo "Checking for color contrast issues..."
+npm run check:contrast
+
+# Run linting with contrast rules
+echo "Running ESLint with contrast validation..."
+npx lint-staged

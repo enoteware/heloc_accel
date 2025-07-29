@@ -80,7 +80,7 @@ function SignInContent() {
                   <button
                     type="button"
                     onClick={fillDemoCredentials}
-                    className="mt-2 text-xs bg-green-100 hover:bg-green-200 text-green-800 px-3 py-1 rounded transition duration-200"
+                    className="mt-2 text-xs safe-success-light hover:bg-green-200 px-3 py-1 rounded transition duration-200"
                   >
                     Fill Demo Credentials
                   </button>

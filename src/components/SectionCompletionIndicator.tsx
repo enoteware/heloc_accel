@@ -11,27 +11,27 @@ interface SectionCompletionIndicatorProps {
 const colorClasses = {
   blue: {
     complete: 'bg-blue-500 text-white border-blue-500',
-    incomplete: 'bg-gray-100 text-gray-400 border-gray-300',
+    incomplete: 'bg-gray-100 text-gray-600 border-gray-300',
     textComplete: 'text-blue-600',
-    textIncomplete: 'text-gray-500'
+    textIncomplete: 'text-gray-700'
   },
   green: {
     complete: 'bg-green-500 text-white border-green-500',
-    incomplete: 'bg-gray-100 text-gray-400 border-gray-300',
+    incomplete: 'bg-gray-100 text-gray-600 border-gray-300',
     textComplete: 'text-green-600',
-    textIncomplete: 'text-gray-500'
+    textIncomplete: 'text-gray-700'
   },
   purple: {
     complete: 'bg-purple-500 text-white border-purple-500',
-    incomplete: 'bg-gray-100 text-gray-400 border-gray-300',
+    incomplete: 'bg-gray-100 text-gray-600 border-gray-300',
     textComplete: 'text-purple-600',
-    textIncomplete: 'text-gray-500'
+    textIncomplete: 'text-gray-700'
   },
   gray: {
     complete: 'bg-gray-500 text-white border-gray-500',
-    incomplete: 'bg-gray-100 text-gray-400 border-gray-300',
+    incomplete: 'bg-gray-100 text-gray-600 border-gray-300',
     textComplete: 'text-gray-600',
-    textIncomplete: 'text-gray-500'
+    textIncomplete: 'text-gray-700'
   }
 };
 

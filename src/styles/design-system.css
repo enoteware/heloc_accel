@@ -71,7 +71,7 @@
 .btn-base {
   @apply inline-flex items-center justify-center rounded-lg border font-medium transition-all duration-200;
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
-  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+  @apply disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none;
 }
 
 .btn-primary {
@@ -114,8 +114,8 @@
 .input-base {
   @apply block w-full rounded-lg border px-3 py-2 transition-all duration-200;
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
-  @apply disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50;
-  @apply placeholder-neutral-400 bg-white text-neutral-900;
+  @apply disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply placeholder-neutral-600 bg-white text-neutral-900;
 }
 
 .input-default {
@@ -298,8 +298,8 @@ input[type="month"],
 input[type="week"],
 select,
 textarea {
-  color: rgb(23 23 23) !important; /* neutral-900 */
-  -webkit-text-fill-color: rgb(23 23 23) !important; /* Fix for Safari/Chrome autofill */
+  color: rgb(17 24 39) !important; /* gray-900 */
+  -webkit-text-fill-color: rgb(17 24 39) !important; /* Fix for Safari/Chrome autofill */
 }
 
 /* Dark mode text color */
@@ -327,7 +327,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
-  -webkit-text-fill-color: rgb(23 23 23) !important;
+  -webkit-text-fill-color: rgb(17 24 39) !important; /* gray-900 */
   transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -340,26 +340,52 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: rgb(245 245 245) !important;
 }
 
-/* Custom placeholder color for HELOC Calculator */
+/* Custom placeholder color for HELOC Calculator - Updated for better contrast */
 .placeholder-custom {
   --tw-placeholder-opacity: 1;
-  color: rgb(208 209 213) !important;
+  color: rgb(115 115 115) !important; /* neutral-600 for better contrast */
 }
 
 .placeholder-custom::placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(208 209 213) !important;
+  color: rgb(115 115 115) !important; /* neutral-600 for better contrast */
 }
 
 .placeholder-custom::-webkit-input-placeholder {
-  color: rgb(208 209 213) !important;
+  color: rgb(115 115 115) !important; /* neutral-600 for better contrast */
 }
 
 .placeholder-custom::-moz-placeholder {
-  color: rgb(208 209 213) !important;
+  color: rgb(115 115 115) !important; /* neutral-600 for better contrast */
   opacity: 1;
 }
 
 .placeholder-custom:-ms-input-placeholder {
-  color: rgb(208 209 213) !important;
+  color: rgb(115 115 115) !important; /* neutral-600 for better contrast */
+}
+
+/* Force input text to be black in light mode */
+:not(.dark) input[type="text"],
+:not(.dark) input[type="email"],
+:not(.dark) input[type="password"],
+:not(.dark) input[type="number"],
+:not(.dark) input[type="tel"],
+:not(.dark) input[type="url"],
+:not(.dark) input[type="search"],
+:not(.dark) input[type="date"],
+:not(.dark) input[type="time"],
+:not(.dark) input[type="datetime-local"],
+:not(.dark) input[type="month"],
+:not(.dark) input[type="week"],
+:not(.dark) select,
+:not(.dark) textarea {
+  color: rgb(17 24 39) !important; /* gray-900 */
+  -webkit-text-fill-color: rgb(17 24 39) !important;
+}
+
+/* Override any conflicting styles */
+input.text-gray-900,
+input[class*="text-gray-900"] {
+  color: rgb(17 24 39) !important;
+  -webkit-text-fill-color: rgb(17 24 39) !important;
 }

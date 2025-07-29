@@ -403,9 +403,9 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-gray-700 mb-2">{description}</p>
       <div className="relative">
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
         <input
           type="number"
           id={field}
@@ -441,7 +441,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-gray-700 mb-2">{description}</p>
       <div className="relative">
         <input
           type="number"
@@ -457,7 +457,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
           min="0"
           max="30"
         />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">%</span>
       </div>
       {errors[field] && (
         <p className="mt-1 text-sm text-red-600">{errors[field]}</p>
@@ -480,7 +480,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-gray-700 mb-2">{description}</p>
       <input
         type="number"
         id={field}
@@ -498,7 +498,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         <p className="mt-1 text-sm text-red-600">{errors[field]}</p>
       )}
       {field === 'remainingTermMonths' && formData[field] && (
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-gray-700">
           {Math.round((formData[field] as number) / 12 * 10) / 10} years
         </p>
       )}
@@ -571,7 +571,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
       {/* Demo Fill Button */}
       <div className="flex justify-between items-center">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-700">
           {isDemoMode && (
             <span className="text-green-600 font-medium">
               🎮 Debug mode active - errors shown above
@@ -581,7 +581,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         <button
           type="button"
           onClick={handlePrefillDemo}
-          className="px-4 py-2 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors"
+          className="px-4 py-2 text-sm bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
         >
           Fill with Demo Data
         </button>
@@ -636,7 +636,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               <label htmlFor="remainingTermYears" className="block text-sm font-medium text-gray-700 mb-1">
                 Remaining Term (years) <span className="text-red-500">*</span>
               </label>
-              <p className="text-xs text-gray-500 mb-2">Number of years left on your current mortgage</p>
+              <p className="text-xs text-gray-700 mb-2">Number of years left on your current mortgage</p>
               <div className="relative">
                 <input
                   type="number"
@@ -658,7 +658,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
                 </div>
               </div>
               {formData.remainingTermYears && (
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-700">
                   = {formData.remainingTermYears * 12} months
                 </p>
               )}
@@ -936,7 +936,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               <label htmlFor="scenarioName" className="block text-sm font-medium text-gray-700 mb-1">
                 Scenario Name
               </label>
-              <p className="text-xs text-gray-500 mb-2">Give this scenario a memorable name</p>
+              <p className="text-xs text-gray-700 mb-2">Give this scenario a memorable name</p>
               <input
                 type="text"
                 id="scenarioName"
@@ -955,7 +955,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                 Description
               </label>
-              <p className="text-xs text-gray-500 mb-2">Add notes about this scenario</p>
+              <p className="text-xs text-gray-700 mb-2">Add notes about this scenario</p>
               <textarea
                 id="description"
                 value={formData.description || ''}

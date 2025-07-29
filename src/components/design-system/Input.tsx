@@ -12,9 +12,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const errorId = error ? `${inputId}-error` : undefined;
+    const helperId = helperText && !error ? `${inputId}-helper` : undefined;
 
     return (
-      <div className="w-full">
+      <div className="w-full form-field">
         {label && (
           <label
             htmlFor={inputId}
@@ -25,18 +27,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <div className="text-neutral-400">{leftIcon}</div>
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
+              <div className="text-neutral-600 input-icon-left">{leftIcon}</div>
             </div>
           )}
           <input
             id={inputId}
+            aria-invalid={!!error}
+            aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
             className={cn(
               // Base styles
               'block w-full rounded-lg border transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50',
-              'placeholder-neutral-400 dark:placeholder-neutral-500',
+              'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60',
+              'placeholder-neutral-600 dark:placeholder-neutral-400',
               // Background and text colors with higher specificity
               'bg-white dark:bg-neutral-800',
               '!text-neutral-900 dark:!text-neutral-100',
@@ -54,16 +58,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <div className="text-neutral-400">{rightIcon}</div>
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" aria-hidden="true">
+              <div className="text-neutral-600 input-icon-right">{rightIcon}</div>
             </div>
           )}
         </div>
         {error && (
-          <p className="mt-1 text-body-sm text-red-600">{error}</p>
+          <p id={errorId} role="alert" className="mt-1 text-body-sm text-red-600 error-message">{error}</p>
         )}
         {helperText && !error && (
-          <p className="mt-1 text-body-sm text-neutral-500">{helperText}</p>
+          <p id={helperId} className="mt-1 text-body-sm text-neutral-600 helper-text">{helperText}</p>
         )}
       </div>
     );

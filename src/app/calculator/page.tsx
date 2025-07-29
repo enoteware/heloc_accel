@@ -4,7 +4,11 @@ import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FastCalculatorForm from '@/components/FastCalculatorForm'
+import LiveCalculatorForm from '@/components/LiveCalculatorForm'
+import LiveResultsPanel from '@/components/LiveResultsPanel'
 import SaveScenarioModal from '@/components/SaveScenarioModal'
+import ErrorDisplay from '@/components/ErrorDisplay'
+import Disclaimer from '@/components/Disclaimer'
 import type { CalculatorValidationInput } from '@/lib/validation'
 import { getDemoScenario, generateSampleScenarios, addDemoScenario } from '@/lib/demo-storage'
 import { getApiUrl } from '@/lib/api-url'
@@ -52,6 +56,9 @@ function CalculatorPageContent() {
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [currentFormData, setCurrentFormData] = useState<CalculatorValidationInput | null>(null)
+  const [liveMode, setLiveMode] = useState(true) // Toggle between live and traditional mode
+  const [liveLoading, setLiveLoading] = useState(false)
+  const [liveError, setLiveError] = useState<string | null>(null)
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
 
   // Initialize demo data if in demo mode
@@ -222,6 +229,46 @@ function CalculatorPageContent() {
       console.log('=== CALCULATION REQUEST END ===')
     }
   }
+
+  const handleLiveCalculation = useCallback(async (formData: CalculatorValidationInput) => {
+    setLiveLoading(true)
+    setLiveError(null)
+    setCurrentFormData(formData) // Store form data for saving
+
+    try {
+      const response = await fetch(getApiUrl('api/calculate'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Calculation failed')
+      }
+
+      if (data.success) {
+        setResults(data.data)
+      } else {
+        throw new Error(data.error || 'Calculation failed')
+      }
+    } catch (err) {
+      let errorMessage = 'An error occurred during calculation'
+      if (err instanceof Error) {
+        errorMessage = err.message
+        if (err.message.includes('fetch')) {
+          errorMessage = 'Network error - please check your connection'
+        }
+      }
+      
+      setLiveError(errorMessage)
+    } finally {
+      setLiveLoading(false)
+    }
+  }, [])
 
   const handleSaveScenario = async () => {
     console.log('=== SAVE SCENARIO BUTTON CLICKED ===')
@@ -525,48 +572,111 @@ function CalculatorPageContent() {
           </div>
         )}
 
+        {/* Mode Toggle */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 inline-flex">
+            <button
+              onClick={() => setLiveMode(true)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                liveMode
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Live Mode (Two-Column)
+            </button>
+            <button
+              onClick={() => setLiveMode(false)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                !liveMode
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Traditional Mode
+            </button>
+          </div>
+        </div>
+
         {/* Main Content */}
-        {!results ? (
-          <FastCalculatorForm
-            onSubmit={handleCalculation}
-            loading={loading}
-            initialData={initialData}
-          />
+        {liveMode ? (
+          // Live Mode - Two Column Layout
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column - Form */}
+            <div>
+              <LiveCalculatorForm
+                onCalculate={handleLiveCalculation}
+                onClear={() => setResults(null)}
+                initialData={initialData}
+              />
+            </div>
+
+            {/* Right Column - Live Results */}
+            <div className="lg:sticky lg:top-8 lg:h-fit">
+              <LiveResultsPanel
+                results={results}
+                loading={liveLoading}
+                error={liveError}
+              />
+              
+              {/* Save Button */}
+              {results && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={handleSaveScenario}
+                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                  >
+                    Save This Scenario
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         ) : (
-          <div className="space-y-8">
-            <Suspense fallback={
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                    <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+          // Traditional Mode
+          !results ? (
+            <FastCalculatorForm
+              onSubmit={handleCalculation}
+              loading={loading}
+              initialData={initialData}
+            />
+          ) : (
+            <div className="space-y-8">
+              <Suspense fallback={
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div className="space-y-3">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                      <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            }>
-              <ResultsDisplay
-                results={results}
-                onSaveScenario={handleSaveScenario}
-                onNewCalculation={handleNewCalculation}
-              />
-            </Suspense>
+              }>
+                <ResultsDisplay
+                  results={results}
+                  inputs={currentFormData || undefined}
+                  onSaveScenario={handleSaveScenario}
+                  onNewCalculation={handleNewCalculation}
+                />
+              </Suspense>
 
-            <Suspense fallback={
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                  <div className="h-64 bg-gray-200 rounded"></div>
+              <Suspense fallback={
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div className="h-64 bg-gray-200 rounded"></div>
+                  </div>
                 </div>
-              </div>
-            }>
-              <PayoffChart
-                data={prepareChartData()}
-                title="Mortgage Balance Over Time"
-              />
-            </Suspense>
-          </div>
+              }>
+                <PayoffChart
+                  data={prepareChartData()}
+                  title="Mortgage Balance Over Time"
+                />
+              </Suspense>
+            </div>
+          )
         )}
 
         {/* Save Scenario Modal */}
@@ -577,6 +687,21 @@ function CalculatorPageContent() {
           isLoading={isSaving}
         />
       </div>
+
+      {/* Footer */}
+      <footer className="mt-12 pt-8 border-t border-gray-200">
+        <Disclaimer />
+        <div className="mt-8 text-center text-sm text-gray-500">
+          <p>&copy; {new Date().getFullYear()} HELOC Accelerator. All rights reserved.</p>
+          <p className="mt-2">
+            <a href="/terms" className="hover:text-gray-700 underline">Terms of Service</a>
+            <span className="mx-2">•</span>
+            <a href="/privacy" className="hover:text-gray-700 underline">Privacy Policy</a>
+            <span className="mx-2">•</span>
+            <a href="/contact" className="hover:text-gray-700 underline">Contact Us</a>
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

@@ -4,6 +4,7 @@
 
 /* Import Design System CSS */
 @import '../styles/design-system.css';
+@import '../styles/contrast-safe.css';
 @import '../styles/animations.css';
 @import '../styles/dark-mode.css';
 
@@ -35,4 +36,71 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Print Styles for Report Generation */
+@media print {
+  /* Hide everything except the printable report */
+  body > * {
+    display: none !important;
+  }
+  
+  .print\:block {
+    display: block !important;
+  }
+  
+  /* Remove margins and padding */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+  
+  /* Ensure color printing */
+  * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Page setup */
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+  
+  /* Prevent page breaks inside important elements */
+  .printable-report section {
+    page-break-inside: avoid;
+  }
+  
+  /* Ensure backgrounds are printed */
+  .bg-gradient-to-r,
+  .bg-blue-50,
+  .bg-blue-100,
+  .bg-green-50,
+  .bg-green-100,
+  .bg-gray-50,
+  .bg-gray-100,
+  .bg-yellow-50,
+  .bg-purple-50,
+  .bg-purple-100 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* Critical fix for input text color visibility */
+body:not(.dark) input,
+body:not(.dark) textarea,
+body:not(.dark) select {
+  color: rgb(17 24 39) !important;
+  -webkit-text-fill-color: rgb(17 24 39) !important;
+}
+
+/* Ensure filled inputs are visible */
+body:not(.dark) input:not(:placeholder-shown),
+body:not(.dark) textarea:not(:placeholder-shown) {
+  color: rgb(17 24 39) !important;
+  -webkit-text-fill-color: rgb(17 24 39) !important;
 }

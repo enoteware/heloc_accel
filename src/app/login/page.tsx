@@ -87,7 +87,7 @@ export default function LoginPage() {
         {/* Environment Banner */}
         <div className={`text-center p-3 rounded-lg border-2 ${
           isDemoMode 
-            ? 'bg-green-50 border-green-200 text-green-800' 
+            ? 'safe-success-light border-green-200' 
             : 'bg-purple-50 border-purple-200 text-purple-800'
         }`}>
           <p className="font-semibold text-sm">

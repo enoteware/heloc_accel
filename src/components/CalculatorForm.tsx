@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import type { CalculatorValidationInput } from '@/lib/validation'
+import { Icon } from '@/components/Icons'
 
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
@@ -123,7 +124,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Current Mortgage Balance *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="currentMortgageBalance"
@@ -156,7 +157,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">%</span>
             </div>
             {errors.currentInterestRate && (
               <p className="mt-1 text-sm text-red-600">{errors.currentInterestRate}</p>
@@ -181,7 +182,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
             {errors.remainingTermMonths && (
               <p className="mt-1 text-sm text-red-600">{errors.remainingTermMonths}</p>
             )}
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-gray-700">
               {formData.remainingTermMonths ? `${Math.round(formData.remainingTermMonths / 12 * 10) / 10} years` : ''}
             </p>
           </div>
@@ -191,7 +192,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Current Monthly Payment *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="monthlyPayment"
@@ -218,7 +219,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               HELOC Credit Limit *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="helocLimit"
@@ -251,7 +252,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">%</span>
             </div>
             {errors.helocInterestRate && (
               <p className="mt-1 text-sm text-red-600">{errors.helocInterestRate}</p>
@@ -269,7 +270,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Gross Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="monthlyGrossIncome"
@@ -290,7 +291,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Net Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="monthlyNetIncome"
@@ -311,7 +312,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Expenses *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="monthlyExpenses"
@@ -332,7 +333,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Discretionary Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="monthlyDiscretionaryIncome"
@@ -346,7 +347,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
             {errors.monthlyDiscretionaryIncome && (
               <p className="mt-1 text-sm text-red-600">{errors.monthlyDiscretionaryIncome}</p>
             )}
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-gray-700">
               Available for HELOC acceleration strategy
             </p>
           </div>
@@ -362,7 +363,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Property Value
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="propertyValue"
@@ -379,7 +380,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Property Tax
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="propertyTaxMonthly"
@@ -396,7 +397,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly Insurance
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="insuranceMonthly"
@@ -413,7 +414,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               Monthly HOA Fees
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
               <input
                 type="number"
                 id="hoaFeesMonthly"
@@ -435,9 +436,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           onClick={handlePrefillDemo}
           className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center space-x-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+          <Icon name="file-text" size="sm" />
           <span>Fill Demo Data</span>
         </button>
 
@@ -447,9 +446,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           onClick={handleClearForm}
           className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center space-x-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
+          <Icon name="x" size="sm" />
           <span>Clear Form</span>
         </button>
 
@@ -459,11 +456,10 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           disabled={loading}
           className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-8 rounded-lg transition duration-200 flex items-center space-x-2"
         >
-          {loading && (
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+          {loading ? (
+            <Icon name="refresh" size="sm" className="animate-spin" />
+          ) : (
+            <Icon name="calculator" size="sm" />
           )}
           <span>{loading ? 'Calculating...' : 'Calculate HELOC Strategy'}</span>
         </button>

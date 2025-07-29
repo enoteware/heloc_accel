@@ -868,14 +868,14 @@ export default function Dashboard() {
                   toggleScenarioSharing(selectedScenario.id, false)
                   setShareModalOpen(false)
                 }}
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-medium transition duration-200"
+                className="flex-1 safe-neutral-light hover:bg-gray-200 px-4 py-2 rounded-md font-medium transition duration-200"
                 disabled={sharingLoading}
               >
                 Disable Sharing
               </button>
               <button
                 onClick={() => setShareModalOpen(false)}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-200"
+                className="flex-1 safe-info hover:bg-blue-700 px-4 py-2 rounded-md font-medium transition duration-200"
               >
                 Done
               </button>

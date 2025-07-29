@@ -33,8 +33,8 @@ export default function AuthTestPage() {
   }
 
   return (
-    <div className="p-8 bg-white min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 text-gray-900">Authentication Test</h1>
+    <div className="p-8 safe-neutral-light min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-on-white">Authentication Test</h1>
       
       <div className="space-y-4">
         {testCredentials.map((cred, index) => (
@@ -42,7 +42,7 @@ export default function AuthTestPage() {
             <button
               onClick={() => testLogin(cred.email, cred.password)}
               disabled={loading}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+              className="safe-info px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
             >
               Test {cred.email} / {cred.password}
             </button>
@@ -51,8 +51,8 @@ export default function AuthTestPage() {
       </div>
       
       <div className="mt-8">
-        <h2 className="text-lg font-bold mb-2 text-gray-900">Result:</h2>
-        <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm text-gray-900">
+        <h2 className="text-lg font-bold mb-2 text-on-white">Result:</h2>
+        <pre className="safe-neutral-light p-4 rounded overflow-auto text-sm">
           {result || 'No tests run yet'}
         </pre>
       </div>

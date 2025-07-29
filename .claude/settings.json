@@ -18,6 +18,19 @@
           {
             "type": "command",
             "command": "echo \"✅ Code change completed. Running type check...\" && npx tsc --noEmit --skipLibCheck || echo \"⚠️ TypeScript errors found\""
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/edit-sound.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash.*(?:npm run build|npm run test|npm test)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/success-sound.sh"
           }
         ]
       },
@@ -38,6 +51,16 @@
           {
             "type": "command",
             "command": "echo \"🚀 HELOC Accelerator Project - Next.js TypeScript Financial Calculator\" && echo \"📋 Context: Financial services domain with strict security requirements\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh"
           }
         ]
       }

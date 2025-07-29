@@ -5,6 +5,7 @@ import { compareStrategies } from '@/lib/calculations'
 import { ApiResponse } from '@/lib/types'
 import { applyRateLimit, calculationRateLimit } from '@/lib/rate-limit'
 import { applySecurityHeaders, defaultSecurityHeaders } from '@/lib/security-headers'
+import { extractErrorDetails, ErrorCode, createErrorResponse } from '@/lib/errors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -149,18 +150,37 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Calculation error:', error)
 
-    if (error instanceof Error && error.message === 'Authentication required') {
-      const authResponse = NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-      return applySecurityHeaders(authResponse, defaultSecurityHeaders)
+    // Extract detailed error information
+    const errorDetails = extractErrorDetails(error)
+    
+    // Determine appropriate HTTP status code
+    let statusCode = 500
+    switch (errorDetails.code) {
+      case ErrorCode.AUTHENTICATION_REQUIRED:
+        statusCode = 401
+        break
+      case ErrorCode.RATE_LIMIT_EXCEEDED:
+        statusCode = 429
+        break
+      case ErrorCode.VALIDATION_FAILED:
+      case ErrorCode.INVALID_INTEREST_RATE:
+      case ErrorCode.INVALID_LOAN_TERM:
+      case ErrorCode.NEGATIVE_AMORTIZATION:
+      case ErrorCode.INSUFFICIENT_PAYMENT:
+        statusCode = 400
+        break
     }
 
     const errorResponse = NextResponse.json<ApiResponse>({
       success: false,
-      error: 'Internal server error during calculation'
-    }, { status: 500 })
+      error: errorDetails.userMessage,
+      data: {
+        errorCode: errorDetails.code,
+        suggestion: errorDetails.suggestion,
+        field: errorDetails.field,
+        technicalMessage: errorDetails.message
+      }
+    }, { status: statusCode })
 
     return applySecurityHeaders(errorResponse, defaultSecurityHeaders)
   }
