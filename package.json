@@ -36,7 +36,7 @@
     "force-deploy": "./scripts/force-vercel-deploy.sh",
     "vercel:force": "./scripts/force-vercel-deploy.sh",
     "quick-deploy": "./scripts/quick-deploy.sh",
-    "prepare": "husky install"
+    "prepare": "husky install || true"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
