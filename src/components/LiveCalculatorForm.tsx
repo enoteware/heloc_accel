@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import type { CalculatorValidationInput } from '@/lib/validation'
 import { useDebounce } from '@/hooks/useDebounce'
+import { Home, CreditCard, DollarSign, Building } from 'lucide-react'
 
 interface LiveCalculatorFormProps {
   onCalculate: (data: CalculatorValidationInput) => void
@@ -157,7 +158,10 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
       {/* Mortgage Information Section */}
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4">Current Mortgage</h3>
+        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+          <Home className="w-5 h-5" />
+          Current Mortgage
+        </h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label htmlFor="currentMortgageBalance" className="block text-sm font-medium text-gray-700 mb-1">
@@ -170,7 +174,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="currentMortgageBalance"
                 value={formData.currentMortgageBalance || ''}
                 onChange={(e) => handleInputChange('currentMortgageBalance', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -186,7 +190,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="currentInterestRate"
                 value={formData.currentInterestRate || ''}
                 onChange={(e) => handleInputChange('currentInterestRate', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
                 step="0.01"
                 min="0"
@@ -217,7 +221,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                       const years = parseFloat(e.target.value) || 0
                       handleInputChange('remainingTermMonths', Math.round(years * 12))
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="e.g. 25"
                     min="0.1"
                     max="40"
@@ -234,7 +238,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                     id="remainingTermMonths"
                     value={formData.remainingTermMonths || ''}
                     onChange={(e) => handleInputChange('remainingTermMonths', parseInt(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="e.g. 300"
                     min="1"
                     max="480"
@@ -258,7 +262,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="monthlyPayment"
                 value={formData.monthlyPayment || ''}
                 onChange={(e) => handleInputChange('monthlyPayment', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -268,7 +272,10 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
       {/* HELOC Information Section */}
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4">HELOC Details</h3>
+        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+          <CreditCard className="w-5 h-5" />
+          HELOC Details
+        </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="helocLimit" className="block text-sm font-medium text-gray-700 mb-1">
@@ -281,7 +288,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="helocLimit"
                 value={formData.helocLimit || ''}
                 onChange={(e) => handleInputChange('helocLimit', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -296,7 +303,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
               id="helocInterestRate"
               value={formData.helocInterestRate || ''}
               onChange={(e) => handleInputChange('helocInterestRate', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="0"
               step="0.01"
               min="0"
@@ -308,7 +315,10 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
       {/* Income and Expenses Section */}
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4">Monthly Finances</h3>
+        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+          <DollarSign className="w-5 h-5" />
+          Monthly Finances
+        </h3>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -322,7 +332,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                   id="monthlyGrossIncome"
                   value={formData.monthlyGrossIncome || ''}
                   onChange={(e) => handleInputChange('monthlyGrossIncome', parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="0"
                 />
               </div>
@@ -339,7 +349,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                   id="monthlyNetIncome"
                   value={formData.monthlyNetIncome || ''}
                   onChange={(e) => handleInputChange('monthlyNetIncome', parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="0"
                 />
               </div>
@@ -358,7 +368,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                   id="monthlyExpenses"
                   value={formData.monthlyExpenses || ''}
                   onChange={(e) => handleInputChange('monthlyExpenses', parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="0"
                 />
               </div>
@@ -375,7 +385,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                   id="monthlyDiscretionaryIncome"
                   value={formData.monthlyDiscretionaryIncome || ''}
                   readOnly
-                  className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-700 cursor-not-allowed"
+                  className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-md bg-blue-50 text-gray-700 cursor-not-allowed"
                   placeholder="Auto-calculated"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -390,12 +400,13 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
         </div>
       </div>
 
-      {/* Optional Property Information - Collapsed by default */}
-      <details className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <summary className="p-5 cursor-pointer hover:bg-gray-50 font-medium text-gray-700">
+      {/* Property Information Section */}
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+          <Building className="w-5 h-5" />
           Property Details (Optional)
-        </summary>
-        <div className="px-5 pb-5 grid grid-cols-2 gap-3">
+        </h3>
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">
               Property Value
@@ -407,7 +418,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="propertyValue"
                 value={formData.propertyValue || ''}
                 onChange={(e) => handleInputChange('propertyValue', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -424,7 +435,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="propertyTaxMonthly"
                 value={formData.propertyTaxMonthly || ''}
                 onChange={(e) => handleInputChange('propertyTaxMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -441,7 +452,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="insuranceMonthly"
                 value={formData.insuranceMonthly || ''}
                 onChange={(e) => handleInputChange('insuranceMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -458,7 +469,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="hoaFeesMonthly"
                 value={formData.hoaFeesMonthly || ''}
                 onChange={(e) => handleInputChange('hoaFeesMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -475,14 +486,14 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="pmiMonthly"
                 value={formData.pmiMonthly || ''}
                 onChange={(e) => handleInputChange('pmiMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
             <p className="mt-1 text-xs text-gray-500">Private Mortgage Insurance</p>
           </div>
         </div>
-      </details>
+      </div>
     </div>
   )
 }

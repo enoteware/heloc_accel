@@ -117,7 +117,10 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Mortgage Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Current Mortgage Information</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+          <Icon name="home" size="sm" />
+          Current Mortgage Information
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="currentMortgageBalance" className="block text-sm font-medium text-gray-700 mb-1">
@@ -212,7 +215,10 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* HELOC Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">HELOC Information</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+          <Icon name="credit-card" size="sm" />
+          HELOC Information
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="helocLimit" className="block text-sm font-medium text-gray-700 mb-1">
@@ -263,7 +269,10 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* Income and Expenses Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Monthly Income & Expenses</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+          <Icon name="dollar" size="sm" />
+          Monthly Income & Expenses
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="monthlyGrossIncome" className="block text-sm font-medium text-gray-700 mb-1">
@@ -356,7 +365,10 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
       {/* Optional Property Information Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700">Property Information (Optional)</h3>
+        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+          <Icon name="building" size="sm" />
+          Property Information (Optional)
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">

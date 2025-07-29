@@ -23,6 +23,8 @@ import {
   Minus,
   RefreshCw,
   FileText,
+  CreditCard,
+  Building,
   type LucideIcon,
   type LucideProps,
 } from 'lucide-react';
@@ -52,7 +54,9 @@ export type IconName =
   | 'plus'
   | 'minus'
   | 'refresh'
-  | 'file-text';
+  | 'file-text'
+  | 'credit-card'
+  | 'building';
 
 const iconMap: Record<IconName, LucideIcon> = {
   'calculator': Calculator,
@@ -79,6 +83,8 @@ const iconMap: Record<IconName, LucideIcon> = {
   'minus': Minus,
   'refresh': RefreshCw,
   'file-text': FileText,
+  'credit-card': CreditCard,
+  'building': Building,
 };
 
 export interface IconProps extends Omit<LucideProps, 'ref'> {
