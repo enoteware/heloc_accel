@@ -1,5 +1,99 @@
 # Build Log
 
+## 2025-07-29 - UI/UX Improvements and Confetti Integration
+
+### Status: ✅ Complete
+**Type:** Feature Enhancement & UI Improvements
+**Impact:** Enhanced user experience with visual feedback and improved form usability
+
+### Features Added
+
+#### 1. **Confetti Celebration Animations**
+- **Library:** canvas-confetti with TypeScript support
+- **Integration:** Custom useConfetti hook for reusable animations
+- **Triggers:**
+  - Automatic: When positive savings are calculated in live mode
+  - Manual: "Celebrate Savings!" button on results page
+  - Thresholds:
+    - Success (green): Any positive savings up to $25k
+    - Savings (orange): $25k-$50k savings
+    - Celebration (multi-color): $50k+ savings
+- **Features:**
+  - Respects user's reduced motion preferences
+  - Custom colors matching app design system
+  - Dynamic canvas creation with proper z-index
+
+#### 2. **Form Section Icons**
+- **Added Lucide Icons:** Visual hierarchy for form sections
+  - Home icon: Current Mortgage section
+  - CreditCard icon: HELOC Details section
+  - DollarSign icon: Monthly Finances section
+  - Building icon: Property Details section
+- **Implementation:** Added to both LiveCalculatorForm and standard CalculatorForm
+- **Icon Component:** Extended with credit-card and building icon support
+
+#### 3. **Property Details Visibility**
+- **Change:** Made Property Details section visible by default
+- **Before:** Collapsible `<details>` element (hidden by default)
+- **After:** Regular section matching other form sections
+- **Impact:** Better user experience - all fields immediately visible
+
+#### 4. **Form Field Contrast Improvements**
+- **Issue:** Grey-on-grey input fields with poor readability
+- **Fix:** Added explicit `bg-white` to all input fields
+- **Special Cases:**
+  - Discretionary Income: Changed from `bg-gray-50` to `bg-blue-50`
+  - All input fields now have consistent white backgrounds
+  - Maintained border colors for visual hierarchy
+
+### Technical Implementation
+
+#### Files Modified
+1. **src/hooks/useConfetti.ts** - Custom confetti hook
+2. **src/components/LiveCalculatorForm.tsx** - Live form improvements
+3. **src/components/CalculatorForm.tsx** - Standard form improvements
+4. **src/components/LiveResultsPanel.tsx** - Auto-trigger confetti
+5. **src/components/ResultsDisplay.tsx** - Celebrate button
+6. **src/components/Icons.tsx** - Added new icon types
+7. **src/app/confetti-demo/page.tsx** - Demo page for testing
+
+#### Dependencies Added
+- canvas-confetti: ^1.9.3
+- @types/canvas-confetti: ^1.6.4
+
+### Build & Deployment Notes
+
+#### Vercel Deployment Fix
+- **Issue:** Husky prepare script failing on Vercel
+- **Fix:** Modified package.json prepare script to `"husky install || true"`
+- **Impact:** Allows builds to continue when husky is unavailable
+
+#### Lint Fixes
+- Wrapped `addDebugLog` in useCallback to prevent re-renders
+- Fixed React Hook dependency warnings
+- Fixed unescaped entities in confetti demo page
+
+### Testing Results
+- ✅ All TypeScript types valid
+- ✅ ESLint passing (1 warning in useAnimation.ts - false positive)
+- ✅ Build successful
+- ✅ Vercel deployment successful
+
+### User Impact
+- **Visual Feedback:** Positive reinforcement when savings are achieved
+- **Better Navigation:** Icons help users quickly identify form sections
+- **Improved Readability:** White input backgrounds with proper contrast
+- **Enhanced UX:** All fields visible without expanding sections
+
+### Next Steps
+- Monitor confetti performance on lower-end devices
+- Consider adding sound effects (optional, with user preference)
+- Gather user feedback on celebration thresholds
+
+---
+
+# Build Log
+
 ## 2025-07-29 - UI Improvements and Error Handling
 
 ### Overview
