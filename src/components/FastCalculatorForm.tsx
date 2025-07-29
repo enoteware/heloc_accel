@@ -113,14 +113,14 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
 
   // Debug logging function
-  const addDebugLog = (message: string, data?: any) => {
+  const addDebugLog = useCallback((message: string, data?: any) => {
     const timestamp = new Date().toLocaleTimeString()
     const logMessage = `[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}`
     console.log(logMessage)
     if (isDemoMode) {
       setDebugLogs(prev => [...prev.slice(-10), logMessage]) // Keep last 10 logs
     }
-  }
+  }, [isDemoMode])
 
   // Update form data when initialData changes
   useEffect(() => {
@@ -150,7 +150,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       setErrors({})
       setTouched({})
     }
-  }, [initialData])
+  }, [initialData, addDebugLog])
 
   const validateField = useCallback((field: keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number }), value: number): string => {
     const rule = validationRules[field as keyof typeof validationRules]
@@ -222,7 +222,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
         [field]: ''
       }))
     }
-  }, [errors])
+  }, [errors, addDebugLog])
 
   const handleBlur = useCallback((field: keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number })) => {
     setTouched(prev => ({
