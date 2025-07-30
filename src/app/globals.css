@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 /* Import Design System CSS */
-@import '../styles/design-system.css';
-@import '../styles/contrast-safe.css';
-@import '../styles/animations.css';
-@import '../styles/dark-mode.css';
-@import '../styles/stack-auth-overrides.css';
+@import "../styles/design-system.css";
+@import "../styles/contrast-safe.css";
+@import "../styles/animations.css";
+@import "../styles/dark-mode.css";
+@import "../styles/stack-auth-overrides.css";
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -45,36 +45,36 @@ body {
   body > * {
     display: none !important;
   }
-  
+
   .print\:block {
     display: block !important;
   }
-  
+
   /* Remove margins and padding */
   body {
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
   }
-  
+
   /* Ensure color printing */
   * {
     color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
+
   /* Page setup */
   @page {
     size: letter;
     margin: 0.5in;
   }
-  
+
   /* Prevent page breaks inside important elements */
   .printable-report section {
     page-break-inside: avoid;
   }
-  
+
   /* Ensure backgrounds are printed */
   .bg-gradient-to-r,
   .bg-blue-50,
@@ -107,17 +107,24 @@ body:not(.dark) textarea:not(:placeholder-shown) {
 }
 
 /* Override for blue-gray text specifically in save scenario modal */
-body:not(.dark) .text-blue-gray-700,
-body:not(.dark) .\\!text-blue-gray-700,
-body:not(.dark) input.\\!text-blue-gray-700,
-body:not(.dark) textarea.\\!text-blue-gray-700 {
+body:not(.dark) .text-blue-gray-700 {
+  color: rgb(55 65 81) !important;
+  -webkit-text-fill-color: rgb(55 65 81) !important;
+}
+
+/* Override for important blue-gray text */
+body:not(.dark) [class*="!text-blue-gray-700"] {
   color: rgb(55 65 81) !important;
   -webkit-text-fill-color: rgb(55 65 81) !important;
 }
 
 /* Dot pattern backgrounds for Hero Highlight */
 .bg-dot-thick-neutral-300 {
-  background-image: radial-gradient(circle, rgb(212 212 212) 1px, transparent 1px);
+  background-image: radial-gradient(
+    circle,
+    rgb(212 212 212) 1px,
+    transparent 1px
+  );
   background-size: 20px 20px;
 }
 
