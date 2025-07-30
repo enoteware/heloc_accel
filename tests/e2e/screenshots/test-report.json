@@ -1,0 +1,16 @@
+{
+  "consoleErrors": [],
+  "networkErrors": [
+    {
+      "url": "http://localhost:3005/",
+      "method": "GET",
+      "error": "NS_ERROR_CONNECTION_REFUSED",
+      "timestamp": "2025-07-30T20:47:46.974Z"
+    }
+  ],
+  "uiIssues": [
+    "Test execution error: page.goto: NS_ERROR_CONNECTION_REFUSED\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/\", waiting until \"networkidle\"\u001b[22m\n"
+  ],
+  "successfulSteps": [],
+  "screenshots": []
+}

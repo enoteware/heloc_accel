@@ -13,7 +13,7 @@ export default function HomePageContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Hero Section with Hero Highlight */}
-      <HeroHighlight className="flex items-center justify-center">
+      <HeroHighlight className="flex items-center justify-center pt-16 md:pt-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{
@@ -74,11 +74,11 @@ export default function HomePageContent() {
         </div>
       </HeroHighlight>
 
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-4">
 
         {/* Feature Grid with Aceternity Cards */}
-        <div className="mt-24">
-          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-12">
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-8">
             Transform Your Financial Future
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
@@ -98,20 +98,14 @@ export default function HomePageContent() {
         </div>
 
         {/* Aceternity Demo Section */}
-        <div className="mt-24 text-center">
+        <div className="mt-12 text-center">
           <div className="bg-white rounded-lg shadow-md p-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               ✨ Enhanced with Aceternity UI
             </h3>
             <p className="text-gray-600 mb-6">
-              Experience interactive cards with dynamic backgrounds and hover effects, powered by our Pexels integration.
+              Experience interactive cards with dynamic backgrounds and hover effects throughout the application.
             </p>
-            <a
-              href="/demo/aceternity"
-              className="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
-            >
-              View Aceternity Demo →
-            </a>
           </div>
         </div>
       </div>
