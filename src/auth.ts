@@ -1,7 +1,14 @@
+// NextAuth has been replaced with Stack Auth
+// This file is temporarily disabled to prevent compilation errors
+// TODO: Remove or replace with Stack Auth equivalents
+
+/*
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import type { NextAuthConfig } from "next-auth"
+*/
 
+/*
 // Demo users for development/demo mode
 const DEMO_USERS = [
   {
@@ -25,7 +32,7 @@ const DEMO_USERS = [
 ]
 
 export const config: NextAuthConfig = {
-  debug: process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true',
+  debug: false, // Disabled since we're using Stack Auth now
   theme: {
     logo: "/heloc_accel.svg",
   },
@@ -74,8 +81,53 @@ export const config: NextAuthConfig = {
           }
         } else {
           // Production mode: query database
-          // TODO: Implement database user lookup with bcrypt password verification
-          console.log('[AUTH DEBUG] Production mode - database lookup not implemented')
+          try {
+            const { Client } = require('pg')
+            const bcrypt = require('bcryptjs')
+            
+            const client = new Client({
+              connectionString: process.env.DATABASE_URL,
+              ssl: {
+                rejectUnauthorized: false
+              }
+            })
+            
+            await client.connect()
+            
+            // Find user by email
+            const result = await client.query(
+              'SELECT id, email, password_hash, first_name, last_name, is_active FROM users WHERE email = $1 AND is_active = true',
+              [credentials.email]
+            )
+            
+            await client.end()
+            
+            if (result.rows.length === 0) {
+              console.log('[AUTH DEBUG] User not found:', credentials.email)
+              return null
+            }
+            
+            const user = result.rows[0]
+            
+            // Verify password
+            const isValidPassword = await bcrypt.compare(credentials.password, user.password_hash)
+            
+            console.log('[AUTH DEBUG] Database auth:', {
+              email: credentials.email,
+              userFound: true,
+              passwordValid: isValidPassword
+            })
+            
+            if (isValidPassword) {
+              return {
+                id: user.id,
+                email: user.email,
+                name: `${user.first_name} ${user.last_name}`.trim(),
+              }
+            }
+          } catch (error) {
+            console.error('[AUTH DEBUG] Database error:', error.message)
+          }
         }
 
         return null
@@ -122,5 +174,12 @@ export const config: NextAuthConfig = {
   },
   secret: process.env.AUTH_SECRET,
 }
+*/
 
-export const { handlers, signIn, signOut, auth } = NextAuth(config)
+// export const { handlers, signIn, signOut, auth } = NextAuth(config)
+
+// Temporary placeholder exports to prevent import errors
+export const handlers = { GET: () => {}, POST: () => {} }
+export const signIn = () => Promise.resolve()
+export const signOut = () => Promise.resolve()
+export const auth = () => Promise.resolve(null)

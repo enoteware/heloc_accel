@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
-import { useSession } from 'next-auth/react'
+import { useUser } from '@stackframe/stack'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getDemoScenarios, deleteDemoScenario, updateDemoScenario, generateSampleScenarios, clearDemoScenarios, getStorageInfo } from '@/lib/demo-storage'
 import { FirstConfirmationModal, SecondConfirmationModal, SuccessModal } from '@/components/ConfirmationModals'
-import { Modal, ModalBody, ModalFooter } from '../../components/design-system/Modal'
-import { Button } from '../../components/design-system/Button'
+import { Modal, ModalBody, ModalFooter } from '@/components/design-system/Modal'
+import { Button } from '@/components/design-system/Button'
 
 // Lazy load heavy components
 const PayoffChart = lazy(() => import('@/components/PayoffChart'))
@@ -26,9 +26,9 @@ interface Scenario {
 }
 
 export default function Dashboard() {
-  const sessionResult = useSession()
-  const session = sessionResult?.data
-  const status = sessionResult?.status || 'loading'
+  const user = useUser()
+  const session = user ? { user: { email: user.primaryEmail, name: user.displayName, id: user.id } } : null
+  const status = user === undefined ? 'loading' : user ? 'authenticated' : 'unauthenticated'
   const router = useRouter()
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [loading, setLoading] = useState(true)

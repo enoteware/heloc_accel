@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
-import { useSession } from 'next-auth/react'
+import { useUser } from '@stackframe/stack'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -32,9 +32,9 @@ interface Scenario {
 }
 
 function ComparePageContent() {
-  const sessionResult = useSession()
-  const session = sessionResult?.data
-  const status = sessionResult?.status || 'loading'
+  const user = useUser()
+  const session = user ? { user: { email: user.primaryEmail, name: user.displayName, id: user.id } } : null
+  const status = user === undefined ? 'loading' : user ? 'authenticated' : 'unauthenticated'
   const router = useRouter()
   const searchParams = useSearchParams()
   const [scenarios, setScenarios] = useState<Scenario[]>([])

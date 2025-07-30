@@ -83,9 +83,9 @@ The application includes a comprehensive demo mode (enabled by default) that all
 
 ### Demo Accounts
 When in demo mode, you can use these pre-configured accounts:
-- **Primary**: demo@example.com / demo123
-- **John Smith**: john@example.com / password123
-- **Jane Doe**: jane@example.com / password123
+- **Primary**: demo@example.com / demo123456
+- **John Smith**: john@example.com / password123456
+- **Jane Doe**: jane@example.com / password123456
 
 **Note**: These accounts match the actual authentication system and will work for login.
 

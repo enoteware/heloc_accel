@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import '../globals.css'
 import { AuthProvider } from '@/components/AuthProvider'
 import { NavigationProvider, NavigationBar } from '@/components/navigation'
 import { ThemeProvider } from '../../components/design-system/ThemeProvider'
@@ -14,6 +13,8 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import SimpleLanguageSwitcher from '@/components/SimpleLanguageSwitcher'
 import DebugInfo from '@/components/DebugInfo'
 import LiveDebugLogger from '@/components/LiveDebugLogger'
+import { StackProvider, StackTheme } from "@stackframe/stack"
+import { stackServerApp } from "@/stack"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,29 +49,30 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className={inter.className}>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            <AuthProvider>
-              <CompanyProvider>
-                <NavigationProvider>
-                  <EnvironmentBanner />
-                  <NavigationBar />
-                  <div className="fixed top-4 right-4 z-50">
-                    <SimpleLanguageSwitcher />
-                  </div>
-                  <main className="min-h-screen">
-                    {children}
-                  </main>
-                  <DebugInfo />
-                  <LiveDebugLogger />
-                </NavigationProvider>
-              </CompanyProvider>
-            </AuthProvider>
-          </ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <div lang={locale} className={inter.className}>
+      <StackProvider app={stackServerApp}>
+        <StackTheme>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider>
+              <AuthProvider>
+                <CompanyProvider>
+                  <NavigationProvider>
+                    <NavigationBar />
+                    <div className="fixed top-4 right-4 z-50">
+                      <SimpleLanguageSwitcher />
+                    </div>
+                    <main className="min-h-screen">
+                      {children}
+                    </main>
+                    <DebugInfo />
+                    {/* <LiveDebugLogger /> */}
+                  </NavigationProvider>
+                </CompanyProvider>
+              </AuthProvider>
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </StackTheme>
+      </StackProvider>
+    </div>
   );
 }

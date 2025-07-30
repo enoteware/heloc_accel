@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { useUser } from '@stackframe/stack'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
@@ -15,9 +15,9 @@ function LoginContent() {
   
   const router = useRouter()
   const searchParams = useSearchParams()
-  const sessionResult = useSession()
-  const session = sessionResult?.data
-  const status = sessionResult?.status || 'loading'
+  const user = useUser()
+  const session = user ? { user } : null
+  const status = user ? 'authenticated' : 'unauthenticated'
   const t = useTranslations('auth')
   
   const callbackUrl = searchParams.get('callbackUrl') || '/calculator'
@@ -39,30 +39,8 @@ function LoginContent() {
   }, [urlError, t])
 
   const handleLogin = async (email: string, password: string) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError(t('errors.invalidCredentials'))
-      } else if (result?.ok) {
-        // Success - wait for session to update, then redirect
-        router.push(callbackUrl)
-        router.refresh()
-      } else {
-        setError(t('errors.unexpectedError'))
-      }
-    } catch (err) {
-      setError(t('errors.signInError'))
-    } finally {
-      setLoading(false)
-    }
+    // Redirect to Stack Auth sign-in handler
+    router.push(`/handler/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -13,6 +13,7 @@ interface LogEntry {
 let logId = 0;
 const logs: LogEntry[] = [];
 const logListeners: ((logs: LogEntry[]) => void)[] = [];
+let isProcessingLog = false; // Prevent recursive calls
 
 // Override console methods to capture logs
 const originalLog = console.log;
@@ -20,37 +21,67 @@ const originalError = console.error;
 const originalWarn = console.warn;
 
 const addLog = (message: string, level: 'info' | 'error' | 'warn') => {
+  // Prevent recursive logging
+  if (isProcessingLog) return;
+
   const entry: LogEntry = {
     id: ++logId,
     timestamp: new Date().toLocaleTimeString(),
     message,
     level
   };
-  
+
   logs.push(entry);
   if (logs.length > 50) logs.shift(); // Keep only last 50 logs
-  
-  logListeners.forEach(listener => listener([...logs]));
+
+  // Use setTimeout to avoid React state update during render
+  setTimeout(() => {
+    logListeners.forEach(listener => {
+      try {
+        listener([...logs]);
+      } catch (error) {
+        // Silently ignore listener errors to prevent recursion
+      }
+    });
+  }, 0);
 };
 
 console.log = (...args) => {
+  if (isProcessingLog) return originalLog(...args);
+
+  isProcessingLog = true;
   const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
   if (message.includes('[LocaleLayout]') || message.includes('[LanguageSwitcher]') || message.includes('HomePageContent')) {
     addLog(message, 'info');
   }
   originalLog(...args);
+  isProcessingLog = false;
 };
 
 console.error = (...args) => {
+  if (isProcessingLog) return originalError(...args);
+
+  isProcessingLog = true;
   const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
-  addLog(`ERROR: ${message}`, 'error');  
+  // Only log specific errors, not React internal errors
+  if (!message.includes('Warning:') && !message.includes('React') && !message.includes('webpack-internal')) {
+    addLog(`ERROR: ${message}`, 'error');
+  }
   originalError(...args);
+  isProcessingLog = false;
 };
 
 console.warn = (...args) => {
+  if (isProcessingLog) return originalWarn(...args);
+
+  isProcessingLog = true;
   const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
-  addLog(`WARN: ${message}`, 'warn');
+  // Only log specific warnings, not React internal warnings
+  if (!message.includes('Warning:') && !message.includes('React') && !message.includes('webpack-internal')) {
+    addLog(`WARN: ${message}`, 'warn');
+  }
   originalWarn(...args);
+  isProcessingLog = false;
 };
 
 export default function LiveDebugLogger() {
@@ -59,9 +90,15 @@ export default function LiveDebugLogger() {
   const isDebugMode = useDebugFlag();
 
   useEffect(() => {
-    const listener = (newLogs: LogEntry[]) => setLogs(newLogs);
+    const listener = (newLogs: LogEntry[]) => {
+      // Use functional update to avoid stale closure issues
+      setLogs(prevLogs => newLogs);
+    };
     logListeners.push(listener);
-    
+
+    // Set initial logs
+    setLogs([...logs]);
+
     return () => {
       const index = logListeners.indexOf(listener);
       if (index > -1) logListeners.splice(index, 1);
@@ -116,8 +153,11 @@ export default function LiveDebugLogger() {
         )}
       </div>
       
-      <button 
-        onClick={() => setLogs([])}
+      <button
+        onClick={() => {
+          logs.length = 0; // Clear the global logs array
+          setLogs([]); // Clear the component state
+        }}
         className="mt-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded"
       >
         Clear Logs

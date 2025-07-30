@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
-import { useSession } from 'next-auth/react'
+import { useUser } from '@stackframe/stack'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FastCalculatorForm from '@/components/FastCalculatorForm'
 import LiveCalculatorForm from '@/components/LiveCalculatorForm'
@@ -47,9 +47,9 @@ interface CalculationResults {
 }
 
 function CalculatorPageContent() {
-  const sessionResult = useSession()
-  const session = sessionResult?.data
-  const status = sessionResult?.status || 'loading'
+  const user = useUser()
+  const session = user ? { user } : null
+  const status = user ? 'authenticated' : 'unauthenticated'
   const router = useRouter()
   const searchParams = useSearchParams()
   const [results, setResults] = useState<CalculationResults | null>(null)

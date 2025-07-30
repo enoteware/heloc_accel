@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@stackframe/stack';
 import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import NavigationLink from './NavigationLink';
@@ -19,7 +19,8 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   onClose,
   className,
 }) => {
-  const { data: session } = useSession();
+  const user = useUser();
+  const session = user ? { user } : null;
   const router = useRouter();
 
   // Close drawer on escape key
@@ -88,8 +89,8 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
 
   // Get user display info
   const getUserDisplayName = () => {
-    if (session?.user?.name) return session.user.name;
-    if (session?.user?.email) return session.user.email.split('@')[0];
+    if (user?.displayName) return user.displayName;
+    if (user?.primaryEmail) return user.primaryEmail.split('@')[0];
     return 'User';
   };
 
@@ -163,9 +164,9 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 <p className="text-body font-medium text-neutral-900 dark:text-neutral-100">
                   {getUserDisplayName()}
                 </p>
-                {session.user.email && (
+                {user?.primaryEmail && (
                   <p className="text-body-sm text-neutral-600 dark:text-neutral-400">
-                    {session.user.email}
+                    {user.primaryEmail}
                   </p>
                 )}
               </div>

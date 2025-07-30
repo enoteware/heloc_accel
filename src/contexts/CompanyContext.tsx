@@ -1,13 +1,13 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { useSession } from 'next-auth/react'
-import { 
-  CompanySettings, 
-  Agent, 
-  getDemoCompanySettings, 
+import { useUser } from '@stackframe/stack'
+import {
+  CompanySettings,
+  Agent,
+  getDemoCompanySettings,
   getDemoUserAgent,
-  initializeDemoCompanyData 
+  initializeDemoCompanyData
 } from '@/lib/company-data'
 
 interface CompanyContextType {
@@ -21,7 +21,8 @@ interface CompanyContextType {
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
 
 export function CompanyProvider({ children }: { children: ReactNode }) {
-  const { data: session } = useSession()
+  const user = useUser()
+  const session = user ? { user } : null
   const [companySettings, setCompanySettings] = useState<CompanySettings | null>(null)
   const [assignedAgent, setAssignedAgent] = useState<Agent | null>(null)
   const [loading, setLoading] = useState(true)

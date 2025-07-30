@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@stackframe/stack';
 import { useRouter } from '@/i18n/routing';
 import { Dropdown, DropdownItem } from '@/components/design-system';
 import NavigationIcon from './NavigationIcon';
@@ -17,9 +17,9 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   className,
   placement = 'bottom-end',
 }) => {
-  const sessionResult = useSession();
-  const session = sessionResult?.data;
-  const status = sessionResult?.status || 'loading';
+  const user = useUser();
+  const session = user ? { user } : null;
+  const status = user ? 'authenticated' : 'unauthenticated';
   const router = useRouter();
 
   if (status === "loading") {
@@ -36,11 +36,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({
 
   // Get user display name
   const getUserDisplayName = () => {
-    if (session.user.name) {
-      return session.user.name;
+    if (user?.displayName) {
+      return user.displayName;
     }
-    if (session.user.email) {
-      return session.user.email.split('@')[0];
+    if (user?.primaryEmail) {
+      return user.primaryEmail.split('@')[0];
     }
     return 'User';
   };

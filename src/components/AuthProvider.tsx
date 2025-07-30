@@ -1,16 +1,7 @@
 'use client'
 
-import { SessionProvider } from 'next-auth/react'
-
+// NextAuth has been replaced with Stack Auth
+// This component is kept for compatibility but no longer wraps with SessionProvider
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <SessionProvider
-      // Disable automatic refetching to prevent CLIENT_FETCH_ERROR spam
-      refetchOnWindowFocus={false}
-      // Don't refetch session automatically
-      refetchInterval={0}
-    >
-      {children}
-    </SessionProvider>
-  )
+  return <>{children}</>
 }

@@ -1,7 +1,8 @@
 "use server"
 
-import { signOut } from "@/auth"
+import { redirect } from "next/navigation"
 
 export async function signOutAction() {
-  await signOut({ redirectTo: "/" })
+  // Redirect to a client-side sign-out page that will handle the actual logout
+  redirect("/sign-out")
 }

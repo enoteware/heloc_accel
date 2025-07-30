@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { auth } from '@/auth'
+import { stackServerApp } from '@/stack'
 import AdminSidebar from './_components/AdminSidebar'
 
 export default async function AdminLayout({
@@ -7,17 +7,17 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth()
-  
+  const user = await stackServerApp.getUser()
+
   // Check if user is authenticated
-  if (!session?.user) {
-    redirect('/login')
+  if (!user) {
+    redirect('/handler/sign-in')
   }
 
   // In demo mode, allow any authenticated user to be admin
   // In production, you would check for admin role here
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-  const isAdmin = isDemoMode || session.user.email === 'admin@helocaccelerator.com'
+  const isAdmin = isDemoMode || user.primaryEmail === 'admin@helocaccelerator.com'
 
   if (!isAdmin) {
     redirect('/dashboard')

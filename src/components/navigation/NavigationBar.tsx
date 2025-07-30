@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@stackframe/stack';
 import { usePathname } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/Logo';
@@ -21,7 +21,8 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   variant = 'default',
   showOnAuthPages = false,
 }) => {
-  const { data: session } = useSession();
+  const user = useUser();
+  const session = user ? { user } : null;
   const pathname = usePathname();
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

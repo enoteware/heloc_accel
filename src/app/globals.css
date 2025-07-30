@@ -7,6 +7,7 @@
 @import '../styles/contrast-safe.css';
 @import '../styles/animations.css';
 @import '../styles/dark-mode.css';
+@import '../styles/stack-auth-overrides.css';
 
 :root {
   --foreground-rgb: 0, 0, 0;

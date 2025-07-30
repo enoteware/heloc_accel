@@ -28,6 +28,10 @@
     "db:cli": "node scripts/db-cli.js",
     "db:users": "node scripts/db-cli.js list-users",
     "db:migrate": "node scripts/db-cli.js migrate",
+    "db:neon:setup": "node scripts/setup-neon-db.js",
+    "db:neon:test": "node scripts/test-neon-connection.js",
+    "db:neon:import-users": "node scripts/import-test-users.js",
+    "db:neon:test-auth": "node scripts/test-database-auth.js",
     "check:imports": "node scripts/validate-imports.js",
     "check:deploy": "node scripts/pre-deploy-check.js",
     "check:vercel": "node scripts/vercel-check.js",
@@ -44,10 +48,12 @@
     "augment:workflow:pre": "node .augment/automation/task-workflows.js pre-edit",
     "augment:workflow:post": "node .augment/automation/task-workflows.js post-edit",
     "augment:workflow:ui": "node .augment/automation/task-workflows.js ui",
-    "augment:workflow:deploy": "node .augment/automation/task-workflows.js deployment"
+    "augment:workflow:deploy": "node .augment/automation/task-workflows.js deployment",
+    "test:stack-auth": "node test-stack-auth.js"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
+    "@stackframe/stack": "^2.8.25",
     "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.9.0",
     "@types/jsonwebtoken": "^9.0.6",
@@ -76,6 +82,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
+    "uuid": "^11.1.0",
     "zod": "^4.0.8"
   },
   "devDependencies": {
@@ -87,6 +94,7 @@
     "@testing-library/user-event": "^14.6.0",
     "@types/jest": "^29.5.12",
     "axe-core": "^4.10.2",
+    "dotenv": "^17.2.1",
     "eslint-plugin-contrast-validation": "file:./eslint-rules",
     "husky": "^9.0.11",
     "jest": "^29.7.0",
