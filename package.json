@@ -36,7 +36,15 @@
     "force-deploy": "./scripts/force-vercel-deploy.sh",
     "vercel:force": "./scripts/force-vercel-deploy.sh",
     "quick-deploy": "./scripts/quick-deploy.sh",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "augment:pre-edit": "node .augment/automation/quality-framework.js pre-edit",
+    "augment:post-edit": "node .augment/automation/quality-framework.js post-edit",
+    "augment:ui-check": "node .augment/automation/quality-framework.js ui-check",
+    "augment:session": "node .augment/automation/quality-framework.js session-status",
+    "augment:workflow:pre": "node .augment/automation/task-workflows.js pre-edit",
+    "augment:workflow:post": "node .augment/automation/task-workflows.js post-edit",
+    "augment:workflow:ui": "node .augment/automation/task-workflows.js ui",
+    "augment:workflow:deploy": "node .augment/automation/task-workflows.js deployment"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
@@ -83,6 +91,7 @@
     "husky": "^9.0.11",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.6.2"
   }
 }

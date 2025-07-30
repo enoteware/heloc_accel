@@ -11,21 +11,32 @@ export default auth((req) => {
   const isAdminPath = req.nextUrl.pathname.startsWith('/admin')
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
+  // Prevent redirect loops by checking if we're already on the target path
+  const url = req.nextUrl.clone()
+
   // Check admin access
   if (isAdminPath) {
     // In demo mode, any authenticated user can access admin
     if (isDemoMode) {
       if (!token) {
-        return NextResponse.redirect(new URL('/login', req.url))
+        const loginUrl = new URL('/login', req.url)
+        // Prevent redirect loop
+        if (req.nextUrl.pathname !== '/login') {
+          return NextResponse.redirect(loginUrl)
+        }
       }
     } else {
       // In production, check for admin role
-      const isAdmin = token?.user?.email === 'admin@helocaccelerator.com' || 
+      const isAdmin = token?.user?.email === 'admin@helocaccelerator.com' ||
                      (token as any)?.role === 'admin' ||
                      (token as any)?.isAdmin === true
 
       if (!isAdmin) {
-        return NextResponse.redirect(new URL('/dashboard', req.url))
+        const dashboardUrl = new URL('/dashboard', req.url)
+        // Prevent redirect loop
+        if (req.nextUrl.pathname !== '/dashboard') {
+          return NextResponse.redirect(dashboardUrl)
+        }
       }
     }
   }

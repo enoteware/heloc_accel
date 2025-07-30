@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"🔍 Running TypeScript check before code changes...\" && npm run lint --silent || echo \"⚠️ Linting issues found\""
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/health-check.sh"
           }
         ]
       }
@@ -17,11 +17,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"✅ Code change completed. Running type check...\" && npx tsc --noEmit --skipLibCheck || echo \"⚠️ TypeScript errors found\""
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/auto-quality-check.sh"
           },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/edit-sound.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit.*\\.(tsx|css|scss)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/ui-check.sh"
           }
         ]
       },

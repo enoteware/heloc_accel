@@ -1,0 +1,1 @@
+view Claude Code commands and hooks and see if augment can omplementh them
