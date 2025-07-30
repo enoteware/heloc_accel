@@ -105,3 +105,14 @@ body:not(.dark) textarea:not(:placeholder-shown) {
   color: rgb(17 24 39) !important;
   -webkit-text-fill-color: rgb(17 24 39) !important;
 }
+
+/* Dot pattern backgrounds for Hero Highlight */
+.bg-dot-thick-neutral-300 {
+  background-image: radial-gradient(circle, rgb(212 212 212) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.dark .bg-dot-thick-neutral-800 {
+  background-image: radial-gradient(circle, rgb(38 38 38) 1px, transparent 1px);
+  background-size: 20px 20px;
+}

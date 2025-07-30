@@ -2,6 +2,9 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import PexelsImage from '@/components/PexelsImage';
+import { StableMoneyCard, StablePlanningCard, StableSuccessCard, HeroHighlight, Highlight } from '@/components/design-system';
+import { motion } from 'framer-motion';
 
 export default function HomePageContent() {
   const t = useTranslations();
@@ -9,21 +12,106 @@ export default function HomePageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            {t('pages.homeTitle')}
-          </h1>
-          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            {t('pages.homeSubtitle')}
-          </p>
-          <div className="space-x-4">
-            <Link
-              href="/calculator"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      {/* Hero Section with Hero Highlight */}
+      <HeroHighlight className="flex items-center justify-center">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.5,
+            }}
+            className="text-center"
+          >
+            <motion.h1
+              className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
-              {t('calculator.getStarted')}
-            </Link>
+              {t('pages.homeHero.title')}{' '}
+              <Highlight className="text-white">
+                {t('pages.homeHero.highlight')}
+              </Highlight>
+            </motion.h1>
+            
+            <motion.p
+              className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              {t('pages.homeHero.subtitle')}{' '}
+              <span className="font-semibold text-blue-600">
+                {t('pages.homeHero.saveMoney')}
+              </span>{' '}
+              {t('pages.homeHero.connector')}{' '}
+              <span className="font-semibold text-blue-600">
+                {t('pages.homeHero.achieveFreedom')}
+              </span>
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="mt-10"
+            >
+              <Link
+                href="/calculator"
+                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:scale-105"
+              >
+                {t('calculator.getStarted')}
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </HeroHighlight>
+
+      <div className="container mx-auto px-4 py-16">
+
+        {/* Feature Grid with Aceternity Cards */}
+        <div className="mt-24">
+          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-12">
+            Transform Your Financial Future
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
+            <StableMoneyCard
+              title="Calculate Savings"
+              description="See exactly how much time and money you can save with HELOC acceleration"
+            />
+            <StablePlanningCard
+              title="Strategic Planning"
+              description="Get detailed month-by-month strategies for optimal HELOC utilization"
+            />
+            <StableSuccessCard
+              title="Achieve Freedom"
+              description="Pay off your mortgage faster and achieve financial freedom sooner"
+            />
+          </div>
+        </div>
+
+        {/* Aceternity Demo Section */}
+        <div className="mt-24 text-center">
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              ✨ Enhanced with Aceternity UI
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Experience interactive cards with dynamic backgrounds and hover effects, powered by our Pexels integration.
+            </p>
+            <a
+              href="/demo/aceternity"
+              className="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              View Aceternity Demo →
+            </a>
           </div>
         </div>
       </div>

@@ -2,13 +2,16 @@
 
 import React, { useState } from 'react'
 import PrintableReport from './PrintableReport'
-import { printReportInNewWindow } from '@/lib/print-utils'
+import { generatePDFFromComponent } from '@/lib/pdf-generator'
+import { generateReportFilename } from '@/lib/print-utils'
 import { renderToString } from 'react-dom/server'
 import type { CalculatorValidationInput } from '@/lib/validation'
 import { Icon } from '@/components/Icons'
 import { useConfetti } from '@/hooks/useConfetti'
 import InputSummary from './InputSummary'
 import { useCompany } from '@/contexts/CompanyContext'
+import { useTranslations, useLocale } from 'next-intl'
+import PexelsImage from './PexelsImage'
 
 interface CalculationResults {
   traditional: {
@@ -53,9 +56,12 @@ interface ResultsDisplayProps {
 export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewCalculation }: ResultsDisplayProps) {
   const { triggerConfetti } = useConfetti()
   const { companySettings, assignedAgent } = useCompany()
-  
+  const tResults = useTranslations('results')
+  const tPrintable = useTranslations('printableReport')
+  const locale = useLocale()
+
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(locale === 'es' ? 'es-US' : 'en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
@@ -95,12 +101,12 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-600">Time Saved</p>
+              <p className="text-sm font-medium text-green-600">{tResults('timeSaved')}</p>
               <p className="text-2xl font-bold text-green-900">
-                {results.comparison.timeSavedYears} years
+                {results.comparison.timeSavedYears} {tResults('years')}
               </p>
               <p className="text-sm text-green-700">
-                ({results.comparison.timeSavedMonths} months)
+                ({results.comparison.timeSavedMonths} {tResults('months')})
               </p>
             </div>
             <div className="p-3 bg-green-200 rounded-full">
@@ -113,7 +119,7 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-600">Interest Saved</p>
+              <p className="text-sm font-medium text-blue-600">{tResults('totalInterestSaved')}</p>
               <p className="text-2xl font-bold text-blue-900">
                 {formatCurrency(results.comparison.interestSaved)}
               </p>
@@ -131,12 +137,12 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-purple-600">Max HELOC Used</p>
+              <p className="text-sm font-medium text-purple-600">{tResults('maxHelocUsed')}</p>
               <p className="text-2xl font-bold text-purple-900">
                 {formatCurrency(results.heloc.maxHelocUsed)}
               </p>
               <p className="text-sm text-purple-700">
-                Peak utilization
+                {tResults('peakUtilization')}
               </p>
             </div>
             <div className="p-3 bg-purple-200 rounded-full">
@@ -149,7 +155,7 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
       {/* Detailed Comparison */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Strategy Comparison</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{tResults('strategyComparison')}</h3>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
@@ -159,30 +165,30 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
               <div className="p-2 bg-gray-100 rounded-lg mr-3">
                 <Icon name="home" size="sm" className="text-gray-600" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-900">Traditional Mortgage</h4>
+              <h4 className="text-lg font-semibold text-gray-900">{tResults('traditionalMortgage')}</h4>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Payoff Time:</span>
+                <span className="text-sm text-gray-600">{tResults('payoffTime')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatMonths(results.traditional.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Monthly Payment:</span>
+                <span className="text-sm text-gray-600">{tResults('monthlyPayment')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.traditional.monthlyPayment)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Total Interest:</span>
+                <span className="text-sm text-gray-600">{tResults('totalInterest')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.traditional.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Total Payments:</span>
+                <span className="text-sm text-gray-600">{tResults('totalPayments')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.traditional.totalPayments)}
                 </span>
@@ -196,36 +202,36 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
               <div className="p-2 bg-blue-100 rounded-lg mr-3">
                 <Icon name="trending-up" size="sm" className="text-blue-600" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-900">HELOC Acceleration</h4>
+              <h4 className="text-lg font-semibold text-gray-900">{tResults('helocAcceleration')}</h4>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Payoff Time:</span>
+                <span className="text-sm text-gray-600">{tResults('payoffTime')}:</span>
                 <span className="text-sm font-medium text-green-600">
                   {formatMonths(results.heloc.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Total Interest:</span>
+                <span className="text-sm text-gray-600">{tResults('totalInterest')}:</span>
                 <span className="text-sm font-medium text-green-600">
                   {formatCurrency(results.heloc.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Mortgage Interest:</span>
+                <span className="text-sm text-gray-600">{tResults('mortgageInterest')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.heloc.totalMortgageInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">HELOC Interest:</span>
+                <span className="text-sm text-gray-600">{tResults('helocInterest')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.heloc.totalHelocInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Avg HELOC Balance:</span>
+                <span className="text-sm text-gray-600">{tResults('avgHelocBalance')}:</span>
                 <span className="text-sm font-medium text-gray-900">
                   {formatCurrency(results.heloc.averageHelocBalance)}
                 </span>
@@ -240,10 +246,10 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
           <h3 className="text-lg font-semibold text-blue-900 flex items-center">
             <Icon name="trending-up" size="sm" className="text-blue-600 mr-2" />
-            Monthly HELOC Payment Strategy
+            {tResults('monthlyHelocPaymentStrategy')}
           </h3>
           <p className="text-sm text-blue-700 mt-1">
-            Here&apos;s how your monthly HELOC payments will work
+            {tResults('monthlyHelocPaymentDescription')}
           </p>
         </div>
 
@@ -275,21 +281,21 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                       <span className="safe-badge-info text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         STEP 1
                       </span>
-                      Initial HELOC Draw
+                      {tResults('initialHelocDraw')}
                     </h4>
                     <div className="bg-blue-50 p-4 rounded-lg">
                       <p className="text-sm text-blue-800 mb-2">
-                        <strong>Month {firstHelocDrawMonth?.month || 1}:</strong> Start using HELOC to accelerate mortgage payoff
+                        <strong>Month {firstHelocDrawMonth?.month || 1}:</strong> {tResults('startUsingHeloc')}
                       </p>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-blue-700">Initial draw amount:</span>
+                          <span className="text-blue-700">{tResults('initialDrawAmount')}:</span>
                           <span className="font-medium text-blue-900">
                             {formatCurrency(firstHelocDrawMonth?.helocBalance || 0)}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-blue-700">Monthly discretionary income:</span>
+                          <span className="text-blue-700">{tResults('monthlyDiscretionaryIncome')}:</span>
                           <span className="font-medium text-blue-900">
                             {formatCurrency(avgDiscretionaryUsed)}
                           </span>
@@ -303,24 +309,24 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                       <span className="safe-badge-success text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         STEP 2
                       </span>
-                      Monthly HELOC Payments
+                      {tResults('monthlyHelocPayments')}
                     </h4>
                     <div className="bg-green-50 p-4 rounded-lg">
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-green-700">Average monthly HELOC interest:</span>
+                          <span className="text-green-700">{tResults('averageMonthlyHelocInterest')}:</span>
                           <span className="font-medium text-green-900">
                             {formatCurrency(avgHelocInterest)}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-green-700">Discretionary income for paydown:</span>
+                          <span className="text-green-700">{tResults('discretionaryIncomeForPaydown')}:</span>
                           <span className="font-medium text-green-900">
                             {formatCurrency(avgDiscretionaryUsed)}
                           </span>
                         </div>
                         <div className="flex justify-between border-t border-green-200 pt-2">
-                          <span className="text-green-700 font-medium">Net monthly HELOC reduction:</span>
+                          <span className="text-green-700 font-medium">{tResults('netMonthlyHelocReduction')}:</span>
                           <span className="font-semibold text-green-900">
                             {formatCurrency(Math.max(0, avgDiscretionaryUsed - avgHelocInterest))}
                           </span>
@@ -336,12 +342,12 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                       <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         TIMING
                       </span>
-                      Key Milestones
+                      {tResults('keyMilestones')}
                     </h4>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">Peak HELOC Usage</p>
+                          <p className="text-sm font-medium text-gray-900">{tResults('peakHelocUsage')}</p>
                           <p className="text-xs text-gray-600">Month {maxHelocMonth.month}</p>
                         </div>
                         <div className="text-right">
@@ -354,7 +360,7 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                       {firstPaydownMonth && (
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                           <div>
-                            <p className="text-sm font-medium text-gray-900">First HELOC Paydown</p>
+                            <p className="text-sm font-medium text-gray-900">{tResults('firstHelocPaydown')}</p>
                             <p className="text-xs text-gray-600">Month {firstPaydownMonth.month}</p>
                           </div>
                           <div className="text-right">
@@ -367,12 +373,12 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                       
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">Full Payoff</p>
+                          <p className="text-sm font-medium text-gray-900">{tResults('fullPayoff')}</p>
                           <p className="text-xs text-gray-600">Month {results.heloc.payoffMonths}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-semibold text-green-900">
-                            🎉 Debt Free!
+                            {tResults('debtFree')}
                           </p>
                         </div>
                       </div>
@@ -382,12 +388,10 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
                   <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
                     <h5 className="text-sm font-semibold text-orange-800 mb-2 flex items-center">
                       <Icon name="info" size="xs" className="text-orange-600 mr-1" />
-                      Payment Strategy Tip
+                      {tResults('paymentStrategyTip')}
                     </h5>
                     <p className="text-xs text-orange-700">
-                      Use your discretionary income each month to pay down the HELOC balance. 
-                      This reduces interest charges and accelerates your path to being debt-free. 
-                      The key is consistency - treat the HELOC payment like any other monthly bill.
+                      {tResults('paymentStrategyDescription')}
                     </p>
                   </div>
                 </div>
@@ -410,26 +414,76 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         )}
 
         <button
-          onClick={() => {
+          onClick={async () => {
             if (inputs) {
-              // Render the report component to HTML string
-              const reportHTML = renderToString(
-                <PrintableReport 
-                  results={results} 
-                  inputs={inputs} 
-                  companySettings={companySettings}
-                  assignedAgent={assignedAgent}
-                />
-              )
-              
-              // Use the utility function to print in a new window
-              printReportInNewWindow(reportHTML, inputs.scenarioName ? `HELOC Report - ${inputs.scenarioName}` : 'HELOC Report')
+              try {
+                // Prepare translations for PDF generation
+                const pdfTranslations = {
+                  title: tPrintable('title'),
+                  generated: tPrintable('generated'),
+                  executiveSummary: tPrintable('executiveSummary'),
+                  propertyMortgageDetails: tPrintable('propertyMortgageDetails'),
+                  propertyValue: tPrintable('propertyValue'),
+                  currentBalance: tPrintable('currentBalance'),
+                  interestRate: tPrintable('interestRate'),
+                  monthlyPayment: tPrintable('monthlyPayment'),
+                  yearsSaved: tPrintable('yearsSaved'),
+                  interestSaved: tPrintable('interestSaved'),
+                  interestReduction: tPrintable('interestReduction'),
+                  financialCapacity: tPrintable('financialCapacity'),
+                  monthlyNetIncome: tPrintable('monthlyNetIncome'),
+                  monthlyExpenses: tPrintable('monthlyExpenses'),
+                  discretionaryIncome: tPrintable('discretionaryIncome'),
+                  helocLimit: tPrintable('helocLimit'),
+                  strategyComparison: tPrintable('strategyComparison'),
+                  traditionalMortgage: tPrintable('traditionalMortgage'),
+                  helocAcceleration: tPrintable('helocAcceleration'),
+                  payoffTime: tPrintable('payoffTime'),
+                  totalInterest: tPrintable('totalInterest'),
+                  totalPayments: tPrintable('totalPayments'),
+                  maxHelocUsed: tPrintable('maxHelocUsed'),
+                  implementationStrategy: tPrintable('implementationStrategy'),
+                  monthlyPaymentPlan: tPrintable('monthlyPaymentPlan'),
+                  keyMilestones: tPrintable('keyMilestones'),
+                  continueMortgagePayment: tPrintable('continueMortgagePayment'),
+                  avgHelocInterest: tPrintable('avgHelocInterest'),
+                  applyDiscretionaryIncome: tPrintable('applyDiscretionaryIncome'),
+                  beginHelocDraws: tPrintable('beginHelocDraws'),
+                  peakHeloc: tPrintable('peakHeloc'),
+                  fullPayoff: tPrintable('fullPayoff'),
+                  payoffTimelineComparison: tPrintable('payoffTimelineComparison'),
+                  yourHelocSpecialist: tPrintable('yourHelocSpecialist'),
+                  mortgageAdvisor: tPrintable('mortgageAdvisor'),
+                  importantDisclaimer: tPrintable('importantDisclaimer'),
+                  disclaimerText: tPrintable('disclaimerText')
+                }
+
+                // Render the report component to HTML string
+                const reportHTML = renderToString(
+                  <PrintableReport
+                    results={results}
+                    inputs={inputs}
+                    companySettings={companySettings}
+                    assignedAgent={assignedAgent}
+                    translations={pdfTranslations}
+                  />
+                )
+
+                // Generate filename
+                const filename = generateReportFilename(inputs.scenarioName)
+
+                // Generate and download PDF
+                await generatePDFFromComponent(reportHTML, filename)
+              } catch (error) {
+                console.error('Error generating PDF:', error)
+                alert('Failed to generate PDF. Please try again.')
+              }
             }
           }}
           className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
         >
           <Icon name="print" size="sm" />
-          <span>Print Report</span>
+          <span>{tResults('printReport')}</span>
         </button>
 
         {onNewCalculation && (
@@ -451,47 +505,48 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
         </button>
       </div>
 
-      {/* Key Insights */}
+      {/* Key Insights with Success Image */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <Icon name="info" size="sm" className="text-blue-600 mr-2" />
-          Key Insights
-        </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Icon name="info" size="sm" className="text-blue-600 mr-2" />
+              Key Insights
+            </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="space-y-2">
-            <p className="text-gray-700">
-              <span className="font-medium">Strategy Effectiveness:</span> The HELOC acceleration strategy could save you{' '}
-              <span className="font-semibold text-green-600">
-                {formatCurrency(results.comparison.interestSaved)}
-              </span>{' '}
-              in interest payments.
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <p className="text-gray-700">
+                  <span className="font-medium">{tResults('strategyEffectiveness')}:</span> {tResults('strategyEffectivenessDescription', { amount: formatCurrency(results.comparison.interestSaved) })}
+                </p>
 
-            <p className="text-gray-700">
-              <span className="font-medium">Time Savings:</span> You could pay off your mortgage{' '}
-              <span className="font-semibold text-green-600">
-                {results.comparison.timeSavedYears} years earlier
-              </span>{' '}
-              using this strategy.
-            </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">{tResults('timeSaved')}:</span> {tResults('timeSavingsDescription', { years: results.comparison.timeSavedYears })}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-gray-700">
+                  <span className="font-medium">{tResults('helocUtilization')}:</span> {tResults('helocUtilizationDescription', { amount: formatCurrency(results.heloc.maxHelocUsed) })}
+                </p>
+
+                <p className="text-gray-700">
+                  <span className="font-medium">{tResults('interestReduction')}:</span> {tResults('interestReductionDescription', { percentage: formatPercentage(results.comparison.percentageInterestSaved) })}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-gray-700">
-              <span className="font-medium">HELOC Utilization:</span> The strategy requires a maximum HELOC balance of{' '}
-              <span className="font-semibold text-purple-600">
-                {formatCurrency(results.heloc.maxHelocUsed)}
-              </span>.
-            </p>
-
-            <p className="text-gray-700">
-              <span className="font-medium">Interest Reduction:</span> This represents a{' '}
-              <span className="font-semibold text-blue-600">
-                {formatPercentage(results.comparison.percentageInterestSaved)}
-              </span>{' '}
-              reduction in total interest paid.
-            </p>
+          <div className="flex justify-center">
+            <PexelsImage
+              theme="success"
+              orientation="square"
+              size="medium"
+              className="rounded-lg shadow-md w-48 h-48"
+              width={200}
+              height={200}
+              showAttribution={false}
+            />
           </div>
         </div>
       </div>
@@ -503,13 +558,10 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
             <Icon name="alert" size="sm" className="text-yellow-400" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-yellow-800">Important Disclaimer</h3>
+            <h3 className="text-sm font-medium text-yellow-800">{tResults('importantDisclaimer')}</h3>
             <div className="mt-2 text-sm text-yellow-700">
               <p>
-                This calculation is for educational purposes only and should not be considered financial advice.
-                The HELOC acceleration strategy involves risks including variable interest rates, potential loss of home equity,
-                and requires disciplined financial management. Please consult with a qualified financial advisor before
-                implementing any mortgage acceleration strategy.
+                {tResults('disclaimerText')}
               </p>
             </div>
           </div>

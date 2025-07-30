@@ -85,3 +85,33 @@ export {
   useFormContext
 } from './Form';
 export type { FormProps, FormProviderProps, ConnectedFieldProps, FormSummaryProps, FormProgressProps, WithFormFieldProps } from './Form';
+
+// Aceternity UI Components
+export { default as AceternityCard, AceternityCardDemo } from './AceternityCard';
+export type { AceternityCardProps } from './AceternityCard';
+
+export { default as SimpleAceternityCard, SimpleAceternityCardDemo } from './SimpleAceternityCard';
+export type { SimpleAceternityCardProps } from './SimpleAceternityCard';
+
+export { 
+  default as FinancialAceternityCard,
+  HomeAceternityCard,
+  MoneyAceternityCard,
+  SuccessAceternityCard,
+  PlanningAceternityCard,
+  FamilyAceternityCard
+} from './FinancialAceternityCard';
+export type { FinancialAceternityCardProps } from './FinancialAceternityCard';
+
+export { 
+  default as StableAceternityCard,
+  StableHomeCard,
+  StableMoneyCard,
+  StableSuccessCard,
+  StablePlanningCard,
+  StableFamilyCard
+} from './StableAceternityCard';
+export type { StableAceternityCardProps } from './StableAceternityCard';
+
+// Hero Components
+export { HeroHighlight, Highlight } from './HeroHighlight';

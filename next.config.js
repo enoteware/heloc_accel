@@ -23,6 +23,14 @@ const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        port: '',
+        pathname: '/photos/**',
+      },
+    ],
   },
   // Bundle analyzer (uncomment to analyze bundle size)
   // bundleAnalyzer: {
