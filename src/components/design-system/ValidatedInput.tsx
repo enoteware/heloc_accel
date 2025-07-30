@@ -86,7 +86,7 @@ export const ValidatedInput = React.forwardRef<HTMLInputElement, ValidatedInputP
               'focus:outline-none focus:ring-2 focus:ring-offset-0',
               'disabled:bg-neutral-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50',
               'placeholder-neutral-400 dark:placeholder-neutral-500',
-              'bg-white dark:bg-neutral-800 text-blue-gray-700 dark:text-blue-gray-100',
+              'bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100',
               
               // Padding adjustments for icons
               leftIcon ? 'pl-10' : 'pl-3',
@@ -174,7 +174,7 @@ export const ValidatedTextarea = React.forwardRef<HTMLTextAreaElement, Validated
             'focus:outline-none focus:ring-2 focus:ring-offset-0',
             'disabled:bg-neutral-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50',
             'placeholder-neutral-400 dark:placeholder-neutral-500',
-            'bg-white dark:bg-neutral-800 text-blue-gray-700 dark:text-blue-gray-100',
+            'bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100',
             
             // Resize behavior
             resizeClasses[resize],

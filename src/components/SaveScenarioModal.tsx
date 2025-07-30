@@ -101,7 +101,6 @@ export default function SaveScenarioModal({
           disabled={isLoading}
           error={nameError}
           aria-describedby={nameError ? 'scenario-name-error' : undefined}
-          className="!text-blue-gray-700"
         />
 
         <FormField
@@ -115,7 +114,7 @@ export default function SaveScenarioModal({
             rows={3}
             maxLength={500}
             disabled={isLoading}
-            className="w-full px-3 py-2 border border-blue-gray-300 rounded-lg !text-blue-gray-700 placeholder-blue-gray-400 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-coral-500 disabled:bg-blue-gray-50 disabled:cursor-not-allowed bg-white"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-coral-500 disabled:bg-gray-50 disabled:cursor-not-allowed bg-white"
           />
           <div className="mt-1 text-xs text-blue-gray-500">
             {description.length}/500 characters
