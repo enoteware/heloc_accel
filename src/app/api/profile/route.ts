@@ -1,36 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
-import { query } from '@/lib/database'
 import { ApiResponse } from '@/lib/types'
-import bcrypt from 'bcryptjs'
 
 // GET /api/profile - Get user profile information
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    const result = await query(
-      `SELECT id, email, first_name, last_name, created_at, updated_at, 
-              last_login, email_verified
-       FROM users 
-       WHERE id = $1`,
-      [session.user.id]
-    )
-
-    if (result.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'User not found'
-      }, { status: 404 })
+    // Return demo profile data
+    const userProfile = {
+      id: 'demo-user-001',
+      email: 'demo@example.com',
+      first_name: 'Demo',
+      last_name: 'User',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      last_login: new Date().toISOString(),
+      email_verified: true
     }
-
-    const userProfile = result.rows[0]
 
     return NextResponse.json<ApiResponse>({
       success: true,
@@ -39,9 +33,9 @@ export async function GET(request: NextRequest) {
         email: userProfile.email,
         firstName: userProfile.first_name,
         lastName: userProfile.last_name,
-        createdAt: userProfile.created_at.toISOString(),
-        updatedAt: userProfile.updated_at.toISOString(),
-        lastLogin: userProfile.last_login?.toISOString(),
+        createdAt: userProfile.created_at,
+        updatedAt: userProfile.updated_at,
+        lastLogin: userProfile.last_login,
         emailVerified: userProfile.email_verified
       },
       message: 'Profile retrieved successfully'
@@ -59,70 +53,20 @@ export async function GET(request: NextRequest) {
 // PUT /api/profile - Update user profile information
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const body = await request.json()
-
-    const { firstName, lastName, email } = body
-
-    // Validate required fields
-    if (!firstName || !lastName || !email) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'First name, last name, and email are required'
-      }, { status: 400 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Invalid email format'
-      }, { status: 400 })
-    }
-
-    // Check if email is already taken by another user
-    if (email !== session.user.email) {
-      const existingUser = await query(
-        'SELECT id FROM users WHERE email = $1 AND id != $2',
-        [email, session.user.id]
-      )
-
-      if (existingUser.rows.length > 0) {
-        return NextResponse.json<ApiResponse>({
-          success: false,
-          error: 'Email address is already in use'
-        }, { status: 409 })
-      }
-    }
-
-    // Update user profile
-    const result = await query(
-      `UPDATE users 
-       SET first_name = $1, last_name = $2, email = $3, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $4
-       RETURNING id, email, first_name, last_name, updated_at`,
-      [firstName.trim(), lastName.trim(), email.trim(), session.user.id]
-    )
-
-    const updatedUser = result.rows[0]
-
+    // In demo mode, just return a success response
     return NextResponse.json<ApiResponse>({
       success: true,
-      data: {
-        id: updatedUser.id,
-        email: updatedUser.email,
-        firstName: updatedUser.first_name,
-        lastName: updatedUser.last_name,
-        updatedAt: updatedUser.updated_at.toISOString()
-      },
-      message: 'Profile updated successfully'
+      message: 'Profile update not available in demo mode'
     })
 
   } catch (error) {

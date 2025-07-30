@@ -47,11 +47,11 @@ function ComparePageContent() {
   // Redirect to login if not authenticated (skip in demo mode)
   useEffect(() => {
     if (isDemoMode) return // Skip auth check in demo mode
-    if (status === 'loading') return
-    if (!session) {
+    if (user === undefined) return // Still loading
+    if (!user) {
       router.push('/login?callbackUrl=/compare')
     }
-  }, [session, status, router, isDemoMode])
+  }, [user, router, isDemoMode])
 
   const loadScenarios = useCallback(async () => {
     try {
@@ -59,7 +59,7 @@ function ComparePageContent() {
       
       if (isDemoMode) {
         // In demo mode, load scenarios from localStorage
-        const demoUserId = session?.user?.id || 'demo-user-001'
+        const demoUserId = user?.id || 'demo-user-001'
         const storageKey = `heloc_demo_user_${demoUserId}_scenarios`
         const storedScenarios = localStorage.getItem(storageKey)
         
@@ -90,7 +90,7 @@ function ComparePageContent() {
     } finally {
       setLoading(false)
     }
-  }, [isDemoMode, session?.user?.id])
+  }, [isDemoMode, user?.id])
 
   // Load scenarios and pre-select from URL params
   useEffect(() => {

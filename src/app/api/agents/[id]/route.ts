@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { getDemoAgent } from '@/lib/company-data'
 
 interface Params {
@@ -13,6 +12,7 @@ export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = await params
     const agentId = parseInt(id)
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
     
     if (isNaN(agentId)) {
       return NextResponse.json(
@@ -23,8 +23,6 @@ export async function GET(request: NextRequest, { params }: Params) {
         { status: 400 }
       )
     }
-
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
     if (isDemoMode) {
       const agent = getDemoAgent(agentId)
@@ -68,16 +66,18 @@ export async function GET(request: NextRequest, { params }: Params) {
 // PUT /api/agents/[id] - Update agent (admin only)
 export async function PUT(request: NextRequest, { params }: Params) {
   try {
-    const session = await auth()
-    
-    // In production, would check for admin role
-    if (!session?.user) {
+    // In demo mode, skip auth check for now
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
+      // In production, would check for admin role using Stack Auth
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 
@@ -120,16 +120,18 @@ export async function PUT(request: NextRequest, { params }: Params) {
 // DELETE /api/agents/[id] - Delete agent (admin only)
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
-    const session = await auth()
-    
-    // In production, would check for admin role
-    if (!session?.user) {
+    // In demo mode, skip auth check for now
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
+      // In production, would check for admin role using Stack Auth
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 

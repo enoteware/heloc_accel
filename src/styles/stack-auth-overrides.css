@@ -1,0 +1,147 @@
+/* Stack Auth Component Styling Overrides */
+/* Ensures proper contrast and accessibility for Stack Auth components */
+
+/* Force proper text colors on Stack Auth components */
+[data-stack-auth] *,
+.stack-auth *,
+.stack-credential-sign-in *,
+.stack-credential-sign-up * {
+  color: rgb(17, 24, 39) !important; /* gray-900 for high contrast */
+}
+
+/* Ensure form labels are visible */
+[data-stack-auth] label,
+.stack-auth label,
+.stack-credential-sign-in label,
+.stack-credential-sign-up label {
+  color: rgb(55, 65, 81) !important; /* gray-700 for labels */
+  font-weight: 500;
+}
+
+/* Ensure input fields have proper styling */
+[data-stack-auth] input,
+.stack-auth input,
+.stack-credential-sign-in input,
+.stack-credential-sign-up input {
+  background-color: rgb(255, 255, 255) !important; /* white background */
+  color: rgb(17, 24, 39) !important; /* gray-900 text */
+  border: 1px solid rgb(209, 213, 219) !important; /* gray-300 border */
+}
+
+/* Ensure input placeholders are visible */
+[data-stack-auth] input::placeholder,
+.stack-auth input::placeholder,
+.stack-credential-sign-in input::placeholder,
+.stack-credential-sign-up input::placeholder {
+  color: rgb(107, 114, 128) !important; /* gray-500 for placeholders */
+}
+
+/* Ensure buttons have proper contrast */
+[data-stack-auth] button,
+.stack-auth button,
+.stack-credential-sign-in button,
+.stack-credential-sign-up button {
+  background-color: rgb(59, 130, 246) !important; /* blue-500 */
+  color: rgb(255, 255, 255) !important; /* white text */
+  border: none !important;
+}
+
+/* Ensure button hover states are visible */
+[data-stack-auth] button:hover,
+.stack-auth button:hover,
+.stack-credential-sign-in button:hover,
+.stack-credential-sign-up button:hover {
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+}
+
+/* Ensure error messages are visible */
+[data-stack-auth] .error,
+[data-stack-auth] [role="alert"],
+.stack-auth .error,
+.stack-auth [role="alert"],
+.stack-credential-sign-in .error,
+.stack-credential-sign-in [role="alert"],
+.stack-credential-sign-up .error,
+.stack-credential-sign-up [role="alert"] {
+  color: rgb(220, 38, 38) !important; /* red-600 for errors */
+  background-color: rgb(254, 242, 242) !important; /* red-50 background */
+}
+
+/* Ensure links are visible */
+[data-stack-auth] a,
+.stack-auth a,
+.stack-credential-sign-in a,
+.stack-credential-sign-up a {
+  color: rgb(59, 130, 246) !important; /* blue-500 */
+}
+
+[data-stack-auth] a:hover,
+.stack-auth a:hover,
+.stack-credential-sign-in a:hover,
+.stack-credential-sign-up a:hover {
+  color: rgb(37, 99, 235) !important; /* blue-600 */
+}
+
+/* Ensure any text elements are visible */
+[data-stack-auth] span,
+[data-stack-auth] p,
+[data-stack-auth] div,
+.stack-auth span,
+.stack-auth p,
+.stack-auth div,
+.stack-credential-sign-in span,
+.stack-credential-sign-in p,
+.stack-credential-sign-in div,
+.stack-credential-sign-up span,
+.stack-credential-sign-up p,
+.stack-credential-sign-up div {
+  color: rgb(17, 24, 39) !important; /* gray-900 for text */
+}
+
+/* Override any white-on-white combinations */
+.bg-white [data-stack-auth],
+.bg-white .stack-auth,
+.bg-white .stack-credential-sign-in,
+.bg-white .stack-credential-sign-up {
+  color: rgb(17, 24, 39) !important;
+}
+
+/* Ensure focus states are visible */
+[data-stack-auth] input:focus,
+[data-stack-auth] button:focus,
+.stack-auth input:focus,
+.stack-auth button:focus,
+.stack-credential-sign-in input:focus,
+.stack-credential-sign-in button:focus,
+.stack-credential-sign-up input:focus,
+.stack-credential-sign-up button:focus {
+  outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 focus ring */
+  outline-offset: 2px !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  [data-stack-auth] *,
+  .stack-auth *,
+  .stack-credential-sign-in *,
+  .stack-credential-sign-up * {
+    color: rgb(0, 0, 0) !important;
+  }
+  
+  [data-stack-auth] input,
+  .stack-auth input,
+  .stack-credential-sign-in input,
+  .stack-credential-sign-up input {
+    background-color: rgb(255, 255, 255) !important;
+    border: 2px solid rgb(0, 0, 0) !important;
+  }
+  
+  [data-stack-auth] button,
+  .stack-auth button,
+  .stack-credential-sign-in button,
+  .stack-credential-sign-up button {
+    background-color: rgb(0, 0, 0) !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid rgb(0, 0, 0) !important;
+  }
+}

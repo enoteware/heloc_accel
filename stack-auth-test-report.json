@@ -1,0 +1,930 @@
+{
+  "testDate": "2025-07-30T10:44:13.861Z",
+  "summary": {
+    "totalPages": 3,
+    "pagesWorking": 0,
+    "pagesWithIssues": 3,
+    "criticalErrors": 0
+  },
+  "pages": {
+    "Sign Up Page": {
+      "url": "http://localhost:3002/en/handler/sign-up",
+      "name": "Sign Up Page",
+      "status": "issues",
+      "loadTime": 12057,
+      "screenshot": "stack-auth-test-screenshots/Sign-Up-Page.png",
+      "consoleMessages": [
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+          "timestamp": "2025-07-30T10:41:59.089Z"
+        },
+        {
+          "type": "log",
+          "text": "=== ENVIRONMENT BANNER DEBUG ===",
+          "timestamp": "2025-07-30T10:41:59.529Z"
+        },
+        {
+          "type": "log",
+          "text": "Component mounted!",
+          "timestamp": "2025-07-30T10:41:59.529Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE raw: false",
+          "timestamp": "2025-07-30T10:41:59.536Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE type: string",
+          "timestamp": "2025-07-30T10:41:59.537Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE length: 5",
+          "timestamp": "2025-07-30T10:41:59.537Z"
+        },
+        {
+          "type": "log",
+          "text": "Comparison result (=== \"true\"): false",
+          "timestamp": "2025-07-30T10:41:59.537Z"
+        },
+        {
+          "type": "log",
+          "text": "NODE_ENV: development",
+          "timestamp": "2025-07-30T10:41:59.537Z"
+        },
+        {
+          "type": "log",
+          "text": "isDemoMode result: false",
+          "timestamp": "2025-07-30T10:41:59.538Z"
+        },
+        {
+          "type": "log",
+          "text": "All process.env keys: []",
+          "timestamp": "2025-07-30T10:41:59.538Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC env vars: []",
+          "timestamp": "2025-07-30T10:41:59.538Z"
+        },
+        {
+          "type": "log",
+          "text": "================================",
+          "timestamp": "2025-07-30T10:41:59.538Z"
+        },
+        {
+          "type": "log",
+          "text": "Debug info also available at window.envDebug",
+          "timestamp": "2025-07-30T10:41:59.538Z"
+        },
+        {
+          "type": "verbose",
+          "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"new-password\"): (More info: https://goo.gl/9p2vKq) %o",
+          "timestamp": "2025-07-30T10:41:59.986Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-07-30T10:42:02.970Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:03.955Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:03.955Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:03.968Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:03.989Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-07-30T10:42:04.370Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] done in 975ms",
+          "timestamp": "2025-07-30T10:42:05.346Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-07-30T10:42:05.466Z"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+          "timestamp": "2025-07-30T10:42:05.996Z"
+        },
+        {
+          "type": "log",
+          "text": "=== ENVIRONMENT BANNER DEBUG ===",
+          "timestamp": "2025-07-30T10:42:06.121Z"
+        },
+        {
+          "type": "log",
+          "text": "Component mounted!",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE raw: false",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE type: string",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE length: 5",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "Comparison result (=== \"true\"): false",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "NODE_ENV: development",
+          "timestamp": "2025-07-30T10:42:06.122Z"
+        },
+        {
+          "type": "log",
+          "text": "isDemoMode result: false",
+          "timestamp": "2025-07-30T10:42:06.123Z"
+        },
+        {
+          "type": "log",
+          "text": "All process.env keys: []",
+          "timestamp": "2025-07-30T10:42:06.123Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC env vars: []",
+          "timestamp": "2025-07-30T10:42:06.123Z"
+        },
+        {
+          "type": "log",
+          "text": "================================",
+          "timestamp": "2025-07-30T10:42:06.123Z"
+        },
+        {
+          "type": "log",
+          "text": "Debug info also available at window.envDebug",
+          "timestamp": "2025-07-30T10:42:06.123Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:06.128Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:06.131Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:06.141Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:06.144Z"
+        },
+        {
+          "type": "verbose",
+          "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"new-password\"): (More info: https://goo.gl/9p2vKq) %o",
+          "timestamp": "2025-07-30T10:42:06.475Z"
+        }
+      ],
+      "elements": {
+        "forms": [
+          {
+            "index": 0,
+            "action": "not specified",
+            "method": "not specified",
+            "inputs": [
+              {
+                "type": "email",
+                "name": "email",
+                "id": "email",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "password",
+                "id": "password",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "passwordRepeat",
+                "id": "repeat-password",
+                "placeholder": "",
+                "required": false
+              }
+            ],
+            "buttons": [
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "submit",
+                "text": "Sign Up",
+                "disabled": false
+              }
+            ]
+          }
+        ],
+        "inputs": [],
+        "buttons": [],
+        "stackAuthElements": [
+          {
+            "type": "content-mention",
+            "mention": "Stack Auth"
+          },
+          {
+            "type": "content-mention",
+            "mention": "data-stack"
+          }
+        ]
+      },
+      "errors": [
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:03.955Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:03.955Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:03.968Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:03.989Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-07-30T10:42:05.466Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:06.128Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:06.131Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:06.141Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:06.144Z"
+        }
+      ],
+      "warnings": [],
+      "interactions": {
+        "email": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "password": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "passwordRepeat": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "button-Toggle navigation menu": {
+          "canHover": false,
+          "status": "error",
+          "error": "elementHandle.hover: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - attempting hover action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying hover action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying hover action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying hover action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+        },
+        "button-🇺🇸 EN": {
+          "canHover": true,
+          "status": "working"
+        },
+        "button-🇪🇸 ES": {
+          "canHover": true,
+          "status": "working"
+        }
+      }
+    },
+    "Sign In Page": {
+      "url": "http://localhost:3002/en/handler/sign-in",
+      "name": "Sign In Page",
+      "status": "issues",
+      "loadTime": 2714,
+      "screenshot": "stack-auth-test-screenshots/Sign-In-Page.png",
+      "consoleMessages": [
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+          "timestamp": "2025-07-30T10:42:58.944Z"
+        },
+        {
+          "type": "log",
+          "text": "=== ENVIRONMENT BANNER DEBUG ===",
+          "timestamp": "2025-07-30T10:42:59.232Z"
+        },
+        {
+          "type": "log",
+          "text": "Component mounted!",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE raw: false",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE type: string",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE length: 5",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "Comparison result (=== \"true\"): false",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "NODE_ENV: development",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "isDemoMode result: false",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "All process.env keys: []",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC env vars: []",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "================================",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "log",
+          "text": "Debug info also available at window.envDebug",
+          "timestamp": "2025-07-30T10:42:59.234Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:59.242Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:59.244Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:59.254Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:59.258Z"
+        }
+      ],
+      "elements": {
+        "forms": [
+          {
+            "index": 0,
+            "action": "not specified",
+            "method": "not specified",
+            "inputs": [
+              {
+                "type": "email",
+                "name": "email",
+                "id": "email",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "password",
+                "id": "password",
+                "placeholder": "",
+                "required": false
+              }
+            ],
+            "buttons": [
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "submit",
+                "text": "Sign In",
+                "disabled": false
+              }
+            ]
+          }
+        ],
+        "inputs": [],
+        "buttons": [],
+        "stackAuthElements": [
+          {
+            "type": "content-mention",
+            "mention": "Stack Auth"
+          },
+          {
+            "type": "content-mention",
+            "mention": "data-stack"
+          }
+        ]
+      },
+      "errors": [
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:59.242Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:59.244Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:42:59.254Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:42:59.258Z"
+        }
+      ],
+      "warnings": [],
+      "interactions": {
+        "email": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "password": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "button-Toggle navigation menu": {
+          "canHover": false,
+          "status": "error",
+          "error": "elementHandle.hover: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - attempting hover action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying hover action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying hover action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying hover action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+        },
+        "button-🇺🇸 EN": {
+          "canHover": true,
+          "status": "working"
+        },
+        "button-🇪🇸 ES": {
+          "canHover": true,
+          "status": "working"
+        }
+      }
+    },
+    "Stack Auth Test Page": {
+      "url": "http://localhost:3002/en/stack-auth-test",
+      "name": "Stack Auth Test Page",
+      "status": "issues",
+      "loadTime": 5720,
+      "screenshot": "stack-auth-test-screenshots/Stack-Auth-Test-Page.png",
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-07-30T10:43:48.557Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] done in 1438ms",
+          "timestamp": "2025-07-30T10:43:49.995Z"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+          "timestamp": "2025-07-30T10:43:51.036Z"
+        },
+        {
+          "type": "log",
+          "text": "=== ENVIRONMENT BANNER DEBUG ===",
+          "timestamp": "2025-07-30T10:43:51.333Z"
+        },
+        {
+          "type": "log",
+          "text": "Component mounted!",
+          "timestamp": "2025-07-30T10:43:51.334Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE raw: false",
+          "timestamp": "2025-07-30T10:43:51.334Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE type: string",
+          "timestamp": "2025-07-30T10:43:51.334Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE length: 5",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "Comparison result (=== \"true\"): false",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "NODE_ENV: development",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "isDemoMode result: false",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "All process.env keys: []",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC env vars: []",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "================================",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "Debug info also available at window.envDebug",
+          "timestamp": "2025-07-30T10:43:51.335Z"
+        },
+        {
+          "type": "log",
+          "text": "=== ENVIRONMENT BANNER DEBUG ===",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "Component mounted!",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE raw: false",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE type: string",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC_DEMO_MODE length: 5",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "Comparison result (=== \"true\"): false",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "NODE_ENV: development",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "isDemoMode result: false",
+          "timestamp": "2025-07-30T10:43:51.339Z"
+        },
+        {
+          "type": "log",
+          "text": "All process.env keys: []",
+          "timestamp": "2025-07-30T10:43:51.340Z"
+        },
+        {
+          "type": "log",
+          "text": "NEXT_PUBLIC env vars: []",
+          "timestamp": "2025-07-30T10:43:51.340Z"
+        },
+        {
+          "type": "log",
+          "text": "================================",
+          "timestamp": "2025-07-30T10:43:51.340Z"
+        },
+        {
+          "type": "log",
+          "text": "Debug info also available at window.envDebug",
+          "timestamp": "2025-07-30T10:43:51.340Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.360Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.360Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.364Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.364Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.376Z"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.376Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.380Z"
+        },
+        {
+          "type": "error",
+          "text": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.380Z"
+        },
+        {
+          "type": "warning",
+          "text": "[DOM] Found 2 elements with non-unique id #email: (More info: https://goo.gl/9p2vKq) %o %o",
+          "timestamp": "2025-07-30T10:43:51.417Z"
+        },
+        {
+          "type": "warning",
+          "text": "[DOM] Found 2 elements with non-unique id #password: (More info: https://goo.gl/9p2vKq) %o %o",
+          "timestamp": "2025-07-30T10:43:51.417Z"
+        },
+        {
+          "type": "verbose",
+          "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"new-password\"): (More info: https://goo.gl/9p2vKq) %o",
+          "timestamp": "2025-07-30T10:43:51.417Z"
+        }
+      ],
+      "elements": {
+        "forms": [
+          {
+            "index": 0,
+            "action": "not specified",
+            "method": "not specified",
+            "inputs": [
+              {
+                "type": "email",
+                "name": "email",
+                "id": "email",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "password",
+                "id": "password",
+                "placeholder": "",
+                "required": false
+              }
+            ],
+            "buttons": [
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "submit",
+                "text": "Sign In",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "action": "not specified",
+            "method": "not specified",
+            "inputs": [
+              {
+                "type": "email",
+                "name": "email",
+                "id": "email",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "password",
+                "id": "password",
+                "placeholder": "",
+                "required": false
+              },
+              {
+                "type": "password",
+                "name": "passwordRepeat",
+                "id": "repeat-password",
+                "placeholder": "",
+                "required": false
+              }
+            ],
+            "buttons": [
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "button",
+                "text": "no text",
+                "disabled": false
+              },
+              {
+                "type": "submit",
+                "text": "Sign Up",
+                "disabled": false
+              }
+            ]
+          }
+        ],
+        "inputs": [],
+        "buttons": [],
+        "stackAuthElements": [
+          {
+            "type": "content-mention",
+            "mention": "stack-auth"
+          },
+          {
+            "type": "content-mention",
+            "mention": "Stack Auth"
+          },
+          {
+            "type": "content-mention",
+            "mention": "data-stack"
+          }
+        ]
+      },
+      "errors": [
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.360Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.360Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.364Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.364Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.376Z"
+        },
+        {
+          "type": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 410 (Gone)",
+          "timestamp": "2025-07-30T10:43:51.376Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.380Z"
+        },
+        {
+          "type": "console-error",
+          "message": "ClientFetchError: NextAuth disabled - using Stack Auth. Please use /handler/sign-in instead.. Read more at https://errors.authjs.dev#autherror\n    at fetchData (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/lib/client.js:49:22)\n    at async getSession (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:123:21)\n    at async SessionProvider.useEffect [as _getSession] (webpack-internal:///(app-pages-browser)/./node_modules/next-auth/react.js:289:51)",
+          "timestamp": "2025-07-30T10:43:51.380Z"
+        }
+      ],
+      "warnings": [
+        {
+          "type": "console-warning",
+          "message": "[DOM] Found 2 elements with non-unique id #email: (More info: https://goo.gl/9p2vKq) %o %o",
+          "timestamp": "2025-07-30T10:43:51.417Z"
+        },
+        {
+          "type": "console-warning",
+          "message": "[DOM] Found 2 elements with non-unique id #password: (More info: https://goo.gl/9p2vKq) %o %o",
+          "timestamp": "2025-07-30T10:43:51.417Z"
+        }
+      ],
+      "interactions": {
+        "email": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "password": {
+          "canFocus": true,
+          "canType": true,
+          "status": "working"
+        },
+        "button-button-0": {
+          "canHover": true,
+          "status": "working"
+        },
+        "button-23 Issues": {
+          "canHover": true,
+          "status": "working"
+        },
+        "button-button-2": {
+          "canHover": true,
+          "status": "working"
+        }
+      }
+    }
+  },
+  "recommendations": [
+    "Sign Up Page: Console errors detected - check browser console for details",
+    "Sign In Page: Console errors detected - check browser console for details",
+    "Stack Auth Test Page: Console errors detected - check browser console for details"
+  ]
+}

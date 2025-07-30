@@ -55,18 +55,18 @@ export default function Dashboard() {
 
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-  // Get user ID for demo storage (use session user email hash or fallback to demo user)
+  // Get user ID for demo storage (use user email hash or fallback to demo user)
   const getUserId = useCallback(() => {
     if (isDemoMode) {
-      if (session?.user?.email) {
+      if (user?.primaryEmail) {
         // Create consistent user ID from email
-        const emailHash = session.user.email.toLowerCase().replace(/[^a-z0-9]/g, '')
+        const emailHash = user.primaryEmail.toLowerCase().replace(/[^a-z0-9]/g, '')
         return `demo-user-${emailHash.slice(0, 8)}`
       }
       return 'demo-user-default'
     }
-    return session?.user?.id || session?.user?.email
-  }, [isDemoMode, session?.user?.email, session?.user?.id])
+    return user?.id || user?.primaryEmail
+  }, [isDemoMode, user?.primaryEmail, user?.id])
 
   // Initialize demo data if in demo mode
   useEffect(() => {
@@ -88,11 +88,11 @@ export default function Dashboard() {
   // Redirect to login if not authenticated (unless in demo mode)
   useEffect(() => {
     if (isDemoMode) return // Skip auth check in demo mode
-    if (status === 'loading') return
-    if (!session) {
+    if (user === undefined) return // Still loading
+    if (!user) {
       router.push('/login?callbackUrl=/dashboard')
     }
-  }, [session, status, router, isDemoMode])
+  }, [user, router, isDemoMode])
 
   const loadScenarios = useCallback(async () => {
     try {
@@ -462,7 +462,7 @@ export default function Dashboard() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {isDemoMode ? 'Demo Dashboard' : `Welcome back, ${session?.user?.name || 'User'}!`}
+            {isDemoMode ? 'Demo Dashboard' : `Welcome back, ${user?.displayName || 'User'}!`}
           </h1>
           <p className="text-gray-600">
             {isDemoMode

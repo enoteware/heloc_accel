@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { getDemoAgents, getDemoActiveAgents } from '@/lib/company-data'
 import type { Agent } from '@/lib/company-data'
 
@@ -56,16 +55,18 @@ export async function GET(request: NextRequest) {
 // POST /api/agents - Create new agent (admin only)
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
-    
-    // In production, would check for admin role
-    if (!session?.user) {
+    // In demo mode, skip auth check for now
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
+      // In production, would check for admin role using Stack Auth
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 

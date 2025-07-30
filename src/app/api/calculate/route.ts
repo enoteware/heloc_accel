@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { validateCalculatorInputs, sanitizeCalculatorInputs } from '@/lib/validation'
 import { compareStrategies } from '@/lib/calculations'
 import { ApiResponse } from '@/lib/types'
@@ -19,14 +18,14 @@ export async function POST(request: NextRequest) {
     const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
     let user = null
     if (!isDemoMode) {
-      const session = await auth()
-      if (!session?.user) {
-        return NextResponse.json<ApiResponse>({
-          success: false,
-          error: 'Authentication required'
-        }, { status: 401 })
-      }
-      user = session.user
+      // TODO: Implement Stack Auth server-side authentication
+      return NextResponse.json<ApiResponse>({
+        success: false,
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
+    } else {
+      // In demo mode, use a demo user
+      user = { id: 'demo-user', email: 'demo@example.com' }
     }
 
     const body = await request.json()

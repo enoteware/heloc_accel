@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { getDemoCompanySettings, updateDemoCompanySettings } from '@/lib/company-data'
 import type { CompanySettings } from '@/lib/company-data'
 
@@ -52,22 +51,22 @@ export async function GET(request: NextRequest) {
 // PUT /api/company - Update company settings (admin only)
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth()
-    
-    // In production, would check for admin role
-    // For now, allow if authenticated
-    if (!session?.user) {
+    // In demo mode, skip auth check for now
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
+      // In production, would check for admin role using Stack Auth
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 
     const body = await request.json()
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
     if (isDemoMode) {
       // Update demo company settings

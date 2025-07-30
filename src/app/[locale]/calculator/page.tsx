@@ -77,11 +77,11 @@ function CalculatorPageContent() {
   // Redirect to login if not authenticated (unless in demo mode)
   useEffect(() => {
     if (isDemoMode) return // Skip auth check in demo mode
-    if (status === 'loading') return // Still loading
-    if (!session?.user) {
+    if (user === undefined) return // Still loading
+    if (!user) {
       router.push('/login?callbackUrl=/calculator')
     }
-  }, [session, status, router, isDemoMode])
+  }, [user, router, isDemoMode])
 
   const loadScenarioData = useCallback(async (scenarioId: string, isEdit: boolean, customName?: string | null) => {
     try {
@@ -438,7 +438,7 @@ function CalculatorPageContent() {
     return chartData
   }
 
-  if (!isDemoMode && status === 'loading') {
+  if (!isDemoMode && user === undefined) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
@@ -553,7 +553,7 @@ function CalculatorPageContent() {
               <div>
                 <p className="text-sm text-gray-600">Welcome back,</p>
                 <p className="text-lg font-semibold text-gray-900">
-                  {session?.user?.name || session?.user?.email}
+                  {user?.displayName || user?.primaryEmail}
                 </p>
               </div>
               <button

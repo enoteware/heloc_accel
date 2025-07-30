@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { validateCalculatorInputs, sanitizeCalculatorInputs } from '@/lib/validation'
 import { ApiResponse, CreateScenarioInput, Scenario } from '@/lib/types'
@@ -7,12 +6,14 @@ import { ApiResponse, CreateScenarioInput, Scenario } from '@/lib/types'
 // GET /api/scenario - Get all scenarios for authenticated user
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
     const result = await query(
@@ -53,12 +54,14 @@ export async function GET(request: NextRequest) {
 // POST /api/scenario - Create new scenario
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
     const body = await request.json()
 

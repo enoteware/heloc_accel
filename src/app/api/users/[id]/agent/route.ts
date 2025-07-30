@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { getDemoUserAgent } from '@/lib/company-data'
 
 interface Params {

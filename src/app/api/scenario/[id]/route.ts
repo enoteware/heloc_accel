@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
 import { query } from '@/lib/database'
 import { ApiResponse } from '@/lib/types'
 import { randomBytes } from 'crypto'
