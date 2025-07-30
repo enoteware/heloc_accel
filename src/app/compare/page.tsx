@@ -32,7 +32,9 @@ interface Scenario {
 }
 
 function ComparePageContent() {
-  const { data: session, status } = useSession()
+  const sessionResult = useSession()
+  const session = sessionResult?.data
+  const status = sessionResult?.status || 'loading'
   const router = useRouter()
   const searchParams = useSearchParams()
   const [scenarios, setScenarios] = useState<Scenario[]>([])

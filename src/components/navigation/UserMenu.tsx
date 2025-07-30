@@ -17,7 +17,9 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   className,
   placement = 'bottom-end',
 }) => {
-  const { data: session, status } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
+  const status = sessionResult?.status || 'loading';
   const router = useRouter();
 
   if (status === "loading") {

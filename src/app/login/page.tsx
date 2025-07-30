@@ -11,7 +11,9 @@ import { Logo } from "@/components/Logo"
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session, status } = useSession()
+  const sessionResult = useSession()
+  const session = sessionResult?.data
+  const status = sessionResult?.status || 'loading'
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   

@@ -47,7 +47,9 @@ interface CalculationResults {
 }
 
 function CalculatorPageContent() {
-  const { data: session, status } = useSession()
+  const sessionResult = useSession()
+  const session = sessionResult?.data
+  const status = sessionResult?.status || 'loading'
   const router = useRouter()
   const searchParams = useSearchParams()
   const [results, setResults] = useState<CalculationResults | null>(null)
