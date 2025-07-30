@@ -20,6 +20,11 @@
       "args": [],
       "env": {}
     },
+    "browser-tools": {
+      "command": "npx",
+      "args": ["@agentdeskai/browser-tools-mcp@1.2.0"],
+      "env": {}
+    },
     "supabase": {
       "command": "supabase-mcp",
       "args": [],

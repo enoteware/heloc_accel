@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import NavigationIcon from './NavigationIcon';
@@ -82,7 +82,7 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
   }
 
   return (
-    <Link href={href} className={baseClasses} aria-label={label} onClick={onClick}>
+    <Link href={href as any} className={baseClasses} aria-label={label} onClick={onClick}>
       {content}
     </Link>
   );

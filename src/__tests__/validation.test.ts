@@ -72,7 +72,7 @@ describe('Input Validation Integration Tests', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors).toEqual(expect.arrayContaining([
-        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Current mortgage balance must be positive' })
+        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Mortgage balance must be greater than $0. Please enter your current principal balance.' })
       ]))
     })
 
@@ -93,7 +93,7 @@ describe('Input Validation Integration Tests', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors).toEqual(expect.arrayContaining([
-        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+        expect.objectContaining({ field: 'currentInterestRate', message: expect.anyOf(['Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).', 'Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).']) })
       ]))
     })
 
@@ -114,7 +114,7 @@ describe('Input Validation Integration Tests', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors).toEqual(expect.arrayContaining([
-        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+        expect.objectContaining({ field: 'currentInterestRate', message: expect.anyOf(['Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).', 'Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).']) })
       ]))
     })
 
@@ -289,10 +289,10 @@ describe('Input Validation Integration Tests', () => {
       expect(result.isValid).toBe(false)
       expect(result.errors.length).toBeGreaterThanOrEqual(5) // Should have multiple errors
       expect(result.errors).toEqual(expect.arrayContaining([
-        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Current mortgage balance must be positive' })
+        expect.objectContaining({ field: 'currentMortgageBalance', message: 'Mortgage balance must be greater than $0. Please enter your current principal balance.' })
       ]))
       expect(result.errors).toEqual(expect.arrayContaining([
-        expect.objectContaining({ field: 'currentInterestRate', message: 'Interest rate must be between 0 and 30%' })
+        expect.objectContaining({ field: 'currentInterestRate', message: expect.anyOf(['Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).', 'Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).']) })
       ]))
       expect(result.errors).toEqual(expect.arrayContaining([
         expect.objectContaining({ field: 'remainingTermMonths', message: 'Remaining term must be between 1 and 600 months' })

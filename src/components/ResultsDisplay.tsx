@@ -7,6 +7,8 @@ import { renderToString } from 'react-dom/server'
 import type { CalculatorValidationInput } from '@/lib/validation'
 import { Icon } from '@/components/Icons'
 import { useConfetti } from '@/hooks/useConfetti'
+import InputSummary from './InputSummary'
+import { useCompany } from '@/contexts/CompanyContext'
 
 interface CalculationResults {
   traditional: {
@@ -50,6 +52,7 @@ interface ResultsDisplayProps {
 
 export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewCalculation }: ResultsDisplayProps) {
   const { triggerConfetti } = useConfetti()
+  const { companySettings, assignedAgent } = useCompany()
   
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -79,6 +82,13 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
 
   return (
     <div className="space-y-8">
+      {/* Input Summary - Only on larger screens */}
+      {inputs && (
+        <div className="hidden lg:block">
+          <InputSummary formData={inputs} className="max-w-2xl mx-auto" />
+        </div>
+      )}
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Time Saved Card */}
@@ -404,7 +414,12 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
             if (inputs) {
               // Render the report component to HTML string
               const reportHTML = renderToString(
-                <PrintableReport results={results} inputs={inputs} />
+                <PrintableReport 
+                  results={results} 
+                  inputs={inputs} 
+                  companySettings={companySettings}
+                  assignedAgent={assignedAgent}
+                />
               )
               
               // Use the utility function to print in a new window

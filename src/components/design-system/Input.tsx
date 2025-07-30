@@ -40,10 +40,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'block w-full rounded-lg border transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
               'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60',
-              'placeholder-neutral-600 dark:placeholder-neutral-400',
-              // Background and text colors with higher specificity
-              'bg-white dark:bg-neutral-800',
-              '!text-neutral-900 dark:!text-neutral-100',
+              'placeholder-neutral-500',
+              // Background and text colors - white background with black text as per style guide
+              '!bg-white !text-neutral-900',
               // Padding adjustments for icons
               leftIcon ? 'pl-10' : 'pl-3',
               rightIcon ? 'pr-10' : 'pr-3',

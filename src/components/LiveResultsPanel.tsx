@@ -3,15 +3,25 @@
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useConfetti } from '@/hooks/useConfetti'
+import { renderToString } from 'react-dom/server'
+import PrintableReport from './PrintableReport'
+import { printReportInNewWindow } from '@/lib/print-utils'
+import InputSummary from './InputSummary'
+import type { CalculatorValidationInput } from '@/lib/validation'
+import { useCompany } from '@/contexts/CompanyContext'
+import { useTranslations } from 'next-intl'
 
 interface LiveResultsPanelProps {
   results: any | null
   loading?: boolean
   error?: string | null
+  currentFormData?: CalculatorValidationInput | null
 }
 
-export default function LiveResultsPanel({ results, loading = false, error = null }: LiveResultsPanelProps) {
+export default function LiveResultsPanel({ results, loading = false, error = null, currentFormData = null }: LiveResultsPanelProps) {
+  const t = useTranslations('calculator')
   const { triggerConfetti } = useConfetti()
+  const { companySettings, assignedAgent } = useCompany()
   const previousResultsRef = useRef<any>(null)
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -80,8 +90,8 @@ export default function LiveResultsPanel({ results, loading = false, error = nul
         <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
         </svg>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No Results Yet</h3>
-        <p className="text-gray-600">Enter your mortgage details to see real-time calculations</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noResultsYet')}</h3>
+        <p className="text-gray-600">{t('enterMortgageDetails')}</p>
       </div>
     )
   }
@@ -279,6 +289,49 @@ export default function LiveResultsPanel({ results, loading = false, error = nul
             </div>
           </div>
         </motion.div>
+      )}
+
+      {/* Download PDF Report Button */}
+      {results && currentFormData && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+          className="mt-6"
+        >
+          <button
+            onClick={() => {
+              // Render the report component to HTML string
+              const reportHTML = renderToString(
+                <PrintableReport 
+                  results={results} 
+                  inputs={currentFormData} 
+                  companySettings={companySettings}
+                  assignedAgent={assignedAgent}
+                />
+              )
+              
+              // Use the utility function to print in a new window
+              printReportInNewWindow(
+                reportHTML,
+                currentFormData.scenarioName 
+                  ? `HELOC Report - ${currentFormData.scenarioName}` 
+                  : 'HELOC Report'
+              )
+            }}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Download PDF Report</span>
+          </button>
+        </motion.div>
+      )}
+
+      {/* Input Summary - Now below the PDF button */}
+      {currentFormData && (
+        <InputSummary formData={currentFormData} />
       )}
     </div>
   )

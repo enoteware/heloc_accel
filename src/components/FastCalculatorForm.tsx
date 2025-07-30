@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useState, useCallback, useEffect } from 'react'
-import type { CalculatorValidationInput } from '@/lib/validation'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
 import { EnhancedCurrencyInput, EnhancedPercentageInput, EnhancedNumberInput } from './EnhancedCalculatorInputs'
 import { CalculatorProgressBar } from './CalculatorProgressBar'
 import { SectionCompletionIndicator } from './SectionCompletionIndicator'
 import { Card, CardHeader, CardTitle, CardContent } from './design-system/Card'
+import { safeLTVCalculation, isMIPRequired, calculateSuggestedMonthlyPMI } from '@/lib/calculations'
+import { debugLogger, debugFormValidation } from '@/lib/debug-utils'
 
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
   loading?: boolean
   initialData?: Partial<CalculatorValidationInput & { remainingTermYears?: number; pmiMonthly?: number }>
+  validationErrors?: ValidationError[]
 }
 
 // Validation rules
@@ -83,7 +86,7 @@ const validationRules = {
   }
 }
 
-export default function FastCalculatorForm({ onSubmit, loading = false, initialData = {} }: CalculatorFormProps) {
+export default function FastCalculatorForm({ onSubmit, loading = false, initialData = {}, validationErrors = [] }: CalculatorFormProps) {
   const [formData, setFormData] = useState<CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number }>(() => ({
     currentMortgageBalance: initialData.currentMortgageBalance || 0,
     currentInterestRate: initialData.currentInterestRate || 0,
@@ -108,6 +111,17 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  // Update errors when validation errors are passed from parent
+  useEffect(() => {
+    if (validationErrors && validationErrors.length > 0) {
+      const errorMap: Record<string, string> = {}
+      validationErrors.forEach(error => {
+        errorMap[error.field] = error.message
+      })
+      setErrors(errorMap)
+    }
+  }, [validationErrors])
   const [debugLogs, setDebugLogs] = useState<string[]>([])
   
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
@@ -121,6 +135,35 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       setDebugLogs(prev => [...prev.slice(-10), logMessage]) // Keep last 10 logs
     }
   }, [isDemoMode])
+
+  // Calculate LTV ratio and determine if MIP/PMI is required
+  const ltvInfo = useMemo(() => {
+    const ltvResult = safeLTVCalculation(formData.currentMortgageBalance, formData.propertyValue)
+
+    if (!ltvResult.success || !ltvResult.canCalculate) {
+      return {
+        ltvRatio: 0,
+        isMIPRequired: false,
+        suggestedMonthlyPMI: 0,
+        canCalculateLTV: false,
+        error: ltvResult.error
+      }
+    }
+
+    const mipRequired = isMIPRequired(ltvResult.ltvRatio)
+    const suggestedMonthlyPMI = calculateSuggestedMonthlyPMI(
+      Number(formData.currentMortgageBalance) || 0,
+      ltvResult.ltvRatio
+    )
+
+    return {
+      ltvRatio: ltvResult.ltvRatio,
+      isMIPRequired: mipRequired,
+      suggestedMonthlyPMI,
+      canCalculateLTV: true,
+      error: undefined
+    }
+  }, [formData.currentMortgageBalance, formData.propertyValue])
 
   // Update form data when initialData changes
   useEffect(() => {
@@ -173,9 +216,10 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
 
   const handleInputChange = useCallback((field: keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number }), value: string | number) => {
     addDebugLog(`Input change for ${field}`, { value, type: typeof value })
-    
+    debugLogger.log('debug', 'form', `FastCalculatorForm input change: ${field}`, { value, type: typeof value })
+
     let processedValue: string | number = value
-    
+
     // Handle string inputs - keep as string during typing for better UX
     if (typeof value === 'string') {
       // Allow empty string during typing
@@ -908,16 +952,73 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               tooltip="Leave blank or enter 0 if no HOA"
             />
             
+            {/* Conditional MIP/PMI Field */}
+            {ltvInfo.canCalculateLTV && (
+              <div className="col-span-full">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-medium text-blue-900">
+                      Loan-to-Value Analysis
+                    </h4>
+                    <span className={`text-sm font-semibold px-2 py-1 rounded ${
+                      ltvInfo.isMIPRequired
+                        ? 'bg-orange-100 text-orange-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}>
+                      LTV: {ltvInfo.ltvRatio.toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-blue-700">
+                      {ltvInfo.isMIPRequired
+                        ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
+                        : 'MIP/PMI is typically not required when LTV is 80% or below.'
+                      }
+                    </p>
+                    {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleInputChange('pmiMonthly', ltvInfo.suggestedMonthlyPMI)
+                        }}
+                        className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                      >
+                        Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Show PMI field conditionally or always with enhanced messaging */}
             <EnhancedCurrencyInput
               field="pmiMonthly"
-              label="Monthly PMI"
-              description="Private mortgage insurance payment (if applicable)"
+              label={ltvInfo.isMIPRequired ? "Monthly MIP/PMI *" : "Monthly MIP/PMI"}
+              description={
+                ltvInfo.canCalculateLTV
+                  ? ltvInfo.isMIPRequired
+                    ? "Required: Private mortgage insurance payment"
+                    : "Optional: Private mortgage insurance payment (if still paying)"
+                  : "Private mortgage insurance payment (if applicable)"
+              }
               value={formData.pmiMonthly || 0}
               error={errors.pmiMonthly}
               onChange={handleInputChange}
               onBlur={handleBlur}
-              placeholder="e.g. $175"
-              tooltip="This will be removed when you reach 20% equity"
+              placeholder={
+                ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
+                  ? `e.g. $${ltvInfo.suggestedMonthlyPMI}`
+                  : "e.g. $175"
+              }
+              tooltip={
+                ltvInfo.canCalculateLTV
+                  ? ltvInfo.isMIPRequired
+                    ? "MIP/PMI is required when LTV > 80%. This will be removed when you reach 20% equity."
+                    : "You may be able to remove PMI since your LTV is ≤ 80%. Contact your lender."
+                  : "This will be removed when you reach 20% equity"
+              }
+              priority={ltvInfo.isMIPRequired ? "high" : "low"}
             />
           </div>
         </CardContent>

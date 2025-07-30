@@ -1,17 +1,21 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
-import type { CalculatorValidationInput } from '@/lib/validation'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
 import { useDebounce } from '@/hooks/useDebounce'
 import { Home, CreditCard, DollarSign, Building } from 'lucide-react'
+import { safeLTVCalculation, isMIPRequired, calculateSuggestedMonthlyPMI } from '@/lib/calculations'
+import { useTranslations } from 'next-intl'
 
 interface LiveCalculatorFormProps {
   onCalculate: (data: CalculatorValidationInput) => void
   onClear?: () => void
   initialData?: Partial<CalculatorValidationInput>
+  validationErrors?: ValidationError[]
 }
 
-export default function LiveCalculatorForm({ onCalculate, onClear, initialData = {} }: LiveCalculatorFormProps) {
+export default function LiveCalculatorForm({ onCalculate, onClear, initialData = {}, validationErrors = [] }: LiveCalculatorFormProps) {
+  const t = useTranslations('calculator')
   const [useYearsInput, setUseYearsInput] = useState(true)
   const [formData, setFormData] = useState<CalculatorValidationInput>({
     currentMortgageBalance: initialData.currentMortgageBalance || 0,
@@ -36,6 +40,48 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
   // Debounce the form data to avoid too many calculations
   const debouncedFormData = useDebounce(formData, 500)
+  
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Update errors when validation errors are passed from parent
+  useEffect(() => {
+    if (validationErrors.length > 0) {
+      const errorMap: Record<string, string> = {}
+      validationErrors.forEach(error => {
+        errorMap[error.field] = error.message
+      })
+      setErrors(errorMap)
+    }
+  }, [validationErrors])
+
+  // Calculate LTV ratio and determine if MIP/PMI is required
+  const ltvInfo = useMemo(() => {
+    const ltvResult = safeLTVCalculation(formData.currentMortgageBalance, formData.propertyValue)
+
+    if (!ltvResult.success || !ltvResult.canCalculate) {
+      return {
+        ltvRatio: 0,
+        isMIPRequired: false,
+        suggestedMonthlyPMI: 0,
+        canCalculateLTV: false,
+        error: ltvResult.error
+      }
+    }
+
+    const mipRequired = isMIPRequired(ltvResult.ltvRatio)
+    const suggestedMonthlyPMI = calculateSuggestedMonthlyPMI(
+      Number(formData.currentMortgageBalance) || 0,
+      ltvResult.ltvRatio
+    )
+
+    return {
+      ltvRatio: ltvResult.ltvRatio,
+      isMIPRequired: mipRequired,
+      suggestedMonthlyPMI,
+      canCalculateLTV: true,
+      error: undefined
+    }
+  }, [formData.currentMortgageBalance, formData.propertyValue])
 
   // Trigger calculation when debounced data changes
   useEffect(() => {
@@ -72,28 +118,58 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
   }
 
   const handlePrefillDemo = () => {
-    const demoData: CalculatorValidationInput = {
-      currentMortgageBalance: 350000,
-      currentInterestRate: 6.5,
-      remainingTermMonths: 300, // 25 years
-      monthlyPayment: 2347,
-      propertyValue: 500000,
-      propertyTaxMonthly: 583,
-      insuranceMonthly: 125,
-      hoaFeesMonthly: 0,
-      pmiMonthly: 175,
-      helocLimit: 100000,
-      helocInterestRate: 7.25,
-      helocAvailableCredit: 100000,
-      monthlyGrossIncome: 8500,
-      monthlyNetIncome: 6200,
-      monthlyExpenses: 3900,
-      monthlyDiscretionaryIncome: 2300,
-      scenarioName: 'Demo Scenario',
-      description: 'Sample data for testing the HELOC acceleration strategy'
-    }
+    console.log('Fill Demo Data button clicked')
+    
+    // Clear form first to ensure clean state
+    setFormData({
+      currentMortgageBalance: 0,
+      currentInterestRate: 0,
+      remainingTermMonths: 0,
+      monthlyPayment: 0,
+      propertyValue: undefined,
+      propertyTaxMonthly: undefined,
+      insuranceMonthly: undefined,
+      hoaFeesMonthly: undefined,
+      pmiMonthly: undefined,
+      helocLimit: 0,
+      helocInterestRate: 0,
+      helocAvailableCredit: undefined,
+      monthlyGrossIncome: 0,
+      monthlyNetIncome: 0,
+      monthlyExpenses: 0,
+      monthlyDiscretionaryIncome: 0,
+      scenarioName: undefined,
+      description: undefined
+    })
+    
+    // Then set demo data after a brief delay
+    setTimeout(() => {
+      const demoData: CalculatorValidationInput = {
+        currentMortgageBalance: 350000,
+        currentInterestRate: 6.5,
+        remainingTermMonths: 300, // 25 years
+        monthlyPayment: 2347,
+        propertyValue: 500000,
+        propertyTaxMonthly: 583,
+        insuranceMonthly: 125,
+        hoaFeesMonthly: 0,
+        pmiMonthly: 175,
+        helocLimit: 100000,
+        helocInterestRate: 7.25,
+        helocAvailableCredit: 100000,
+        monthlyGrossIncome: 8500,
+        monthlyNetIncome: 6200,
+        monthlyExpenses: 3900,
+        monthlyDiscretionaryIncome: 2300,
+        scenarioName: 'Demo Scenario',
+        description: 'Sample data for testing the HELOC acceleration strategy'
+      }
 
-    setFormData(demoData)
+      console.log('Setting demo data:', demoData)
+      setFormData(demoData)
+      // Clear any existing errors
+      setErrors({})
+    }, 50)
   }
 
   const handleClearForm = () => {
@@ -130,7 +206,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
       {/* Top Actions Bar */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-900">Calculator Inputs</h2>
+          <h2 className="text-xl font-semibold text-gray-900">{t('title')}</h2>
           <div className="flex items-center space-x-3">
             <button
               type="button"
@@ -140,7 +216,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <span>Fill Demo Data</span>
+              <span>{t('fillDemoData')}</span>
             </button>
             <button
               type="button"
@@ -150,7 +226,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
-              <span>Clear Form</span>
+              <span>{t('clearForm')}</span>
             </button>
           </div>
         </div>
@@ -160,12 +236,12 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
           <Home className="w-5 h-5" />
-          Current Mortgage
+          {t('currentMortgage')}
         </h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label htmlFor="currentMortgageBalance" className="block text-sm font-medium text-gray-700 mb-1">
-              Mortgage Balance
+              {t('balance')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -183,7 +259,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="currentInterestRate" className="block text-sm font-medium text-gray-700 mb-1">
-                Interest Rate (%)
+                {t('interestRate')} (%)
               </label>
               <input
                 type="number"
@@ -201,14 +277,14 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label htmlFor="remainingTerm" className="block text-sm font-medium text-gray-700">
-                  Remaining Term
+                  {t('remainingTerm')}
                 </label>
                 <button
                   type="button"
                   onClick={() => setUseYearsInput(!useYearsInput)}
                   className="text-xs text-blue-600 hover:text-blue-700 underline"
                 >
-                  Switch to {useYearsInput ? 'months' : 'years'}
+                  {useYearsInput ? t('switchToMonths') : t('switchToYears')}
                 </button>
               </div>
               {useYearsInput ? (
@@ -228,7 +304,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                     step="0.1"
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    {formData.remainingTermMonths ? `= ${formData.remainingTermMonths} months` : 'Enter years remaining'}
+                    {formData.remainingTermMonths ? `= ${formData.remainingTermMonths} months` : t('enterYearsRemaining')}
                   </p>
                 </>
               ) : (
@@ -253,7 +329,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
           <div>
             <label htmlFor="monthlyPayment" className="block text-sm font-medium text-gray-700 mb-1">
-              Monthly Payment
+              {t('monthlyPayment')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -274,12 +350,12 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
           <CreditCard className="w-5 h-5" />
-          HELOC Details
+          {t('heloc')}
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="helocLimit" className="block text-sm font-medium text-gray-700 mb-1">
-              Credit Limit
+              {t('helocLimit')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -296,7 +372,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
           <div>
             <label htmlFor="helocInterestRate" className="block text-sm font-medium text-gray-700 mb-1">
-              Interest Rate (%)
+              {t('interestRate')} (%)
             </label>
             <input
               type="number"
@@ -317,13 +393,13 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
           <DollarSign className="w-5 h-5" />
-          Monthly Finances
+          {t('income')}
         </h3>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="monthlyGrossIncome" className="block text-sm font-medium text-gray-700 mb-1">
-                Gross Income
+                {t('grossIncome')}
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -340,7 +416,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
             <div>
               <label htmlFor="monthlyNetIncome" className="block text-sm font-medium text-gray-700 mb-1">
-                Net Income
+                {t('netIncome')}
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -359,7 +435,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="monthlyExpenses" className="block text-sm font-medium text-gray-700 mb-1">
-                Expenses
+                {t('expenses')}
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -376,7 +452,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
             <div>
               <label htmlFor="monthlyDiscretionaryIncome" className="block text-sm font-medium text-gray-700 mb-1">
-                Discretionary Income
+                {t('discretionaryIncome')}
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -394,7 +470,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                   </svg>
                 </div>
               </div>
-              <p className="mt-1 text-xs text-gray-500">Net income - Expenses = ${formData.monthlyDiscretionaryIncome?.toLocaleString() || '0'}</p>
+              <p className="mt-1 text-xs text-gray-500">{t('netIncomeMinusExpenses')} = ${formData.monthlyDiscretionaryIncome?.toLocaleString() || '0'}</p>
             </div>
           </div>
         </div>
@@ -404,12 +480,12 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
           <Building className="w-5 h-5" />
-          Property Details (Optional)
+          {t('propertyInfo')} ({t('optional')})
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">
-              Property Value
+              {t('propertyValue')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -426,7 +502,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
           <div>
             <label htmlFor="propertyTaxMonthly" className="block text-sm font-medium text-gray-700 mb-1">
-              Property Tax
+              {t('propertyTax')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -443,7 +519,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
           <div>
             <label htmlFor="insuranceMonthly" className="block text-sm font-medium text-gray-700 mb-1">
-              Insurance
+              {t('insurance')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -460,7 +536,7 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
 
           <div>
             <label htmlFor="hoaFeesMonthly" className="block text-sm font-medium text-gray-700 mb-1">
-              HOA Fees
+              {t('hoaFees')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -475,9 +551,44 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
             </div>
           </div>
 
+          {/* LTV Analysis */}
+          {ltvInfo.canCalculateLTV && (
+            <div className="col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm font-medium text-blue-900">LTV Analysis</span>
+                <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                  ltvInfo.isMIPRequired
+                    ? 'bg-orange-100 text-orange-800'
+                    : 'bg-green-100 text-green-800'
+                }`}>
+                  {ltvInfo.ltvRatio.toFixed(1)}%
+                </span>
+              </div>
+              <p className="text-xs text-blue-700">
+                {ltvInfo.isMIPRequired
+                  ? `MIP/PMI required (LTV > 80%). Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
+                  : 'MIP/PMI typically not required (LTV ≤ 80%).'
+                }
+              </p>
+              {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleInputChange('pmiMonthly', ltvInfo.suggestedMonthlyPMI)
+                  }}
+                  className="mt-2 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors"
+                >
+                  Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
+                </button>
+              )}
+            </div>
+          )}
+
           <div>
-            <label htmlFor="pmiMonthly" className="block text-sm font-medium text-gray-700 mb-1">
-              PMI (Monthly)
+            <label htmlFor="pmiMonthly" className={`block text-sm font-medium text-gray-700 mb-1 ${
+              ltvInfo.isMIPRequired ? 'text-orange-700' : ''
+            }`}>
+              {ltvInfo.isMIPRequired ? `${t('pmi')} *` : t('pmi')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
@@ -486,11 +597,24 @@ export default function LiveCalculatorForm({ onCalculate, onClear, initialData =
                 id="pmiMonthly"
                 value={formData.pmiMonthly || ''}
                 onChange={(e) => handleInputChange('pmiMonthly', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="0"
+                className={`w-full pl-8 pr-3 py-2 bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  ltvInfo.isMIPRequired ? 'border-orange-300' : 'border-gray-300'
+                }`}
+                placeholder={
+                  ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
+                    ? ltvInfo.suggestedMonthlyPMI.toString()
+                    : "0"
+                }
               />
             </div>
-            <p className="mt-1 text-xs text-gray-500">Private Mortgage Insurance</p>
+            <p className="mt-1 text-xs text-gray-500">
+              {ltvInfo.canCalculateLTV
+                ? ltvInfo.isMIPRequired
+                  ? t('requiredPMI')
+                  : t('optionalPMI')
+                : t('privateMortgageInsurance')
+              }
+            </p>
           </div>
         </div>
       </div>

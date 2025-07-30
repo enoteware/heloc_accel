@@ -2,6 +2,8 @@
 
 import React from 'react'
 import type { CalculatorValidationInput } from '@/lib/validation'
+import type { CompanySettings, Agent } from '@/lib/company-data'
+import { formatPhoneNumber, getAgentFullName } from '@/lib/company-data'
 
 interface CalculationResults {
   traditional: {
@@ -40,9 +42,17 @@ interface PrintableReportProps {
   results: CalculationResults
   inputs: CalculatorValidationInput
   generatedDate?: Date
+  companySettings?: CompanySettings | null
+  assignedAgent?: Agent | null
 }
 
-export default function PrintableReport({ results, inputs, generatedDate = new Date() }: PrintableReportProps) {
+export default function PrintableReport({ 
+  results, 
+  inputs, 
+  generatedDate = new Date(), 
+  companySettings, 
+  assignedAgent 
+}: PrintableReportProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -85,12 +95,26 @@ export default function PrintableReport({ results, inputs, generatedDate = new D
 
   return (
     <div className="printable-report bg-white p-8 max-w-[8.5in] mx-auto">
-      {/* Header */}
+      {/* Header with Company Branding */}
       <header className="mb-6 border-b-2 border-gray-800 pb-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">HELOC Acceleration Strategy Report</h1>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Generated: {formatDate(generatedDate)}</span>
-          {inputs.scenarioName && <span className="font-medium">{inputs.scenarioName}</span>}
+        <div className="flex justify-between items-start mb-3">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">HELOC Acceleration Strategy Report</h1>
+            <div className="text-sm text-gray-600">
+              <span>Generated: {formatDate(generatedDate)}</span>
+              {inputs.scenarioName && <span className="ml-3 font-medium">{inputs.scenarioName}</span>}
+            </div>
+          </div>
+          {companySettings && (
+            <div className="text-right text-sm">
+              <h2 className="font-bold text-gray-900">{companySettings.companyName}</h2>
+              <p className="text-gray-600">{companySettings.companyPhone}</p>
+              <p className="text-gray-600">{companySettings.companyWebsite}</p>
+              {companySettings.companyNmlsNumber && (
+                <p className="text-xs text-gray-500 mt-1">NMLS #{companySettings.companyNmlsNumber}</p>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -262,8 +286,60 @@ export default function PrintableReport({ results, inputs, generatedDate = new D
         </div>
       </section>
 
+      {/* Contact Information Section */}
+      {assignedAgent && (
+        <section className="mt-6 mb-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-300">
+          <h2 className="text-lg font-bold text-green-900 mb-3">Your HELOC Specialist</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="font-semibold text-gray-900">{getAgentFullName(assignedAgent)}</h3>
+              <p className="text-sm text-gray-700">{assignedAgent.title || 'Mortgage Advisor'}</p>
+              {assignedAgent.nmlsNumber && (
+                <p className="text-xs text-gray-600 mt-1">NMLS #{assignedAgent.nmlsNumber}</p>
+              )}
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-700">{assignedAgent.email}</p>
+              {assignedAgent.phone && (
+                <p className="text-sm text-gray-700">
+                  Office: {formatPhoneNumber(assignedAgent.phone, assignedAgent.phoneExtension)}
+                </p>
+              )}
+              {assignedAgent.mobilePhone && (
+                <p className="text-sm text-gray-700">Mobile: {formatPhoneNumber(assignedAgent.mobilePhone)}</p>
+              )}
+            </div>
+          </div>
+          {assignedAgent.bio && (
+            <p className="mt-3 text-sm text-gray-700 italic">{assignedAgent.bio}</p>
+          )}
+          <div className="mt-4 p-3 bg-green-200 rounded-lg">
+            <p className="text-sm font-semibold text-green-900">Ready to get started?</p>
+            <p className="text-sm text-green-800 mt-1">
+              Contact {assignedAgent.firstName} today to discuss how a HELOC can help you achieve your financial goals faster.
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* Disclaimer */}
       <footer className="mt-6 pt-4 border-t border-gray-300 text-xs text-gray-600">
+        <div className="mb-3">
+          {companySettings && (
+            <div className="text-center mb-2">
+              <p className="font-semibold text-gray-700">{companySettings.companyName}</p>
+              {companySettings.companyAddress && (
+                <p className="whitespace-pre-line">{companySettings.companyAddress}</p>
+              )}
+              <p>
+                {companySettings.companyPhone} • {companySettings.companyEmail}
+              </p>
+              {companySettings.companyLicenseNumber && (
+                <p className="mt-1">License #{companySettings.companyLicenseNumber}</p>
+              )}
+            </div>
+          )}
+        </div>
         <p className="font-semibold mb-1">Important Disclaimer:</p>
         <p>
           This report is for educational purposes only and should not be considered financial advice. 

@@ -1,10 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 
 export default function Disclaimer() {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
       <div className="flex">
@@ -23,31 +21,22 @@ export default function Disclaimer() {
               The results are estimates based on the information you provide and should not be considered as financial advice.
             </p>
             
-            {isExpanded && (
-              <div className="mt-3 space-y-2">
-                <p>
-                  <strong>Please note:</strong>
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>HELOC rates are typically variable and can change over time</li>
-                  <li>Actual results may vary based on your specific financial situation</li>
-                  <li>The HELOC acceleration strategy involves risks including potential loss of home equity</li>
-                  <li>This strategy requires disciplined financial management and positive cash flow</li>
-                  <li>Tax implications are not considered in these calculations</li>
-                </ul>
-                <p className="mt-2">
-                  <strong>We strongly recommend consulting with a qualified financial advisor, tax professional, 
-                  and mortgage specialist before making any decisions about mortgage acceleration strategies.</strong>
-                </p>
-              </div>
-            )}
-            
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-2 text-gray-600 hover:text-gray-700 text-sm font-medium focus:outline-none focus:underline"
-            >
-              {isExpanded ? 'Show less' : 'Read more'}
-            </button>
+            <div className="mt-3 space-y-2">
+              <p>
+                <strong>Please note:</strong>
+              </p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>HELOC rates are typically variable and can change over time</li>
+                <li>Actual results may vary based on your specific financial situation</li>
+                <li>The HELOC acceleration strategy involves risks including potential loss of home equity</li>
+                <li>This strategy requires disciplined financial management and positive cash flow</li>
+                <li>Tax implications are not considered in these calculations</li>
+              </ul>
+              <p className="mt-2">
+                <strong>We strongly recommend consulting with a qualified financial advisor, tax professional, 
+                and mortgage specialist before making any decisions about mortgage acceleration strategies.</strong>
+              </p>
+            </div>
           </div>
         </div>
       </div>

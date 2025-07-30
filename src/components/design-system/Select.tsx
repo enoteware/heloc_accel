@@ -30,7 +30,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               'block w-full rounded-lg border px-3 py-2 pr-10 transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
               'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50',
-              'appearance-none bg-white dark:bg-neutral-800 !text-neutral-900 dark:!text-neutral-100',
+              // Background and text colors - white background with black text as per style guide
+              'appearance-none !bg-white !text-neutral-900',
               // Error state
               error
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
@@ -45,6 +46,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
+                className="!bg-white !text-neutral-900"
               >
                 {option.label}
               </option>

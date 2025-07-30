@@ -1,3 +1,7 @@
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // No basePath needed since we're using a subdomain
@@ -132,11 +136,11 @@ if (process.env.ANALYZE === 'true' && process.env.NODE_ENV === 'development') {
     const withBundleAnalyzer = require('@next/bundle-analyzer')({
       enabled: true,
     })
-    module.exports = withBundleAnalyzer(nextConfig)
+    module.exports = withNextIntl(withBundleAnalyzer(nextConfig))
   } catch (error) {
     console.warn('Bundle analyzer not available, using default config')
-    module.exports = nextConfig
+    module.exports = withNextIntl(nextConfig)
   }
 } else {
-  module.exports = nextConfig
+  module.exports = withNextIntl(nextConfig)
 }

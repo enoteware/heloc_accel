@@ -1,5 +1,8 @@
 // Input validation schemas and utilities for HELOC Accelerator
 
+import { calculateLTV, isMIPRequired } from './calculations'
+import { errorMonitor, reportFormValidationError } from './error-monitoring'
+
 export interface ValidationError {
   field: string
   message: string
@@ -16,42 +19,47 @@ export const VALIDATION_RULES = {
   mortgageBalance: {
     min: 1000,
     max: 10000000,
-    message: 'Mortgage balance must be between $1,000 and $10,000,000'
+    message: 'Mortgage balance must be between $1,000 and $10,000,000. Please check your latest mortgage statement for the principal balance.'
   },
   interestRate: {
     min: 0.001, // 0.1%
     max: 0.30,  // 30%
-    message: 'Interest rate must be between 0.1% and 30%'
+    message: 'Interest rate must be between 0.1% and 30%. Enter as a percentage (e.g., 6.5 for 6.5%).'
   },
   termMonths: {
     min: 12,    // 1 year
     max: 480,   // 40 years
-    message: 'Loan term must be between 1 and 40 years'
+    message: 'Loan term must be between 1 and 40 years (12-480 months). Check your mortgage documents for remaining term.'
   },
   monthlyPayment: {
     min: 100,
     max: 100000,
-    message: 'Monthly payment must be between $100 and $100,000'
+    message: 'Monthly payment must be between $100 and $100,000. This should be your principal and interest payment only.'
   },
   helocLimit: {
     min: 1000,
     max: 5000000,
-    message: 'HELOC limit must be between $1,000 and $5,000,000'
+    message: 'HELOC limit must be between $1,000 and $5,000,000. This is your maximum approved credit line.'
   },
   income: {
     min: 1000,
     max: 1000000,
-    message: 'Monthly income must be between $1,000 and $1,000,000'
+    message: 'Monthly income must be between $1,000 and $1,000,000. Include all sources of regular monthly income.'
   },
   expenses: {
     min: 0,
     max: 500000,
-    message: 'Monthly expenses must be between $0 and $500,000'
+    message: 'Monthly expenses must be between $0 and $500,000. Include all regular monthly bills except your mortgage payment.'
   },
   propertyValue: {
     min: 10000,
     max: 50000000,
-    message: 'Property value must be between $10,000 and $50,000,000'
+    message: 'Property value must be between $10,000 and $50,000,000. Use a recent appraisal or market estimate.'
+  },
+  pmiMonthly: {
+    min: 0,
+    max: 5000,
+    message: 'MIP/PMI must be between $0 and $5,000 per month. This is required if your loan-to-value ratio exceeds 80%.'
   }
 }
 
@@ -96,9 +104,10 @@ export function validateNumber(
   const errors: ValidationError[] = []
 
   if (required && (value === undefined || value === null || value === '')) {
+    const friendlyName = fieldName.replace(/([A-Z])/g, ' $1').toLowerCase()
     errors.push({
       field: fieldName,
-      message: `${fieldName} is required`
+      message: `Please enter your ${friendlyName}`
     })
     return errors
   }
@@ -110,9 +119,10 @@ export function validateNumber(
   const numValue = typeof value === 'string' ? parseFloat(value) : value
 
   if (isNaN(numValue)) {
+    const friendlyName = fieldName.replace(/([A-Z])/g, ' $1').toLowerCase()
     errors.push({
       field: fieldName,
-      message: `${fieldName} must be a valid number`
+      message: `Please enter a valid number for ${friendlyName}`
     })
     return errors
   }
@@ -137,7 +147,7 @@ export function validatePercentage(
   if (required && (value === undefined || value === null || value === '')) {
     errors.push({
       field: fieldName,
-      message: `${fieldName} is required`
+      message: `Please enter the ${fieldName.toLowerCase().replace('current', '').replace('monthly', '').trim()}`
     })
     return errors
   }
@@ -151,7 +161,7 @@ export function validatePercentage(
   if (isNaN(numValue)) {
     errors.push({
       field: fieldName,
-      message: `${fieldName} must be a valid percentage`
+      message: `Please enter a valid percentage (e.g., 6.5 for 6.5%)`
     })
     return errors
   }
@@ -159,10 +169,15 @@ export function validatePercentage(
   // Convert percentage to decimal if it's > 1 (assume user entered as percentage)
   const decimalValue = numValue > 1 ? numValue / 100 : numValue
 
-  if (decimalValue < 0.001 || decimalValue > 0.30) {
+  if (decimalValue < 0.001) {
     errors.push({
       field: fieldName,
-      message: 'Interest rate must be between 0.1% and 30%'
+      message: 'Interest rate must be at least 0.1%. Please enter as a percentage (e.g., 6.5 for 6.5%).'
+    })
+  } else if (decimalValue > 0.30) {
+    errors.push({
+      field: fieldName,
+      message: 'Interest rate cannot exceed 30%. Please verify and enter as a percentage (e.g., 6.5 for 6.5%).'
     })
   }
 
@@ -176,7 +191,7 @@ export function validateMortgageInputs(input: MortgageValidationInput): Validati
   if (input.currentMortgageBalance <= 0) {
     errors.push({
       field: 'currentMortgageBalance',
-      message: 'Current mortgage balance must be positive'
+      message: 'Mortgage balance must be greater than $0. Please enter your current principal balance.'
     })
   } else {
     errors.push(...validateNumber(
@@ -187,18 +202,28 @@ export function validateMortgageInputs(input: MortgageValidationInput): Validati
   }
 
   // Validate interest rate
-  if (input.currentInterestRate < 0 || input.currentInterestRate > 30) {
+  if (input.currentInterestRate < 0) {
     errors.push({
       field: 'currentInterestRate',
-      message: 'Interest rate must be between 0 and 30%'
+      message: 'Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).'
+    })
+  } else if (input.currentInterestRate > 30) {
+    errors.push({
+      field: 'currentInterestRate',
+      message: 'Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).'
     })
   }
 
   // Validate term
-  if (input.remainingTermMonths < 1 || input.remainingTermMonths > 600) {
+  if (input.remainingTermMonths < 1) {
     errors.push({
       field: 'remainingTermMonths',
-      message: 'Remaining term must be between 1 and 600 months'
+      message: 'Remaining term must be at least 1 month. Please check your mortgage statement for the exact number of months remaining.'
+    })
+  } else if (input.remainingTermMonths > 600) {
+    errors.push({
+      field: 'remainingTermMonths',
+      message: 'Remaining term cannot exceed 600 months (50 years). Please verify the number of months remaining on your mortgage.'
     })
   }
 
@@ -250,9 +275,60 @@ export function validateMortgageInputs(input: MortgageValidationInput): Validati
     errors.push(...validateNumber(
       input.pmiMonthly,
       'pmiMonthly',
-      { min: 0, max: 2000, message: 'PMI must be between $0 and $2,000' },
+      VALIDATION_RULES.pmiMonthly,
       false
     ))
+  }
+
+  // Validate LTV-based MIP/PMI requirements
+  if (input.propertyValue !== undefined && input.currentMortgageBalance !== undefined) {
+    try {
+      const ltvRatio = calculateLTV(input.currentMortgageBalance, input.propertyValue)
+
+      // If LTV > 80%, MIP/PMI should be provided
+      if (isMIPRequired(ltvRatio) && (input.pmiMonthly === undefined || input.pmiMonthly === 0)) {
+        const errorMessage = `MIP/PMI is required when LTV exceeds 80% (current LTV: ${ltvRatio.toFixed(1)}%)`
+        errors.push({
+          field: 'pmiMonthly',
+          message: errorMessage
+        })
+
+        // Report validation error for monitoring
+        reportFormValidationError(
+          'MortgageValidation',
+          'pmiMonthly',
+          input.pmiMonthly,
+          'ltvBasedRequirement',
+          errorMessage
+        )
+      }
+
+      // If LTV <= 80%, warn if PMI is still being paid (but don't block calculation)
+      // This is just informational - some loans may still require PMI even with low LTV
+      if (!isMIPRequired(ltvRatio) && input.pmiMonthly && input.pmiMonthly > 0) {
+        const warningMessage = `MIP/PMI may not be required when LTV is ${ltvRatio.toFixed(1)}% (≤80%). Consider removing PMI.`
+        // Log the warning but don't add it to validation errors
+        console.info('PMI Warning:', warningMessage)
+        
+        // Report validation warning for monitoring
+        reportFormValidationError(
+          'MortgageValidation',
+          'pmiMonthly',
+          input.pmiMonthly,
+          'ltvBasedWarning',
+          warningMessage
+        )
+      }
+    } catch (error) {
+      // LTV calculation failed - report this error
+      console.warn('LTV calculation failed during validation:', error)
+      errorMonitor.reportCalculationError(
+        'ltv',
+        { loanAmount: input.currentMortgageBalance, propertyValue: input.propertyValue },
+        `LTV calculation failed during validation: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        error instanceof Error ? error : undefined
+      )
+    }
   }
 
   return {
@@ -268,7 +344,7 @@ export function validateHELOCInputs(input: HELOCValidationInput): ValidationResu
   if (input.helocLimit <= 0) {
     errors.push({
       field: 'helocLimit',
-      message: 'HELOC limit must be positive'
+      message: 'HELOC limit must be greater than $0. Please enter your approved HELOC credit limit.'
     })
   } else {
     errors.push(...validateNumber(
@@ -297,7 +373,7 @@ export function validateHELOCInputs(input: HELOCValidationInput): ValidationResu
     if (input.helocAvailableCredit > input.helocLimit) {
       errors.push({
         field: 'helocAvailableCredit',
-        message: 'Available credit cannot exceed HELOC limit'
+        message: `Available credit ($${input.helocAvailableCredit.toLocaleString()}) cannot exceed your HELOC limit ($${input.helocLimit.toLocaleString()}). Please verify both amounts.`
       })
     }
   }
@@ -344,16 +420,17 @@ export function validateIncomeInputs(input: IncomeValidationInput): ValidationRe
     if (input.monthlyNetIncome > input.monthlyGrossIncome) {
       errors.push({
         field: 'monthlyNetIncome',
-        message: 'Net income cannot be higher than gross income'
+        message: `Net income ($${input.monthlyNetIncome.toLocaleString()}) cannot exceed gross income ($${input.monthlyGrossIncome.toLocaleString()}). Net income should be your take-home pay after taxes.`
       })
     }
   }
 
   if (!isNaN(input.monthlyExpenses) && !isNaN(input.monthlyNetIncome)) {
     if (input.monthlyExpenses > input.monthlyNetIncome) {
+      const deficit = input.monthlyExpenses - input.monthlyNetIncome
       errors.push({
         field: 'monthlyExpenses',
-        message: 'Monthly expenses cannot exceed net income'
+        message: `Monthly expenses ($${input.monthlyExpenses.toLocaleString()}) exceed net income by $${deficit.toLocaleString()}. HELOC acceleration requires positive cash flow. Please verify your expenses.`
       })
     }
   }
@@ -365,7 +442,7 @@ export function validateIncomeInputs(input: IncomeValidationInput): ValidationRe
     if (Math.abs(input.monthlyDiscretionaryIncome - calculatedDiscretionary) > tolerance) {
       errors.push({
         field: 'monthlyDiscretionaryIncome',
-        message: `Discretionary income should equal net income minus expenses (${calculatedDiscretionary.toFixed(2)})`
+        message: `Discretionary income should be $${calculatedDiscretionary.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (Net Income: $${input.monthlyNetIncome.toLocaleString()} - Expenses: $${input.monthlyExpenses.toLocaleString()}). This is the amount available for accelerating your mortgage payoff.`
       })
     }
   }
@@ -408,7 +485,7 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
     console.log('HELOC credit validation failed:', { limit: input.helocLimit, available: input.helocAvailableCredit })
     errors.push({
       field: 'helocAvailableCredit',
-      message: 'HELOC available credit cannot exceed HELOC limit'
+      message: `Available credit ($${input.helocAvailableCredit.toLocaleString()}) cannot exceed your HELOC limit ($${input.helocLimit.toLocaleString()}). Please check your HELOC statement for the correct amounts.`
     })
   }
 
@@ -418,14 +495,14 @@ export function validateCalculatorInputs(input: CalculatorValidationInput): Vali
   if (input.scenarioName !== undefined && input.scenarioName.trim().length === 0) {
     errors.push({
       field: 'scenarioName',
-      message: 'Scenario name is required'
+      message: 'Please provide a name for this scenario (e.g., "Current Mortgage" or "HELOC Strategy")'
     })
   }
 
   if (input.scenarioName && input.scenarioName.length > 255) {
     errors.push({
       field: 'scenarioName',
-      message: 'Scenario name must be less than 255 characters'
+      message: `Scenario name is too long (${input.scenarioName.length} characters). Please use a shorter name (maximum 255 characters).`
     })
   }
 

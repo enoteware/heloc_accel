@@ -42,10 +42,26 @@ export async function POST(request: NextRequest) {
 
     if (!validation.isValid) {
       console.log('Validation failed with errors:', validation.errors)
+      
+      // Create a user-friendly error message
+      const errorCount = validation.errors.length
+      const primaryError = validation.errors[0]
+      let errorMessage = ''
+      
+      if (errorCount === 1) {
+        errorMessage = primaryError.message
+      } else {
+        errorMessage = `Please fix ${errorCount} validation errors. ${primaryError.message}`
+      }
+      
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Invalid input data',
-        data: { validationErrors: validation.errors }
+        error: errorMessage,
+        data: { 
+          validationErrors: validation.errors,
+          errorCount: errorCount,
+          fields: validation.errors.map(e => e.field)
+        }
       }, { status: 400 })
     }
 

@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
-import type { CalculatorValidationInput } from '@/lib/validation'
+import React, { useState, useMemo, useEffect } from 'react'
+import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
 import { Icon } from '@/components/Icons'
+import { safeLTVCalculation, isMIPRequired, calculateSuggestedMonthlyPMI } from '@/lib/calculations'
+import { FieldError } from '@/components/ValidationErrorDisplay'
 
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
   loading?: boolean
   initialData?: Partial<CalculatorValidationInput>
+  validationErrors?: ValidationError[]
 }
 
-export default function CalculatorForm({ onSubmit, loading = false, initialData = {} }: CalculatorFormProps) {
+export default function CalculatorForm({ onSubmit, loading = false, initialData = {}, validationErrors = [] }: CalculatorFormProps) {
   const [formData, setFormData] = useState<CalculatorValidationInput>({
     currentMortgageBalance: initialData.currentMortgageBalance || 0,
     currentInterestRate: initialData.currentInterestRate || 0,
@@ -20,6 +23,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
     propertyTaxMonthly: initialData.propertyTaxMonthly,
     insuranceMonthly: initialData.insuranceMonthly,
     hoaFeesMonthly: initialData.hoaFeesMonthly,
+    pmiMonthly: initialData.pmiMonthly,
     helocLimit: initialData.helocLimit || 0,
     helocInterestRate: initialData.helocInterestRate || 0,
     helocAvailableCredit: initialData.helocAvailableCredit,
@@ -32,6 +36,46 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Update errors when validation errors are passed from parent
+  useEffect(() => {
+    if (validationErrors.length > 0) {
+      const errorMap: Record<string, string> = {}
+      validationErrors.forEach(error => {
+        errorMap[error.field] = error.message
+      })
+      setErrors(errorMap)
+    }
+  }, [validationErrors])
+
+  // Calculate LTV ratio and determine if MIP/PMI is required
+  const ltvInfo = useMemo(() => {
+    const ltvResult = safeLTVCalculation(formData.currentMortgageBalance, formData.propertyValue)
+
+    if (!ltvResult.success || !ltvResult.canCalculate) {
+      return {
+        ltvRatio: 0,
+        isMIPRequired: false,
+        suggestedMonthlyPMI: 0,
+        canCalculateLTV: false,
+        error: ltvResult.error
+      }
+    }
+
+    const mipRequired = isMIPRequired(ltvResult.ltvRatio)
+    const suggestedMonthlyPMI = calculateSuggestedMonthlyPMI(
+      Number(formData.currentMortgageBalance) || 0,
+      ltvResult.ltvRatio
+    )
+
+    return {
+      ltvRatio: ltvResult.ltvRatio,
+      isMIPRequired: mipRequired,
+      suggestedMonthlyPMI,
+      canCalculateLTV: true,
+      error: undefined
+    }
+  }, [formData.currentMortgageBalance, formData.propertyValue])
 
   const handleInputChange = (field: keyof CalculatorValidationInput, value: string | number) => {
     setFormData(prev => ({
@@ -64,6 +108,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
       propertyTaxMonthly: 583,
       insuranceMonthly: 125,
       hoaFeesMonthly: 0,
+      pmiMonthly: 175,
       helocLimit: 100000,
       helocInterestRate: 7.25,
       helocAvailableCredit: 100000,
@@ -89,6 +134,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
       propertyTaxMonthly: undefined,
       insuranceMonthly: undefined,
       hoaFeesMonthly: undefined,
+      pmiMonthly: undefined,
       helocLimit: 0,
       helocInterestRate: 0,
       helocAvailableCredit: undefined,
@@ -437,6 +483,73 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               />
             </div>
           </div>
+        </div>
+
+        {/* LTV Analysis */}
+        {ltvInfo.canCalculateLTV && (
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-blue-900">Loan-to-Value Analysis</h4>
+              <span className={`text-sm font-semibold px-2 py-1 rounded ${
+                ltvInfo.isMIPRequired
+                  ? 'bg-orange-100 text-orange-800'
+                  : 'bg-green-100 text-green-800'
+              }`}>
+                LTV: {ltvInfo.ltvRatio.toFixed(1)}%
+              </span>
+            </div>
+            <p className="text-xs text-blue-700 mb-2">
+              {ltvInfo.isMIPRequired
+                ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
+                : 'MIP/PMI is typically not required when LTV is 80% or below.'
+              }
+            </p>
+            {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  handleInputChange('pmiMonthly', ltvInfo.suggestedMonthlyPMI)
+                }}
+                className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+              >
+                Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Conditional PMI Field */}
+        <div className="mt-4">
+          <label htmlFor="pmiMonthly" className={`block text-sm font-medium mb-1 ${
+            ltvInfo.isMIPRequired ? 'text-orange-700' : 'text-gray-700'
+          }`}>
+            {ltvInfo.isMIPRequired ? "Monthly MIP/PMI *" : "Monthly MIP/PMI"}
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+            <input
+              type="number"
+              id="pmiMonthly"
+              value={formData.pmiMonthly || ''}
+              onChange={(e) => handleInputChange('pmiMonthly', parseFloat(e.target.value) || 0)}
+              className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
+                ltvInfo.isMIPRequired ? 'border-orange-300' : 'border-gray-300'
+              }`}
+              placeholder={
+                ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
+                  ? ltvInfo.suggestedMonthlyPMI.toString()
+                  : ""
+              }
+            />
+          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            {ltvInfo.canCalculateLTV
+              ? ltvInfo.isMIPRequired
+                ? "Required: Private Mortgage Insurance"
+                : "Optional: Private Mortgage Insurance (if still paying)"
+              : "Private Mortgage Insurance (if applicable)"
+            }
+          </p>
         </div>
       </div>
 

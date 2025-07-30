@@ -1,6 +1,177 @@
 // Mortgage and HELOC calculation utilities
 
 import { CalculationError, ErrorCode, createErrorResponse } from './errors'
+import { debugLogger, debugLTVCalculation, debugCalculationError } from './debug-utils'
+
+/**
+ * Calculate Loan-to-Value (LTV) ratio
+ * @param loanAmount - Current loan balance or loan amount
+ * @param propertyValue - Current property value
+ * @returns LTV ratio as a percentage (0-100)
+ * @throws CalculationError for invalid inputs
+ */
+export function calculateLTV(loanAmount: number, propertyValue: number): number {
+  // Handle edge cases
+  if (loanAmount == null || propertyValue == null) {
+    throw new CalculationError({
+      code: ErrorCode.INVALID_CALCULATION_INPUT,
+      message: 'Both loan amount and property value are required for LTV calculation',
+      userMessage: 'Please provide both loan amount and property value',
+      suggestion: 'Enter valid numbers for both loan amount and property value',
+      field: 'loanAmount,propertyValue',
+      value: { loanAmount, propertyValue }
+    })
+  }
+
+  // Convert to numbers and validate
+  const loan = Number(loanAmount)
+  const value = Number(propertyValue)
+
+  if (isNaN(loan) || isNaN(value)) {
+    throw new CalculationError({
+      code: ErrorCode.INVALID_CALCULATION_INPUT,
+      message: 'Loan amount and property value must be valid numbers',
+      userMessage: 'Please enter valid numeric values',
+      suggestion: 'Use numbers only (e.g., 400000 for loan amount, 500000 for property value)',
+      field: 'loanAmount,propertyValue',
+      value: { loanAmount, propertyValue }
+    })
+  }
+
+  if (loan < 0 || value <= 0) {
+    throw new CalculationError({
+      code: ErrorCode.INVALID_CALCULATION_INPUT,
+      message: 'Loan amount cannot be negative and property value must be positive',
+      userMessage: 'Please enter positive values',
+      suggestion: 'Loan amount should be 0 or greater, property value should be greater than 0',
+      field: 'loanAmount,propertyValue',
+      value: { loanAmount: loan, propertyValue: value }
+    })
+  }
+
+  // Calculate LTV as percentage
+  const ltvRatio = (loan / value) * 100
+
+  // Sanity check - LTV over 200% is likely an error
+  if (ltvRatio > 200) {
+    console.warn(`Warning: LTV ratio is ${ltvRatio.toFixed(2)}% which seems unusually high`)
+  }
+
+  return ltvRatio
+}
+
+/**
+ * Determine if MIP/PMI is required based on LTV ratio
+ * @param ltvRatio - LTV ratio as percentage
+ * @returns true if MIP/PMI is required (LTV > 80%)
+ */
+export function isMIPRequired(ltvRatio: number): boolean {
+  return ltvRatio > 80
+}
+
+/**
+ * Calculate standard MIP/PMI rate based on LTV
+ * @param ltvRatio - LTV ratio as percentage
+ * @returns Annual MIP/PMI rate as decimal (e.g., 0.005 for 0.5%)
+ */
+export function calculateStandardMIPRate(ltvRatio: number): number {
+  if (ltvRatio <= 80) return 0
+
+  // Standard rates based on LTV ranges
+  if (ltvRatio <= 85) return 0.005  // 0.5%
+  if (ltvRatio <= 90) return 0.0075 // 0.75%
+  if (ltvRatio <= 95) return 0.01   // 1.0%
+  return 0.0125 // 1.25% for LTV > 95%
+}
+
+/**
+ * Safe LTV calculation that returns a result object instead of throwing errors
+ * @param loanAmount - Current loan balance or loan amount
+ * @param propertyValue - Current property value
+ * @returns Object with success status, LTV ratio, and error message if applicable
+ */
+export function safeLTVCalculation(loanAmount: number | string | null | undefined, propertyValue: number | string | null | undefined): {
+  success: boolean
+  ltvRatio: number
+  error?: string
+  canCalculate: boolean
+} {
+  // Debug the calculation process
+  const debugInfo = debugLTVCalculation(loanAmount, propertyValue)
+
+  // Handle null/undefined inputs
+  if (loanAmount == null || propertyValue == null) {
+    const result = {
+      success: false,
+      ltvRatio: 0,
+      error: 'Both loan amount and property value are required',
+      canCalculate: false
+    }
+    debugLogger.log('warn', 'ltv', 'LTV calculation failed: missing inputs', { loanAmount, propertyValue, result })
+    return result
+  }
+
+  // Convert to numbers
+  const loan = Number(loanAmount)
+  const value = Number(propertyValue)
+
+  // Check for invalid numbers
+  if (isNaN(loan) || isNaN(value)) {
+    const result = {
+      success: false,
+      ltvRatio: 0,
+      error: 'Loan amount and property value must be valid numbers',
+      canCalculate: false
+    }
+    debugLogger.log('warn', 'ltv', 'LTV calculation failed: invalid numbers', { loanAmount, propertyValue, loan, value, result })
+    return result
+  }
+
+  // Check for zero or negative values
+  if (loan <= 0 || value <= 0) {
+    const result = {
+      success: false,
+      ltvRatio: 0,
+      error: 'Loan amount and property value must be positive',
+      canCalculate: false
+    }
+    debugLogger.log('warn', 'ltv', 'LTV calculation failed: non-positive values', { loan, value, result })
+    return result
+  }
+
+  try {
+    const ltvRatio = calculateLTV(loan, value)
+    const result = {
+      success: true,
+      ltvRatio,
+      canCalculate: true
+    }
+    debugLogger.log('info', 'ltv', 'LTV calculation successful', { loan, value, ltvRatio, result })
+    return result
+  } catch (error) {
+    const result = {
+      success: false,
+      ltvRatio: 0,
+      error: error instanceof Error ? error.message : 'LTV calculation failed',
+      canCalculate: false
+    }
+    debugCalculationError(error as Error, { loanAmount, propertyValue, loan, value })
+    return result
+  }
+}
+
+/**
+ * Calculate suggested monthly PMI amount based on loan amount and LTV
+ * @param loanAmount - Current loan balance
+ * @param ltvRatio - LTV ratio as percentage
+ * @returns Suggested monthly PMI amount, or 0 if not required
+ */
+export function calculateSuggestedMonthlyPMI(loanAmount: number, ltvRatio: number): number {
+  if (!isMIPRequired(ltvRatio)) return 0
+
+  const annualRate = calculateStandardMIPRate(ltvRatio)
+  return Math.round((loanAmount * annualRate) / 12)
+}
 
 export interface MortgageInput {
   principal: number

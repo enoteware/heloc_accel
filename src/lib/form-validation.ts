@@ -1,4 +1,5 @@
 import { VALIDATION_RULES } from './validation'
+import { calculateLTV, isMIPRequired } from './calculations'
 
 // React Hook Form validation rules that leverage existing validation constants
 export const FORM_VALIDATION_RULES = {
@@ -201,6 +202,50 @@ export const FORM_VALIDATION_RULES = {
         return true
       }
     }
+  },
+
+  pmiMonthly: {
+    min: {
+      value: VALIDATION_RULES.pmiMonthly.min,
+      message: `Minimum MIP/PMI is $${VALIDATION_RULES.pmiMonthly.min}`
+    },
+    max: {
+      value: VALIDATION_RULES.pmiMonthly.max,
+      message: `Maximum MIP/PMI is $${VALIDATION_RULES.pmiMonthly.max.toLocaleString()}`
+    },
+    validate: {
+      ltvBased: (value: string, formValues: any) => {
+        if (!value) return true // Optional field when not required
+
+        const pmi = parseFloat(value.replace(/[,$]/g, ''))
+        const mortgageBalance = parseFloat(formValues.currentMortgageBalance?.replace(/[,$]/g, '') || '0')
+        const propertyValue = parseFloat(formValues.propertyValue?.replace(/[,$]/g, '') || '0')
+
+        if (isNaN(pmi)) return 'Please enter a valid MIP/PMI amount'
+
+        // If we have both mortgage balance and property value, validate based on LTV
+        if (mortgageBalance > 0 && propertyValue > 0) {
+          try {
+            const ltvRatio = calculateLTV(mortgageBalance, propertyValue)
+
+            // If LTV > 80% and no PMI provided, suggest it's required
+            if (isMIPRequired(ltvRatio) && pmi === 0) {
+              return `MIP/PMI is typically required when LTV exceeds 80% (current LTV: ${ltvRatio.toFixed(1)}%)`
+            }
+
+            // If LTV <= 80% and PMI is provided, suggest it may not be needed
+            if (!isMIPRequired(ltvRatio) && pmi > 0) {
+              return `MIP/PMI may not be required when LTV is ${ltvRatio.toFixed(1)}% (≤80%)`
+            }
+          } catch (error) {
+            // LTV calculation failed, skip LTV-based validation
+            console.warn('LTV calculation failed during form validation:', error)
+          }
+        }
+
+        return true
+      }
+    }
   }
 }
 
@@ -215,7 +260,9 @@ export function getValidationHint(fieldName: string): string {
     helocInterestRate: 'HELOC interest rate as percentage (optional)',
     monthlyIncome: 'Your total monthly gross income',
     monthlyExpenses: 'All monthly expenses except mortgage payment',
-    monthlyDiscretionaryIncome: 'Income minus expenses minus mortgage payment'
+    monthlyDiscretionaryIncome: 'Income minus expenses minus mortgage payment',
+    pmiMonthly: 'Monthly MIP/PMI payment (required when LTV > 80%)',
+    propertyValue: 'Current estimated value of your property'
   }
   
   return hints[fieldName] || ''
