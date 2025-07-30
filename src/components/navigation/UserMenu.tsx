@@ -22,14 +22,6 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   const status = user ? 'authenticated' : 'unauthenticated';
   const router = useRouter();
 
-  if (status === "loading") {
-    return (
-      <div className="flex items-center space-x-2 px-3 py-2">
-        <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
-      </div>
-    );
-  }
-
   if (!session?.user) {
     return null;
   }

@@ -9,71 +9,21 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const { id: scenarioId } = await params
-    const body = await request.json()
-    const { enable } = body
-
-    // Check if scenario exists and belongs to user
-    const existingResult = await query(
-      'SELECT id, is_public, public_share_token FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, session.user.id]
-    )
-
-    if (existingResult.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Scenario not found or access denied'
-      }, { status: 404 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    const scenario = existingResult.rows[0]
-
-    if (enable) {
-      // Enable sharing - generate token if doesn't exist
-      let shareToken = scenario.public_share_token
-      
-      if (!shareToken) {
-        shareToken = randomBytes(32).toString('hex')
-      }
-
-      await query(
-        'UPDATE scenarios SET is_public = true, public_share_token = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-        [shareToken, scenarioId]
-      )
-
-      const shareUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/shared/${shareToken}`
-
-      return NextResponse.json<ApiResponse>({
-        success: true,
-        data: {
-          shareUrl,
-          shareToken,
-          isPublic: true
-        },
-        message: 'Scenario sharing enabled'
-      })
-    } else {
-      // Disable sharing
-      await query(
-        'UPDATE scenarios SET is_public = false, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
-        [scenarioId]
-      )
-
-      return NextResponse.json<ApiResponse>({
-        success: true,
-        data: {
-          isPublic: false
-        },
-        message: 'Scenario sharing disabled'
-      })
-    }
+    // In demo mode, just return success response
+    return NextResponse.json<ApiResponse>({
+      success: true,
+      message: 'Scenario sharing not available in demo mode'
+    })
 
   } catch (error) {
     console.error('Share scenario error:', error)
@@ -90,41 +40,25 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const { id: scenarioId } = await params
-
-    // Check if scenario exists and belongs to user
-    const result = await query(
-      'SELECT is_public, public_share_token FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, session.user.id]
-    )
-
-    if (result.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Scenario not found or access denied'
-      }, { status: 404 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    const scenario = result.rows[0]
-    const shareUrl = scenario.is_public && scenario.public_share_token 
-      ? `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/shared/${scenario.public_share_token}`
-      : null
-
+    // In demo mode, return demo sharing status
     return NextResponse.json<ApiResponse>({
       success: true,
       data: {
-        isPublic: scenario.is_public,
-        shareUrl,
-        shareToken: scenario.public_share_token
+        isPublic: false,
+        shareUrl: null,
+        shareToken: null
       },
-      message: 'Sharing status retrieved'
+      message: 'Demo sharing status retrieved'
     })
 
   } catch (error) {

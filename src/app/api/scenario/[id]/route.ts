@@ -9,46 +9,50 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const { id: scenarioId } = await params
-
-    const result = await query(
-      `SELECT id, name, description, current_mortgage_balance, current_interest_rate,
-              remaining_term_months, monthly_payment, heloc_limit, heloc_interest_rate,
-              heloc_available_credit, monthly_gross_income, monthly_net_income, 
-              monthly_expenses, monthly_discretionary_income, property_value, 
-              property_tax_monthly, insurance_monthly, hoa_fees_monthly,
-              traditional_payoff_months, traditional_total_interest, heloc_payoff_months,
-              heloc_total_interest, time_saved_months, interest_saved,
-              created_at, updated_at, is_public, public_share_token
-       FROM scenarios
-       WHERE id = $1 AND (user_id = $2 OR is_public = true)`,
-      [scenarioId, session.user.id]
-    )
-
-    if (result.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Scenario not found or access denied'
-      }, { status: 404 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    const scenario = {
-      ...result.rows[0],
-      created_at: result.rows[0].created_at.toISOString(),
-      updated_at: result.rows[0].updated_at.toISOString()
-    }
-
+    // In demo mode, return demo scenario data
     return NextResponse.json<ApiResponse>({
       success: true,
-      data: scenario,
-      message: 'Scenario retrieved successfully'
+      data: {
+        id: 'demo-scenario-001',
+        name: 'Demo HELOC Scenario',
+        description: 'Sample HELOC acceleration scenario for demonstration',
+        current_mortgage_balance: 250000,
+        current_interest_rate: 6.5,
+        remaining_term_months: 240,
+        monthly_payment: 1850,
+        heloc_limit: 100000,
+        heloc_interest_rate: 7.25,
+        heloc_available_credit: 100000,
+        monthly_gross_income: 8000,
+        monthly_net_income: 6000,
+        monthly_expenses: 4500,
+        monthly_discretionary_income: 1500,
+        property_value: 400000,
+        property_tax_monthly: 500,
+        insurance_monthly: 150,
+        hoa_fees_monthly: 0,
+        traditional_payoff_months: 240,
+        traditional_total_interest: 194000,
+        heloc_payoff_months: 156,
+        heloc_total_interest: 142000,
+        time_saved_months: 84,
+        interest_saved: 52000,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        is_public: false,
+        public_share_token: null
+      },
+      message: 'Demo scenario retrieved successfully'
     })
 
   } catch (error) {
@@ -66,37 +70,20 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const { id: scenarioId } = await params
-
-    // Check if scenario exists and belongs to user
-    const existingResult = await query(
-      'SELECT id FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, session.user.id]
-    )
-
-    if (existingResult.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Scenario not found or access denied'
-      }, { status: 404 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    // Delete the scenario (cascade will delete related calculation_results)
-    await query(
-      'DELETE FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, session.user.id]
-    )
-
+    // In demo mode, just return success response
     return NextResponse.json<ApiResponse>({
       success: true,
-      message: 'Scenario deleted successfully'
+      message: 'Scenario deletion not available in demo mode'
     })
 
   } catch (error) {
@@ -114,55 +101,20 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json<ApiResponse>({
         success: false,
-        error: 'Authentication required'
-      }, { status: 401 })
-    }
-    const { id: scenarioId } = await params
-    const body = await request.json()
-
-    // Check if scenario exists and belongs to user
-    const existingResult = await query(
-      'SELECT id FROM scenarios WHERE id = $1 AND user_id = $2',
-      [scenarioId, session.user.id]
-    )
-
-    if (existingResult.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Scenario not found or access denied'
-      }, { status: 404 })
+        error: 'Authentication not implemented for production mode'
+      }, { status: 501 })
     }
 
-    // Extract updatable fields
-    const { name, description, is_public } = body
-
-    // Update scenario
-    const result = await query(
-      `UPDATE scenarios 
-       SET name = COALESCE($1, name),
-           description = COALESCE($2, description),
-           is_public = COALESCE($3, is_public),
-           updated_at = CURRENT_TIMESTAMP
-       WHERE id = $4 AND user_id = $5
-       RETURNING id, name, description, updated_at`,
-      [name, description, is_public, scenarioId, session.user.id]
-    )
-
-    const updatedScenario = result.rows[0]
-
+    // In demo mode, just return success response
     return NextResponse.json<ApiResponse>({
       success: true,
-      data: {
-        id: updatedScenario.id,
-        name: updatedScenario.name,
-        description: updatedScenario.description,
-        updated_at: updatedScenario.updated_at.toISOString()
-      },
-      message: 'Scenario updated successfully'
+      message: 'Scenario update not available in demo mode'
     })
 
   } catch (error) {

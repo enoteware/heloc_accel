@@ -104,7 +104,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     className="hidden lg:flex"
                   />
                   {/* Admin link for demo mode or admin users */}
-                  {(isDemoMode || session?.user?.email === 'admin@helocaccelerator.com') && (
+                  {(isDemoMode || user?.primaryEmail === 'admin@helocaccelerator.com') && (
                     <NavigationLink
                       href="/admin"
                       label="Admin"

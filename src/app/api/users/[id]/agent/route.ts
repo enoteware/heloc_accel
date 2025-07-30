@@ -10,21 +10,20 @@ interface Params {
 // GET /api/users/[id]/agent - Get assigned agent for a user
 export async function GET(request: NextRequest, { params }: Params) {
   try {
-    const session = await auth()
-    const { id: userId } = await params
-    
-    // Users can only access their own agent assignment
-    if (!session?.user || session.user.id !== userId) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+    const { id: userId } = await params
 
     if (isDemoMode) {
       const agent = getDemoUserAgent(userId)
@@ -68,41 +67,23 @@ export async function GET(request: NextRequest, { params }: Params) {
 // POST /api/users/[id]/agent - Assign agent to user (admin only)
 export async function POST(request: NextRequest, { params }: Params) {
   try {
-    const session = await auth()
-    
-    // In production, would check for admin role
-    if (!session?.user) {
+    // TODO: Implement Stack Auth server-side authentication
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+    if (!isDemoMode) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Unauthorized'
+          error: 'Authentication not implemented for production mode'
         },
-        { status: 401 }
+        { status: 501 }
       )
     }
 
-    const { id: userId } = await params
-    const body = await request.json()
-    
-    if (!body.agentId) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Agent ID is required'
-        },
-        { status: 400 }
-      )
-    }
-
-    // In production, would save to database
+    // In demo mode, just return success response
     return NextResponse.json({
       success: true,
-      data: {
-        userId,
-        agentId: body.agentId,
-        assignmentType: body.assignmentType || 'primary',
-        assignedAt: new Date()
-      }
+      message: 'Agent assignment not available in demo mode'
     })
   } catch (error) {
     console.error('Error assigning agent:', error)
