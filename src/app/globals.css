@@ -106,6 +106,15 @@ body:not(.dark) textarea:not(:placeholder-shown) {
   -webkit-text-fill-color: rgb(17 24 39) !important;
 }
 
+/* Override for blue-gray text specifically in save scenario modal */
+body:not(.dark) .text-blue-gray-700,
+body:not(.dark) .\\!text-blue-gray-700,
+body:not(.dark) input.\\!text-blue-gray-700,
+body:not(.dark) textarea.\\!text-blue-gray-700 {
+  color: rgb(55 65 81) !important;
+  -webkit-text-fill-color: rgb(55 65 81) !important;
+}
+
 /* Dot pattern backgrounds for Hero Highlight */
 .bg-dot-thick-neutral-300 {
   background-image: radial-gradient(circle, rgb(212 212 212) 1px, transparent 1px);
