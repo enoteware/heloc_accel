@@ -85,7 +85,7 @@ export default function SaveScenarioModal({
       size="md"
     >
       <div className="space-y-6">
-        <div className="text-sm text-blue-gray-600">
+        <div className="text-sm text-gray-700">
           Save your calculation results as a scenario for future reference and comparison.
         </div>
 
