@@ -6,22 +6,39 @@ import { routing } from './i18n/routing'
 // Create the internationalization middleware
 const intlMiddleware = createMiddleware(routing)
 
+// Helper function to get locale from pathname or default
+function getLocaleFromPathname(pathname: string): string {
+  const segments = pathname.split('/')
+  const potentialLocale = segments[1]
+
+  if (routing.locales.includes(potentialLocale as any)) {
+    return potentialLocale
+  }
+
+  return routing.defaultLocale
+}
+
+// Helper function to create locale-aware URLs
+function createLocaleAwareUrl(path: string, req: any): URL {
+  const locale = getLocaleFromPathname(req.nextUrl.pathname)
+  const localizedPath = `/${locale}${path}`
+  return new URL(localizedPath, req.url)
+}
+
 export default auth((req) => {
   const token = req.auth
   const isAdminPath = req.nextUrl.pathname.startsWith('/admin')
   const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-
-  // Prevent redirect loops by checking if we're already on the target path
-  const url = req.nextUrl.clone()
+  const pathname = req.nextUrl.pathname
 
   // Check admin access
   if (isAdminPath) {
     // In demo mode, any authenticated user can access admin
     if (isDemoMode) {
       if (!token) {
-        const loginUrl = new URL('/login', req.url)
+        const loginUrl = createLocaleAwareUrl('/login', req)
         // Prevent redirect loop
-        if (req.nextUrl.pathname !== '/login') {
+        if (!pathname.includes('/login')) {
           return NextResponse.redirect(loginUrl)
         }
       }
@@ -32,9 +49,9 @@ export default auth((req) => {
                      (token as any)?.isAdmin === true
 
       if (!isAdmin) {
-        const dashboardUrl = new URL('/dashboard', req.url)
+        const dashboardUrl = createLocaleAwareUrl('/dashboard', req)
         // Prevent redirect loop
-        if (req.nextUrl.pathname !== '/dashboard') {
+        if (!pathname.includes('/dashboard')) {
           return NextResponse.redirect(dashboardUrl)
         }
       }

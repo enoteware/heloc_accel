@@ -121,5 +121,28 @@
     "completed": "Completado",
     "failed": "Falló",
     "processing": "Procesando"
+  },
+  "auth": {
+    "signInTitle": "Inicia sesión en tu cuenta",
+    "signUpTitle": "Crear una nueva cuenta",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "signInButton": "Iniciar Sesión",
+    "signUpButton": "Registrarse",
+    "signInWithDemo": "Usar Cuenta Demo",
+    "orSignUp": "O crear una nueva cuenta",
+    "orSignIn": "O iniciar sesión en cuenta existente",
+    "backToHome": "← Volver al inicio",
+    "skipLogin": "Saltar Login - Ir a Calculadora →",
+    "enterEmail": "Ingresa tu correo electrónico",
+    "enterPassword": "Ingresa tu contraseña",
+    "loading": "Cargando...",
+    "signingIn": "Iniciando sesión...",
+    "errors": {
+      "invalidCredentials": "Correo electrónico o contraseña inválidos. Por favor intenta de nuevo.",
+      "unexpectedError": "Ocurrió un error inesperado. Por favor intenta de nuevo.",
+      "signInError": "Ocurrió un error durante el inicio de sesión. Por favor intenta de nuevo.",
+      "missingCredentials": "El correo electrónico y la contraseña son requeridos"
+    }
   }
 }

@@ -18,7 +18,15 @@ export const routing = defineRouting({
     '/calculator': '/calculator',
     '/scenarios': '/scenarios',
     '/reports': '/reports',
-    '/dashboard': '/dashboard'
+    '/dashboard': '/dashboard',
+    '/profile': '/profile',
+    '/compare': '/compare',
+    '/formulas': '/formulas',
+    '/style-guide': '/style-guide',
+    '/admin': '/admin',
+    '/login': '/login',
+    '/auth/signin': '/auth/signin',
+    '/auth/signup': '/auth/signup'
   }
 });
 

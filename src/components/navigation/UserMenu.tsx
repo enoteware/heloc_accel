@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { Dropdown, DropdownItem } from '@/components/design-system';
 import NavigationIcon from './NavigationIcon';
 import { cn } from '@/lib/utils';

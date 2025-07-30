@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import NavigationLink from './NavigationLink';
 import NavigationIcon from './NavigationIcon';

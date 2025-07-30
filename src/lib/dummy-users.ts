@@ -10,18 +10,19 @@ export interface DummyUser {
   lastName: string
 }
 
+// These users match the DEMO_USERS defined in src/auth.ts for consistency
 export const DUMMY_USERS: DummyUser[] = [
   {
     id: 'demo-user-001',
-    email: 'demo@helocaccel.com',
-    password: 'DemoUser123!',
+    email: 'demo@example.com',
+    password: 'demo123',
     name: 'Demo User',
     firstName: 'Demo',
     lastName: 'User'
   },
   {
     id: 'demo-user-002',
-    email: 'john.smith@example.com',
+    email: 'john@example.com',
     password: 'password123',
     name: 'John Smith',
     firstName: 'John',
@@ -29,27 +30,11 @@ export const DUMMY_USERS: DummyUser[] = [
   },
   {
     id: 'demo-user-003',
-    email: 'sarah.johnson@example.com',
+    email: 'jane@example.com',
     password: 'password123',
-    name: 'Sarah Johnson',
-    firstName: 'Sarah',
-    lastName: 'Johnson'
-  },
-  {
-    id: 'demo-user-004',
-    email: 'mike.davis@example.com',
-    password: 'password123',
-    name: 'Mike Davis',
-    firstName: 'Mike',
-    lastName: 'Davis'
-  },
-  {
-    id: 'demo-user-005',
-    email: 'lisa.wilson@example.com',
-    password: 'password123',
-    name: 'Lisa Wilson',
-    firstName: 'Lisa',
-    lastName: 'Wilson'
+    name: 'Jane Doe',
+    firstName: 'Jane',
+    lastName: 'Doe'
   }
 ]
 

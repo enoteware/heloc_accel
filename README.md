@@ -83,11 +83,11 @@ The application includes a comprehensive demo mode (enabled by default) that all
 
 ### Demo Accounts
 When in demo mode, you can use these pre-configured accounts:
-- **Primary**: demo@helocaccel.com / DemoUser123!
-- **John Smith**: john.smith@example.com / password123
-- **Sarah Johnson**: sarah.johnson@example.com / password123
-- **Mike Davis**: mike.davis@example.com / password123
-- **Lisa Wilson**: lisa.wilson@example.com / password123
+- **Primary**: demo@example.com / demo123
+- **John Smith**: john@example.com / password123
+- **Jane Doe**: jane@example.com / password123
+
+**Note**: These accounts match the actual authentication system and will work for login.
 
 ### Calculator Features
 1. **Input Your Data**: Enter mortgage details, income, and expenses

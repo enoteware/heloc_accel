@@ -115,5 +115,28 @@
     "completed": "Completed",
     "failed": "Failed",
     "processing": "Processing"
+  },
+  "auth": {
+    "signInTitle": "Sign in to your account",
+    "signUpTitle": "Create a new account",
+    "email": "Email address",
+    "password": "Password",
+    "signInButton": "Sign In",
+    "signUpButton": "Sign Up",
+    "signInWithDemo": "Use Demo Account",
+    "orSignUp": "Or create a new account",
+    "orSignIn": "Or sign in to existing account",
+    "backToHome": "← Back to home",
+    "skipLogin": "Skip Login - Go to Calculator →",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "loading": "Loading...",
+    "signingIn": "Signing in...",
+    "errors": {
+      "invalidCredentials": "Invalid email or password. Please try again.",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "signInError": "An error occurred during sign in. Please try again.",
+      "missingCredentials": "Email and password are required"
+    }
   }
 }
