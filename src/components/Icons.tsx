@@ -19,12 +19,24 @@ import {
   X,
   ChevronRight,
   ChevronDown,
+  ChevronUp,
   Plus,
   Minus,
   RefreshCw,
   FileText,
   CreditCard,
   Building,
+  Table,
+  Eye,
+  EyeOff,
+  Download,
+  Star,
+  GitBranch,
+  ArrowDown,
+  ArrowRight,
+  ArrowLeft,
+  MoreHorizontal,
+  TrendingDown,
   type LucideIcon,
   type LucideProps,
 } from 'lucide-react';
@@ -36,9 +48,11 @@ export type IconName =
   | 'calendar'
   | 'home'
   | 'trending-up'
+  | 'trending-down'
   | 'chart'
   | 'alert'
   | 'check'
+  | 'check-circle'
   | 'x-circle'
   | 'info'
   | 'save'
@@ -51,12 +65,23 @@ export type IconName =
   | 'x'
   | 'chevron-right'
   | 'chevron-down'
+  | 'chevron-up'
   | 'plus'
   | 'minus'
   | 'refresh'
   | 'file-text'
   | 'credit-card'
-  | 'building';
+  | 'building'
+  | 'table'
+  | 'eye'
+  | 'eye-off'
+  | 'download'
+  | 'star'
+  | 'git-branch'
+  | 'arrow-down'
+  | 'arrow-right'
+  | 'arrow-left'
+  | 'more-horizontal';
 
 const iconMap: Record<IconName, LucideIcon> = {
   'calculator': Calculator,
@@ -64,9 +89,11 @@ const iconMap: Record<IconName, LucideIcon> = {
   'calendar': Calendar,
   'home': Home,
   'trending-up': TrendingUp,
+  'trending-down': TrendingDown,
   'chart': ChartLine,
   'alert': AlertCircle,
   'check': CheckCircle,
+  'check-circle': CheckCircle,
   'x-circle': XCircle,
   'info': Info,
   'save': Save,
@@ -79,12 +106,23 @@ const iconMap: Record<IconName, LucideIcon> = {
   'x': X,
   'chevron-right': ChevronRight,
   'chevron-down': ChevronDown,
+  'chevron-up': ChevronUp,
   'plus': Plus,
   'minus': Minus,
   'refresh': RefreshCw,
   'file-text': FileText,
   'credit-card': CreditCard,
   'building': Building,
+  'table': Table,
+  'eye': Eye,
+  'eye-off': EyeOff,
+  'download': Download,
+  'star': Star,
+  'git-branch': GitBranch,
+  'arrow-down': ArrowDown,
+  'arrow-right': ArrowRight,
+  'arrow-left': ArrowLeft,
+  'more-horizontal': MoreHorizontal,
 };
 
 export interface IconProps extends Omit<LucideProps, 'ref'> {

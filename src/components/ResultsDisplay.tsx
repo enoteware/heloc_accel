@@ -12,6 +12,11 @@ import InputSummary from './InputSummary'
 import { useCompany } from '@/contexts/CompanyContext'
 import { useTranslations, useLocale } from 'next-intl'
 import PexelsImage from './PexelsImage'
+import AmortizationTable from './AmortizationTable'
+import { PaymentBadge, FlowIndicator } from './HighlightComponents'
+import PaymentFlowDiagram from './PaymentFlowDiagram'
+import ComparisonHighlight from './ComparisonHighlight'
+import FullAmortizationTable from './FullAmortizationTable'
 
 interface CalculationResults {
   traditional: {
@@ -54,6 +59,9 @@ interface ResultsDisplayProps {
 }
 
 export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewCalculation }: ResultsDisplayProps) {
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
   const { triggerConfetti } = useConfetti()
   const { companySettings, assignedAgent } = useCompany()
   const tResults = useTranslations('results')
@@ -98,7 +106,15 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Time Saved Card */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 relative overflow-hidden">
+          <div className="absolute top-2 right-2">
+            <PaymentBadge 
+              amount="HELOC" 
+              type="heloc" 
+              showIcon={false}
+              className="text-xs"
+            />
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-green-600">{tResults('timeSaved')}</p>
@@ -240,6 +256,65 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
           </div>
         </div>
       </div>
+
+      {/* Enhanced Comparison with Highlighting */}
+      <ComparisonHighlight
+        data={{
+          traditional: {
+            monthlyPayment: results.traditional.monthlyPayment,
+            totalInterest: results.traditional.totalInterest,
+            payoffMonths: results.traditional.payoffMonths,
+            totalPayments: results.traditional.totalPayments
+          },
+          heloc: {
+            avgMonthlyPayment: results.heloc.schedule.length > 0
+              ? results.heloc.schedule.reduce((sum, p) => sum + p.totalMonthlyPayment, 0) / results.heloc.schedule.length
+              : 0,
+            totalInterest: results.heloc.totalInterest,
+            payoffMonths: results.heloc.payoffMonths,
+            maxHelocUsed: results.heloc.maxHelocUsed
+          },
+          savings: {
+            timeSavedMonths: results.comparison.timeSavedMonths,
+            interestSaved: results.comparison.interestSaved,
+            percentageSaved: results.comparison.percentageInterestSaved
+          }
+        }}
+      />
+
+      {/* Payment Flow Diagram */}
+      {inputs && (
+        <PaymentFlowDiagram
+          monthlyIncome={inputs.monthlyNetIncome}
+          monthlyExpenses={inputs.monthlyExpenses}
+          discretionaryIncome={inputs.monthlyDiscretionaryIncome}
+          mortgagePayment={results.traditional.monthlyPayment}
+          helocBalance={results.heloc.averageHelocBalance}
+          extraPayment={results.heloc.schedule[0]?.discretionaryUsed || 0}
+        />
+      )}
+
+      {/* Detailed Amortization Schedule with Highlighting */}
+      <AmortizationTable 
+        schedule={results.heloc.schedule}
+        showHighlights={true}
+      />
+
+      {/* Full Excel-Style Amortization Table */}
+      {inputs && (
+        <FullAmortizationTable
+          schedule={results.heloc.schedule}
+          inputs={{
+            propertyValue: inputs.propertyValue || 0,
+            monthlyNetIncome: inputs.monthlyNetIncome,
+            monthlyExpenses: inputs.monthlyExpenses,
+            discretionaryIncome: inputs.monthlyDiscretionaryIncome,
+            helocLimit: inputs.helocLimit || 0,
+            helocRate: inputs.helocInterestRate || 0,
+            pmiMonthly: inputs.pmiMonthly
+          }}
+        />
+      )}
 
       {/* Monthly HELOC Payment Strategy */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -405,11 +480,59 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         {onSaveScenario && (
           <button
-            onClick={onSaveScenario}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+            onClick={async () => {
+              setIsSaving(true)
+              setSaveError(null)
+              setSaveSuccess(false)
+              
+              try {
+                const response = await fetch('/api/scenarios', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    inputs,
+                    results
+                  }),
+                })
+                
+                if (!response.ok) {
+                  const error = await response.json()
+                  throw new Error(error.error || 'Failed to save scenario')
+                }
+                
+                setSaveSuccess(true)
+                triggerConfetti({ type: 'success' })
+                
+                // Call the parent callback if provided
+                if (onSaveScenario) {
+                  onSaveScenario()
+                }
+                
+                // Clear success message after 3 seconds
+                setTimeout(() => setSaveSuccess(false), 3000)
+              } catch (error) {
+                console.error('Error saving scenario:', error)
+                setSaveError(error instanceof Error ? error.message : 'Failed to save scenario')
+              } finally {
+                setIsSaving(false)
+              }
+            }}
+            disabled={isSaving}
+            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
           >
-            <Icon name="save" size="sm" />
-            <span>Save Scenario</span>
+            {isSaving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Icon name="save" size="sm" />
+                <span>Save Scenario</span>
+              </>
+            )}
           </button>
         )}
 
@@ -567,6 +690,29 @@ export default function ResultsDisplay({ results, inputs, onSaveScenario, onNewC
           </div>
         </div>
       </div>
+
+      {/* Success/Error Messages for Save */}
+      {(saveSuccess || saveError) && (
+        <div className="fixed bottom-4 right-4 z-50 max-w-md">
+          {saveSuccess && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg">
+              <div className="flex items-center">
+                <Icon name="check-circle" size="sm" className="text-green-600 mr-2" />
+                <p className="text-green-800 font-medium">Scenario saved successfully!</p>
+              </div>
+            </div>
+          )}
+          
+          {saveError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 shadow-lg">
+              <div className="flex items-center">
+                <Icon name="x-circle" size="sm" className="text-red-600 mr-2" />
+                <p className="text-red-800">{saveError}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   )

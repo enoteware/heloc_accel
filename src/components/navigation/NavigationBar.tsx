@@ -98,6 +98,11 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     icon="dashboard"
                   />
                   <NavigationLink
+                    href="/scenarios"
+                    label="Scenarios"
+                    icon="save"
+                  />
+                  <NavigationLink
                     href="/compare"
                     label="Compare"
                     icon="compare"

@@ -31,7 +31,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       {label && (
         <label className={cn(
           'block text-body-sm font-medium mb-1',
-          hasError ? 'text-red-700 dark:text-red-400' : 'text-neutral-700 dark:text-neutral-300',
+          hasError ? 'text-red-700 dark:text-red-400' : 'text-blue-gray-700 dark:text-blue-gray-300',
           labelClassName
         )}>
           {label}
@@ -86,7 +86,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
   return (
     <fieldset className={cn('space-y-4', className)}>
       {title && (
-        <legend className="text-h5 font-semibold text-neutral-900 dark:text-neutral-100">
+        <legend className="text-h5 font-semibold text-blue-gray-800 dark:text-blue-gray-100">
           {title}
         </legend>
       )}
@@ -120,7 +120,7 @@ export const FormSection: React.FC<FormSectionProps> = ({
       {(title || description) && (
         <div className="border-b border-neutral-200 dark:border-neutral-700 pb-4">
           {title && (
-            <h3 className="text-h4 font-semibold text-neutral-900 dark:text-neutral-100">
+            <h3 className="text-h4 font-semibold text-blue-gray-800 dark:text-blue-gray-100">
               {title}
             </h3>
           )}

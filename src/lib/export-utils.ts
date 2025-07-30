@@ -173,6 +173,84 @@ export function parseCSV(csvText: string): Record<string, any>[] {
 }
 
 /**
+ * Format amortization data for export
+ */
+export function formatAmortizationForExport(
+  schedule: any[],
+  inputs: any
+): { data: Record<string, any>[], headers: string[] } {
+  const headers = [
+    'Month',
+    'Beginning Balance',
+    'Monthly Payment',
+    'Principal Payment',
+    'Interest Payment',
+    'Monthly Deposit',
+    'Monthly Expenses',
+    'Net Surplus',
+    'Usable HELOC Room',
+    'Extra Payment to Mortgage',
+    'Net Change in HELOC',
+    'HELOC Balance',
+    'HELOC Interest',
+    'PMI Cost',
+    'LTV %',
+    'Cumulative Interest',
+    'Cumulative Principal',
+    'Total Interest Paid'
+  ]
+  
+  const data = schedule.map((payment, index) => {
+    const ltvRatio = inputs.propertyValue > 0 
+      ? ((payment.beginningBalance / inputs.propertyValue) * 100)
+      : 0
+    
+    const pmiCost = ltvRatio > 80 ? (inputs.pmiMonthly || 0) : 0
+    const netSurplus = inputs.monthlyNetIncome - inputs.monthlyExpenses - payment.paymentAmount - pmiCost
+    const usableHelocRoom = Math.max(0, inputs.helocLimit - payment.helocBalance)
+    const extraPayment = payment.discretionaryUsed || 0
+    const previousHeloc = index > 0 ? schedule[index - 1].helocBalance : 0
+    const netChangeHeloc = payment.helocBalance - previousHeloc
+    
+    return {
+      'Month': payment.month,
+      'Beginning Balance': payment.beginningBalance.toFixed(2),
+      'Monthly Payment': payment.paymentAmount.toFixed(2),
+      'Principal Payment': payment.principalPayment.toFixed(2),
+      'Interest Payment': payment.interestPayment.toFixed(2),
+      'Monthly Deposit': inputs.monthlyNetIncome.toFixed(2),
+      'Monthly Expenses': inputs.monthlyExpenses.toFixed(2),
+      'Net Surplus': netSurplus.toFixed(2),
+      'Usable HELOC Room': usableHelocRoom.toFixed(2),
+      'Extra Payment to Mortgage': extraPayment.toFixed(2),
+      'Net Change in HELOC': netChangeHeloc.toFixed(2),
+      'HELOC Balance': payment.helocBalance.toFixed(2),
+      'HELOC Interest': payment.helocInterest.toFixed(2),
+      'PMI Cost': pmiCost.toFixed(2),
+      'LTV %': ltvRatio.toFixed(2),
+      'Cumulative Interest': payment.cumulativeInterest.toFixed(2),
+      'Cumulative Principal': payment.cumulativePrincipal.toFixed(2),
+      'Total Interest Paid': payment.cumulativeInterest.toFixed(2)
+    }
+  })
+  
+  return { data, headers }
+}
+
+/**
+ * Export amortization schedule to CSV
+ */
+export function exportAmortizationToCSV(schedule: any[], inputs: any, filename?: string) {
+  const { data } = formatAmortizationForExport(schedule, inputs)
+  
+  // Convert to CSV using existing function
+  const csv = arrayToCSV(data)
+  
+  const defaultFilename = `heloc-amortization-${new Date().toISOString().split('T')[0]}.csv`
+  downloadCSV(filename || defaultFilename, csv)
+}
+
+/**
  * Import agents from CSV file
  */
 export async function importAgentsFromCSV(file: File): Promise<Partial<Agent>[]> {
