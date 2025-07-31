@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import NavigationLink from './NavigationLink';
 import NavigationIcon from './NavigationIcon';
 import { signOutAction } from '@/app/actions/auth';
+import SimpleLanguageSwitcher from '@/components/SimpleLanguageSwitcher';
 
 export interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -134,19 +135,22 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           <h2 className="text-h6 font-semibold text-neutral-900 dark:text-neutral-100">
             Navigation
           </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className={cn(
-              'p-2 rounded-lg text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100',
-              'dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-neutral-800',
-              'focus:outline-none focus:ring-2 focus:ring-primary-500',
-              'transition-colors duration-200'
-            )}
-            aria-label="Close navigation menu"
-          >
-            <NavigationIcon name="close" size="md" aria-hidden={true} />
-          </button>
+          <div className="flex items-center space-x-2">
+            <SimpleLanguageSwitcher />
+            <button
+              type="button"
+              onClick={onClose}
+              className={cn(
+                'p-2 rounded-lg text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100',
+                'dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-neutral-800',
+                'focus:outline-none focus:ring-2 focus:ring-primary-500',
+                'transition-colors duration-200'
+              )}
+              aria-label="Close navigation menu"
+            >
+              <NavigationIcon name="close" size="md" aria-hidden={true} />
+            </button>
+          </div>
         </div>
 
         {/* User info (if authenticated) */}
@@ -201,6 +205,13 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 onClick={handleLinkClick}
               />
               <NavigationLink
+                href="/scenarios"
+                label="Scenarios"
+                icon="save"
+                className="w-full justify-start"
+                onClick={handleLinkClick}
+              />
+              <NavigationLink
                 href="/compare"
                 label="Compare"
                 icon="compare"
@@ -215,24 +226,6 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 onClick={handleLinkClick}
               />
             </>
-          )}
-
-          <NavigationLink
-            href="/formulas"
-            label="Formulas"
-            icon="formulas"
-            className="w-full justify-start"
-            onClick={handleLinkClick}
-          />
-
-          {process.env.NODE_ENV === 'development' && (
-            <NavigationLink
-              href="/style-guide"
-              label="Style Guide"
-              icon="styleGuide"
-              className="w-full justify-start"
-              onClick={handleLinkClick}
-            />
           )}
         </nav>
 
@@ -254,9 +247,9 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             </button>
           ) : (
             <NavigationLink
-              href="/login"
+              href="/handler/sign-in"
               label="Sign In"
-              icon="user"
+              icon="login"
               className="w-full justify-start bg-primary-500 text-white hover:bg-primary-600"
               onClick={handleLinkClick}
             />

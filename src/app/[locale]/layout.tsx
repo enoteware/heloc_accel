@@ -15,6 +15,7 @@ import DebugInfo from '@/components/DebugInfo'
 import LiveDebugLogger from '@/components/LiveDebugLogger'
 import { StackProvider, StackTheme } from "@stackframe/stack"
 import { stackServerApp } from "@/stack"
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -58,12 +59,10 @@ export default async function LocaleLayout({
                 <CompanyProvider>
                   <NavigationProvider>
                     <NavigationBar />
-                    <div className="fixed top-4 right-4 z-50">
-                      <SimpleLanguageSwitcher />
-                    </div>
                     <main className="min-h-screen">
                       {children}
                     </main>
+                    <Footer />
                     <DebugInfo />
                     {/* <LiveDebugLogger /> */}
                   </NavigationProvider>

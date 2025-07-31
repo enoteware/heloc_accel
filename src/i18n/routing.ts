@@ -26,7 +26,12 @@ export const routing = defineRouting({
     '/admin': '/admin',
     '/login': '/login',
     '/auth/signin': '/auth/signin',
-    '/auth/signup': '/auth/signup'
+    '/auth/signup': '/auth/signup',
+    '/handler/sign-in': '/handler/sign-in',
+    '/handler/sign-up': '/handler/sign-up',
+    '/handler/[...stack]': '/handler/[...stack]',
+    '/sign-out': '/sign-out',
+    '/demo-setup': '/demo-setup'
   }
 });
 

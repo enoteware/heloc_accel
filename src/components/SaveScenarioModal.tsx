@@ -50,12 +50,24 @@ export default function SaveScenarioModal({
       onClose()
     } catch (error) {
       console.error('❌ Save failed:', error)
+      console.error('Full error details:', {
+        name: error instanceof Error ? error.name : 'Unknown',
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      })
+      
       if (error instanceof Error && error.message.includes('already exists')) {
         console.log('Error type: Duplicate scenario name')
         setNameError('A scenario with this name already exists')
+      } else if (error instanceof Error && error.message.includes('Unauthorized')) {
+        console.log('Error type: Authentication error')
+        setNameError('You must be logged in to save scenarios. Please sign in and try again.')
+      } else if (error instanceof Error && error.message.includes('Authentication')) {
+        console.log('Error type: Authentication error')
+        setNameError('Authentication error. Please sign in again.')
       } else {
         console.log('Error type: Generic save failure')
-        setNameError('Failed to save scenario. Please try again.')
+        setNameError(`Failed to save scenario: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
   }
@@ -101,6 +113,7 @@ export default function SaveScenarioModal({
           disabled={isLoading}
           error={nameError}
           aria-describedby={nameError ? 'scenario-name-error' : undefined}
+          className="!bg-white !text-black dark:!bg-white dark:!text-black"
         />
 
         <FormField

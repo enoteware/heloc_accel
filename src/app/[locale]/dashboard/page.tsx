@@ -4,10 +4,11 @@ import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { useUser } from '@stackframe/stack'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getDemoScenarios, deleteDemoScenario, updateDemoScenario, generateSampleScenarios, clearDemoScenarios, getStorageInfo } from '@/lib/demo-storage'
 import { FirstConfirmationModal, SecondConfirmationModal, SuccessModal } from '@/components/ConfirmationModals'
 import { Modal, ModalBody, ModalFooter } from '@/components/design-system/Modal'
 import { Button } from '@/components/design-system/Button'
+import { logInfo, logError, logDebug } from '@/lib/debug-logger'
+import DebugLogViewer from '@/components/DebugLogViewer'
 
 // Lazy load heavy components
 const PayoffChart = lazy(() => import('@/components/PayoffChart'))
@@ -27,8 +28,6 @@ interface Scenario {
 
 export default function Dashboard() {
   const user = useUser()
-  const session = user ? { user: { email: user.primaryEmail, name: user.displayName, id: user.id } } : null
-  const status = user === undefined ? 'loading' : user ? 'authenticated' : 'unauthenticated'
   const router = useRouter()
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [loading, setLoading] = useState(true)
@@ -37,119 +36,66 @@ export default function Dashboard() {
   const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null)
   const [shareUrl, setShareUrl] = useState<string>('')
   const [sharingLoading, setSharingLoading] = useState(false)
-  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([])
-
-  // Demo data clearing modal states
-  const [showFirstConfirmation, setShowFirstConfirmation] = useState(false)
-  const [showSecondConfirmation, setShowSecondConfirmation] = useState(false)
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [clearingData, setClearingData] = useState(false)
+  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
 
   // Individual scenario deletion modal states
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [scenarioToDelete, setScenarioToDelete] = useState<string | null>(null)
   const [deletingScenario, setDeletingScenario] = useState(false)
 
-  // Storage availability state
-  const [storageInfo, setStorageInfo] = useState<{ used: number; available: boolean; error?: string } | null>(null)
-
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-
-  // Get user ID for demo storage (use user email hash or fallback to demo user)
-  const getUserId = useCallback(() => {
-    if (isDemoMode) {
-      if (user?.primaryEmail) {
-        // Create consistent user ID from email
-        const emailHash = user.primaryEmail.toLowerCase().replace(/[^a-z0-9]/g, '')
-        return `demo-user-${emailHash.slice(0, 8)}`
-      }
-      return 'demo-user-default'
-    }
-    return user?.id || user?.primaryEmail
-  }, [isDemoMode, user?.primaryEmail, user?.id])
-
-  // Initialize demo data if in demo mode
+  // Redirect to login if not authenticated
   useEffect(() => {
-    if (isDemoMode) {
-      const userId = getUserId()
-      // Check storage availability
-      const info = getStorageInfo(userId || 'demo-user-default')
-      setStorageInfo(info)
-
-      if (info.available) {
-        generateSampleScenarios(userId || 'demo-user-default')
-        loadScenarios()
-      } else {
-        setError(info.error || 'localStorage is not available')
-      }
-    }
-  }, [isDemoMode]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Redirect to login if not authenticated (unless in demo mode)
-  useEffect(() => {
-    if (isDemoMode) return // Skip auth check in demo mode
     if (user === undefined) return // Still loading
     if (!user) {
-      router.push('/login?callbackUrl=/dashboard')
+      router.push('/handler/sign-in?callbackUrl=/dashboard')
     }
-  }, [user, router, isDemoMode])
+  }, [user, router])
 
   const loadScenarios = useCallback(async () => {
     try {
       setLoading(true)
+      logInfo('Dashboard', 'Loading scenarios from API')
+      
+      // Load from API
+      const response = await fetch('/api/scenarios', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include' // Include cookies for authentication
+      })
 
-      if (isDemoMode) {
-        // Load from localStorage in demo mode
-        const userId = getUserId()
-        const demoScenarios = getDemoScenarios(userId || 'demo-user-default')
-        // Convert demo scenarios to dashboard format
-        const formattedScenarios = demoScenarios.map(scenario => ({
-          id: scenario.id,
-          name: scenario.name,
-          description: scenario.description,
-          created_at: scenario.createdAt,
-          updated_at: scenario.updatedAt,
-          traditional_payoff_months: scenario.traditionalPayoffMonths,
-          heloc_payoff_months: scenario.helocPayoffMonths,
-          interest_saved: scenario.interestSaved,
-          is_public: scenario.isPublic,
-          public_share_token: scenario.publicShareToken
-        }))
-        setScenarios(formattedScenarios)
+      logInfo('Dashboard', `API Response status: ${response.status}`)
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        logError('Dashboard', 'API Error', errorData)
+        throw new Error(errorData.error || `Failed to load scenarios: ${response.status}`)
+      }
+
+      const data = await response.json()
+      logDebug('Dashboard', 'API Response data', data)
+      
+      if (data.scenarios) {
+        logInfo('Dashboard', `Loaded ${data.scenarios.length} scenarios`)
+        setScenarios(data.scenarios)
       } else {
-        // Load from API in normal mode
-        const response = await fetch('/api/scenario', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to load scenarios')
-        }
-
-        const data = await response.json()
-        if (data.success) {
-          setScenarios(data.data)
-        } else {
-          throw new Error(data.error || 'Failed to load scenarios')
-        }
+        throw new Error(data.error || 'Failed to load scenarios')
       }
     } catch (err) {
-      console.error('Error loading scenarios:', err)
+      logError('Dashboard', 'Error loading scenarios', err)
       setError('Failed to load scenarios')
     } finally {
       setLoading(false)
     }
-  }, [isDemoMode, getUserId])
+  }, [])
 
   // Load user scenarios
   useEffect(() => {
-    if (isDemoMode || session) {
+    if (user) {
       loadScenarios()
     }
-  }, [session, isDemoMode, loadScenarios])
+  }, [user, loadScenarios])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -193,22 +139,14 @@ export default function Dashboard() {
     try {
       setDeletingScenario(true)
 
-      if (isDemoMode) {
-        // Delete from localStorage in demo mode
-        const userId = getUserId()
-        const success = deleteDemoScenario(scenarioToDelete, userId || 'demo-user-default')
-        if (!success) {
-          throw new Error('Scenario not found')
-        }
-      } else {
-        // Delete via API in normal mode
-        const response = await fetch(`/heloc/api/scenario/${scenarioToDelete}`, {
-          method: 'DELETE',
-        })
+      // Delete via API
+      const response = await fetch(`/api/scenarios/${scenarioToDelete}`, {
+        method: 'DELETE',
+        credentials: 'include' // Include cookies for authentication
+      })
 
-        if (!response.ok) {
-          throw new Error('Failed to delete scenario')
-        }
+      if (!response.ok) {
+        throw new Error('Failed to delete scenario')
       }
 
       // Remove from local state
@@ -266,12 +204,13 @@ export default function Dashboard() {
   const toggleScenarioSharing = async (scenarioId: string, enable: boolean) => {
     try {
       setSharingLoading(true)
-      const response = await fetch(`/heloc/api/scenario/${scenarioId}/share`, {
+      const response = await fetch(`/api/scenario/${scenarioId}/share`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ enable })
+        body: JSON.stringify({ enable }),
+        credentials: 'include' // Include cookies for authentication
       })
 
       if (!response.ok) {
@@ -342,63 +281,7 @@ export default function Dashboard() {
     }
   }
 
-  // Clear all demo data handlers
-  const handleClearAllDataClick = () => {
-    setShowFirstConfirmation(true)
-  }
-
-  const handleFirstConfirmationProceed = () => {
-    setShowFirstConfirmation(false)
-    setShowSecondConfirmation(true)
-  }
-
-  const handleFirstConfirmationCancel = () => {
-    setShowFirstConfirmation(false)
-  }
-
-  const handleSecondConfirmationProceed = async () => {
-    try {
-      setClearingData(true)
-
-      // Clear all demo scenarios
-      const userId = getUserId()
-      clearDemoScenarios(userId || 'demo-user-default')
-
-      // Update local state
-      setScenarios([])
-      setSelectedForComparison([])
-
-      // Close second confirmation and show success
-      setShowSecondConfirmation(false)
-      setShowSuccessModal(true)
-    } catch (err) {
-      console.error('Error clearing demo data:', err)
-      const errorMessage = err instanceof Error ? err.message : 'Failed to clear demo data'
-      setError(errorMessage)
-
-      // Close the modal on error
-      setShowSecondConfirmation(false)
-    } finally {
-      setClearingData(false)
-    }
-  }
-
-  const handleSecondConfirmationCancel = () => {
-    setShowSecondConfirmation(false)
-  }
-
-  const handleSuccessModalClose = () => {
-    setShowSuccessModal(false)
-  }
-
-  const handleRegenerateSampleData = () => {
-    const userId = getUserId()
-    generateSampleScenarios(userId || 'demo-user-default')
-    loadScenarios()
-    setShowSuccessModal(false)
-  }
-
-  if (!isDemoMode && status === 'loading') {
+  if (user === undefined) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
@@ -409,7 +292,7 @@ export default function Dashboard() {
     )
   }
 
-  if (!isDemoMode && !session && status !== 'loading') {
+  if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
@@ -423,52 +306,13 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Demo Mode Banner */}
-        {isDemoMode && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 mb-8">
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="ml-4 flex-1">
-                <h3 className="text-lg font-semibold text-green-800 mb-2">Demo Mode Dashboard</h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm text-green-700">
-                  <div>
-                    <p className="font-medium mb-1">✅ Features Available:</p>
-                    <ul className="space-y-1 text-xs">
-                      <li>• Save & manage scenarios locally</li>
-                      <li>• Edit and delete scenarios</li>
-                      <li>• Compare multiple scenarios</li>
-                      <li>• Export and share results</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="font-medium mb-1">💡 Demo Info:</p>
-                    <ul className="space-y-1 text-xs">
-                      <li>• Data persists in your browser</li>
-                      <li>• Sample scenarios pre-loaded</li>
-                      <li>• No account required</li>
-                      <li>• Full calculator functionality</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {isDemoMode ? 'Demo Dashboard' : `Welcome back, ${user?.displayName || 'User'}!`}
+            Welcome back, {user?.displayName || user?.primaryEmail || 'User'}!
           </h1>
           <p className="text-gray-600">
-            {isDemoMode
-              ? 'Explore HELOC acceleration scenarios in demo mode. All data is stored locally in your browser.'
-              : 'Manage your HELOC acceleration scenarios and track your mortgage payoff progress.'
-            }
+            Manage your HELOC acceleration scenarios and track your mortgage payoff progress.
           </p>
         </div>
 
@@ -523,105 +367,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Storage Warning */}
-        {isDemoMode && storageInfo && !storageInfo.available && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-            <div className="flex items-start">
-              <svg className="w-5 h-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-              <div>
-                <h3 className="text-sm font-medium text-red-800 mb-1">Storage Not Available</h3>
-                <p className="text-sm text-red-700">
-                  {storageInfo.error || 'Your browser does not support localStorage or it is disabled. Demo data cannot be saved between sessions.'}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Demo Data Management Section */}
-        {isDemoMode && storageInfo?.available && (
-          <div className="bg-white rounded-lg shadow-md mb-8">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Demo Data Management</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Manage your demo scenarios and data stored in your browser
-              </p>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Data Statistics */}
-                <div className="space-y-4">
-                  <h3 className="text-md font-medium text-gray-900">Data Overview</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Stored Scenarios:</span>
-                      <span className="text-sm font-medium text-gray-900">{scenarios.length}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Storage Used:</span>
-                      <span className={`text-sm font-medium ${
-                        storageInfo && storageInfo.used > 1024 * 1024 ? 'text-yellow-600' :
-                        storageInfo && storageInfo.used > 2 * 1024 * 1024 ? 'text-red-600' :
-                        'text-gray-900'
-                      }`}>
-                        {storageInfo ? Math.round(storageInfo.used / 1024) : Math.round(JSON.stringify(scenarios).length / 1024)} KB
-                        {storageInfo && storageInfo.used > 1024 * 1024 && (
-                          <span className="ml-1 text-xs">⚠️</span>
-                        )}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Last Updated:</span>
-                      <span className="text-sm font-medium text-gray-900">
-                        {scenarios.length > 0
-                          ? new Date(Math.max(...scenarios.map(s => new Date(s.updated_at).getTime()))).toLocaleDateString()
-                          : 'No data'
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Data Actions */}
-                <div className="space-y-4">
-                  <h3 className="text-md font-medium text-gray-900">Data Actions</h3>
-                  <div className="space-y-3">
-                    <button
-                      onClick={handleClearAllDataClick}
-                      className="w-full flex items-center justify-center px-4 py-3 border border-red-300 rounded-lg text-red-700 bg-red-50 hover:bg-red-100 transition duration-200 font-medium"
-                      disabled={scenarios.length === 0}
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      Clear All Demo Data
-                    </button>
-
-                    <div className="text-xs text-gray-500 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                      <div className="flex items-start">
-                        <svg className="w-4 h-4 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                        </svg>
-                        <div>
-                          <p className="font-medium text-yellow-800 mb-1">⚠️ Important:</p>
-                          <ul className="space-y-1 text-yellow-700">
-                            <li>• Clearing data will permanently delete all scenarios</li>
-                            <li>• This action cannot be undone</li>
-                            <li>• Data is only stored in your browser</li>
-                            <li>• You can regenerate sample data after clearing</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Scenarios Section */}
         <div className="bg-white rounded-lg shadow-md">
@@ -942,40 +687,8 @@ export default function Dashboard() {
         </ModalFooter>
       </Modal>
 
-      {/* Demo Data Clearing Modals */}
-      <FirstConfirmationModal
-        isOpen={showFirstConfirmation}
-        onClose={handleFirstConfirmationCancel}
-        onConfirm={handleFirstConfirmationProceed}
-        title="⚠️ Clear All Demo Data"
-        message="This will permanently delete all your saved scenarios and calculations. This action cannot be undone. Are you sure you want to continue?"
-        confirmText="Yes, Continue"
-        cancelText="Cancel"
-      />
-
-      <SecondConfirmationModal
-        isOpen={showSecondConfirmation}
-        onClose={handleSecondConfirmationCancel}
-        onConfirm={handleSecondConfirmationProceed}
-        title="🚨 Final Confirmation"
-        message="This will permanently delete all your demo data. This action cannot be undone."
-        confirmationText="DELETE ALL DATA"
-        placeholder="Type the confirmation text exactly as shown..."
-        confirmText="Confirm Deletion"
-        cancelText="Cancel"
-        loading={clearingData}
-      />
-
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={handleSuccessModalClose}
-        onRegenerateData={handleRegenerateSampleData}
-        title="✅ Demo Data Cleared"
-        message="All demo data has been successfully cleared from your browser. You can now start fresh or regenerate sample data to explore the application."
-        showRegenerateOption={true}
-        regenerateText="Generate Sample Data"
-        closeText="Close"
-      />
+      {/* Debug Log Viewer */}
+      <DebugLogViewer />
     </div>
   )
 }

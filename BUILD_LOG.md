@@ -2,10 +2,167 @@
 
 ## Summary
 
-**Latest Build:** Stack Auth + NEON Integration (2025-07-30)
-**Status:** ✅ Complete - Modern authentication system with credential-only login
+**Latest Build:** Demo Mode Removal & Debug Tools (2025-07-31)
+**Status:** ✅ Complete - Simplified architecture with comprehensive debugging
 **Tech Stack:** Next.js 15, Stack Auth, NEON PostgreSQL, TypeScript, Tailwind CSS
-**Environment:** Development server running on http://localhost:3002
+**Environment:** Development server running on http://localhost:3000
+
+---
+
+## 2025-07-31 - Demo Mode Removal & Debug Tools Implementation
+
+### Status: ✅ Complete
+**Type:** Major Architecture Simplification & Debug Enhancement
+**Impact:** Removed demo mode complexity, added comprehensive debug tools
+
+### Overview
+Removed all demo mode functionality to simplify the codebase and focus on real authentication. Added comprehensive debug tools to help troubleshoot authentication and API issues.
+
+### Changes Made
+
+#### 1. **Demo Mode Removal**
+- **Removed from Calculator:** No more localStorage saving, only API
+- **Removed from Dashboard:** Only loads from API, no localStorage
+- **Removed Environment Banners:** Cleaned up UI
+- **Simplified Authentication:** Always requires real login
+- **Deleted Demo Storage:** Removed all demo-related functions
+
+#### 2. **Debug Tools Implementation**
+
+**API Endpoints:**
+- `/api/debug/auth` - Shows authentication status, cookies, environment
+- `/api/debug/status` - System status, database connection, logs
+- `/api/test/db` - Database connection test
+- `/api/test/stack-auth` - Comprehensive Stack Auth integration test
+- `/api/test/save-scenario` - Scenario saving test endpoint
+
+**UI Components:**
+- **DebugPanel** (`/src/components/DebugPanel.tsx`) - Real-time auth/system monitoring
+- **DebugLogViewer** - Comprehensive log viewer with filtering
+- **Network Interceptor** - Automatic API request logging
+- **Test Page** (`/[locale]/debug-test`) - Dedicated debug testing page
+- **Test Save Page** (`/[locale]/test-save`) - Scenario save testing
+
+**Debug Features:**
+- Real-time authentication status monitoring
+- API request/response logging
+- Database connection status
+- System resource monitoring
+- Log filtering and export
+- Network request interception
+
+#### 3. **Enhanced Logging**
+- Added detailed logging to scenario save flow
+- Console logs in calculator for save process
+- API endpoint logging for authentication
+- Network interceptor for all fetch requests
+- Structured debug logger with categories
+
+### Technical Details
+
+#### Files Modified
+- `src/app/[locale]/calculator/page.tsx` - Removed demo mode logic
+- `src/app/[locale]/dashboard/page.tsx` - Removed demo mode loading
+- `src/components/SaveScenarioModal.tsx` - Enhanced error messages
+- `src/app/api/scenarios/route.ts` - Added detailed logging
+
+#### Files Created
+- `src/app/api/debug/auth/route.ts` - Auth debug endpoint
+- `src/app/api/debug/status/route.ts` - System status endpoint
+- `src/app/api/test/db/route.ts` - Database test endpoint
+- `src/app/api/test/save-scenario/route.ts` - Save test endpoint
+- `src/components/DebugPanel.tsx` - Debug panel component
+- `src/lib/network-interceptor.ts` - Network logging
+- `src/app/[locale]/debug-test/page.tsx` - Debug test page
+- `src/app/[locale]/test-save/page.tsx` - Save test page
+- `DEBUG_TOOLS.md` - Comprehensive debug documentation
+
+### User Impact
+- **Simpler Architecture:** No confusion between demo/real modes
+- **Better Debugging:** Comprehensive tools for troubleshooting
+- **Clearer Errors:** Enhanced error messages for save failures
+- **Real Data Only:** All operations use database storage
+
+### Debug Tools Usage
+
+1. **Access debug test page:** http://localhost:3000/en/debug-test
+2. **Use Debug Panel:** Purple button for real-time monitoring
+3. **Use Debug Log Viewer:** Gray button for application logs
+4. **Check authentication:** View auth status and cookies
+5. **Monitor API calls:** See all requests in network interceptor
+
+### Testing & Verification
+- ✅ All demo mode code removed
+- ✅ Debug tools functional
+- ✅ Authentication working with Stack Auth
+- ✅ Database connection verified
+- ✅ API endpoints responding correctly
+- ✅ ESLint passing (warnings only)
+- ✅ TypeScript compilation successful
+
+### Next Steps
+- Test scenario saving with authenticated user
+- Monitor debug logs for any issues
+- Consider adding more debug endpoints as needed
+
+---
+
+## 2025-07-31 - PMI Auto-Removal & UI Enhancements
+
+### Status: ✅ Complete
+
+**Type:** Feature Enhancement & UI Improvement
+**Impact:** Automatic PMI removal based on LTV calculations, improved number formatting
+
+### Features Added
+
+#### 1. **Property Value → Original Purchase Price**
+- Renamed "Property Value" to "Original Purchase Price" throughout the application
+- Updated all UI labels in English and Spanish translations
+- Modified validation messages to reflect the new terminology
+- Maintained backward compatibility with existing data
+
+#### 2. **Automatic PMI Removal at 78% LTV**
+- PMI automatically drops to $0 when LTV reaches 78% or below
+- Real-time UI updates when changing mortgage balance or purchase price
+- Clear messaging:
+  - LTV > 80%: "PMI is required"
+  - LTV 78-80%: "PMI may still be required (check with lender)"
+  - LTV ≤ 78%: "PMI is automatically removed"
+- Works in both traditional and HELOC acceleration calculations
+
+#### 3. **Dynamic PMI Calculation in Amortization**
+- PMI is recalculated each month based on current loan balance
+- Automatic removal during the loan term when LTV drops to 78%
+- Accurate total PMI cost calculations for both strategies
+- Shows PMI savings with HELOC acceleration
+
+#### 4. **UI Improvements**
+- Added comma separators for thousands in PMI suggestions
+- Created `format-utils.ts` for consistent number formatting
+- Improved LTV analysis display with clearer status indicators
+- Auto-zero PMI field when LTV drops below threshold
+
+### Technical Implementation
+
+#### Files Modified:
+- `src/lib/calculations.ts` - Added PMI removal logic at 78% LTV
+- `src/components/CalculatorForm.tsx` - Auto-update PMI based on LTV
+- `src/components/FastCalculatorForm.tsx` - Same auto-update logic
+- `src/messages/en.json` & `es.json` - Updated translations
+- `src/lib/format-utils.ts` - New utility for number formatting
+- `src/app/api/calculate/route.ts` - Pass property value to calculations
+
+#### Test Coverage:
+- Created `src/lib/__tests__/pmi-removal.test.ts` with comprehensive tests
+- Updated `ltv-calculations.test.ts` for new error messages
+- All tests passing (30/30 LTV tests, 4/4 PMI removal tests)
+
+### Key Changes:
+1. PMI automatically zeros when LTV ≤ 78% (not 80%)
+2. Uses original purchase price for LTV calculations (not current value)
+3. Real-time UI updates when changing relevant fields
+4. Comma separators for better readability of large numbers
 
 ---
 

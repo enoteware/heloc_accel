@@ -44,24 +44,26 @@ export default function SimpleLanguageSwitcher() {
   };
 
   return (
-    <div className="flex space-x-2 bg-white rounded-md shadow-sm p-2">
+    <div className="flex items-center space-x-1">
       <button
         onClick={switchToEnglish}
-        className={`px-3 py-1 rounded text-sm ${
+        className={`px-2 py-1 rounded text-sm transition-colors ${
           locale === 'en' 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300' 
+            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
         }`}
+        aria-label="Switch to English"
       >
         🇺🇸 EN
       </button>
       <button
         onClick={switchToSpanish}
-        className={`px-3 py-1 rounded text-sm ${
+        className={`px-2 py-1 rounded text-sm transition-colors ${
           locale === 'es' 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300' 
+            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
         }`}
+        aria-label="Switch to Spanish"
       >
         🇪🇸 ES
       </button>

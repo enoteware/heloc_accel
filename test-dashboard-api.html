@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard API Test</title>
+</head>
+<body>
+    <h1>Testing Dashboard API</h1>
+    <button onclick="testAPI()">Test Scenarios API</button>
+    <pre id="result"></pre>
+    
+    <script>
+        async function testAPI() {
+            const resultEl = document.getElementById('result');
+            
+            try {
+                resultEl.textContent = 'Testing /api/scenarios...\n';
+                
+                const response = await fetch('/api/scenarios', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+                
+                resultEl.textContent += `Status: ${response.status}\n`;
+                resultEl.textContent += `Headers: ${JSON.stringify(Object.fromEntries(response.headers))}\n\n`;
+                
+                const data = await response.json();
+                resultEl.textContent += `Response: ${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                resultEl.textContent += `Error: ${error.message}`;
+            }
+        }
+        
+        // Auto-test on load
+        window.onload = testAPI;
+    </script>
+</body>
+</html>

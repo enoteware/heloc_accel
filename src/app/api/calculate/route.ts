@@ -79,7 +79,9 @@ export async function POST(request: NextRequest) {
       annualInterestRate: currentInterestRate,
       termInMonths: sanitizedInputs.remainingTermMonths,
       currentBalance: sanitizedInputs.currentMortgageBalance,
-      monthlyPayment: sanitizedInputs.monthlyPayment
+      monthlyPayment: sanitizedInputs.monthlyPayment,
+      propertyValue: sanitizedInputs.propertyValue,
+      pmiMonthly: sanitizedInputs.pmiMonthly
     }
 
     const helocInput = {
@@ -112,7 +114,9 @@ export async function POST(request: NextRequest) {
           interestPayment: Math.round(payment.interestPayment * 100) / 100,
           endingBalance: Math.round(payment.endingBalance * 100) / 100,
           cumulativeInterest: Math.round(payment.cumulativeInterest * 100) / 100,
-          cumulativePrincipal: Math.round(payment.cumulativePrincipal * 100) / 100
+          cumulativePrincipal: Math.round(payment.cumulativePrincipal * 100) / 100,
+          pmiPayment: payment.pmiPayment !== undefined ? Math.round(payment.pmiPayment * 100) / 100 : undefined,
+          currentLTV: payment.currentLTV !== undefined ? Math.round(payment.currentLTV * 100) / 100 : undefined
         }))
       },
       heloc: {

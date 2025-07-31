@@ -21,7 +21,7 @@ export default function LoginDemoBanner() {
     }`}>
       {isDemoMode ? (
         <span>
-          🎮 DEMO MODE ACTIVE - Use: demo@example.com / demo123456 |
+          🎮 DEMO MODE ACTIVE - Use: demo@example.com / demo123 |
           <span className="ml-2 opacity-90">Data stored locally, no signup needed</span>
         </span>
       ) : nodeEnv === 'development' ? (

@@ -54,7 +54,7 @@ export const VALIDATION_RULES = {
   propertyValue: {
     min: 10000,
     max: 50000000,
-    message: 'Property value must be between $10,000 and $50,000,000. Use a recent appraisal or market estimate.'
+    message: 'Original purchase price must be between $10,000 and $50,000,000.'
   },
   pmiMonthly: {
     min: 0,

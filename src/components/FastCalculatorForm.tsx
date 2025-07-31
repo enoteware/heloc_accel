@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import { formatWithCommas } from '@/lib/format-utils'
 import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
 import { EnhancedCurrencyInput, EnhancedPercentageInput, EnhancedNumberInput } from './EnhancedCalculatorInputs'
 import { CalculatorProgressBar } from './CalculatorProgressBar'
@@ -267,6 +268,20 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
       }))
     }
   }, [errors, addDebugLog])
+
+  // Automatically update PMI when LTV changes
+  useEffect(() => {
+    if (ltvInfo.canCalculateLTV) {
+      // If LTV is 78% or below, automatically set PMI to 0
+      if (ltvInfo.ltvRatio <= 78 && formData.pmiMonthly && formData.pmiMonthly > 0) {
+        setFormData(prev => ({
+          ...prev,
+          pmiMonthly: 0
+        }))
+        addDebugLog('Auto-zeroed PMI due to LTV <= 78%', { ltv: ltvInfo.ltvRatio })
+      }
+    }
+  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV, formData.pmiMonthly, addDebugLog])
 
   const handleBlur = useCallback((field: keyof (CalculatorValidationInput & { remainingTermYears: number; pmiMonthly: number })) => {
     setTouched(prev => ({
@@ -906,8 +921,8 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <EnhancedCurrencyInput
               field="propertyValue"
-              label="Property Value"
-              description="Current estimated market value of your property"
+              label="Original Purchase Price"
+              description="The price you paid when you purchased the property"
               value={formData.propertyValue || 0}
               error={errors.propertyValue}
               onChange={handleInputChange}
@@ -970,9 +985,11 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
                   </div>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-blue-700">
-                      {ltvInfo.isMIPRequired
-                        ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
-                        : 'MIP/PMI is typically not required when LTV is 80% or below.'
+                      {ltvInfo.ltvRatio > 80
+                        ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
+                        : ltvInfo.ltvRatio > 78
+                        ? 'MIP/PMI may still be required (LTV between 78-80%). Check with your lender.'
+                        : 'MIP/PMI is automatically removed when LTV reaches 78% or below.'
                       }
                     </p>
                     {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
@@ -983,7 +1000,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
                         }}
                         className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
                       >
-                        Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
+                        Use Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/mo
                       </button>
                     )}
                   </div>
@@ -1008,7 +1025,7 @@ export default function FastCalculatorForm({ onSubmit, loading = false, initialD
               onBlur={handleBlur}
               placeholder={
                 ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
-                  ? `e.g. $${ltvInfo.suggestedMonthlyPMI}`
+                  ? `e.g. $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}`
                   : "e.g. $175"
               }
               tooltip={

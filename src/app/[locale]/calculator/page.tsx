@@ -11,10 +11,11 @@ import ErrorDisplay from '@/components/ErrorDisplay'
 import Disclaimer from '@/components/Disclaimer'
 import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
 import { ValidationErrorDisplay } from '@/components/ValidationErrorDisplay'
-import { getDemoScenario, generateSampleScenarios, addDemoScenario } from '@/lib/demo-storage'
 import { getApiUrl } from '@/lib/api-url'
 import Logo from '@/components/Logo'
 import DebugPanel from '@/components/DebugPanel'
+import { logInfo, logError, logDebug } from '@/lib/debug-logger'
+import DebugLogViewer from '@/components/DebugLogViewer'
 
 // Lazy load heavy components that are only shown after calculation
 const ResultsDisplay = lazy(() => import('@/components/ResultsDisplay'))
@@ -65,69 +66,32 @@ function CalculatorPageContent() {
   const [liveLoading, setLiveLoading] = useState(false)
   const [liveError, setLiveError] = useState<string | null>(null)
   const [showDebugPanel, setShowDebugPanel] = useState(false)
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
 
-  // Initialize demo data if in demo mode
+  // Redirect to login if not authenticated
   useEffect(() => {
-    if (isDemoMode) {
-      generateSampleScenarios()
-    }
-  }, [isDemoMode])
-
-  // Redirect to login if not authenticated (unless in demo mode)
-  useEffect(() => {
-    if (isDemoMode) return // Skip auth check in demo mode
     if (user === undefined) return // Still loading
     if (!user) {
       router.push('/login?callbackUrl=/calculator')
     }
-  }, [user, router, isDemoMode])
+  }, [user, router])
 
   const loadScenarioData = useCallback(async (scenarioId: string, isEdit: boolean, customName?: string | null) => {
     try {
       setLoading(true)
 
-      let scenario: any = null
-
-      if (isDemoMode) {
-        // Load from localStorage in demo mode
-        scenario = getDemoScenario(scenarioId)
-        if (!scenario) {
-          throw new Error('Scenario not found in demo storage')
-        }
-      } else {
-        // Load from API in normal mode
-        const response = await fetch(`/api/scenario/${scenarioId}`)
-        if (!response.ok) {
-          throw new Error('Failed to load scenario')
-        }
-        const data = await response.json()
-        if (!data.success) {
-          throw new Error('Failed to load scenario')
-        }
-        scenario = data.data
+      // Load from API
+      const response = await fetch(`/api/scenario/${scenarioId}`)
+      if (!response.ok) {
+        throw new Error('Failed to load scenario')
       }
+      const data = await response.json()
+      if (!data.success) {
+        throw new Error('Failed to load scenario')
+      }
+      const scenario = data.data
 
-      // Convert scenario data to form format
-      const formData: Partial<CalculatorValidationInput> = isDemoMode ? {
-        // Demo mode - direct mapping
-        currentMortgageBalance: scenario.currentMortgageBalance,
-        currentInterestRate: scenario.currentInterestRate * 100, // Convert to percentage
-        remainingTermMonths: scenario.remainingTermMonths,
-        monthlyPayment: scenario.monthlyPayment,
-        propertyValue: scenario.propertyValue,
-        propertyTaxMonthly: scenario.propertyTaxMonthly,
-        insuranceMonthly: scenario.insuranceMonthly,
-        hoaFeesMonthly: scenario.hoaFeesMonthly,
-        helocLimit: scenario.helocLimit,
-        helocInterestRate: scenario.helocInterestRate * 100, // Convert to percentage
-        helocAvailableCredit: scenario.helocAvailableCredit,
-        monthlyGrossIncome: scenario.monthlyGrossIncome,
-        monthlyNetIncome: scenario.monthlyNetIncome,
-        monthlyExpenses: scenario.monthlyExpenses,
-        monthlyDiscretionaryIncome: scenario.monthlyDiscretionaryIncome,
-      } : {
-        // Database mode - snake_case mapping
+      // Convert scenario data to form format - snake_case mapping
+      const formData: Partial<CalculatorValidationInput> = {
         currentMortgageBalance: scenario.current_mortgage_balance,
         currentInterestRate: scenario.current_interest_rate * 100, // Convert to percentage
         remainingTermMonths: scenario.remaining_term_months,
@@ -159,7 +123,7 @@ function CalculatorPageContent() {
     } finally {
       setLoading(false)
     }
-  }, [isDemoMode])
+  }, [])
 
   // Load scenario data if editing or duplicating
   useEffect(() => {
@@ -297,104 +261,76 @@ function CalculatorPageContent() {
   }
 
   const handleSaveConfirm = async (scenarioName: string, description: string) => {
-    console.log('=== SAVE SCENARIO CONFIRM ===')
-    console.log('Scenario name:', scenarioName)
-    console.log('Description:', description)
-    console.log('Demo mode:', isDemoMode)
-    console.log('Results available:', !!results)
-    console.log('Form data available:', !!currentFormData)
+    logInfo('SaveScenario', 'Save scenario initiated', {
+      scenarioName,
+      description,
+      hasResults: !!results,
+      hasFormData: !!currentFormData
+    })
     
     if (!results || !currentFormData) {
-      console.log('❌ Cannot save: Missing results or form data')
+      logError('SaveScenario', 'Cannot save: Missing results or form data')
       return
     }
 
     setIsSaving(true)
     try {
-      if (isDemoMode) {
-        console.log('📱 Demo mode: Saving to localStorage')
-        
-        // Save to localStorage in demo mode
-        const scenarioData = {
-          name: scenarioName,
-          description,
-          currentMortgageBalance: currentFormData.currentMortgageBalance,
-          currentInterestRate: currentFormData.currentInterestRate / 100, // Convert back to decimal
-          remainingTermMonths: currentFormData.remainingTermMonths,
-          monthlyPayment: currentFormData.monthlyPayment,
-          helocLimit: currentFormData.helocLimit,
-          helocInterestRate: currentFormData.helocInterestRate ? currentFormData.helocInterestRate / 100 : 0,
-          monthlyGrossIncome: currentFormData.monthlyGrossIncome,
-          monthlyNetIncome: currentFormData.monthlyNetIncome,
-          monthlyExpenses: currentFormData.monthlyExpenses,
-          monthlyDiscretionaryIncome: currentFormData.monthlyDiscretionaryIncome,
-          propertyValue: currentFormData.propertyValue,
-          propertyTaxMonthly: currentFormData.propertyTaxMonthly,
-          insuranceMonthly: currentFormData.insuranceMonthly,
-          hoaFeesMonthly: currentFormData.hoaFeesMonthly,
-          traditionalPayoffMonths: results.traditional.payoffMonths,
-          traditionalTotalInterest: results.traditional.totalInterest,
-          helocPayoffMonths: results.heloc.payoffMonths,
-          helocTotalInterest: results.heloc.totalInterest,
-          timeSavedMonths: results.comparison.timeSavedMonths,
-          interestSaved: results.comparison.interestSaved
-        }
-        
-        console.log('Demo scenario data:', scenarioData)
-        console.log('Calling addDemoScenario...')
-        
-        const savedScenario = addDemoScenario(scenarioData)
-        
-        console.log('✅ Demo scenario saved:', savedScenario)
-        console.log('🔄 Redirecting to dashboard...')
-        
-        // Redirect to dashboard to see saved scenarios
-        router.push('/dashboard')
-      } else {
-        console.log('🗄️ Production mode: Saving to database via API')
-        
-        // Save to database via API
-        const payload = {
+      console.log('🗄️ Saving to database via API')
+      
+      // Save to database via API
+      const payload = {
+        inputs: {
+          ...currentFormData,
           scenarioName,
-          description,
-          calculationResults: results,
-          ...currentFormData
-        }
-
-        console.log('API payload:', payload)
-        console.log('Making POST request to /api/scenario...')
-
-        const response = await fetch('/api/scenario', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        })
-
-        console.log('API response status:', response.status)
-        
-        const data = await response.json()
-        console.log('API response data:', data)
-
-        if (!response.ok) {
-          console.log('❌ API request failed with status:', response.status)
-          throw new Error(data.error || 'Failed to save scenario')
-        }
-
-        if (!data.success) {
-          console.log('❌ API returned unsuccessful result')
-          throw new Error(data.error || 'Failed to save scenario')
-        }
-
-        console.log('✅ Database scenario saved successfully')
-        console.log('🔄 Redirecting to dashboard...')
-        
-        // Redirect to dashboard to see saved scenarios
-        router.push('/dashboard')
+          description
+        },
+        results: results
       }
+
+      logDebug('SaveScenario', 'API payload prepared', payload)
+      logInfo('SaveScenario', 'Making POST request to /api/scenarios')
+      console.log('📤 Sending save request to /api/scenarios')
+      console.log('Payload:', payload)
+
+      const response = await fetch('/api/scenarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies for authentication
+        body: JSON.stringify(payload),
+      })
+      
+      console.log('📥 Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      })
+
+      logInfo('SaveScenario', `API response received: ${response.status}`)
+      
+      const data = await response.json()
+      console.log('📥 Response data:', data)
+      logDebug('SaveScenario', 'API response data', data)
+
+      if (!response.ok) {
+        console.error('❌ API request failed:', {
+          status: response.status,
+          error: data.error || 'Unknown error',
+          data: data
+        })
+        logError('SaveScenario', `API request failed with status: ${response.status}`, data)
+        throw new Error(data.error || 'Failed to save scenario')
+      }
+
+      logInfo('SaveScenario', 'Scenario saved successfully', { scenarioId: data.id })
+      logDebug('SaveScenario', 'Full API response', data)
+      logInfo('SaveScenario', 'Redirecting to dashboard')
+      
+      // Redirect to dashboard to see saved scenarios
+      router.push('/en/dashboard')
     } catch (error) {
-      console.error('❌ Save scenario error:', error)
+      logError('SaveScenario', 'Failed to save scenario', error)
       console.error('Error details:', {
         name: error instanceof Error ? error.name : 'Unknown',
         message: error instanceof Error ? error.message : error,
@@ -438,7 +374,7 @@ function CalculatorPageContent() {
     return chartData
   }
 
-  if (!isDemoMode && user === undefined) {
+  if (user === undefined) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
@@ -449,7 +385,7 @@ function CalculatorPageContent() {
     )
   }
 
-  if (!isDemoMode && !session?.user) {
+  if (!session?.user) {
     return null // Will redirect to login
   }
 
@@ -478,93 +414,23 @@ function CalculatorPageContent() {
           </p>
         </div>
 
-        {/* Environment Banner */}
-        {isDemoMode ? (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-4 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">🎮 Demo Mode Active</h3>
-                  <p className="text-sm text-green-700">
-                    Try all features without signing up • Data saved locally • Sample scenarios included
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="text-green-600 hover:text-green-700 font-medium text-sm"
-              >
-                View Dashboard →
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className={`rounded-lg p-4 mb-8 border-2 ${
-            process.env.NODE_ENV === 'development'
-              ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
-              : 'bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200'
-          }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className={`w-6 h-6 ${
-                    process.env.NODE_ENV === 'development' ? 'text-blue-600' : 'text-purple-600'
-                  }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className={`text-sm font-medium ${
-                    process.env.NODE_ENV === 'development' ? 'text-blue-800' : 'text-purple-800'
-                  }`}>
-                    {process.env.NODE_ENV === 'development' ? '🔧 Development Environment' : '🚀 Production Environment'}
-                  </h3>
-                  <p className={`text-sm ${
-                    process.env.NODE_ENV === 'development' ? 'text-blue-700' : 'text-purple-700'
-                  }`}>
-                    {process.env.NODE_ENV === 'development'
-                      ? 'Development build • Debug mode enabled • Local database'
-                      : 'Production build • Optimized performance • Live database'
-                    }
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className={`font-medium text-sm hover:opacity-80 ${
-                  process.env.NODE_ENV === 'development' ? 'text-blue-600' : 'text-purple-600'
-                }`}
-              >
-                View Dashboard →
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* User Welcome */}
-        {!isDemoMode && (
-          <div className="bg-white rounded-lg shadow-md p-4 mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Welcome back,</p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {user?.displayName || user?.primaryEmail}
-                </p>
-              </div>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                View Dashboard
-              </button>
+        <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Welcome back,</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {user?.displayName || user?.primaryEmail}
+              </p>
             </div>
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="text-blue-600 hover:text-blue-700 font-medium"
+            >
+              View Dashboard
+            </button>
           </div>
-        )}
+        </div>
 
         {/* Error Display */}
         {(error || validationErrors.length > 0) && (
@@ -733,6 +599,9 @@ function CalculatorPageContent() {
         isVisible={showDebugPanel}
         onToggle={() => setShowDebugPanel(!showDebugPanel)}
       />
+
+      {/* Debug Log Viewer */}
+      <DebugLogViewer />
     </div>
   )
 }

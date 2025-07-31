@@ -9,6 +9,7 @@ import NavigationLink from './NavigationLink';
 import UserMenu from './UserMenu';
 import HamburgerButton from './HamburgerButton';
 import MobileNavigationDrawer from './MobileNavigationDrawer';
+import SimpleLanguageSwitcher from '@/components/SimpleLanguageSwitcher';
 
 export interface NavigationBarProps {
   className?: string;
@@ -108,47 +109,26 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     icon="compare"
                     className="hidden lg:flex"
                   />
-                  {/* Admin link for demo mode or admin users */}
-                  {(isDemoMode || user?.primaryEmail === 'admin@helocaccelerator.com') && (
-                    <NavigationLink
-                      href="/admin"
-                      label="Admin"
-                      icon="settings"
-                    />
-                  )}
                 </>
-              )}
-
-              {/* Always show formulas */}
-              <NavigationLink
-                href="/formulas"
-                label="Formulas"
-                icon="formulas"
-                className="hidden lg:flex"
-              />
-
-              {/* Development only */}
-              {process.env.NODE_ENV === 'development' && (
-                <NavigationLink
-                  href="/style-guide"
-                  label="Style Guide"
-                  icon="styleGuide"
-                  className="hidden xl:flex"
-                />
               )}
             </div>
 
             {/* Right side actions */}
             <div className="flex items-center space-x-2">
+              {/* Language Switcher */}
+              <div className="hidden md:block">
+                <SimpleLanguageSwitcher />
+              </div>
+
               {/* Desktop User Menu or Sign In */}
               <div className="hidden md:flex items-center">
-                {isAuthenticated ? (
+                {user ? (
                   <UserMenu />
                 ) : (
                   <NavigationLink
-                    href="/login"
+                    href="/handler/sign-in"
                     label="Sign In"
-                    icon="user"
+                    icon="login"
                     className="bg-primary-500 text-white hover:bg-primary-600 border-transparent"
                   />
                 )}

@@ -72,7 +72,7 @@ function formatFieldName(fieldName: string): string {
     currentInterestRate: 'Interest Rate',
     remainingTermMonths: 'Remaining Term',
     monthlyPayment: 'Monthly Payment',
-    propertyValue: 'Property Value',
+    propertyValue: 'Original Purchase Price',
     propertyTaxMonthly: 'Property Tax',
     insuranceMonthly: 'Insurance',
     hoaFeesMonthly: 'HOA Fees',

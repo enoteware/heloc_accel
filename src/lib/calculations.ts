@@ -15,9 +15,9 @@ export function calculateLTV(loanAmount: number, propertyValue: number): number 
   if (loanAmount == null || propertyValue == null) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Both loan amount and property value are required for LTV calculation',
-      userMessage: 'Please provide both loan amount and property value',
-      suggestion: 'Enter valid numbers for both loan amount and property value',
+      message: 'Both loan amount and original purchase price are required for LTV calculation',
+      userMessage: 'Please provide both loan amount and original purchase price',
+      suggestion: 'Enter valid numbers for both loan amount and original purchase price',
       field: 'loanAmount,propertyValue',
       value: { loanAmount, propertyValue }
     })
@@ -30,9 +30,9 @@ export function calculateLTV(loanAmount: number, propertyValue: number): number 
   if (isNaN(loan) || isNaN(value)) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Loan amount and property value must be valid numbers',
+      message: 'Loan amount and original purchase price must be valid numbers',
       userMessage: 'Please enter valid numeric values',
-      suggestion: 'Use numbers only (e.g., 400000 for loan amount, 500000 for property value)',
+      suggestion: 'Use numbers only (e.g., 400000 for loan amount, 500000 for original purchase price)',
       field: 'loanAmount,propertyValue',
       value: { loanAmount, propertyValue }
     })
@@ -41,9 +41,9 @@ export function calculateLTV(loanAmount: number, propertyValue: number): number 
   if (loan < 0 || value <= 0) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Loan amount cannot be negative and property value must be positive',
+      message: 'Loan amount cannot be negative and original purchase price must be positive',
       userMessage: 'Please enter positive values',
-      suggestion: 'Loan amount should be 0 or greater, property value should be greater than 0',
+      suggestion: 'Loan amount should be 0 or greater, original purchase price should be greater than 0',
       field: 'loanAmount,propertyValue',
       value: { loanAmount: loan, propertyValue: value }
     })
@@ -104,7 +104,7 @@ export function safeLTVCalculation(loanAmount: number | string | null | undefine
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Both loan amount and property value are required',
+      error: 'Both loan amount and original purchase price are required',
       canCalculate: false
     }
     debugLogger.log('warn', 'ltv', 'LTV calculation failed: missing inputs', { loanAmount, propertyValue, result })
@@ -120,7 +120,7 @@ export function safeLTVCalculation(loanAmount: number | string | null | undefine
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Loan amount and property value must be valid numbers',
+      error: 'Loan amount and original purchase price must be valid numbers',
       canCalculate: false
     }
     debugLogger.log('warn', 'ltv', 'LTV calculation failed: invalid numbers', { loanAmount, propertyValue, loan, value, result })
@@ -132,7 +132,7 @@ export function safeLTVCalculation(loanAmount: number | string | null | undefine
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Loan amount and property value must be positive',
+      error: 'Loan amount and original purchase price must be positive',
       canCalculate: false
     }
     debugLogger.log('warn', 'ltv', 'LTV calculation failed: non-positive values', { loan, value, result })
@@ -179,6 +179,8 @@ export interface MortgageInput {
   termInMonths: number
   currentBalance?: number
   monthlyPayment?: number
+  propertyValue?: number
+  pmiMonthly?: number
 }
 
 export interface MonthlyPayment {
@@ -190,6 +192,8 @@ export interface MonthlyPayment {
   endingBalance: number
   cumulativeInterest: number
   cumulativePrincipal: number
+  pmiPayment?: number
+  currentLTV?: number
 }
 
 export interface AmortizationSchedule {
@@ -229,7 +233,9 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
     annualInterestRate,
     termInMonths,
     currentBalance = principal,
-    monthlyPayment: providedPayment
+    monthlyPayment: providedPayment,
+    propertyValue,
+    pmiMonthly = 0
   } = input
 
   // Validate inputs
@@ -260,6 +266,18 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
     const interestPayment = balance * monthlyRate
     let principalPayment = monthlyPayment - interestPayment
 
+    // Calculate current LTV and PMI payment
+    let currentPmiPayment = pmiMonthly
+    let currentLTV = 100
+    
+    if (propertyValue && propertyValue > 0) {
+      currentLTV = (balance / propertyValue) * 100
+      // PMI is automatically removed when LTV reaches 78%
+      if (currentLTV <= 78) {
+        currentPmiPayment = 0
+      }
+    }
+
     // Check for negative amortization
     if (principalPayment < 0) {
       // Payment is less than interest - loan balance would increase
@@ -289,7 +307,9 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
       interestPayment,
       endingBalance,
       cumulativeInterest,
-      cumulativePrincipal
+      cumulativePrincipal,
+      pmiPayment: currentPmiPayment,
+      currentLTV: propertyValue ? currentLTV : undefined
     })
 
     balance = endingBalance
@@ -465,11 +485,13 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
     // Calculate PMI payment and equity percentage
     let currentPmiPayment = pmiMonthly
     let currentEquityPercentage = 0
+    let currentLTV = 100 // Default to 100% if no property value
     
     if (propertyValue && propertyValue > 0) {
-      currentEquityPercentage = ((propertyValue - mortgageBalanceRemaining) / propertyValue) * 100
-      // PMI is removed when equity reaches 20%
-      if (currentEquityPercentage >= 20) {
+      currentLTV = (mortgageBalanceRemaining / propertyValue) * 100
+      currentEquityPercentage = 100 - currentLTV
+      // PMI is automatically removed when LTV reaches 78%
+      if (currentLTV <= 78) {
         currentPmiPayment = 0
       }
     }

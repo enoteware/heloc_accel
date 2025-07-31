@@ -1,15 +1,14 @@
 import { CredentialSignIn, CredentialSignUp } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
-import LoginDemoBanner from "@/components/LoginDemoBanner";
 
-export default function Handler(props: any) {
+export default async function Handler(props: { params: Promise<{ stack?: string[] }> }) {
   // Extract the route from the URL to determine which component to show
-  const route = props.params?.stack?.[0] || 'sign-in';
+  const params = await props.params;
+  const route = params?.stack?.[0] || 'sign-in';
 
   // Common wrapper styling for full-page layout
   const PageWrapper = ({ children }: { children: React.ReactNode }) => (
     <div className="min-h-screen bg-gray-50">
-      <LoginDemoBanner />
       <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
         <div className="text-center">
@@ -20,14 +19,14 @@ export default function Handler(props: any) {
             {route === 'sign-up' ? (
               <>
                 Already have an account?{' '}
-                <a href="/handler/sign-in" className="font-medium text-blue-600 hover:text-blue-500">
+                <a href="/en/handler/sign-in" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign in
                 </a>
               </>
             ) : (
               <>
                 Don't have an account?{' '}
-                <a href="/handler/sign-up" className="font-medium text-blue-600 hover:text-blue-500">
+                <a href="/en/handler/sign-up" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign up
                 </a>
               </>

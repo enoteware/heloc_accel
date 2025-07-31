@@ -5,6 +5,7 @@ import type { CalculatorValidationInput, ValidationError } from '@/lib/validatio
 import { Icon } from '@/components/Icons'
 import { safeLTVCalculation, isMIPRequired, calculateSuggestedMonthlyPMI } from '@/lib/calculations'
 import { FieldError } from '@/components/ValidationErrorDisplay'
+import { formatWithCommas } from '@/lib/format-utils'
 
 interface CalculatorFormProps {
   onSubmit: (data: CalculatorValidationInput) => void
@@ -91,6 +92,19 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
       }))
     }
   }
+
+  // Automatically update PMI when LTV changes
+  useEffect(() => {
+    if (ltvInfo.canCalculateLTV) {
+      // If LTV is 78% or below, automatically set PMI to 0
+      if (ltvInfo.ltvRatio <= 78 && formData.pmiMonthly && formData.pmiMonthly > 0) {
+        setFormData(prev => ({
+          ...prev,
+          pmiMonthly: 0
+        }))
+      }
+    }
+  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -418,7 +432,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">
-              Property Value
+              Original Purchase Price
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
@@ -499,9 +513,11 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               </span>
             </div>
             <p className="text-xs text-blue-700 mb-2">
-              {ltvInfo.isMIPRequired
-                ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
-                : 'MIP/PMI is typically not required when LTV is 80% or below.'
+              {ltvInfo.ltvRatio > 80
+                ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
+                : ltvInfo.ltvRatio > 78
+                ? 'MIP/PMI may still be required (LTV between 78-80%). Check with your lender.'
+                : 'MIP/PMI is automatically removed when LTV reaches 78% or below.'
               }
             </p>
             {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
@@ -512,7 +528,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 }}
                 className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
               >
-                Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
+                Use Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/mo
               </button>
             )}
           </div>
@@ -537,7 +553,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               }`}
               placeholder={
                 ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
-                  ? ltvInfo.suggestedMonthlyPMI.toString()
+                  ? formatWithCommas(ltvInfo.suggestedMonthlyPMI)
                   : ""
               }
             />

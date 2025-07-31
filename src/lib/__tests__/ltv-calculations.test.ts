@@ -73,7 +73,7 @@ describe('LTV Calculation Functions', () => {
       expect(result.success).toBe(false)
       expect(result.ltvRatio).toBe(0)
       expect(result.canCalculate).toBe(false)
-      expect(result.error).toBe('Both loan amount and property value are required')
+      expect(result.error).toBe('Both loan amount and original purchase price are required')
     })
 
     it('should handle string inputs', () => {
