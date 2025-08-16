@@ -48,6 +48,17 @@
       "env": {
         "NEON_API_KEY": "${NEON_API_KEY}"
       }
+    },
+    "chrome-mcp-stdio": {
+      "command": "node",
+      "args": [
+        "/Users/elliotnoteware/.npm-global/lib/node_modules/mcp-chrome-bridge/dist/mcp/mcp-server-stdio.js"
+      ],
+      "env": {}
+    },
+    "chrome-mcp-server": {
+      "type": "streamableHttp",
+      "url": "http://127.0.0.1:12306/mcp"
     }
   }
 }

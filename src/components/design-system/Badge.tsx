@@ -15,13 +15,13 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const badgeVariants = {
-  default: "bg-neutral-100 text-neutral-800 border-neutral-200",
-  primary: "bg-primary-100 text-primary-800 border-primary-200",
-  secondary: "bg-secondary-100 text-secondary-800 border-secondary-200",
-  success: "bg-green-100 text-green-800 border-green-200",
-  warning: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  danger: "bg-red-100 text-red-800 border-red-200",
-  info: "bg-blue-100 text-blue-800 border-blue-200",
+  default: "safe-badge-neutral",
+  primary: "safe-badge-primary",
+  secondary: "safe-badge-secondary",
+  success: "safe-badge-success",
+  warning: "safe-badge-warning",
+  danger: "safe-badge-danger",
+  info: "safe-badge-neutral",
 };
 
 const badgeSizes = {

@@ -46,14 +46,24 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
 
       // Fetch assigned agent if user is logged in
       if (session?.user?.id) {
-        const agentResponse = await fetch(
-          `/api/users/${session.user.id}/agent`,
-        );
-        if (agentResponse.ok) {
-          const agentData = await agentResponse.json();
-          if (agentData.success) {
-            setAssignedAgent(agentData.data);
+        try {
+          const agentResponse = await fetch(
+            `/api/users/${session.user.id}/agent`,
+            { credentials: "include" },
+          );
+          if (agentResponse.ok) {
+            const agentData = await agentResponse.json();
+            if (agentData.success) {
+              setAssignedAgent(agentData.data);
+            }
+          } else if (
+            agentResponse.status === 401 ||
+            agentResponse.status === 403
+          ) {
+            // Not authenticated or forbidden; avoid noisy console errors
           }
+        } catch (e) {
+          // Network failure; ignore silently for unauthenticated users
         }
       }
     } catch (err) {

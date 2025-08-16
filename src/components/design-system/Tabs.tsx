@@ -63,9 +63,9 @@ export const TabsList: React.FC<TabsListProps> = ({ children, className }) => {
   const { variant } = useTabsContext();
 
   const variantClasses = {
-    default: "border-b border-neutral-200",
-    pills: "bg-neutral-100 p-1 rounded-lg",
-    underline: "border-b border-neutral-200",
+    default: "border-b border-border",
+    pills: "bg-muted p-1 rounded-lg",
+    underline: "border-b border-border",
   };
 
   return (
@@ -104,22 +104,22 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
     default: cn(
       "px-4 py-2 text-body-sm font-medium border-b-2 transition-colors",
       isActive
-        ? "border-primary-500 text-primary-600"
-        : "border-transparent text-neutral-600 hover:text-neutral-900 hover:border-neutral-300",
+        ? "border-primary text-primary"
+        : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
       disabled && "opacity-50 cursor-not-allowed",
     ),
     pills: cn(
       "px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
       isActive
-        ? "bg-white text-primary-600 shadow-sm"
-        : "text-neutral-600 hover:text-neutral-900 hover:bg-white/50",
+        ? "bg-card text-primary shadow-sm"
+        : "text-muted-foreground hover:text-foreground hover:bg-card/50",
       disabled && "opacity-50 cursor-not-allowed",
     ),
     underline: cn(
       "px-4 py-2 text-body-sm font-medium border-b-2 transition-colors",
       isActive
-        ? "border-primary-500 text-primary-600"
-        : "border-transparent text-neutral-600 hover:text-neutral-900",
+        ? "border-primary text-primary"
+        : "border-transparent text-muted-foreground hover:text-foreground",
       disabled && "opacity-50 cursor-not-allowed",
     ),
   };

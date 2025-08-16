@@ -17,7 +17,7 @@ export default function HomePageContent() {
   const locale = useLocale();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       {/* Hero Section with Hero Highlight */}
       <HeroHighlight className="flex items-center justify-center pt-16 md:pt-20">
         <div className="container mx-auto px-4">
@@ -36,7 +36,7 @@ export default function HomePageContent() {
             className="text-center"
           >
             <motion.h1
-              className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight"
+              className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -48,17 +48,17 @@ export default function HomePageContent() {
             </motion.h1>
 
             <motion.p
-              className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto"
+              className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               {t("pages.homeHero.subtitle")}{" "}
-              <span className="font-semibold text-blue-600">
+              <span className="font-semibold text-primary">
                 {t("pages.homeHero.saveMoney")}
               </span>{" "}
               {t("pages.homeHero.connector")}{" "}
-              <span className="font-semibold text-blue-600">
+              <span className="font-semibold text-primary">
                 {t("pages.homeHero.achieveFreedom")}
               </span>
             </motion.p>
@@ -71,7 +71,7 @@ export default function HomePageContent() {
             >
               <Link
                 href="/calculator"
-                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:scale-105"
+                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-all transform hover:scale-105"
               >
                 {t("calculator.getStarted")}
               </Link>
@@ -83,7 +83,7 @@ export default function HomePageContent() {
       <div className="container mx-auto px-4 py-4">
         {/* Feature Grid with Aceternity Cards */}
         <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-8">
+          <h2 className="text-2xl font-semibold text-center text-foreground mb-8">
             Transform Your Financial Future
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
@@ -105,10 +105,10 @@ export default function HomePageContent() {
         {/* Aceternity Demo Section */}
         <div className="mt-12 text-center">
           <div className="bg-white rounded-lg shadow-md p-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <h3 className="text-xl font-semibold text-foreground mb-4">
               ✨ Enhanced with Aceternity UI
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Experience interactive cards with dynamic backgrounds and hover
               effects throughout the application.
             </p>

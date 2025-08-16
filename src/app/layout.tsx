@@ -10,7 +10,10 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body
+        className={`${inter.className} bg-background text-foreground`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

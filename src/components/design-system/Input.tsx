@@ -47,19 +47,19 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               // Base styles
               "block w-full rounded-lg border transition-all duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-              "disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60",
-              "placeholder-neutral-500",
-              // Background and text colors - white background with black text as per style guide
-              "!bg-white !text-neutral-900",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
+              "disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-60",
+              "placeholder-muted-foreground",
+              // Background and text colors
+              "!bg-background !text-foreground",
               // Padding adjustments for icons
               leftIcon ? "pl-10" : "pl-3",
               rightIcon ? "pr-10" : "pr-3",
               "py-2",
               // Error state
               error
-                ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                : "border-neutral-300 hover:border-neutral-400",
+                ? "border-destructive focus:border-destructive focus:ring-destructive"
+                : "border-input hover:border-border",
               className,
             )}
             ref={ref}

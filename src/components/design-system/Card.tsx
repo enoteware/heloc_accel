@@ -8,9 +8,9 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const cardVariants = {
-  default: "bg-white border border-neutral-200",
-  elevated: "bg-white shadow-lg border border-neutral-100",
-  outlined: "bg-white border-2 border-neutral-300",
+  default: "bg-card border border-border",
+  elevated: "bg-card shadow-lg border border-border",
+  outlined: "bg-card border-2 border-border",
 };
 
 const cardPadding = {
@@ -74,7 +74,7 @@ export const CardTitle = React.forwardRef<HTMLParagraphElement, CardTitleProps>(
     return (
       <h3
         className={cn(
-          "text-h4 font-semibold leading-none tracking-tight text-neutral-900",
+          "text-h4 font-semibold leading-none tracking-tight text-foreground",
           className,
         )}
         ref={ref}
@@ -99,7 +99,7 @@ export const CardDescription = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   return (
     <p
-      className={cn("text-body text-neutral-700", className)}
+      className={cn("text-body text-muted-foreground", className)}
       ref={ref}
       {...props}
     >

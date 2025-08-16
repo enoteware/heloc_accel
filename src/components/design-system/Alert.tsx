@@ -10,25 +10,25 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const alertVariants = {
   info: {
-    container: "bg-blue-50 border-blue-200 text-blue-800",
+    container: "safe-alert-info",
     icon: "text-blue-400",
     title: "text-blue-800",
     content: "text-blue-700",
   },
   success: {
-    container: "bg-green-50 border-green-200 text-green-800",
+    container: "safe-alert-success",
     icon: "text-green-400",
     title: "text-green-800",
     content: "text-green-700",
   },
   warning: {
-    container: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    container: "safe-alert-warning",
     icon: "text-yellow-400",
     title: "text-yellow-800",
     content: "text-yellow-700",
   },
   danger: {
-    container: "bg-red-50 border-red-200 text-red-800",
+    container: "safe-alert-danger",
     icon: "text-red-400",
     title: "text-red-800",
     content: "text-red-700",

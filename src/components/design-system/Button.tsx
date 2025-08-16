@@ -14,15 +14,15 @@ export interface ButtonProps
 
 const buttonVariants = {
   primary:
-    "btn-primary bg-primary-500 hover:bg-primary-600 focus:bg-primary-600 text-white border-transparent",
+    "btn-primary bg-primary text-primary-foreground hover:bg-primary/90 focus:bg-primary/90 border-transparent",
   secondary:
-    "btn-secondary bg-secondary-500 hover:bg-secondary-600 focus:bg-secondary-600 text-white border-transparent",
+    "btn-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 focus:bg-secondary/90 border-transparent",
   outline:
-    "btn-outline bg-transparent hover:bg-primary-50 focus:bg-primary-50 text-primary-700 border-primary-300 hover:border-primary-400",
+    "btn-outline bg-transparent hover:bg-muted focus:bg-muted text-foreground border-border hover:border-foreground/30",
   ghost:
-    "btn-ghost bg-transparent hover:bg-neutral-100 focus:bg-neutral-100 text-neutral-700 border-transparent",
+    "btn-ghost bg-transparent hover:bg-muted focus:bg-muted text-muted-foreground border-transparent",
   danger:
-    "btn-danger bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white border-transparent",
+    "btn-danger bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:bg-destructive/90 border-transparent",
 };
 
 const buttonSizes = {

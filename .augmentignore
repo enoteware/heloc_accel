@@ -119,3 +119,9 @@ scripts/secrets/
 # Bundle Analysis
 .bundle-analyzer/
 bundle-report.html
+
+# history folder
+
+.history/
+*.history
+.history/*

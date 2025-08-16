@@ -9,8 +9,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand colors from logo analysis
+        // Semantic design tokens (use these in components/pages)
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
         primary: {
+          // Brand colors from logo analysis + semantic DEFAULT/foreground
           50: "#f0f4f8",
           100: "#d9e2ec",
           200: "#bcccdc",
@@ -21,6 +35,8 @@ module.exports = {
           700: "#486581",
           800: "#334e68",
           900: "#00193f", // Dark navy from logo
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           50: "#fff4f1",
@@ -33,6 +49,21 @@ module.exports = {
           700: "#cc4125",
           800: "#b8321f",
           900: "#7f433a", // Brown from logo
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          // Semantic accent tokens used across UI
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         neutral: {
           50: "#fffefe", // Off-white from logo
@@ -46,7 +77,7 @@ module.exports = {
           800: "#2d3748",
           900: "#1a202c",
         },
-        accent: {
+        brandAccent: {
           blue: "#85a6cc", // Light blue from logo
           navy: "#053d7d", // Medium blue from logo
         },

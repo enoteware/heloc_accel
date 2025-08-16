@@ -46,11 +46,9 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
   // Navigation variant styles
   const variantStyles = {
-    default:
-      "bg-white/95 backdrop-blur-sm border-b border-neutral-200 dark:bg-neutral-900/95 dark:border-neutral-800",
+    default: "bg-background/95 backdrop-blur-sm border-b border-border",
     transparent: "bg-transparent",
-    solid:
-      "bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800",
+    solid: "bg-background border-b border-border",
   };
 
   return (
