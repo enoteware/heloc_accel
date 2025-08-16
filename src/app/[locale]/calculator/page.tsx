@@ -489,10 +489,10 @@ function CalculatorPageContent() {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">
+                    <h3 className="text-sm font-medium text-destructive-foreground">
                       Calculation Error
                     </h3>
-                    <div className="mt-2 text-sm text-red-700">
+                    <div className="mt-2 text-sm text-destructive-foreground">
                       <p>{error}</p>
                     </div>
                   </div>
@@ -504,13 +504,13 @@ function CalculatorPageContent() {
 
         {/* Mode Toggle */}
         <div className="flex justify-center mb-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 inline-flex">
+          <div className="bg-card rounded-lg shadow-sm border border-border p-1 inline-flex">
             <button
               onClick={() => setLiveMode(true)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 liveMode
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Live Mode (Two-Column)
@@ -519,8 +519,8 @@ function CalculatorPageContent() {
               onClick={() => setLiveMode(false)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 !liveMode
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Traditional Mode

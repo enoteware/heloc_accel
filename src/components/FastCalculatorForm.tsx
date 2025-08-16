@@ -644,11 +644,11 @@ export default function FastCalculatorForm({
     <div>
       <label
         htmlFor={field}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-foreground mb-1"
       >
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-700 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
           $
@@ -659,8 +659,8 @@ export default function FastCalculatorForm({
           value={formData[field] === 0 ? "" : formData[field] || ""}
           onChange={(e) => handleInputChange(field, e.target.value)}
           onBlur={() => handleBlur(field)}
-          className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
-            errors[field] ? "border-red-300" : "border-gray-300"
+          className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent text-foreground bg-background ${
+            errors[field] ? "border-destructive" : "border-input"
           }`}
           placeholder="0"
           min="0"
@@ -668,7 +668,7 @@ export default function FastCalculatorForm({
         />
       </div>
       {errors[field] && (
-        <p className="mt-1 text-sm text-red-600">{errors[field]}</p>
+        <p className="mt-1 text-sm text-destructive">{errors[field]}</p>
       )}
     </div>
   );
@@ -687,11 +687,11 @@ export default function FastCalculatorForm({
     <div>
       <label
         htmlFor={field}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-foreground mb-1"
       >
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-700 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
         <input
           type="number"
@@ -699,8 +699,8 @@ export default function FastCalculatorForm({
           value={formData[field] === 0 ? "" : formData[field] || ""}
           onChange={(e) => handleInputChange(field, e.target.value)}
           onBlur={() => handleBlur(field)}
-          className={`w-full px-3 py-2 pr-8 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
-            errors[field] ? "border-red-300" : "border-gray-300"
+          className={`w-full px-3 py-2 pr-8 border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent text-foreground bg-background ${
+            errors[field] ? "border-destructive" : "border-input"
           }`}
           placeholder="0.00"
           step="0.01"
@@ -731,29 +731,29 @@ export default function FastCalculatorForm({
     <div>
       <label
         htmlFor={field}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-foreground mb-1"
       >
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <p className="text-xs text-gray-700 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <input
         type="number"
         id={field}
         value={formData[field] === 0 ? "" : formData[field] || ""}
         onChange={(e) => handleInputChange(field, e.target.value)}
         onBlur={() => handleBlur(field)}
-        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
-          errors[field] ? "border-red-300" : "border-gray-300"
+        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent text-foreground bg-background ${
+          errors[field] ? "border-destructive" : "border-input"
         }`}
         placeholder="0"
         min="1"
         max="480"
       />
       {errors[field] && (
-        <p className="mt-1 text-sm text-red-600">{errors[field]}</p>
+        <p className="mt-1 text-sm text-destructive">{errors[field]}</p>
       )}
       {field === "remainingTermMonths" && formData[field] && (
-        <p className="mt-1 text-xs text-gray-700">
+        <p className="mt-1 text-xs text-muted-foreground">
           {Math.round(((formData[field] as number) / 12) * 10) / 10} years
         </p>
       )}
