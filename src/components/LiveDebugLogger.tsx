@@ -46,6 +46,7 @@ const addLog = (message: string, level: "info" | "error" | "warn") => {
   }, 0);
 };
 
+// Keep console output intact; only attach listener in debug mode
 console.log = (...args) => {
   if (isProcessingLog) return originalLog(...args);
 

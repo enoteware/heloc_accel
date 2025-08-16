@@ -70,24 +70,21 @@ export async function GET(request: NextRequest) {
 // POST /api/scenarios - Create new scenario
 export async function POST(request: NextRequest) {
   logInfo("API:Scenarios", "POST /api/scenarios called");
-  console.log("=== SCENARIOS POST ENDPOINT CALLED ===");
+  // Removed debug log
 
   try {
     let user;
     try {
-      console.log("Attempting to get user from Stack Auth...");
+      // Removed debug log
       user = await stackServerApp.getUser({ tokenStore: request });
-      console.log("User authentication result:", {
-        success: !!user,
-        userId: user?.id,
-        email: user?.primaryEmail,
-      });
+      /* removed debug block */
+
       logDebug("API:Scenarios", "User authenticated for POST", {
         userId: user?.id,
         email: user?.primaryEmail,
       });
     } catch (error) {
-      console.error("Stack Auth error:", error);
+      // Error already logged via logError
       logError("API:Scenarios", "Stack Auth error in POST", error);
       return NextResponse.json(
         { error: "Authentication error" },

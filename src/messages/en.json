@@ -111,6 +111,49 @@
     "netMonthlyHelocReduction": "Net monthly HELOC reduction",
     "startUsingHeloc": "Start using HELOC to accelerate mortgage payoff"
   },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account information and security settings",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number (optional)",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "changePassword": "Change Password",
+    "password": {
+      "title": "Account Security",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "changing": "Changing...",
+      "cancel": "Cancel"
+    },
+    "alerts": {
+      "updated": "Profile updated successfully",
+      "error": "Failed to update profile"
+    },
+    "errors": {
+      "loadProfile": "Failed to load profile data"
+    },
+    "backToDashboard": "Back to Dashboard"
+,
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "city": "City",
+    "state": "State",
+    "postalCode": "ZIP/Postal Code",
+    "country": "Country",
+    "dateOfBirth": "Date of Birth",
+    "ageRange": "Age Range",
+    "householdSize": "Household Size",
+    "maritalStatus": "Marital Status",
+    "dependents": "Dependents",
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "emailVerified": "Email Verified",
+    "lastLogin": "Last Login"
+  },
   "inputSummary": {
     "title": "Input Summary",
     "asOf": "as of",

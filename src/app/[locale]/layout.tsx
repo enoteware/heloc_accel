@@ -11,13 +11,9 @@ import { ThemeProvider } from "../../components/design-system/ThemeProvider";
 import { CompanyProvider } from "@/contexts/CompanyContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
-import DebugInfo from "@/components/DebugInfo";
-import LiveDebugLogger from "@/components/LiveDebugLogger";
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
 import Footer from "@/components/Footer";
-import ConsoleInterceptor from "@/components/ConsoleInterceptor";
-import StorageMonitor from "@/components/StorageMonitor";
 
 const inter = Inter({ subsets: ["latin"] });
 

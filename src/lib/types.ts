@@ -6,6 +6,18 @@ export interface User {
   password_hash: string;
   first_name?: string;
   last_name?: string;
+  phone_number?: string;
+  address_line1?: string;
+  address_line2?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  country?: string;
+  date_of_birth?: Date;
+  age_range?: string;
+  household_size?: number;
+  marital_status?: string;
+  dependents?: number;
   created_at: Date;
   updated_at: Date;
   last_login?: Date;

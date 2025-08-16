@@ -113,6 +113,49 @@
     "netMonthlyHelocReduction": "Reducción mensual neta de HELOC",
     "startUsingHeloc": "Comenzar a usar HELOC para acelerar el pago de la hipoteca"
   },
+  "profile": {
+    "title": "Configuración del Perfil",
+    "subtitle": "Administra tu información de cuenta y seguridad",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Número de Teléfono (opcional)",
+    "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "changePassword": "Cambiar Contraseña",
+    "password": {
+      "title": "Seguridad de la Cuenta",
+      "current": "Contraseña Actual",
+      "new": "Nueva Contraseña",
+      "confirm": "Confirmar Nueva Contraseña",
+      "changing": "Cambiando...",
+      "cancel": "Cancelar"
+    },
+    "alerts": {
+      "updated": "Perfil actualizado con éxito",
+      "error": "Error al actualizar el perfil"
+    },
+    "errors": {
+      "loadProfile": "Error al cargar los datos del perfil"
+    },
+    "backToDashboard": "Volver al Panel"
+,
+    "addressLine1": "Dirección Línea 1",
+    "addressLine2": "Dirección Línea 2",
+    "city": "Ciudad",
+    "state": "Estado/Provincia",
+    "postalCode": "Código Postal",
+    "country": "País",
+    "dateOfBirth": "Fecha de Nacimiento",
+    "ageRange": "Rango de Edad",
+    "householdSize": "Tamaño del Hogar",
+    "maritalStatus": "Estado Civil",
+    "dependents": "Dependientes",
+    "verified": "Verificado",
+    "notVerified": "No Verificado",
+    "emailVerified": "Correo Verificado",
+    "lastLogin": "Último Acceso"
+  },
   "inputSummary": {
     "title": "Resumen de Datos",
     "asOf": "a las",

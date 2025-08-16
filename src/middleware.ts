@@ -27,6 +27,20 @@ function createLocaleAwareUrl(path: string, req: any): URL {
 
 export default async function middleware(req: any) {
   const pathname = req.nextUrl.pathname;
+
+  // Gate debug/test APIs when DISABLE_DEBUG is true
+  if (pathname.startsWith("/api/debug/") || pathname.startsWith("/api/test/")) {
+    const disabled =
+      process.env.DISABLE_DEBUG === "true" ||
+      process.env.NEXT_PUBLIC_DISABLE_DEBUG === "true";
+    if (disabled) {
+      return NextResponse.json(
+        { success: false, error: "Debug endpoints are disabled" },
+        { status: 403 },
+      );
+    }
+  }
+
   const isApiPath = pathname.startsWith("/api/");
   const isAdminPath = pathname.startsWith("/admin");
   const isProtectedApiPath = isApiPath && !isPublicApiPath(pathname);

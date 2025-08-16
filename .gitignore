@@ -68,3 +68,7 @@ temp/
 /public/uploads/
 /storage/
 /deployment/
+
+
+# History directory
+/history/

@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useDebugFlag } from "@/hooks/useDebugFlag";
 
+// Deprecated debug component - retained for potential future developer debugging
 export default function DebugInfo() {
   const pathname = usePathname();
   const locale = useLocale();

@@ -7,12 +7,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
+import { ArrowLeft, CheckCircle2, XCircle } from "lucide-react";
 
 interface UserProfile {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
+  phoneNumber?: string;
   createdAt: string;
   updatedAt: string;
   lastLogin?: string;
@@ -29,6 +32,8 @@ export default function ProfilePage() {
   const status =
     user === undefined ? "loading" : user ? "authenticated" : "unauthenticated";
   const router = useRouter();
+  const t = useTranslations("profile");
+  const locale = useLocale();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -40,6 +45,18 @@ export default function ProfilePage() {
     firstName: "",
     lastName: "",
     email: "",
+    phoneNumber: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+    dateOfBirth: "",
+    ageRange: "",
+    householdSize: 0,
+    maritalStatus: "",
+    dependents: 0,
   });
 
   // Password form state
@@ -54,7 +71,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
-      router.push("/login?callbackUrl=/profile");
+      router.push(`/${locale}/login?callbackUrl=/${locale}/profile`);
     }
   }, [session, status, router]);
 
@@ -66,7 +83,7 @@ export default function ProfilePage() {
       const response = await fetch("/api/profile");
 
       if (!response.ok) {
-        throw new Error("Failed to load profile");
+        throw new Error(t("errors.loadProfile"));
       }
 
       const data = await response.json();
@@ -76,13 +93,25 @@ export default function ProfilePage() {
           firstName: data.data.firstName || "",
           lastName: data.data.lastName || "",
           email: data.data.email || "",
+          phoneNumber: data.data.phoneNumber || "",
+          addressLine1: data.data.addressLine1 || "",
+          addressLine2: data.data.addressLine2 || "",
+          city: data.data.city || "",
+          state: data.data.state || "",
+          postalCode: data.data.postalCode || "",
+          country: data.data.country || "",
+          dateOfBirth: data.data.dateOfBirth || "",
+          ageRange: data.data.ageRange || "",
+          householdSize: data.data.householdSize ?? 0,
+          maritalStatus: data.data.maritalStatus || "",
+          dependents: data.data.dependents ?? 0,
         });
       } else {
-        throw new Error(data.error || "Failed to load profile");
+        throw new Error(data.error || t("errors.loadProfile"));
       }
     } catch (err) {
       console.error("Error loading profile:", err);
-      setError("Failed to load profile data");
+      setError(t("errors.loadProfile"));
     } finally {
       setLoading(false);
     }
@@ -178,10 +207,12 @@ export default function ProfilePage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">
+            {t("errors.loadProfile")}
+          </p>
         </div>
       </div>
     );
@@ -192,38 +223,26 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Profile Settings
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            {t("title")}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Manage your account information and security settings
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            {t("subtitle")}
           </p>
         </div>
 
         {/* Navigation */}
         <div className="mb-8">
           <Link
-            href="/dashboard"
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+            href="/${locale}/dashboard"
+            className="inline-flex items-center text-primary hover:underline font-medium"
           >
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Dashboard
+            <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+            {t("backToDashboard")}
           </Link>
         </div>
 
@@ -242,9 +261,9 @@ export default function ProfilePage() {
 
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Profile Information */}
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">
+          <div className="bg-card text-card-foreground rounded-lg shadow-md">
+            <div className="px-6 py-4 border-b border-border">
+              <h2 className="text-xl font-semibold text-foreground">
                 Profile Information
               </h2>
             </div>
@@ -268,7 +287,7 @@ export default function ProfilePage() {
                           firstName: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
                       required
                     />
                   </div>
@@ -289,7 +308,7 @@ export default function ProfilePage() {
                           lastName: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
                       required
                     />
                   </div>
@@ -311,17 +330,264 @@ export default function ProfilePage() {
                         email: e.target.value,
                       }))
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
                     required
                   />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="addressLine1"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("addressLine1")}
+                      </label>
+                      <input
+                        id="addressLine1"
+                        type="text"
+                        value={profileForm.addressLine1}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            addressLine1: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="addressLine2"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("addressLine2")}
+                      </label>
+                      <input
+                        id="addressLine2"
+                        type="text"
+                        value={profileForm.addressLine2}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            addressLine2: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="city"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("city")}
+                      </label>
+                      <input
+                        id="city"
+                        type="text"
+                        value={profileForm.city}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            city: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="state"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("state")}
+                      </label>
+                      <input
+                        id="state"
+                        type="text"
+                        value={profileForm.state}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            state: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="postalCode"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("postalCode")}
+                      </label>
+                      <input
+                        id="postalCode"
+                        type="text"
+                        value={profileForm.postalCode}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            postalCode: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="country"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("country")}
+                      </label>
+                      <input
+                        id="country"
+                        type="text"
+                        value={profileForm.country}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            country: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="dateOfBirth"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("dateOfBirth")}
+                      </label>
+                      <input
+                        id="dateOfBirth"
+                        type="date"
+                        value={profileForm.dateOfBirth}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            dateOfBirth: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="ageRange"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("ageRange")}
+                      </label>
+                      <input
+                        id="ageRange"
+                        type="text"
+                        value={profileForm.ageRange}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            ageRange: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="householdSize"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("householdSize")}
+                      </label>
+                      <input
+                        id="householdSize"
+                        type="number"
+                        min={0}
+                        value={profileForm.householdSize}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            householdSize: Number(e.target.value),
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="maritalStatus"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("maritalStatus")}
+                      </label>
+                      <input
+                        id="maritalStatus"
+                        type="text"
+                        value={profileForm.maritalStatus}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            maritalStatus: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="dependents"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {t("dependents")}
+                      </label>
+                      <input
+                        id="dependents"
+                        type="number"
+                        min={0}
+                        value={profileForm.dependents}
+                        onChange={(e) =>
+                          setProfileForm((p) => ({
+                            ...p,
+                            dependents: Number(e.target.value),
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phoneNumber"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      {t("phone")}
+                    </label>
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      value={profileForm.phoneNumber}
+                      onChange={(e) =>
+                        setProfileForm((prev) => ({
+                          ...prev,
+                          phoneNumber: e.target.value,
+                        }))
+                      }
+                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
                 </div>
                 <div className="flex justify-end">
                   <button
                     type="submit"
                     disabled={saving}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition duration-200 disabled:opacity-50"
+                    className="bg-primary hover:opacity-90 text-primary-foreground px-6 py-2 rounded-md font-medium transition duration-200 disabled:opacity-50"
                   >
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? t("saving") : t("saveChanges")}
                   </button>
                 </div>
               </form>
@@ -329,8 +595,8 @@ export default function ProfilePage() {
           </div>
 
           {/* Account Security */}
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-card text-card-foreground rounded-lg shadow-md">
+            <div className="px-6 py-4 border-b border-border">
               <h2 className="text-xl font-semibold text-gray-900">
                 Account Security
               </h2>
@@ -339,16 +605,16 @@ export default function ProfilePage() {
               {!showPasswordForm ? (
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">
+                    <h3 className="text-lg font-medium text-foreground">
                       Password
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-muted-foreground">
                       Change your account password
                     </p>
                   </div>
                   <button
                     onClick={() => setShowPasswordForm(true)}
-                    className="safe-neutral-light hover:bg-gray-200 px-4 py-2 rounded-md font-medium transition duration-200"
+                    className="safe-neutral-light hover:opacity-90 px-4 py-2 rounded-md font-medium transition duration-200"
                   >
                     Change Password
                   </button>
@@ -396,7 +662,7 @@ export default function ProfilePage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Must be at least 8 characters with uppercase, lowercase,
                       and number
                     </p>
@@ -433,16 +699,16 @@ export default function ProfilePage() {
                           confirmPassword: "",
                         });
                       }}
-                      className="safe-neutral-light hover:bg-gray-200 px-4 py-2 rounded-md font-medium transition duration-200"
+                      className="safe-neutral-light hover:opacity-90 px-4 py-2 rounded-md font-medium transition duration-200"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={saving}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition duration-200 disabled:opacity-50"
+                      className="bg-primary hover:opacity-90 text-primary-foreground px-6 py-2 rounded-md font-medium transition duration-200 disabled:opacity-50"
                     >
-                      {saving ? "Changing..." : "Change Password"}
+                      {saving ? t("password.changing") : t("changePassword")}
                     </button>
                   </div>
                 </form>
@@ -479,7 +745,7 @@ export default function ProfilePage() {
                   {profile.lastLogin && (
                     <div>
                       <h3 className="text-sm font-medium text-gray-700">
-                        Last Login
+                        {t("lastLogin")}
                       </h3>
                       <p className="text-gray-900">
                         {formatDate(profile.lastLogin)}
@@ -493,7 +759,23 @@ export default function ProfilePage() {
                     <p
                       className={`font-medium ${profile.emailVerified ? "text-green-600" : "text-red-600"}`}
                     >
-                      {profile.emailVerified ? "Verified" : "Not Verified"}
+                      {profile.emailVerified ? (
+                        <>
+                          <CheckCircle2
+                            className="inline w-4 h-4 mr-1 text-green-600"
+                            aria-hidden="true"
+                          />{" "}
+                          {t("verified")}
+                        </>
+                      ) : (
+                        <>
+                          <XCircle
+                            className="inline w-4 h-4 mr-1 text-red-600"
+                            aria-hidden="true"
+                          />{" "}
+                          {t("notVerified")}
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
