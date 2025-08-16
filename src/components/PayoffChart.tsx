@@ -72,7 +72,7 @@ export default function PayoffChart({
             <Line
               type="monotone"
               dataKey="traditionalBalance"
-              stroke="#6B7280"
+              stroke="hsl(var(--muted-foreground))"
               strokeWidth={2}
               name="Traditional Mortgage"
               dot={false}
@@ -80,7 +80,7 @@ export default function PayoffChart({
             <Line
               type="monotone"
               dataKey="helocBalance"
-              stroke="#3B82F6"
+              stroke="hsl(var(--primary))"
               strokeWidth={2}
               name="HELOC Strategy"
               dot={false}
