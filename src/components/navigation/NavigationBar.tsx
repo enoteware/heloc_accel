@@ -1,41 +1,40 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useUser } from '@stackframe/stack';
-import { usePathname } from '@/i18n/routing';
-import { cn } from '@/lib/utils';
-import Logo from '@/components/Logo';
-import NavigationLink from './NavigationLink';
-import UserMenu from './UserMenu';
-import HamburgerButton from './HamburgerButton';
-import MobileNavigationDrawer from './MobileNavigationDrawer';
-import SimpleLanguageSwitcher from '@/components/SimpleLanguageSwitcher';
+import React, { useState } from "react";
+import { useUser } from "@stackframe/stack";
+import { usePathname } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+import Logo from "@/components/Logo";
+import NavigationLink from "./NavigationLink";
+import UserMenu from "./UserMenu";
+import HamburgerButton from "./HamburgerButton";
+import MobileNavigationDrawer from "./MobileNavigationDrawer";
+import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
 
 export interface NavigationBarProps {
   className?: string;
-  variant?: 'default' | 'transparent' | 'solid';
+  variant?: "default" | "transparent" | "solid";
   showOnAuthPages?: boolean;
 }
 
 export const NavigationBar: React.FC<NavigationBarProps> = ({
   className,
-  variant = 'default',
+  variant = "default",
   showOnAuthPages = false,
 }) => {
   const user = useUser();
   const session = user ? { user } : null;
   const pathname = usePathname();
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Don't show navigation on auth pages unless explicitly requested
-  const isAuthPage = pathname.startsWith('/auth/');
+  const isAuthPage = pathname.startsWith("/auth/");
   if (isAuthPage && !showOnAuthPages) {
     return null;
   }
 
   // Determine if user is authenticated
-  const isAuthenticated = session?.user || isDemoMode;
+  const isAuthenticated = !!session?.user;
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -47,18 +46,20 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
   // Navigation variant styles
   const variantStyles = {
-    default: 'bg-white/95 backdrop-blur-sm border-b border-neutral-200 dark:bg-neutral-900/95 dark:border-neutral-800',
-    transparent: 'bg-transparent',
-    solid: 'bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800',
+    default:
+      "bg-white/95 backdrop-blur-sm border-b border-neutral-200 dark:bg-neutral-900/95 dark:border-neutral-800",
+    transparent: "bg-transparent",
+    solid:
+      "bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800",
   };
 
   return (
     <>
       <nav
         className={cn(
-          'sticky top-0 z-30 transition-all duration-200',
+          "sticky top-0 z-30 transition-all duration-200",
           variantStyles[variant],
-          className
+          className,
         )}
         role="navigation"
         aria-label="Main navigation"

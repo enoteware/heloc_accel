@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /**
  * Custom hook to detect debug flag in URL parameters
@@ -11,26 +11,22 @@ export function useDebugFlag(): boolean {
 
   useEffect(() => {
     // Only run on client side
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const checkDebugFlag = () => {
       const urlParams = new URLSearchParams(window.location.search);
-      
+
       // Check for various debug flags
-      const debugFlags = [
-        'debug',
-        'dev', 
-        'development',
-        'verbose',
-        'trace'
-      ];
-      
-      const hasDebugFlag = debugFlags.some(flag => {
+      const debugFlags = ["debug", "dev", "development", "verbose", "trace"];
+
+      const hasDebugFlag = debugFlags.some((flag) => {
         const value = urlParams.get(flag);
         // Consider true if: ?debug=true, ?debug=1, ?debug (no value), etc.
-        return value === 'true' || value === '1' || value === '' || value === 'on';
+        return (
+          value === "true" || value === "1" || value === "" || value === "on"
+        );
       });
-      
+
       setIsDebugMode(hasDebugFlag);
     };
 
@@ -42,24 +38,24 @@ export function useDebugFlag(): boolean {
       checkDebugFlag();
     };
 
-    window.addEventListener('popstate', handlePopState);
-    
+    window.addEventListener("popstate", handlePopState);
+
     // Also listen for pushstate/replacestate (for programmatic navigation)
     const originalPushState = window.history.pushState;
     const originalReplaceState = window.history.replaceState;
-    
-    window.history.pushState = function(...args) {
+
+    window.history.pushState = function (...args) {
       originalPushState.apply(window.history, args);
       setTimeout(checkDebugFlag, 0);
     };
-    
-    window.history.replaceState = function(...args) {
+
+    window.history.replaceState = function (...args) {
       originalReplaceState.apply(window.history, args);
       setTimeout(checkDebugFlag, 0);
     };
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener("popstate", handlePopState);
       window.history.pushState = originalPushState;
       window.history.replaceState = originalReplaceState;
     };
@@ -72,25 +68,25 @@ export function useDebugFlag(): boolean {
  * Utility function to add debug flag to current URL
  */
 export function addDebugFlag(): void {
-  if (typeof window === 'undefined') return;
-  
+  if (typeof window === "undefined") return;
+
   const url = new URL(window.location.href);
-  url.searchParams.set('debug', 'true');
-  window.history.replaceState({}, '', url.toString());
+  url.searchParams.set("debug", "true");
+  window.history.replaceState({}, "", url.toString());
 }
 
 /**
  * Utility function to remove debug flag from current URL
  */
 export function removeDebugFlag(): void {
-  if (typeof window === 'undefined') return;
-  
+  if (typeof window === "undefined") return;
+
   const url = new URL(window.location.href);
-  const debugFlags = ['debug', 'dev', 'development', 'verbose', 'trace'];
-  
-  debugFlags.forEach(flag => {
+  const debugFlags = ["debug", "dev", "development", "verbose", "trace"];
+
+  debugFlags.forEach((flag) => {
     url.searchParams.delete(flag);
   });
-  
-  window.history.replaceState({}, '', url.toString());
+
+  window.history.replaceState({}, "", url.toString());
 }

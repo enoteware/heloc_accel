@@ -1,73 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Debug API</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Debug Dashboard API</h1>
     <button onclick="testAuth()">Test Auth</button>
     <button onclick="testScenarios()">Test Scenarios</button>
     <button onclick="checkCookies()">Check Cookies</button>
-    
+
     <pre id="result"></pre>
-    
+
     <script>
-        const resultEl = document.getElementById('result');
-        
-        async function testAuth() {
-            resultEl.textContent = 'Testing authentication...\n';
-            try {
-                const response = await fetch('/api/test-auth', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                resultEl.textContent += `Status: ${response.status}\n`;
-                const data = await response.json();
-                resultEl.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
-            } catch (error) {
-                resultEl.textContent += `Error: ${error.message}\n`;
-            }
+      const resultEl = document.getElementById("result");
+
+      async function testAuth() {
+        resultEl.textContent = "Testing authentication...\n";
+        try {
+          const response = await fetch("/api/test-auth", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          resultEl.textContent += `Status: ${response.status}\n`;
+          const data = await response.json();
+          resultEl.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
+        } catch (error) {
+          resultEl.textContent += `Error: ${error.message}\n`;
         }
-        
-        async function testScenarios() {
-            resultEl.textContent = 'Testing scenarios API...\n';
-            try {
-                const response = await fetch('/api/scenarios', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                resultEl.textContent += `Status: ${response.status}\n`;
-                const data = await response.json();
-                resultEl.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
-            } catch (error) {
-                resultEl.textContent += `Error: ${error.message}\n`;
-            }
+      }
+
+      async function testScenarios() {
+        resultEl.textContent = "Testing scenarios API...\n";
+        try {
+          const response = await fetch("/api/scenarios", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          resultEl.textContent += `Status: ${response.status}\n`;
+          const data = await response.json();
+          resultEl.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
+        } catch (error) {
+          resultEl.textContent += `Error: ${error.message}\n`;
         }
-        
-        function checkCookies() {
-            resultEl.textContent = 'Cookies:\n';
-            resultEl.textContent += document.cookie || 'No cookies found';
-            
-            // Check for Stack Auth specific cookies
-            const cookies = document.cookie.split(';').map(c => c.trim());
-            const stackCookies = cookies.filter(c => c.includes('stack') || c.includes('auth'));
-            
-            resultEl.textContent += '\n\nStack Auth cookies:\n';
-            resultEl.textContent += stackCookies.length > 0 ? stackCookies.join('\n') : 'No Stack Auth cookies found';
-        }
-        
-        // Auto-run on load
-        window.onload = () => {
-            checkCookies();
-        };
+      }
+
+      function checkCookies() {
+        resultEl.textContent = "Cookies:\n";
+        resultEl.textContent += document.cookie || "No cookies found";
+
+        // Check for Stack Auth specific cookies
+        const cookies = document.cookie.split(";").map((c) => c.trim());
+        const stackCookies = cookies.filter(
+          (c) => c.includes("stack") || c.includes("auth"),
+        );
+
+        resultEl.textContent += "\n\nStack Auth cookies:\n";
+        resultEl.textContent +=
+          stackCookies.length > 0
+            ? stackCookies.join("\n")
+            : "No Stack Auth cookies found";
+      }
+
+      // Auto-run on load
+      window.onload = () => {
+        checkCookies();
+      };
     </script>
-</body>
+  </body>
 </html>

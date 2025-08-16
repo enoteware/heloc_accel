@@ -9,25 +9,30 @@ This design system is built on the visual identity extracted from the HELOC Acce
 ## Brand Colors
 
 ### Primary Colors (Blue-Gray)
+
 - **Primary 50**: `#f0f4f8` - Lightest background
 - **Primary 500**: `#8095af` - Brand primary (from logo)
 - **Primary 900**: `#00193f` - Dark navy (from logo)
 
 ### Secondary Colors (Coral/Orange)
+
 - **Secondary 300**: `#ffac89` - Coral accent (from logo)
 - **Secondary 900**: `#7f433a` - Brown accent (from logo)
 
 ### Neutral Colors
+
 - **Neutral 50**: `#fffefe` - Off-white (from logo)
 - **Neutral 600**: `#80828e` - Medium gray (from logo)
 
 ## Typography
 
 ### Font Family
+
 - **Primary**: Inter (modern, professional, excellent readability)
 - **Fallback**: System fonts (-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif)
 
 ### Typography Scale
+
 ```css
 .text-display    /* 56px / 1.1 / 700 */
 .text-h1         /* 48px / 1.2 / 700 */
@@ -45,6 +50,7 @@ This design system is built on the visual identity extracted from the HELOC Acce
 ## Spacing System
 
 Based on 8px grid system:
+
 - `xs`: 4px
 - `sm`: 8px
 - `md`: 16px
@@ -63,22 +69,23 @@ Based on 8px grid system:
 Import components from the design system:
 
 ```tsx
-import { 
-  Button, 
-  Input, 
-  Select, 
-  Checkbox, 
-  RadioGroup, 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent, 
-  Badge, 
-  Alert 
-} from '@/components/design-system';
+import {
+  Button,
+  Input,
+  Select,
+  Checkbox,
+  RadioGroup,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Badge,
+  Alert,
+} from "@/components/design-system";
 ```
 
 #### Button
+
 ```tsx
 <Button variant="primary" size="md">Primary Button</Button>
 <Button variant="outline" size="lg">Outline Button</Button>
@@ -89,8 +96,9 @@ import {
 **Sizes**: `sm`, `md`, `lg`, `xl`
 
 #### Input
+
 ```tsx
-<Input 
+<Input
   label="Email Address"
   placeholder="Enter your email"
   helperText="We'll never share your email"
@@ -99,6 +107,7 @@ import {
 ```
 
 #### Card
+
 ```tsx
 <Card variant="elevated">
   <CardHeader>
@@ -143,18 +152,21 @@ Use pre-built CSS classes for quick styling:
 ## Accessibility
 
 ### WCAG Compliance
+
 - All color combinations meet WCAG AA contrast requirements (4.5:1 minimum)
 - Interactive elements have minimum 44px touch targets
 - Focus states are clearly visible with 2px ring
 - Form labels are properly associated with inputs
 
 ### Focus Management
+
 ```css
 .focus-ring      /* Standard focus ring */
 .focus-ring-danger /* Error state focus ring */
 ```
 
 ### Screen Reader Support
+
 ```css
 .sr-only         /* Screen reader only content */
 .skip-link       /* Skip navigation link */
@@ -163,18 +175,21 @@ Use pre-built CSS classes for quick styling:
 ## Usage Guidelines
 
 ### Color Usage
+
 - Use primary colors for main actions and navigation
 - Use secondary colors for accents and highlights
 - Use neutral colors for text and backgrounds
 - Ensure sufficient contrast for accessibility
 
 ### Typography Hierarchy
+
 - Use Display for hero sections and major page titles
 - Use H1-H3 for main content hierarchy
 - Use H4-H6 for component and section titles
 - Use Body variants for content text
 
 ### Component Guidelines
+
 - Use primary buttons for main actions
 - Use outline buttons for secondary actions
 - Use ghost buttons for tertiary actions
@@ -185,13 +200,15 @@ Use pre-built CSS classes for quick styling:
 ## Implementation
 
 ### 1. Import Styles
+
 Add the design system CSS to your main stylesheet:
 
 ```css
-@import '../styles/design-system.css';
+@import "../styles/design-system.css";
 ```
 
 ### 2. Use Tailwind Classes
+
 The design system extends Tailwind CSS with custom colors and utilities:
 
 ```tsx
@@ -202,10 +219,11 @@ The design system extends Tailwind CSS with custom colors and utilities:
 ```
 
 ### 3. Use React Components
+
 Import and use pre-built components:
 
 ```tsx
-import { Button, Card, Alert } from '@/components/design-system';
+import { Button, Card, Alert } from "@/components/design-system";
 
 function MyComponent() {
   return (
@@ -222,12 +240,14 @@ function MyComponent() {
 ## Development
 
 ### Adding New Components
+
 1. Create component in `src/components/design-system/`
 2. Follow existing patterns for props and styling
 3. Export from `src/components/design-system/index.ts`
 4. Add documentation and examples to style guide
 
 ### Customizing Colors
+
 Update `tailwind.config.js` to modify the color palette:
 
 ```js

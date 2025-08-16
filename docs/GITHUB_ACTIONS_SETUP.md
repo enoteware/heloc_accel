@@ -11,6 +11,7 @@ This guide will help you set up automated deployments using GitHub Actions.
 ```
 
 This script will:
+
 - Generate SSH keys for GitHub Actions
 - Install the public key on your server
 - Test the SSH connection
@@ -22,11 +23,11 @@ Go to your repository settings: `https://github.com/enoteware/heloc_accel/settin
 
 Add these secrets:
 
-| Secret Name | Description | Example Value |
-|-------------|-------------|---------------|
+| Secret Name       | Description                       | Example Value                            |
+| ----------------- | --------------------------------- | ---------------------------------------- |
 | `SSH_PRIVATE_KEY` | Private SSH key for server access | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
-| `SSH_USER` | SSH username for server | `root` |
-| `SERVER_HOST` | Server IP address | `50.28.106.254` |
+| `SSH_USER`        | SSH username for server           | `root`                                   |
+| `SERVER_HOST`     | Server IP address                 | `50.28.106.254`                          |
 
 ### 3. Set Up Server Environment (if not done already)
 
@@ -56,6 +57,7 @@ nano /opt/heloc-accelerator/config/.env.production
 ### Workflow Triggers
 
 The deployment runs automatically when:
+
 - You push to the `main` branch
 - You manually trigger it from GitHub Actions tab
 
@@ -108,6 +110,7 @@ curl http://localhost:3000/heloc/api/health
 ### Deployment Logs
 
 Each deployment creates:
+
 - Backup in `/opt/heloc-accelerator/backups/`
 - Deployment info in `/opt/heloc-accelerator/app/DEPLOYMENT_INFO.txt`
 - PM2 logs in `/opt/heloc-accelerator/logs/`
@@ -117,12 +120,14 @@ Each deployment creates:
 ### Common Issues
 
 **SSH Connection Failed:**
+
 ```bash
 # Test SSH connection manually
 ssh -i ~/.ssh/github-actions-heloc root@50.28.106.254
 ```
 
 **Deployment Failed:**
+
 ```bash
 # Check PM2 status
 pm2 status
@@ -133,6 +138,7 @@ tail -f /opt/heloc-accelerator/logs/error.log
 ```
 
 **Health Check Failed:**
+
 ```bash
 # Test health endpoint
 curl -v http://localhost:3000/heloc/api/health
@@ -163,6 +169,7 @@ sudo ./scripts/ci-deploy.sh
 ### Modify Deployment Process
 
 Edit `.github/workflows/deploy.yml` to:
+
 - Add more test steps
 - Change deployment conditions
 - Add notifications (Slack, email, etc.)
@@ -171,6 +178,7 @@ Edit `.github/workflows/deploy.yml` to:
 ### Environment-Specific Deployments
 
 Create additional workflow files for different environments:
+
 - `.github/workflows/deploy-staging.yml`
 - `.github/workflows/deploy-production.yml`
 

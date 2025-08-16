@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import React from 'react'
-import EnhancedCalculatorForm from '@/components/EnhancedCalculatorForm'
-import { CalculationInput } from '@/lib/types'
+import React from "react";
+import EnhancedCalculatorForm from "@/components/EnhancedCalculatorForm";
+import { CalculationInput } from "@/lib/types";
 
 export default function TestValidationPage() {
   const handleSubmit = async (data: CalculationInput) => {
-    console.log('Form submitted with data:', data)
-    alert('Form submitted successfully! Check console for data.')
-  }
+    console.log("Form submitted with data:", data);
+    alert("Form submitted successfully! Check console for data.");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -21,12 +21,9 @@ export default function TestValidationPage() {
             Test the new React Hook Form validation with real-time feedback
           </p>
         </div>
-        
-        <EnhancedCalculatorForm 
-          onSubmit={handleSubmit}
-          loading={false}
-        />
+
+        <EnhancedCalculatorForm onSubmit={handleSubmit} loading={false} />
       </div>
     </div>
-  )
+  );
 }

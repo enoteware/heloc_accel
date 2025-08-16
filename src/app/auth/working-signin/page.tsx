@@ -1,49 +1,49 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function WorkingSignIn() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const response = await fetch('/api/auth/simple-login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/simple-login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.success) {
         // Redirect to calculator after successful login
-        router.push('/calculator')
+        router.push("/calculator");
       } else {
-        setError(data.error || 'Invalid email or password')
+        setError(data.error || "Invalid email or password");
       }
     } catch (err) {
-      setError('An error occurred during sign in')
+      setError("An error occurred during sign in");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fillCredentials = (email: string, password: string) => {
-    setEmail(email)
-    setPassword(password)
-  }
+    setEmail(email);
+    setPassword(password);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4">
@@ -58,18 +58,22 @@ export default function WorkingSignIn() {
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-blue-800 mb-2">Quick Fill Credentials:</h3>
+          <h3 className="text-sm font-semibold text-blue-800 mb-2">
+            Quick Fill Credentials:
+          </h3>
           <div className="space-y-2">
             <button
               type="button"
-              onClick={() => fillCredentials('admin@helocaccel.com', 'admin123')}
+              onClick={() =>
+                fillCredentials("admin@helocaccel.com", "admin123")
+              }
               className="w-full text-left px-3 py-2 bg-white rounded border border-blue-200 hover:bg-blue-50 text-sm"
             >
               <strong>Admin:</strong> admin@helocaccel.com / admin123
             </button>
             <button
               type="button"
-              onClick={() => fillCredentials('test@example.com', 'Test123!')}
+              onClick={() => fillCredentials("test@example.com", "Test123!")}
               className="w-full text-left px-3 py-2 bg-white rounded border border-blue-200 hover:bg-blue-50 text-sm"
             >
               <strong>Test User:</strong> test@example.com / Test123!
@@ -86,7 +90,10 @@ export default function WorkingSignIn() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -103,7 +110,10 @@ export default function WorkingSignIn() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -126,17 +136,20 @@ export default function WorkingSignIn() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
 
           <div className="text-center">
-            <Link href="/" className="text-sm text-blue-600 hover:text-blue-500">
+            <Link
+              href="/"
+              className="text-sm text-blue-600 hover:text-blue-500"
+            >
               ← Back to home
             </Link>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export interface PDFGenerationOptions {
-  filename?: string
-  format?: 'a4' | 'letter'
-  orientation?: 'portrait' | 'landscape'
-  margin?: number
-  scale?: number
+  filename?: string;
+  format?: "a4" | "letter";
+  orientation?: "portrait" | "landscape";
+  margin?: number;
+  scale?: number;
 }
 
 /**
@@ -14,32 +14,32 @@ export interface PDFGenerationOptions {
  */
 export async function generatePDFFromHTML(
   htmlContent: string,
-  options: PDFGenerationOptions = {}
+  options: PDFGenerationOptions = {},
 ): Promise<void> {
   const {
-    filename = 'HELOC-Report.pdf',
-    format = 'a4',
-    orientation = 'portrait',
+    filename = "HELOC-Report.pdf",
+    format = "a4",
+    orientation = "portrait",
     margin = 10,
-    scale = 2
-  } = options
+    scale = 2,
+  } = options;
 
   try {
     // Create a temporary container for the HTML content
-    const tempContainer = document.createElement('div')
-    tempContainer.innerHTML = htmlContent
-    tempContainer.style.position = 'absolute'
-    tempContainer.style.left = '-9999px'
-    tempContainer.style.top = '0'
-    tempContainer.style.width = '210mm' // A4 width
-    tempContainer.style.backgroundColor = 'white'
-    tempContainer.style.padding = '20px'
-    tempContainer.style.fontFamily = 'Arial, sans-serif'
-    tempContainer.style.fontSize = '12px'
-    tempContainer.style.lineHeight = '1.4'
-    
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = htmlContent;
+    tempContainer.style.position = "absolute";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.top = "0";
+    tempContainer.style.width = "210mm"; // A4 width
+    tempContainer.style.backgroundColor = "white";
+    tempContainer.style.padding = "20px";
+    tempContainer.style.fontFamily = "Arial, sans-serif";
+    tempContainer.style.fontSize = "12px";
+    tempContainer.style.lineHeight = "1.4";
+
     // Add some basic styling for better PDF appearance
-    const style = document.createElement('style')
+    const style = document.createElement("style");
     style.textContent = `
       .printable-report * {
         box-sizing: border-box;
@@ -184,58 +184,58 @@ export async function generatePDFFromHTML(
       .printable-report .text-2xl {
         font-size: 20px;
       }
-    `
-    tempContainer.appendChild(style)
-    
-    document.body.appendChild(tempContainer)
+    `;
+    tempContainer.appendChild(style);
+
+    document.body.appendChild(tempContainer);
 
     // Convert HTML to canvas
     const canvas = await html2canvas(tempContainer, {
       scale: scale,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
       width: tempContainer.scrollWidth,
-      height: tempContainer.scrollHeight
-    })
+      height: tempContainer.scrollHeight,
+    });
 
     // Remove temporary container
-    document.body.removeChild(tempContainer)
+    document.body.removeChild(tempContainer);
 
     // Create PDF
-    const imgData = canvas.toDataURL('image/png')
+    const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: orientation,
-      unit: 'mm',
-      format: format
-    })
+      unit: "mm",
+      format: format,
+    });
 
     // Calculate dimensions
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pdfHeight = pdf.internal.pageSize.getHeight()
-    const imgWidth = pdfWidth - (margin * 2)
-    const imgHeight = (canvas.height * imgWidth) / canvas.width
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pdfWidth - margin * 2;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let heightLeft = imgHeight
-    let position = margin
+    let heightLeft = imgHeight;
+    let position = margin;
 
     // Add first page
-    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight)
-    heightLeft -= (pdfHeight - margin * 2)
+    pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight - margin * 2;
 
     // Add additional pages if needed
     while (heightLeft >= 0) {
-      position = heightLeft - imgHeight + margin
-      pdf.addPage()
-      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight)
-      heightLeft -= (pdfHeight - margin * 2)
+      position = heightLeft - imgHeight + margin;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight - margin * 2;
     }
 
     // Download the PDF
-    pdf.save(filename)
+    pdf.save(filename);
   } catch (error) {
-    console.error('Error generating PDF:', error)
-    throw new Error('Failed to generate PDF')
+    console.error("Error generating PDF:", error);
+    throw new Error("Failed to generate PDF");
   }
 }
 
@@ -244,15 +244,15 @@ export async function generatePDFFromHTML(
  */
 export async function generatePDFFromComponent(
   componentHTML: string,
-  filename?: string
+  filename?: string,
 ): Promise<void> {
   const options: PDFGenerationOptions = {
-    filename: filename || 'HELOC-Report.pdf',
-    format: 'a4',
-    orientation: 'portrait',
+    filename: filename || "HELOC-Report.pdf",
+    format: "a4",
+    orientation: "portrait",
     margin: 10,
-    scale: 1.5
-  }
+    scale: 1.5,
+  };
 
-  await generatePDFFromHTML(componentHTML, options)
+  await generatePDFFromHTML(componentHTML, options);
 }

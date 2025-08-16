@@ -5,6 +5,7 @@ This document outlines front-end UI/UX improvements to enhance the clarity, acce
 ---
 
 ## ✅ GOALS
+
 - Improve **readability** for key numeric inputs (e.g., balance, term).
 - Add **visual hierarchy** to guide users.
 - Support **accessibility** and mobile-friendliness.
@@ -15,15 +16,17 @@ This document outlines front-end UI/UX improvements to enhance the clarity, acce
 ## 🎨 VISUAL UPGRADES
 
 ### Typography & Font Sizing
+
 - [ ] Increase `font-size` for high-priority fields:
   - `Remaining Term (months)`
   - `Monthly Gross/Net/Discretionary Income`
   - `Current Mortgage Balance`
   - `Current Monthly Payment`
-  > Use `font-size: 18px–22px`, `font-weight: 600` for emphasis.
+    > Use `font-size: 18px–22px`, `font-weight: 600` for emphasis.
 - [ ] Section headers (`h2` or `legend`) should be 1.25–1.5x larger than input labels.
 
 ### Input Field Styling
+
 - [ ] Center-align number input values.
 - [ ] Add `inputmode="decimal"` or `inputmode="numeric"` where appropriate.
 - [ ] Add comma formatting via JS or React binding (`e.g. 150000 -> 150,000`).
@@ -36,10 +39,12 @@ This document outlines front-end UI/UX improvements to enhance the clarity, acce
 ## 🧩 SECTION LAYOUT
 
 ### Grouping
+
 - [ ] Wrap each main section in a card-style container with subtle shadow or border-radius.
 - [ ] Use alternating background shades to visually break up sections.
 
 ### Icons & Tooltips
+
 - [ ] Add info icons (`ℹ️`) beside labels that may need explanation.
   - Example: `HELOC Interest Rate ℹ️ [Tooltip: "Your lender's variable rate. Usually changes monthly."]`
 
@@ -113,18 +118,21 @@ This document outlines front-end UI/UX improvements to enhance the clarity, acce
 ## Implementation Priority
 
 ### Phase 1: Core Visual Improvements (High Priority)
+
 1. Typography & font sizing for key fields
 2. Input field styling with comma formatting
 3. Section grouping with card containers
 4. Mobile responsiveness
 
 ### Phase 2: Interactive Features (Medium Priority)
+
 1. Progress bar implementation
 2. Icons & tooltips
 3. Inline validation feedback
 4. Button animations
 
 ### Phase 3: Polish & Accessibility (Medium Priority)
+
 1. Full accessibility audit
 2. Cross-browser testing
 3. Aesthetic enhancements
@@ -133,6 +141,7 @@ This document outlines front-end UI/UX improvements to enhance the clarity, acce
 ---
 
 **Related Files:**
+
 - Main calculator form: `src/components/FastCalculatorForm.tsx`
 - Design system: `src/components/design-system/`
 - Styles: `src/styles/`

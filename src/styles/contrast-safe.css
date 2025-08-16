@@ -291,15 +291,15 @@
   .safe-primary {
     @apply bg-primary-600 text-white;
   }
-  
+
   .safe-secondary {
     @apply bg-secondary-600 text-white;
   }
-  
+
   .safe-neutral-light {
     @apply bg-white text-black border-2 border-black;
   }
-  
+
   .safe-neutral-dark {
     @apply bg-black text-white border-2 border-white;
   }

@@ -1,32 +1,32 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import type { PexelsPhoto } from '@/lib/pexels'
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import type { PexelsPhoto } from "@/lib/pexels";
 
 interface PexelsImageProps {
-  theme?: 'home' | 'money' | 'success' | 'planning' | 'family'
-  query?: string
-  size?: 'small' | 'medium' | 'large'
-  orientation?: 'landscape' | 'portrait' | 'square'
-  className?: string
-  alt?: string
-  width?: number
-  height?: number
-  priority?: boolean
-  fallbackSrc?: string
-  onLoad?: (photo: PexelsPhoto) => void
-  onError?: (error: string) => void
-  showAttribution?: boolean
-  attributionClassName?: string
+  theme?: "home" | "money" | "success" | "planning" | "family";
+  query?: string;
+  size?: "small" | "medium" | "large";
+  orientation?: "landscape" | "portrait" | "square";
+  className?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  priority?: boolean;
+  fallbackSrc?: string;
+  onLoad?: (photo: PexelsPhoto) => void;
+  onError?: (error: string) => void;
+  showAttribution?: boolean;
+  attributionClassName?: string;
 }
 
 export default function PexelsImage({
   theme,
   query,
-  size = 'medium',
-  orientation = 'landscape',
-  className = '',
+  size = "medium",
+  orientation = "landscape",
+  className = "",
   alt,
   width = 800,
   height = 600,
@@ -35,69 +35,73 @@ export default function PexelsImage({
   onLoad,
   onError,
   showAttribution = true,
-  attributionClassName = 'text-xs text-gray-500 mt-1'
+  attributionClassName = "text-xs text-gray-500 mt-1",
 }: PexelsImageProps) {
-  const [photo, setPhoto] = useState<PexelsPhoto | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [photo, setPhoto] = useState<PexelsPhoto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPhoto = async () => {
       try {
-        setLoading(true)
-        setError(null)
+        setLoading(true);
+        setError(null);
 
         const params = new URLSearchParams({
-          per_page: '20',
-          page: '1',
+          per_page: "20",
+          page: "1",
           size,
           orientation,
-          random: 'true'
-        })
+          random: "true",
+        });
 
         if (theme) {
-          params.append('theme', theme)
+          params.append("theme", theme);
         } else if (query) {
-          params.append('query', query)
+          params.append("query", query);
         } else {
           // Default to financial themed photos
-          params.append('theme', 'money')
+          params.append("theme", "money");
         }
 
-        const response = await fetch(`/api/pexels/search?${params}`)
-        const data = await response.json()
+        const response = await fetch(`/api/pexels/search?${params}`);
+        const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || 'Failed to fetch image')
+          throw new Error(data.message || "Failed to fetch image");
         }
 
         if (data.success && data.data.photos.length > 0) {
-          const selectedPhoto = data.data.photos[0]
-          setPhoto(selectedPhoto)
-          onLoad?.(selectedPhoto)
+          const selectedPhoto = data.data.photos[0];
+          setPhoto(selectedPhoto);
+          onLoad?.(selectedPhoto);
         } else {
-          throw new Error('No photos found')
+          throw new Error("No photos found");
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to load image'
-        setError(errorMessage)
-        onError?.(errorMessage)
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load image";
+        setError(errorMessage);
+        onError?.(errorMessage);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPhoto()
-  }, [theme, query, size, orientation, onLoad, onError])
+    fetchPhoto();
+  }, [theme, query, size, orientation, onLoad, onError]);
 
   if (loading) {
     return (
-      <div className={`animate-pulse bg-gray-200 ${className}`} style={{ width, height }}>
+      <div
+        className={`animate-pulse bg-gray-200 ${className}`}
+        style={{ width, height }}
+      >
         <div className="flex items-center justify-center h-full">
           <div className="text-gray-400 text-sm">Loading image...</div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error || !photo) {
@@ -106,7 +110,7 @@ export default function PexelsImage({
         <div className={className}>
           <Image
             src={fallbackSrc}
-            alt={alt || 'Fallback image'}
+            alt={alt || "Fallback image"}
             width={width}
             height={height}
             priority={priority}
@@ -118,30 +122,33 @@ export default function PexelsImage({
             </div>
           )}
         </div>
-      )
+      );
     }
 
     return (
-      <div className={`bg-gray-200 flex items-center justify-center ${className}`} style={{ width, height }}>
+      <div
+        className={`bg-gray-200 flex items-center justify-center ${className}`}
+        style={{ width, height }}
+      >
         <div className="text-gray-400 text-sm text-center">
           <div>Image unavailable</div>
           {error && <div className="text-xs mt-1">{error}</div>}
         </div>
       </div>
-    )
+    );
   }
 
   // Select appropriate image size from Pexels
   const getImageSrc = () => {
     switch (size) {
-      case 'small':
-        return photo.src.small
-      case 'large':
-        return photo.src.large
+      case "small":
+        return photo.src.small;
+      case "large":
+        return photo.src.large;
       default:
-        return photo.src.medium
+        return photo.src.medium;
     }
-  }
+  };
 
   return (
     <div className={className}>
@@ -154,8 +161,8 @@ export default function PexelsImage({
         className="object-cover"
         placeholder="blur"
         blurDataURL={`data:image/svg+xml;base64,${Buffer.from(
-          `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="${photo.avg_color}"/></svg>`
-        ).toString('base64')}`}
+          `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="${photo.avg_color}"/></svg>`,
+        ).toString("base64")}`}
       />
       {showAttribution && (
         <div className={attributionClassName}>
@@ -180,74 +187,82 @@ export default function PexelsImage({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Hook for using Pexels images in components
 export function usePexelsImage(
-  theme?: 'home' | 'money' | 'success' | 'planning' | 'family',
+  theme?: "home" | "money" | "success" | "planning" | "family",
   query?: string,
   options: {
-    size?: 'small' | 'medium' | 'large'
-    orientation?: 'landscape' | 'portrait' | 'square'
-    autoFetch?: boolean
-  } = {}
+    size?: "small" | "medium" | "large";
+    orientation?: "landscape" | "portrait" | "square";
+    autoFetch?: boolean;
+  } = {},
 ) {
-  const [photo, setPhoto] = useState<PexelsPhoto | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [photo, setPhoto] = useState<PexelsPhoto | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchPhoto = async () => {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       const params = new URLSearchParams({
-        per_page: '20',
-        page: '1',
-        size: options.size || 'medium',
-        orientation: options.orientation || 'landscape',
-        random: 'true'
-      })
+        per_page: "20",
+        page: "1",
+        size: options.size || "medium",
+        orientation: options.orientation || "landscape",
+        random: "true",
+      });
 
       if (theme) {
-        params.append('theme', theme)
+        params.append("theme", theme);
       } else if (query) {
-        params.append('query', query)
+        params.append("query", query);
       } else {
-        params.append('theme', 'money')
+        params.append("theme", "money");
       }
 
-      const response = await fetch(`/api/pexels/search?${params}`)
-      const data = await response.json()
+      const response = await fetch(`/api/pexels/search?${params}`);
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch image')
+        throw new Error(data.message || "Failed to fetch image");
       }
 
       if (data.success && data.data.photos.length > 0) {
-        setPhoto(data.data.photos[0])
+        setPhoto(data.data.photos[0]);
       } else {
-        throw new Error('No photos found')
+        throw new Error("No photos found");
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load image'
-      setError(errorMessage)
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to load image";
+      setError(errorMessage);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (options.autoFetch !== false) {
-      fetchPhoto()
+      fetchPhoto();
     }
-  }, [theme, query, options.size, options.orientation, options.autoFetch, fetchPhoto])
+  }, [
+    theme,
+    query,
+    options.size,
+    options.orientation,
+    options.autoFetch,
+    fetchPhoto,
+  ]);
 
   return {
     photo,
     loading,
     error,
-    refetch: fetchPhoto
-  }
+    refetch: fetchPhoto,
+  };
 }

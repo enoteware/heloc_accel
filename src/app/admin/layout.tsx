@@ -1,26 +1,24 @@
-import { redirect } from 'next/navigation'
-import { stackServerApp } from '@/stack'
-import AdminSidebar from './_components/AdminSidebar'
+import { redirect } from "next/navigation";
+import { stackServerApp } from "@/stack";
+import AdminSidebar from "./_components/AdminSidebar";
 
 export default async function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const user = await stackServerApp.getUser()
+  const user = await stackServerApp.getUser();
 
   // Check if user is authenticated
   if (!user) {
-    redirect('/handler/sign-in')
+    redirect("/handler/sign-in");
   }
 
-  // In demo mode, allow any authenticated user to be admin
-  // In production, you would check for admin role here
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-  const isAdmin = isDemoMode || user.primaryEmail === 'admin@helocaccelerator.com'
+  // Check for admin role - in production, you would check for admin role here
+  const isAdmin = user.primaryEmail === "admin@helocaccelerator.com";
 
   if (!isAdmin) {
-    redirect('/dashboard')
+    redirect("/dashboard");
   }
 
   return (
@@ -28,14 +26,12 @@ export default async function AdminLayout({
       <div className="flex">
         {/* Sidebar */}
         <AdminSidebar />
-        
+
         {/* Main Content */}
         <main className="flex-1 lg:ml-64">
-          <div className="p-4 sm:p-6 lg:p-8">
-            {children}
-          </div>
+          <div className="p-4 sm:p-6 lg:p-8">{children}</div>
         </main>
       </div>
     </div>
-  )
+  );
 }

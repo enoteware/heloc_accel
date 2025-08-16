@@ -1,93 +1,125 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Modal } from '@/components/design-system/Modal'
-import { Button } from '@/components/design-system/Button'
-import { FormField } from '@/components/design-system/FormField'
-import { ValidatedInput } from '@/components/design-system/ValidatedInput'
+import { useState, useEffect } from "react";
+import { Modal } from "@/components/design-system/Modal";
+import { Button } from "@/components/design-system/Button";
+import { FormField } from "@/components/design-system/FormField";
+import { ValidatedInput } from "@/components/design-system/ValidatedInput";
 
 interface SaveScenarioModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (scenarioName: string, description: string) => Promise<void>
-  isLoading?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (scenarioName: string, description: string) => Promise<void>;
+  isLoading?: boolean;
 }
 
 export default function SaveScenarioModal({
   isOpen,
   onClose,
   onSave,
-  isLoading = false
+  isLoading = false,
 }: SaveScenarioModalProps) {
-  const [scenarioName, setScenarioName] = useState('')
-  const [description, setDescription] = useState('')
-  const [nameError, setNameError] = useState('')
+  const [scenarioName, setScenarioName] = useState("");
+  const [description, setDescription] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  // Generate default scenario name when modal opens
+  useEffect(() => {
+    if (isOpen && !scenarioName) {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+      const timeStr = now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+      setScenarioName(`HELOC Analysis - ${dateStr} at ${timeStr}`);
+    }
+  }, [isOpen, scenarioName]);
 
   const handleSave = async () => {
-    console.log('=== SAVE SCENARIO MODAL ===')
-    console.log('Scenario name:', scenarioName.trim())
-    console.log('Description length:', description.trim().length)
-    
+    console.log("=== SAVE SCENARIO MODAL ===");
+    console.log("Scenario name:", scenarioName.trim());
+    console.log("Description length:", description.trim().length);
+
     if (!scenarioName.trim()) {
-      console.log('❌ Validation failed: Scenario name is required')
-      setNameError('Scenario name is required')
-      return
+      console.log("❌ Validation failed: Scenario name is required");
+      setNameError("Scenario name is required");
+      return;
     }
 
     if (scenarioName.trim().length < 3) {
-      console.log('❌ Validation failed: Scenario name too short:', scenarioName.trim().length)
-      setNameError('Scenario name must be at least 3 characters')
-      return
+      console.log(
+        "❌ Validation failed: Scenario name too short:",
+        scenarioName.trim().length,
+      );
+      setNameError("Scenario name must be at least 3 characters");
+      return;
     }
 
-    console.log('✅ Modal validation passed, calling onSave...')
+    console.log("✅ Modal validation passed, calling onSave...");
     try {
-      await onSave(scenarioName.trim(), description.trim())
-      console.log('✅ Save successful, clearing form and closing modal')
-      setScenarioName('')
-      setDescription('')
-      setNameError('')
-      onClose()
+      await onSave(scenarioName.trim(), description.trim());
+      console.log("✅ Save successful, clearing form and closing modal");
+      // Clear form after successful save
+      setScenarioName("");
+      setDescription("");
+      setNameError("");
+      onClose();
     } catch (error) {
-      console.error('❌ Save failed:', error)
-      console.error('Full error details:', {
-        name: error instanceof Error ? error.name : 'Unknown',
+      console.error("❌ Save failed:", error);
+      console.error("Full error details:", {
+        name: error instanceof Error ? error.name : "Unknown",
         message: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      })
-      
-      if (error instanceof Error && error.message.includes('already exists')) {
-        console.log('Error type: Duplicate scenario name')
-        setNameError('A scenario with this name already exists')
-      } else if (error instanceof Error && error.message.includes('Unauthorized')) {
-        console.log('Error type: Authentication error')
-        setNameError('You must be logged in to save scenarios. Please sign in and try again.')
-      } else if (error instanceof Error && error.message.includes('Authentication')) {
-        console.log('Error type: Authentication error')
-        setNameError('Authentication error. Please sign in again.')
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
+      if (error instanceof Error && error.message.includes("already exists")) {
+        console.log("Error type: Duplicate scenario name");
+        setNameError("A scenario with this name already exists");
+      } else if (
+        error instanceof Error &&
+        error.message.includes("Unauthorized")
+      ) {
+        console.log("Error type: Authentication error");
+        setNameError(
+          "You must be logged in to save scenarios. Please sign in and try again.",
+        );
+      } else if (
+        error instanceof Error &&
+        error.message.includes("Authentication")
+      ) {
+        console.log("Error type: Authentication error");
+        setNameError("Authentication error. Please sign in again.");
       } else {
-        console.log('Error type: Generic save failure')
-        setNameError(`Failed to save scenario: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        console.log("Error type: Generic save failure");
+        setNameError(
+          `Failed to save scenario: ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
       }
     }
-  }
+  };
 
   const handleClose = () => {
     if (!isLoading) {
-      setScenarioName('')
-      setDescription('')
-      setNameError('')
-      onClose()
+      // Don't clear scenario name - keep it for next time
+      setDescription("");
+      setNameError("");
+      onClose();
     }
-  }
+  };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setScenarioName(value)
+    const value = event.target.value;
+    setScenarioName(value);
     if (nameError) {
-      setNameError('')
+      setNameError("");
     }
-  }
+  };
 
   return (
     <Modal
@@ -98,7 +130,8 @@ export default function SaveScenarioModal({
     >
       <div className="space-y-6">
         <div className="text-sm text-gray-700">
-          Save your calculation results as a scenario for future reference and comparison.
+          Save your calculation results as a scenario for future reference and
+          comparison.
         </div>
 
         <ValidatedInput
@@ -112,13 +145,11 @@ export default function SaveScenarioModal({
           maxLength={100}
           disabled={isLoading}
           error={nameError}
-          aria-describedby={nameError ? 'scenario-name-error' : undefined}
+          aria-describedby={nameError ? "scenario-name-error" : undefined}
           className="!bg-white !text-black dark:!bg-white dark:!text-black"
         />
 
-        <FormField
-          label="Description (Optional)"
-        >
+        <FormField label="Description (Optional)">
           <textarea
             id="scenario-description"
             value={description}
@@ -135,11 +166,7 @@ export default function SaveScenarioModal({
         </FormField>
 
         <div className="flex justify-end space-x-3 pt-4 border-t border-blue-gray-200">
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            disabled={isLoading}
-          >
+          <Button variant="outline" onClick={handleClose} disabled={isLoading}>
             Cancel
           </Button>
           <Button
@@ -153,5 +180,5 @@ export default function SaveScenarioModal({
         </div>
       </div>
     </Modal>
-  )
+  );
 }

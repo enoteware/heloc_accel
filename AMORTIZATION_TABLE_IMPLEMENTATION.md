@@ -1,19 +1,23 @@
 # Complete Amortization Table Implementation
 
 ## Overview
+
 We've implemented a comprehensive amortization table that matches the Excel format shown in the screenshot, including all financial columns and calculations for HELOC acceleration strategy.
 
 ## Features Implemented
 
 ### 1. **Full Amortization Table Component** (`/src/components/FullAmortizationTable.tsx`)
+
 - Matches Excel column structure exactly
 - All financial calculations included
 - Interactive features for better usability
 
 ### 2. **Excel Columns Implemented**
+
 Based on the screenshot, we've included all columns:
 
 #### Mortgage Information
+
 - **Month #** - Sequential month number
 - **Beginning Balance** - Mortgage balance at start of month
 - **Monthly Payment** - Regular mortgage payment
@@ -21,11 +25,13 @@ Based on the screenshot, we've included all columns:
 - **Interest Payment** - Interest portion of payment
 
 #### Cash Flow Analysis
+
 - **Monthly Deposit** - Total monthly income
 - **Monthly Expenses** - Total monthly expenses
 - **Net Surplus** - Available funds after all payments
 
 #### HELOC Strategy
+
 - **Usable HELOC Room** - Available credit line
 - **Extra Payment to Mortgage** - Additional principal payment (highlighted)
 - **Net Change in HELOC** - Monthly HELOC balance change
@@ -33,6 +39,7 @@ Based on the screenshot, we've included all columns:
 - **HELOC Interest** - Interest on HELOC balance
 
 #### Additional Tracking
+
 - **PMI Cost** - Monthly PMI payment (drops at 80% LTV)
 - **LTV %** - Loan-to-value ratio
 - **Cumulative Interest** - Running total of interest paid
@@ -40,6 +47,7 @@ Based on the screenshot, we've included all columns:
 - **Total Interest Paid** - Combined mortgage + HELOC interest
 
 ### 3. **Interactive Features**
+
 - **Column Toggle**: Show essential columns or all columns
 - **PMI Highlighting**: Visual indicator when PMI is active
 - **Expandable Rows**: Click any row for detailed breakdown
@@ -47,6 +55,7 @@ Based on the screenshot, we've included all columns:
 - **Export to CSV**: Download complete schedule as Excel-compatible file
 
 ### 4. **Visual Enhancements**
+
 - **Color Coding**:
   - Orange/Secondary: Extra payments (HELOC benefit)
   - Purple: PMI-related cells
@@ -60,12 +69,14 @@ Based on the screenshot, we've included all columns:
   - HELOC paid off month
 
 ### 5. **Export Functionality**
+
 - Complete CSV export with all columns
 - Formatted numbers (2 decimal places)
 - Proper date-stamped filenames
 - Excel-compatible format
 
 ### 6. **Responsive Design**
+
 - Horizontal scrolling for mobile devices
 - Sticky month column for reference
 - Grouped column headers for organization
@@ -74,6 +85,7 @@ Based on the screenshot, we've included all columns:
 ## Usage in Results Display
 
 The full amortization table is now integrated into the results display:
+
 1. Shows after the payment flow diagram
 2. Includes all user inputs for calculations
 3. Provides complete month-by-month breakdown

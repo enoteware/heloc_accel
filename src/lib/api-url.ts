@@ -4,8 +4,8 @@
  */
 export function getApiUrl(path: string): string {
   // Remove leading slash if present
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
 
   // Always use root path for Vercel deployment
-  return `/${cleanPath}`
+  return `/${cleanPath}`;
 }

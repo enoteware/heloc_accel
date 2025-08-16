@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "devCommand": "npm run dev", 
+  "devCommand": "npm run dev",
   "installCommand": "npm ci",
   "framework": "nextjs",
   "regions": ["iad1"],
@@ -18,7 +18,7 @@
           "value": "nosniff"
         },
         {
-          "key": "X-Frame-Options", 
+          "key": "X-Frame-Options",
           "value": "DENY"
         },
         {

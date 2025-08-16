@@ -84,7 +84,7 @@
   "security": {
     "sensitive_patterns": [
       "password",
-      "secret", 
+      "secret",
       "token",
       "api_key",
       "private_key",
@@ -97,7 +97,7 @@
   "workflow_preferences": {
     "default_mcp_workflow": {
       "code_exploration": "serena",
-      "library_research": "context7", 
+      "library_research": "context7",
       "ui_testing": "playwright",
       "complex_planning": "sequential-thinking",
       "database_queries": "postgres",
@@ -105,7 +105,7 @@
     },
     "feature_development": [
       "sequential-thinking: Plan implementation",
-      "serena: Explore code structure", 
+      "serena: Explore code structure",
       "postgres: Analyze database schema (if data-related)",
       "context7: Research libraries/APIs",
       "serena: Implement changes",

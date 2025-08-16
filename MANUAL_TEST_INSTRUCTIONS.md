@@ -3,6 +3,7 @@
 If you prefer to run the test manually or if the automated test doesn't work, follow these steps:
 
 ## Prerequisites
+
 1. Make sure the application is running on http://localhost:3005
 2. Install Playwright: `npm install -D @playwright/test`
 3. Install browsers: `npx playwright install`
@@ -10,16 +11,19 @@ If you prefer to run the test manually or if the automated test doesn't work, fo
 ## Running the Automated Test
 
 ### Option 1: Using the test runner script
+
 ```bash
 ./run-e2e-test.sh
 ```
 
 ### Option 2: Direct Playwright command
+
 ```bash
 npx playwright test tests/e2e/heloc-calculator-test.ts --headed --project=chromium
 ```
 
 ### Option 3: Debug mode with step-by-step execution
+
 ```bash
 npx playwright test tests/e2e/heloc-calculator-test.ts --debug
 ```
@@ -38,6 +42,7 @@ If you want to test manually in your browser:
    - URL should change to http://localhost:3005/calculator
 
 3. **Fill Calculator Form**
+
    ```
    Home Value: 400000
    Current Mortgage Balance: 250000
@@ -66,12 +71,14 @@ If you want to test manually in your browser:
 ## What to Look For
 
 ### Console Errors (High Priority)
+
 - JavaScript errors (red text in console)
 - Failed network requests (404, 500 errors)
 - CORS errors
 - Missing dependencies
 
 ### UI Issues (Medium Priority)
+
 - Forms not submitting
 - Buttons not clickable
 - Missing elements
@@ -79,6 +86,7 @@ If you want to test manually in your browser:
 - Results not displaying
 
 ### Functional Issues (High Priority)
+
 - Calculations not working
 - Save functionality broken
 - Navigation issues
@@ -96,20 +104,24 @@ After running the automated test:
 ## Common Issues and Solutions
 
 ### Port 3005 not accessible
+
 - Make sure to run the app with: `PORT=3005 npm run dev`
 - Or update the test to use your current port
 
 ### Playwright not installed
+
 ```bash
 npm install -D @playwright/test
 npx playwright install
 ```
 
 ### Test timeouts
+
 - Increase timeouts in the test file
 - Check if the app is running slowly
 - Look for infinite loops or heavy computations
 
 ### Authentication issues
+
 - The test assumes no authentication is required
 - If auth is needed, update the test to log in first

@@ -82,6 +82,7 @@ echo "💡 Use Claude to help sync TODO.md with current project state"
 ```
 
 Use this command to:
+
 - **Analyze TODO.md status** and completion progress
 - **Review recent development** for completed tasks
 - **Find new tasks** from code comments and issues

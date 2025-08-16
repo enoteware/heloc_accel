@@ -1,77 +1,80 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { validateCalculatorInputs, sanitizeCalculatorInputs } from '@/lib/validation'
-import { compareStrategies } from '@/lib/calculations'
-import { ApiResponse } from '@/lib/types'
-import { applyRateLimit, calculationRateLimit } from '@/lib/rate-limit'
-import { applySecurityHeaders, defaultSecurityHeaders } from '@/lib/security-headers'
-import { extractErrorDetails, ErrorCode, createErrorResponse } from '@/lib/errors'
+import { NextRequest, NextResponse } from "next/server";
+import {
+  validateCalculatorInputs,
+  sanitizeCalculatorInputs,
+} from "@/lib/validation";
+import { compareStrategies } from "@/lib/calculations";
+import { ApiResponse } from "@/lib/types";
+import { applyRateLimit, calculationRateLimit } from "@/lib/rate-limit";
+import {
+  applySecurityHeaders,
+  defaultSecurityHeaders,
+} from "@/lib/security-headers";
+import {
+  extractErrorDetails,
+  ErrorCode,
+  createErrorResponse,
+} from "@/lib/errors";
 
 export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting
-    const rateLimitResponse = applyRateLimit(request, calculationRateLimit)
+    const rateLimitResponse = applyRateLimit(request, calculationRateLimit);
     if (rateLimitResponse) {
-      return rateLimitResponse
+      return rateLimitResponse;
     }
 
-    // Check authentication (skip in demo mode)
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE?.trim().toLowerCase() === 'true'
-    let user = null
-    if (!isDemoMode) {
-      // TODO: Implement Stack Auth server-side authentication
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication not implemented for production mode'
-      }, { status: 501 })
-    } else {
-      // In demo mode, use a demo user
-      user = { id: 'demo-user', email: 'demo@example.com' }
-    }
+    // This endpoint is public - calculations don't require authentication
 
-    const body = await request.json()
-    console.log('Raw request body:', body)
+    const body = await request.json();
+    console.log("Raw request body:", body);
 
     // Sanitize inputs
-    const sanitizedInputs = sanitizeCalculatorInputs(body)
-    console.log('Sanitized inputs:', sanitizedInputs)
+    const sanitizedInputs = sanitizeCalculatorInputs(body);
+    console.log("Sanitized inputs:", sanitizedInputs);
 
     // Validate inputs
-    const validation = validateCalculatorInputs(sanitizedInputs)
-    console.log('Validation result:', validation)
+    const validation = validateCalculatorInputs(sanitizedInputs);
+    console.log("Validation result:", validation);
 
     if (!validation.isValid) {
-      console.log('Validation failed with errors:', validation.errors)
-      
+      console.log("Validation failed with errors:", validation.errors);
+
       // Create a user-friendly error message
-      const errorCount = validation.errors.length
-      const primaryError = validation.errors[0]
-      let errorMessage = ''
-      
+      const errorCount = validation.errors.length;
+      const primaryError = validation.errors[0];
+      let errorMessage = "";
+
       if (errorCount === 1) {
-        errorMessage = primaryError.message
+        errorMessage = primaryError.message;
       } else {
-        errorMessage = `Please fix ${errorCount} validation errors. ${primaryError.message}`
+        errorMessage = `Please fix ${errorCount} validation errors. ${primaryError.message}`;
       }
-      
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: errorMessage,
-        data: { 
-          validationErrors: validation.errors,
-          errorCount: errorCount,
-          fields: validation.errors.map(e => e.field)
-        }
-      }, { status: 400 })
+
+      return NextResponse.json<ApiResponse>(
+        {
+          success: false,
+          error: errorMessage,
+          data: {
+            validationErrors: validation.errors,
+            errorCount: errorCount,
+            fields: validation.errors.map((e) => e.field),
+          },
+        },
+        { status: 400 },
+      );
     }
 
     // Convert percentage inputs to decimals if needed
-    const currentInterestRate = sanitizedInputs.currentInterestRate > 1
-      ? sanitizedInputs.currentInterestRate / 100
-      : sanitizedInputs.currentInterestRate
+    const currentInterestRate =
+      sanitizedInputs.currentInterestRate > 1
+        ? sanitizedInputs.currentInterestRate / 100
+        : sanitizedInputs.currentInterestRate;
 
-    const helocInterestRate = sanitizedInputs.helocInterestRate && sanitizedInputs.helocInterestRate > 1
-      ? sanitizedInputs.helocInterestRate / 100
-      : sanitizedInputs.helocInterestRate || 0
+    const helocInterestRate =
+      sanitizedInputs.helocInterestRate && sanitizedInputs.helocInterestRate > 1
+        ? sanitizedInputs.helocInterestRate / 100
+        : sanitizedInputs.helocInterestRate || 0;
 
     // Prepare inputs for calculation
     const mortgageInput = {
@@ -81,8 +84,8 @@ export async function POST(request: NextRequest) {
       currentBalance: sanitizedInputs.currentMortgageBalance,
       monthlyPayment: sanitizedInputs.monthlyPayment,
       propertyValue: sanitizedInputs.propertyValue,
-      pmiMonthly: sanitizedInputs.pmiMonthly
-    }
+      pmiMonthly: sanitizedInputs.pmiMonthly,
+    };
 
     const helocInput = {
       mortgageBalance: sanitizedInputs.currentMortgageBalance,
@@ -91,116 +94,143 @@ export async function POST(request: NextRequest) {
       helocLimit: sanitizedInputs.helocLimit || 0,
       helocRate: helocInterestRate,
       discretionaryIncome: sanitizedInputs.monthlyDiscretionaryIncome,
-      helocAvailableCredit: sanitizedInputs.helocAvailableCredit || sanitizedInputs.helocLimit || 0,
+      helocAvailableCredit:
+        sanitizedInputs.helocAvailableCredit || sanitizedInputs.helocLimit || 0,
       propertyValue: sanitizedInputs.propertyValue,
-      pmiMonthly: sanitizedInputs.pmiMonthly
-    }
+      pmiMonthly: sanitizedInputs.pmiMonthly,
+    };
 
     // Perform calculations
-    const results = compareStrategies(mortgageInput, helocInput)
+    const results = compareStrategies(mortgageInput, helocInput);
 
     // Format response
     const response = {
       traditional: {
         payoffMonths: results.traditional.payoffMonths,
-        totalInterest: Math.round(results.traditional.totalInterest * 100) / 100,
-        monthlyPayment: Math.round(results.traditional.monthlyPayment * 100) / 100,
-        totalPayments: Math.round(results.traditional.totalPayments * 100) / 100,
-        schedule: results.traditional.schedule.map(payment => ({
+        totalInterest:
+          Math.round(results.traditional.totalInterest * 100) / 100,
+        monthlyPayment:
+          Math.round(results.traditional.monthlyPayment * 100) / 100,
+        totalPayments:
+          Math.round(results.traditional.totalPayments * 100) / 100,
+        schedule: results.traditional.schedule.map((payment) => ({
           month: payment.month,
           beginningBalance: Math.round(payment.beginningBalance * 100) / 100,
           paymentAmount: Math.round(payment.paymentAmount * 100) / 100,
           principalPayment: Math.round(payment.principalPayment * 100) / 100,
           interestPayment: Math.round(payment.interestPayment * 100) / 100,
           endingBalance: Math.round(payment.endingBalance * 100) / 100,
-          cumulativeInterest: Math.round(payment.cumulativeInterest * 100) / 100,
-          cumulativePrincipal: Math.round(payment.cumulativePrincipal * 100) / 100,
-          pmiPayment: payment.pmiPayment !== undefined ? Math.round(payment.pmiPayment * 100) / 100 : undefined,
-          currentLTV: payment.currentLTV !== undefined ? Math.round(payment.currentLTV * 100) / 100 : undefined
-        }))
+          cumulativeInterest:
+            Math.round(payment.cumulativeInterest * 100) / 100,
+          cumulativePrincipal:
+            Math.round(payment.cumulativePrincipal * 100) / 100,
+          pmiPayment:
+            payment.pmiPayment !== undefined
+              ? Math.round(payment.pmiPayment * 100) / 100
+              : undefined,
+          currentLTV:
+            payment.currentLTV !== undefined
+              ? Math.round(payment.currentLTV * 100) / 100
+              : undefined,
+        })),
       },
       heloc: {
         payoffMonths: results.heloc.payoffMonths,
         totalInterest: Math.round(results.heloc.totalInterest * 100) / 100,
-        totalMortgageInterest: Math.round(results.heloc.totalMortgageInterest * 100) / 100,
-        totalHelocInterest: Math.round(results.heloc.totalHelocInterest * 100) / 100,
+        totalMortgageInterest:
+          Math.round(results.heloc.totalMortgageInterest * 100) / 100,
+        totalHelocInterest:
+          Math.round(results.heloc.totalHelocInterest * 100) / 100,
         maxHelocUsed: Math.round(results.heloc.maxHelocUsed * 100) / 100,
-        averageHelocBalance: Math.round(results.heloc.averageHelocBalance * 100) / 100,
-        schedule: results.heloc.schedule.map(payment => ({
+        averageHelocBalance:
+          Math.round(results.heloc.averageHelocBalance * 100) / 100,
+        schedule: results.heloc.schedule.map((payment) => ({
           month: payment.month,
           beginningBalance: Math.round(payment.beginningBalance * 100) / 100,
           paymentAmount: Math.round(payment.paymentAmount * 100) / 100,
           principalPayment: Math.round(payment.principalPayment * 100) / 100,
           interestPayment: Math.round(payment.interestPayment * 100) / 100,
           endingBalance: Math.round(payment.endingBalance * 100) / 100,
-          cumulativeInterest: Math.round(payment.cumulativeInterest * 100) / 100,
-          cumulativePrincipal: Math.round(payment.cumulativePrincipal * 100) / 100,
+          cumulativeInterest:
+            Math.round(payment.cumulativeInterest * 100) / 100,
+          cumulativePrincipal:
+            Math.round(payment.cumulativePrincipal * 100) / 100,
           helocBalance: Math.round(payment.helocBalance * 100) / 100,
           helocPayment: Math.round(payment.helocPayment * 100) / 100,
           helocInterest: Math.round(payment.helocInterest * 100) / 100,
-          totalMonthlyPayment: Math.round(payment.totalMonthlyPayment * 100) / 100,
+          totalMonthlyPayment:
+            Math.round(payment.totalMonthlyPayment * 100) / 100,
           discretionaryUsed: Math.round(payment.discretionaryUsed * 100) / 100,
           pmiPayment: Math.round(payment.pmiPayment * 100) / 100,
-          currentEquityPercentage: payment.currentEquityPercentage ? Math.round(payment.currentEquityPercentage * 100) / 100 : undefined
-        }))
+          currentEquityPercentage: payment.currentEquityPercentage
+            ? Math.round(payment.currentEquityPercentage * 100) / 100
+            : undefined,
+        })),
       },
       comparison: {
         timeSavedMonths: results.comparison.timeSavedMonths,
-        timeSavedYears: Math.round((results.comparison.timeSavedMonths / 12) * 10) / 10,
+        timeSavedYears:
+          Math.round((results.comparison.timeSavedMonths / 12) * 10) / 10,
         interestSaved: Math.round(results.comparison.interestSaved * 100) / 100,
-        percentageInterestSaved: Math.round(results.comparison.percentageInterestSaved * 100) / 100,
-        monthlyPaymentDifference: Math.round(results.comparison.monthlyPaymentDifference * 100) / 100
+        percentageInterestSaved:
+          Math.round(results.comparison.percentageInterestSaved * 100) / 100,
+        monthlyPaymentDifference:
+          Math.round(results.comparison.monthlyPaymentDifference * 100) / 100,
       },
       metadata: {
         calculatedAt: new Date().toISOString(),
-        userId: user?.id || 'demo',
-        inputs: sanitizedInputs
-      }
-    }
+        inputs: sanitizedInputs,
+      },
+    };
 
-    const successResponse = NextResponse.json<ApiResponse>({
-      success: true,
-      data: response,
-      message: 'Calculation completed successfully'
-    }, { status: 200 })
+    const successResponse = NextResponse.json<ApiResponse>(
+      {
+        success: true,
+        data: response,
+        message: "Calculation completed successfully",
+      },
+      { status: 200 },
+    );
 
-    return applySecurityHeaders(successResponse, defaultSecurityHeaders)
-
+    return applySecurityHeaders(successResponse, defaultSecurityHeaders);
   } catch (error) {
-    console.error('Calculation error:', error)
+    console.error("Calculation error:", error);
 
     // Extract detailed error information
-    const errorDetails = extractErrorDetails(error)
-    
+    const errorDetails = extractErrorDetails(error);
+
     // Determine appropriate HTTP status code
-    let statusCode = 500
+    let statusCode = 500;
     switch (errorDetails.code) {
       case ErrorCode.AUTHENTICATION_REQUIRED:
-        statusCode = 401
-        break
+        statusCode = 401;
+        break;
       case ErrorCode.RATE_LIMIT_EXCEEDED:
-        statusCode = 429
-        break
+        statusCode = 429;
+        break;
       case ErrorCode.VALIDATION_FAILED:
       case ErrorCode.INVALID_INTEREST_RATE:
       case ErrorCode.INVALID_LOAN_TERM:
       case ErrorCode.NEGATIVE_AMORTIZATION:
       case ErrorCode.INSUFFICIENT_PAYMENT:
-        statusCode = 400
-        break
+        statusCode = 400;
+        break;
     }
 
-    const errorResponse = NextResponse.json<ApiResponse>({
-      success: false,
-      error: errorDetails.userMessage,
-      data: {
-        errorCode: errorDetails.code,
-        suggestion: errorDetails.suggestion,
-        field: errorDetails.field,
-        technicalMessage: errorDetails.message
-      }
-    }, { status: statusCode })
+    const errorResponse = NextResponse.json<ApiResponse>(
+      {
+        success: false,
+        error: errorDetails.userMessage,
+        data: {
+          errorCode: errorDetails.code,
+          suggestion: errorDetails.suggestion,
+          field: errorDetails.field,
+          technicalMessage: errorDetails.message,
+        },
+      },
+      { status: statusCode },
+    );
 
-    return applySecurityHeaders(errorResponse, defaultSecurityHeaders)
+    return applySecurityHeaders(errorResponse, defaultSecurityHeaders);
   }
 }

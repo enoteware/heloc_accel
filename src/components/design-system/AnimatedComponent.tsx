@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
-import { 
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+import {
   useIntersectionAnimation,
   fadeInKeyframes,
   slideInUpKeyframes,
@@ -10,11 +10,18 @@ import {
   slideInLeftKeyframes,
   slideInRightKeyframes,
   scaleInKeyframes,
-  UseAnimationOptions
-} from '../../hooks/useAnimation';
+  UseAnimationOptions,
+} from "../../hooks/useAnimation";
 
-export interface AnimatedComponentProps extends React.HTMLAttributes<HTMLDivElement> {
-  animation?: 'fadeIn' | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight' | 'scaleIn';
+export interface AnimatedComponentProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  animation?:
+    | "fadeIn"
+    | "slideInUp"
+    | "slideInDown"
+    | "slideInLeft"
+    | "slideInRight"
+    | "scaleIn";
   duration?: number;
   delay?: number;
   threshold?: number;
@@ -32,27 +39,36 @@ const animationKeyframes = {
   scaleIn: scaleInKeyframes,
 };
 
-export const AnimatedComponent = forwardRef<HTMLElement, AnimatedComponentProps>(
-  ({ 
-    animation = 'fadeIn',
-    duration = 600,
-    delay = 0,
-    threshold = 0.1,
-    rootMargin = '0px',
-    children,
-    className,
-    as: Component = 'div',
-    ...props 
-  }, ref) => {
+export const AnimatedComponent = forwardRef<
+  HTMLElement,
+  AnimatedComponentProps
+>(
+  (
+    {
+      animation = "fadeIn",
+      duration = 600,
+      delay = 0,
+      threshold = 0.1,
+      rootMargin = "0px",
+      children,
+      className,
+      as: Component = "div",
+      ...props
+    },
+    ref,
+  ) => {
     const keyframes = animationKeyframes[animation];
-    
-    const animationOptions: UseAnimationOptions & { threshold?: number; rootMargin?: string } = {
+
+    const animationOptions: UseAnimationOptions & {
+      threshold?: number;
+      rootMargin?: string;
+    } = {
       duration,
       delay,
       threshold,
       rootMargin,
-      easing: 'ease-out',
-      fillMode: 'forwards',
+      easing: "ease-out",
+      fillMode: "forwards",
     };
 
     const elementRef = useIntersectionAnimation(keyframes, animationOptions);
@@ -60,10 +76,11 @@ export const AnimatedComponent = forwardRef<HTMLElement, AnimatedComponentProps>
     // Merge refs if external ref is provided
     const mergedRef = (node: HTMLElement | null) => {
       if (elementRef) {
-        (elementRef as React.MutableRefObject<HTMLElement | null>).current = node;
+        (elementRef as React.MutableRefObject<HTMLElement | null>).current =
+          node;
       }
       if (ref) {
-        if (typeof ref === 'function') {
+        if (typeof ref === "function") {
           ref(node);
         } else {
           (ref as React.MutableRefObject<HTMLElement | null>).current = node;
@@ -75,45 +92,51 @@ export const AnimatedComponent = forwardRef<HTMLElement, AnimatedComponentProps>
       Component,
       {
         ref: mergedRef,
-        className: cn('opacity-0', className),
+        className: cn("opacity-0", className),
         ...props,
       },
-      children
+      children,
     );
-  }
+  },
 );
 
-AnimatedComponent.displayName = 'AnimatedComponent';
+AnimatedComponent.displayName = "AnimatedComponent";
 
 // Convenience components for common animations
-export const FadeIn: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="fadeIn" {...props} />
-);
+export const FadeIn: React.FC<Omit<AnimatedComponentProps, "animation">> = (
+  props,
+) => <AnimatedComponent animation="fadeIn" {...props} />;
 
-export const SlideInUp: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="slideInUp" {...props} />
-);
+export const SlideInUp: React.FC<Omit<AnimatedComponentProps, "animation">> = (
+  props,
+) => <AnimatedComponent animation="slideInUp" {...props} />;
 
-export const SlideInDown: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="slideInDown" {...props} />
-);
+export const SlideInDown: React.FC<
+  Omit<AnimatedComponentProps, "animation">
+> = (props) => <AnimatedComponent animation="slideInDown" {...props} />;
 
-export const SlideInLeft: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="slideInLeft" {...props} />
-);
+export const SlideInLeft: React.FC<
+  Omit<AnimatedComponentProps, "animation">
+> = (props) => <AnimatedComponent animation="slideInLeft" {...props} />;
 
-export const SlideInRight: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="slideInRight" {...props} />
-);
+export const SlideInRight: React.FC<
+  Omit<AnimatedComponentProps, "animation">
+> = (props) => <AnimatedComponent animation="slideInRight" {...props} />;
 
-export const ScaleIn: React.FC<Omit<AnimatedComponentProps, 'animation'>> = (props) => (
-  <AnimatedComponent animation="scaleIn" {...props} />
-);
+export const ScaleIn: React.FC<Omit<AnimatedComponentProps, "animation">> = (
+  props,
+) => <AnimatedComponent animation="scaleIn" {...props} />;
 
 // Staggered animation component
 export interface StaggeredAnimationProps {
   children: React.ReactNode[];
-  animation?: 'fadeIn' | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight' | 'scaleIn';
+  animation?:
+    | "fadeIn"
+    | "slideInUp"
+    | "slideInDown"
+    | "slideInLeft"
+    | "slideInRight"
+    | "scaleIn";
   duration?: number;
   staggerDelay?: number;
   threshold?: number;
@@ -122,7 +145,7 @@ export interface StaggeredAnimationProps {
 
 export const StaggeredAnimation: React.FC<StaggeredAnimationProps> = ({
   children,
-  animation = 'fadeIn',
+  animation = "fadeIn",
   duration = 600,
   staggerDelay = 100,
   threshold = 0.1,

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { useUser } from '@stackframe/stack';
-import { useRouter } from '@/i18n/routing';
-import { cn } from '@/lib/utils';
-import NavigationLink from './NavigationLink';
-import NavigationIcon from './NavigationIcon';
-import { signOutAction } from '@/app/actions/auth';
-import SimpleLanguageSwitcher from '@/components/SimpleLanguageSwitcher';
+import React, { useEffect } from "react";
+import { useUser } from "@stackframe/stack";
+import { useRouter } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+import NavigationLink from "./NavigationLink";
+import NavigationIcon from "./NavigationIcon";
+import { signOutAction } from "@/app/actions/auth";
+import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
 
 export interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -27,35 +27,37 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   // Close drawer on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
       // Prevent body scroll when drawer is open
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
   // Focus trap management
   useEffect(() => {
     if (isOpen) {
-      const drawer = document.getElementById('mobile-navigation-menu');
+      const drawer = document.getElementById("mobile-navigation-menu");
       const focusableElements = drawer?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       const firstElement = focusableElements?.[0] as HTMLElement;
-      const lastElement = focusableElements?.[focusableElements.length - 1] as HTMLElement;
+      const lastElement = focusableElements?.[
+        focusableElements.length - 1
+      ] as HTMLElement;
 
       const handleTabKey = (e: KeyboardEvent) => {
-        if (e.key === 'Tab') {
+        if (e.key === "Tab") {
           if (e.shiftKey) {
             if (document.activeElement === firstElement) {
               e.preventDefault();
@@ -70,11 +72,11 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         }
       };
 
-      document.addEventListener('keydown', handleTabKey);
+      document.addEventListener("keydown", handleTabKey);
       firstElement?.focus();
 
       return () => {
-        document.removeEventListener('keydown', handleTabKey);
+        document.removeEventListener("keydown", handleTabKey);
       };
     }
   }, [isOpen]);
@@ -91,13 +93,13 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   // Get user display info
   const getUserDisplayName = () => {
     if (user?.displayName) return user.displayName;
-    if (user?.primaryEmail) return user.primaryEmail.split('@')[0];
-    return 'User';
+    if (user?.primaryEmail) return user.primaryEmail.split("@")[0];
+    return "User";
   };
 
   const getUserInitials = () => {
     const name = getUserDisplayName();
-    const parts = name.split(' ');
+    const parts = name.split(" ");
     if (parts.length >= 2) {
       return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
     }
@@ -119,12 +121,12 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
       <div
         id="mobile-navigation-menu"
         className={cn(
-          'fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-neutral-900',
-          'shadow-xl border-l border-neutral-200 dark:border-neutral-800',
-          'z-50 transform transition-transform duration-300 ease-in-out',
-          'flex flex-col',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
-          className
+          "fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-neutral-900",
+          "shadow-xl border-l border-neutral-200 dark:border-neutral-800",
+          "z-50 transform transition-transform duration-300 ease-in-out",
+          "flex flex-col",
+          isOpen ? "translate-x-0" : "translate-x-full",
+          className,
         )}
         role="dialog"
         aria-modal="true"
@@ -141,10 +143,10 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               type="button"
               onClick={onClose}
               className={cn(
-                'p-2 rounded-lg text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100',
-                'dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-neutral-800',
-                'focus:outline-none focus:ring-2 focus:ring-primary-500',
-                'transition-colors duration-200'
+                "p-2 rounded-lg text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100",
+                "dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-neutral-800",
+                "focus:outline-none focus:ring-2 focus:ring-primary-500",
+                "transition-colors duration-200",
               )}
               aria-label="Close navigation menu"
             >
@@ -157,11 +159,13 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         {session?.user && (
           <div className="p-4 border-b border-neutral-200 dark:border-neutral-800">
             <div className="flex items-center space-x-3">
-              <div className={cn(
-                'flex items-center justify-center w-10 h-10 rounded-full',
-                'bg-primary-500 text-white text-sm font-medium',
-                'dark:bg-primary-600'
-              )}>
+              <div
+                className={cn(
+                  "flex items-center justify-center w-10 h-10 rounded-full",
+                  "bg-primary-500 text-white text-sm font-medium",
+                  "dark:bg-primary-600",
+                )}
+              >
                 {getUserInitials()}
               </div>
               <div>
@@ -187,7 +191,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             className="w-full justify-start"
             onClick={handleLinkClick}
           />
-          
+
           {session?.user && (
             <>
               <NavigationLink
@@ -236,10 +240,10 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               type="button"
               onClick={handleSignOut}
               className={cn(
-                'flex items-center space-x-2 w-full px-3 py-2 rounded-lg',
-                'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20',
-                'focus:outline-none focus:ring-2 focus:ring-red-500',
-                'transition-colors duration-200'
+                "flex items-center space-x-2 w-full px-3 py-2 rounded-lg",
+                "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20",
+                "focus:outline-none focus:ring-2 focus:ring-red-500",
+                "transition-colors duration-200",
               )}
             >
               <NavigationIcon name="logout" size="md" aria-hidden={true} />

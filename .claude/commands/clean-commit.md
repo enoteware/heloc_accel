@@ -41,13 +41,14 @@ A systematic approach to ensure code quality before committing to the main branc
      - Any breaking changes or side effects
 
    Example:
+
    ```text
    feat(calculator): add HELOC payment optimization algorithm
-   
+
    - Implemented new calculation engine for optimal payment strategies
    - Added validation for edge cases in interest calculations
    - Improved performance by 30% through caching
-   
+
    BREAKING CHANGE: Calculator API now requires helocRate parameter
    ```
 

@@ -28,6 +28,7 @@ or
 ## Prerequisites
 
 1. **Vercel CLI setup**:
+
    ```bash
    npm install -g vercel
    vercel login
@@ -39,17 +40,20 @@ or
 ## Features
 
 ### Intelligent Commit Detection
+
 - Skips commit if no changes detected
 - Generates descriptive commit messages with file count
 - Uses timestamps for easy tracking
 
 ### Automatic Error Recovery
+
 - Detects lint failures and runs `lint:fix`
 - Retries build after fixes
 - Commits auto-fixes to keep history clean
 - Provides detailed troubleshooting on persistent failures
 
 ### Robust Error Handling
+
 - Validates git repository status
 - Checks for Vercel CLI availability
 - Provides specific exit codes and error messages

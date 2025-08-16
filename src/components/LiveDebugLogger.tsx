@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useDebugFlag } from '@/hooks/useDebugFlag';
+import { useState, useEffect } from "react";
+import { useDebugFlag } from "@/hooks/useDebugFlag";
 
 interface LogEntry {
   id: number;
   timestamp: string;
   message: string;
-  level: 'info' | 'error' | 'warn';
+  level: "info" | "error" | "warn";
 }
 
 let logId = 0;
@@ -20,7 +20,7 @@ const originalLog = console.log;
 const originalError = console.error;
 const originalWarn = console.warn;
 
-const addLog = (message: string, level: 'info' | 'error' | 'warn') => {
+const addLog = (message: string, level: "info" | "error" | "warn") => {
   // Prevent recursive logging
   if (isProcessingLog) return;
 
@@ -28,7 +28,7 @@ const addLog = (message: string, level: 'info' | 'error' | 'warn') => {
     id: ++logId,
     timestamp: new Date().toLocaleTimeString(),
     message,
-    level
+    level,
   };
 
   logs.push(entry);
@@ -36,7 +36,7 @@ const addLog = (message: string, level: 'info' | 'error' | 'warn') => {
 
   // Use setTimeout to avoid React state update during render
   setTimeout(() => {
-    logListeners.forEach(listener => {
+    logListeners.forEach((listener) => {
       try {
         listener([...logs]);
       } catch (error) {
@@ -50,9 +50,15 @@ console.log = (...args) => {
   if (isProcessingLog) return originalLog(...args);
 
   isProcessingLog = true;
-  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
-  if (message.includes('[LocaleLayout]') || message.includes('[LanguageSwitcher]') || message.includes('HomePageContent')) {
-    addLog(message, 'info');
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
+  if (
+    message.includes("[LocaleLayout]") ||
+    message.includes("[LanguageSwitcher]") ||
+    message.includes("HomePageContent")
+  ) {
+    addLog(message, "info");
   }
   originalLog(...args);
   isProcessingLog = false;
@@ -62,10 +68,16 @@ console.error = (...args) => {
   if (isProcessingLog) return originalError(...args);
 
   isProcessingLog = true;
-  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
   // Only log specific errors, not React internal errors
-  if (!message.includes('Warning:') && !message.includes('React') && !message.includes('webpack-internal')) {
-    addLog(`ERROR: ${message}`, 'error');
+  if (
+    !message.includes("Warning:") &&
+    !message.includes("React") &&
+    !message.includes("webpack-internal")
+  ) {
+    addLog(`ERROR: ${message}`, "error");
   }
   originalError(...args);
   isProcessingLog = false;
@@ -75,10 +87,16 @@ console.warn = (...args) => {
   if (isProcessingLog) return originalWarn(...args);
 
   isProcessingLog = true;
-  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
   // Only log specific warnings, not React internal warnings
-  if (!message.includes('Warning:') && !message.includes('React') && !message.includes('webpack-internal')) {
-    addLog(`WARN: ${message}`, 'warn');
+  if (
+    !message.includes("Warning:") &&
+    !message.includes("React") &&
+    !message.includes("webpack-internal")
+  ) {
+    addLog(`WARN: ${message}`, "warn");
   }
   originalWarn(...args);
   isProcessingLog = false;
@@ -92,7 +110,7 @@ export default function LiveDebugLogger() {
   useEffect(() => {
     const listener = (newLogs: LogEntry[]) => {
       // Use functional update to avoid stale closure issues
-      setLogs(prevLogs => newLogs);
+      setLogs((prevLogs) => newLogs);
     };
     logListeners.push(listener);
 
@@ -125,25 +143,27 @@ export default function LiveDebugLogger() {
     <div className="fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-lg max-w-md w-80 max-h-96 overflow-hidden z-50">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-sm font-bold">Live Debug Logs</h3>
-        <button 
+        <button
           onClick={() => setIsVisible(false)}
           className="text-gray-300 hover:text-white text-xs"
         >
           ✕
         </button>
       </div>
-      
+
       <div className="space-y-1 text-xs font-mono overflow-y-auto max-h-80">
         {logs.length === 0 ? (
           <div className="text-gray-400">No debug logs yet...</div>
         ) : (
-          logs.map(log => (
-            <div 
+          logs.map((log) => (
+            <div
               key={log.id}
               className={`p-1 rounded text-xs ${
-                log.level === 'error' ? 'bg-red-900 text-red-200' :
-                log.level === 'warn' ? 'bg-yellow-900 text-yellow-200' :
-                'bg-gray-800 text-gray-200'
+                log.level === "error"
+                  ? "bg-red-900 text-red-200"
+                  : log.level === "warn"
+                    ? "bg-yellow-900 text-yellow-200"
+                    : "bg-gray-800 text-gray-200"
               }`}
             >
               <div className="text-gray-400">{log.timestamp}</div>
@@ -152,7 +172,7 @@ export default function LiveDebugLogger() {
           ))
         )}
       </div>
-      
+
       <button
         onClick={() => {
           logs.length = 0; // Clear the global logs array

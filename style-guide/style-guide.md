@@ -9,6 +9,7 @@ HELOC Accelerator is a professional financial application that helps homeowners 
 ## Color Palette
 
 ### Primary Colors (Blue-Gray)
+
 - **Primary 50**: `#f0f4f8` - Light backgrounds, subtle highlights
 - **Primary 100**: `#d9e2ec` - Secondary backgrounds
 - **Primary 200**: `#bcccdc` - Borders, dividers
@@ -21,6 +22,7 @@ HELOC Accelerator is a professional financial application that helps homeowners 
 - **Primary 900**: `#00193f` - Navy headers, primary text
 
 ### Secondary Colors (Coral/Orange)
+
 - **Secondary 50**: `#fff5f0` - Light accent backgrounds
 - **Secondary 100**: `#ffe4d9` - Highlight backgrounds
 - **Secondary 200**: `#ffc9b4` - Success indicators
@@ -33,6 +35,7 @@ HELOC Accelerator is a professional financial application that helps homeowners 
 - **Secondary 900**: `#7f433a` - Deep brown accent
 
 ### Neutral Colors
+
 - **Neutral 50**: `#fffefe` - White backgrounds
 - **Neutral 100**: `#f8f9fa` - Light gray
 - **Neutral 200**: `#e9ecef` - Borders
@@ -45,6 +48,7 @@ HELOC Accelerator is a professional financial application that helps homeowners 
 - **Neutral 900**: `#212529` - Primary text
 
 ### Semantic Colors
+
 - **Success**: `#10b981` - Positive outcomes, savings
 - **Warning**: `#f59e0b` - Cautions, important notices
 - **Error**: `#ef4444` - Errors, negative values
@@ -53,11 +57,21 @@ HELOC Accelerator is a professional financial application that helps homeowners 
 ## Typography
 
 ### Font Stack
+
 ```css
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+font-family:
+  "Inter",
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  "Helvetica Neue",
+  Arial,
+  sans-serif;
 ```
 
 ### Type Scale
+
 - **Display**: 56px / 61.6px line-height / 700 weight
 - **H1**: 48px / 57.6px line-height / 700 weight
 - **H2**: 36px / 46.8px line-height / 600 weight
@@ -73,6 +87,7 @@ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'He
 ## Spacing System
 
 Based on an 8px grid:
+
 - **xs**: 4px
 - **sm**: 8px
 - **md**: 16px
@@ -89,6 +104,7 @@ Based on an 8px grid:
 ### Buttons
 
 #### Primary Button
+
 - Background: `primary-500`
 - Text: white
 - Hover: `primary-600`
@@ -100,12 +116,14 @@ Based on an 8px grid:
 - Font weight: 500
 
 #### Secondary Button
+
 - Background: `secondary-300`
 - Text: `primary-900`
 - Hover: `secondary-400`
 - Active: `secondary-500`
 
 #### Outline Button
+
 - Background: transparent
 - Border: 2px solid `primary-200`
 - Text: `primary-700`
@@ -114,6 +132,7 @@ Based on an 8px grid:
 ### Form Elements
 
 #### Input Fields
+
 - Height: 40px
 - Border: 1px solid `neutral-300`
 - Border radius: 6px
@@ -124,12 +143,14 @@ Based on an 8px grid:
 - Placeholder: `neutral-500`
 
 #### Labels
+
 - Font size: 14px
 - Font weight: 500
 - Color: `neutral-700`
 - Margin bottom: 4px
 
 #### Helper Text
+
 - Font size: 12px
 - Color: `neutral-600`
 - Margin top: 4px
@@ -137,6 +158,7 @@ Based on an 8px grid:
 ### Cards
 
 #### Default Card
+
 - Background: white
 - Border: 1px solid `neutral-200`
 - Border radius: 8px
@@ -144,6 +166,7 @@ Based on an 8px grid:
 - Shadow: none
 
 #### Elevated Card
+
 - Background: white
 - Border: none
 - Border radius: 8px
@@ -153,6 +176,7 @@ Based on an 8px grid:
 ### Financial Data Display
 
 #### Currency Values
+
 - Font: Tabular nums (monospace numbers)
 - Positive values: `neutral-900`
 - Negative values: `error`
@@ -160,6 +184,7 @@ Based on an 8px grid:
 - Font weight: 600 for emphasis
 
 #### Data Tables
+
 - Header background: `neutral-50`
 - Header text: `neutral-700`
 - Row borders: `neutral-200`
@@ -176,28 +201,33 @@ Based on an 8px grid:
 ## Accessibility Requirements
 
 ### Color Contrast
+
 - Normal text: 4.5:1 minimum
 - Large text: 3:1 minimum
 - Interactive elements: 3:1 minimum
 
 ### Focus States
+
 - 2px solid ring
 - Color: `primary-500`
 - Offset: 2px
 - Never remove focus indicators
 
 ### Touch Targets
+
 - Minimum size: 44x44px
 - Spacing between targets: 8px minimum
 
 ## Motion and Animation
 
 ### Transitions
+
 - Duration: 150ms for micro-interactions
 - Duration: 200-300ms for larger transitions
 - Easing: `cubic-bezier(0.4, 0, 0.2, 1)`
 
 ### Loading States
+
 - Use skeleton screens for content loading
 - Spinner for actions (primary color)
 - Progress bars for multi-step processes
@@ -205,11 +235,13 @@ Based on an 8px grid:
 ## Responsive Design
 
 ### Breakpoints
+
 - Mobile: < 640px
 - Tablet: 640px - 1024px
 - Desktop: > 1024px
 
 ### Mobile Considerations
+
 - Increase touch targets to 48px
 - Stack form elements vertically
 - Simplify navigation to hamburger menu
@@ -218,6 +250,7 @@ Based on an 8px grid:
 ## Do's and Don'ts
 
 ### Do's
+
 - Use consistent spacing throughout
 - Maintain visual hierarchy with typography
 - Use semantic colors for financial data
@@ -225,6 +258,7 @@ Based on an 8px grid:
 - Ensure all text is readable
 
 ### Don'ts
+
 - Don't use more than 3 font sizes per screen
 - Don't rely on color alone for information
 - Don't create custom components when design system components exist

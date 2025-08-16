@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Link from 'next/link'
-import { 
-  AceternityCard, 
+import React from "react";
+import Link from "next/link";
+import {
+  AceternityCard,
   AceternityCardDemo,
   FinancialAceternityCard,
   HomeAceternityCard,
@@ -16,8 +16,8 @@ import {
   StableMoneyCard,
   StableSuccessCard,
   StablePlanningCard,
-  StableFamilyCard
-} from '@/components/design-system'
+  StableFamilyCard,
+} from "@/components/design-system";
 
 export default function AceternityDemoPage() {
   return (
@@ -28,7 +28,8 @@ export default function AceternityDemoPage() {
             Aceternity UI Cards Demo
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Interactive cards with background overlays and hover effects, integrated with Pexels API for dynamic financial imagery.
+            Interactive cards with background overlays and hover effects,
+            integrated with Pexels API for dynamic financial imagery.
           </p>
         </div>
 
@@ -55,7 +56,8 @@ export default function AceternityDemoPage() {
             <StableFamilyCard />
           </div>
           <p className="text-center text-gray-600 mt-4 text-sm">
-            ✨ These cards use curated Unsplash images with stable hover effects - no endless loops!
+            ✨ These cards use curated Unsplash images with stable hover effects
+            - no endless loops!
           </p>
         </section>
 
@@ -72,7 +74,8 @@ export default function AceternityDemoPage() {
             <FamilyAceternityCard />
           </div>
           <p className="text-center text-gray-600 mt-4 text-sm">
-            🔄 These cards fetch live images from Pexels API (may have loading states)
+            🔄 These cards fetch live images from Pexels API (may have loading
+            states)
           </p>
         </section>
 
@@ -100,10 +103,7 @@ export default function AceternityDemoPage() {
               </div>
             </FinancialAceternityCard>
 
-            <FinancialAceternityCard
-              theme="success"
-              className="max-w-sm"
-            >
+            <FinancialAceternityCard theme="success" className="max-w-sm">
               <div className="space-y-4">
                 <h1 className="font-bold text-2xl text-gray-50 relative drop-shadow-md">
                   🏆 Success Stories
@@ -139,12 +139,12 @@ export default function AceternityDemoPage() {
             <h3 className="text-xl font-semibold text-gray-900 mb-6">
               How to Use in Your Components
             </h3>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Basic Usage:</h4>
                 <pre className="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
-{`import { HomeAceternityCard } from '@/components/design-system'
+                  {`import { HomeAceternityCard } from '@/components/design-system'
 
 <HomeAceternityCard
   title="Your Dream Home"
@@ -154,9 +154,11 @@ export default function AceternityDemoPage() {
               </div>
 
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Custom Content:</h4>
+                <h4 className="font-medium text-gray-900 mb-3">
+                  Custom Content:
+                </h4>
                 <pre className="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
-{`<FinancialAceternityCard theme="success">
+                  {`<FinancialAceternityCard theme="success">
   <div className="space-y-4">
     <h1 className="font-bold text-2xl text-white">
       Custom Title
@@ -174,7 +176,10 @@ export default function AceternityDemoPage() {
               <h4 className="font-medium text-blue-900 mb-2">✨ Features:</h4>
               <ul className="text-sm text-blue-800 space-y-1">
                 <li>• Dynamic Pexels API integration for background images</li>
-                <li>• 5 pre-configured financial themes (home, money, success, planning, family)</li>
+                <li>
+                  • 5 pre-configured financial themes (home, money, success,
+                  planning, family)
+                </li>
                 <li>• Hover effects with animated GIF overlays</li>
                 <li>• Proper photo attribution with photographer credits</li>
                 <li>• Responsive design with Tailwind CSS</li>
@@ -196,5 +201,5 @@ export default function AceternityDemoPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

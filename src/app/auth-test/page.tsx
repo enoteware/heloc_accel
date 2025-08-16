@@ -1,41 +1,43 @@
-'use client'
+"use client";
 
-import { signIn } from 'next-auth/react'
-import { useState } from 'react'
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export default function AuthTestPage() {
-  const [result, setResult] = useState<string>('')
-  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const testCredentials = [
-    { email: 'demo@example.com', password: 'demo123' },
-    { email: 'john@example.com', password: 'password123' },
-    { email: 'jane@example.com', password: 'password123' }
-  ]
+    { email: "demo@example.com", password: "demo123" },
+    { email: "john@example.com", password: "password123" },
+    { email: "jane@example.com", password: "password123" },
+  ];
 
   const testLogin = async (email: string, password: string) => {
-    setLoading(true)
-    setResult(`Testing ${email}...`)
-    
+    setLoading(true);
+    setResult(`Testing ${email}...`);
+
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email,
         password,
-        redirect: false
-      })
-      
-      setResult(`Result for ${email}: ${JSON.stringify(result, null, 2)}`)
+        redirect: false,
+      });
+
+      setResult(`Result for ${email}: ${JSON.stringify(result, null, 2)}`);
     } catch (error) {
-      setResult(`Error for ${email}: ${error}`)
+      setResult(`Error for ${email}: ${error}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="p-8 safe-neutral-light min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 text-on-white">Authentication Test</h1>
-      
+      <h1 className="text-2xl font-bold mb-4 text-on-white">
+        Authentication Test
+      </h1>
+
       <div className="space-y-4">
         {testCredentials.map((cred, index) => (
           <div key={index} className="border p-4 rounded">
@@ -49,23 +51,29 @@ export default function AuthTestPage() {
           </div>
         ))}
       </div>
-      
+
       <div className="mt-8">
         <h2 className="text-lg font-bold mb-2 text-on-white">Result:</h2>
         <pre className="safe-neutral-light p-4 rounded overflow-auto text-sm">
-          {result || 'No tests run yet'}
+          {result || "No tests run yet"}
         </pre>
       </div>
-      
+
       <div className="mt-8">
-        <h2 className="text-lg font-bold mb-2 text-gray-900">Environment Info:</h2>
+        <h2 className="text-lg font-bold mb-2 text-gray-900">
+          Environment Info:
+        </h2>
         <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm text-gray-900">
-          {JSON.stringify({
-            NEXT_PUBLIC_DEMO_MODE: process.env.NEXT_PUBLIC_DEMO_MODE,
-            NODE_ENV: process.env.NODE_ENV
-          }, null, 2)}
+          {JSON.stringify(
+            {
+              NEXT_PUBLIC_DEMO_MODE: process.env.NEXT_PUBLIC_DEMO_MODE,
+              NODE_ENV: process.env.NODE_ENV,
+            },
+            null,
+            2,
+          )}
         </pre>
       </div>
     </div>
-  )
+  );
 }

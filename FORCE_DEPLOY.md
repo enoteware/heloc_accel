@@ -40,18 +40,20 @@ npm run vercel:force
 ## When to Use
 
 - ✅ GitHub deployments failing with module resolution errors
-- ✅ Build cache issues causing persistent failures  
+- ✅ Build cache issues causing persistent failures
 - ✅ Need to deploy urgent fixes quickly
 - ✅ Vercel dashboard shows stale builds
 
 ## Prerequisites
 
 1. **Vercel CLI installed**:
+
    ```bash
    npm install -g vercel
    ```
 
 2. **Vercel authentication**:
+
    ```bash
    vercel login
    ```
@@ -64,6 +66,7 @@ npm run vercel:force
 ## Important Notes
 
 ⚠️ **Out of Sync Warning**: This deployment method bypasses GitHub, which means:
+
 - The deployed version may not match your git repository
 - Future GitHub-based deployments may conflict
 - Always ensure your changes are committed and pushed after successful deployment
@@ -73,12 +76,15 @@ npm run vercel:force
 ## Troubleshooting
 
 ### Script fails with "Vercel CLI not found"
+
 ```bash
 npm install -g vercel
 ```
 
 ### Build fails locally
+
 Fix the build issues before attempting deployment:
+
 ```bash
 npm run build
 npm run lint
@@ -86,7 +92,9 @@ npm run pre-deploy
 ```
 
 ### Permission denied
+
 Make the script executable:
+
 ```bash
 chmod +x scripts/force-vercel-deploy.sh
 ```
@@ -123,12 +131,14 @@ Continue with force deployment? (y/N): y
 After a successful force deployment:
 
 1. Ensure all local changes are committed:
+
    ```bash
    git add .
    git commit -m "sync with force deployment"
    ```
 
 2. Push to GitHub:
+
    ```bash
    git push origin main
    ```

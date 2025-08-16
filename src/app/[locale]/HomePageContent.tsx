@@ -1,10 +1,16 @@
-'use client';
+"use client";
 
-import { useTranslations, useLocale } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import PexelsImage from '@/components/PexelsImage';
-import { StableMoneyCard, StablePlanningCard, StableSuccessCard, HeroHighlight, Highlight } from '@/components/design-system';
-import { motion } from 'framer-motion';
+import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/routing";
+import PexelsImage from "@/components/PexelsImage";
+import {
+  StableMoneyCard,
+  StablePlanningCard,
+  StableSuccessCard,
+  HeroHighlight,
+  Highlight,
+} from "@/components/design-system";
+import { motion } from "framer-motion";
 
 export default function HomePageContent() {
   const t = useTranslations();
@@ -35,28 +41,28 @@ export default function HomePageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              {t('pages.homeHero.title')}{' '}
+              {t("pages.homeHero.title")}{" "}
               <Highlight className="text-white">
-                {t('pages.homeHero.highlight')}
+                {t("pages.homeHero.highlight")}
               </Highlight>
             </motion.h1>
-            
+
             <motion.p
               className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              {t('pages.homeHero.subtitle')}{' '}
+              {t("pages.homeHero.subtitle")}{" "}
               <span className="font-semibold text-blue-600">
-                {t('pages.homeHero.saveMoney')}
-              </span>{' '}
-              {t('pages.homeHero.connector')}{' '}
+                {t("pages.homeHero.saveMoney")}
+              </span>{" "}
+              {t("pages.homeHero.connector")}{" "}
               <span className="font-semibold text-blue-600">
-                {t('pages.homeHero.achieveFreedom')}
+                {t("pages.homeHero.achieveFreedom")}
               </span>
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -67,7 +73,7 @@ export default function HomePageContent() {
                 href="/calculator"
                 className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:scale-105"
               >
-                {t('calculator.getStarted')}
+                {t("calculator.getStarted")}
               </Link>
             </motion.div>
           </motion.div>
@@ -75,7 +81,6 @@ export default function HomePageContent() {
       </HeroHighlight>
 
       <div className="container mx-auto px-4 py-4">
-
         {/* Feature Grid with Aceternity Cards */}
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-center text-gray-900 mb-8">
@@ -104,7 +109,8 @@ export default function HomePageContent() {
               ✨ Enhanced with Aceternity UI
             </h3>
             <p className="text-gray-600 mb-6">
-              Experience interactive cards with dynamic backgrounds and hover effects throughout the application.
+              Experience interactive cards with dynamic backgrounds and hover
+              effects throughout the application.
             </p>
           </div>
         </div>

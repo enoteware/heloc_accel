@@ -1,60 +1,62 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
-import AgentForm from '../../_components/AgentForm'
-import type { Agent } from '@/lib/company-data'
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import AgentForm from "../../_components/AgentForm";
+import type { Agent } from "@/lib/company-data";
 
 export default function NewAgentPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (data: Partial<Agent>) => {
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
       if (isDemoMode) {
         // In demo mode, save to localStorage
-        const agents = JSON.parse(localStorage.getItem('heloc_demo_agents') || '[]')
+        const agents = JSON.parse(
+          localStorage.getItem("heloc_demo_agents") || "[]",
+        );
         const newAgent: Agent = {
-          ...data as Agent,
+          ...(data as Agent),
           id: Date.now(), // Generate temporary ID
           createdAt: new Date(),
-          updatedAt: new Date()
-        }
-        agents.push(newAgent)
-        localStorage.setItem('heloc_demo_agents', JSON.stringify(agents))
-        
-        alert('Agent created successfully!')
-        router.push('/admin/agents')
+          updatedAt: new Date(),
+        };
+        agents.push(newAgent);
+        localStorage.setItem("heloc_demo_agents", JSON.stringify(agents));
+
+        alert("Agent created successfully!");
+        router.push("/admin/agents");
       } else {
         // In production, save via API
-        const response = await fetch('/api/agents', {
-          method: 'POST',
+        const response = await fetch("/api/agents", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-        })
+        });
 
         if (response.ok) {
-          alert('Agent created successfully!')
-          router.push('/admin/agents')
+          alert("Agent created successfully!");
+          router.push("/admin/agents");
         } else {
-          throw new Error('Failed to create agent')
+          throw new Error("Failed to create agent");
         }
       }
     } catch (error) {
-      console.error('Error creating agent:', error)
-      alert('Failed to create agent')
+      console.error("Error creating agent:", error);
+      alert("Failed to create agent");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -76,9 +78,9 @@ export default function NewAgentPage() {
       {/* Form */}
       <AgentForm
         onSubmit={handleSubmit}
-        onCancel={() => router.push('/admin/agents')}
+        onCancel={() => router.push("/admin/agents")}
         loading={loading}
       />
     </div>
-  )
+  );
 }

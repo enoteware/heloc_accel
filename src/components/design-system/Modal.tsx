@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   description?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   children: React.ReactNode;
   showCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
@@ -16,11 +16,11 @@ export interface ModalProps {
 }
 
 const modalSizes = {
-  sm: 'max-w-md',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
-  xl: 'max-w-4xl',
-  full: 'max-w-full mx-4',
+  sm: "max-w-md",
+  md: "max-w-lg",
+  lg: "max-w-2xl",
+  xl: "max-w-4xl",
+  full: "max-w-full mx-4",
 };
 
 export const Modal: React.FC<ModalProps> = ({
@@ -28,7 +28,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   description,
-  size = 'md',
+  size = "md",
   children,
   showCloseButton = true,
   closeOnOverlayClick = true,
@@ -39,25 +39,25 @@ export const Modal: React.FC<ModalProps> = ({
     if (!closeOnEscape) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         onClose();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose, closeOnEscape]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -76,30 +76,36 @@ export const Modal: React.FC<ModalProps> = ({
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={handleOverlayClick}
       />
-      
+
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={cn(
-            'relative w-full transform rounded-lg bg-white shadow-xl transition-all',
-            modalSizes[size]
+            "relative w-full transform rounded-lg bg-white shadow-xl transition-all",
+            modalSizes[size],
           )}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={title ? 'modal-title' : undefined}
-          aria-describedby={description ? 'modal-description' : undefined}
+          aria-labelledby={title ? "modal-title" : undefined}
+          aria-describedby={description ? "modal-description" : undefined}
         >
           {/* Header */}
           {(title || showCloseButton) && (
             <div className="flex items-center justify-between p-6 border-b border-neutral-200">
               <div>
                 {title && (
-                  <h3 id="modal-title" className="text-h4 font-semibold text-gray-900">
+                  <h3
+                    id="modal-title"
+                    className="text-h4 font-semibold text-gray-900"
+                  >
                     {title}
                   </h3>
                 )}
                 {description && (
-                  <p id="modal-description" className="mt-1 text-body-sm text-neutral-600">
+                  <p
+                    id="modal-description"
+                    className="mt-1 text-body-sm text-neutral-600"
+                  >
                     {description}
                   </p>
                 )}
@@ -111,8 +117,18 @@ export const Modal: React.FC<ModalProps> = ({
                   className="rounded-md p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   aria-label="Close modal"
                 >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               )}
@@ -120,9 +136,7 @@ export const Modal: React.FC<ModalProps> = ({
           )}
 
           {/* Content */}
-          <div className="p-6">
-            {children}
-          </div>
+          <div className="p-6">{children}</div>
         </div>
       </div>
     </div>
@@ -134,30 +148,36 @@ export interface ModalHeaderProps {
   className?: string;
 }
 
-export const ModalHeader: React.FC<ModalHeaderProps> = ({ children, className }) => (
-  <div className={cn('mb-4', className)}>
-    {children}
-  </div>
-);
+export const ModalHeader: React.FC<ModalHeaderProps> = ({
+  children,
+  className,
+}) => <div className={cn("mb-4", className)}>{children}</div>;
 
 export interface ModalBodyProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const ModalBody: React.FC<ModalBodyProps> = ({ children, className }) => (
-  <div className={cn('mb-6', className)}>
-    {children}
-  </div>
-);
+export const ModalBody: React.FC<ModalBodyProps> = ({
+  children,
+  className,
+}) => <div className={cn("mb-6", className)}>{children}</div>;
 
 export interface ModalFooterProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const ModalFooter: React.FC<ModalFooterProps> = ({ children, className }) => (
-  <div className={cn('flex justify-end space-x-3 pt-4 border-t border-neutral-200', className)}>
+export const ModalFooter: React.FC<ModalFooterProps> = ({
+  children,
+  className,
+}) => (
+  <div
+    className={cn(
+      "flex justify-end space-x-3 pt-4 border-t border-neutral-200",
+      className,
+    )}
+  >
     {children}
   </div>
 );

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Modal, ModalBody, ModalFooter } from './design-system/Modal';
-import { Button } from './design-system/Button';
-import { Input } from './design-system/Input';
+import React, { useState } from "react";
+import { Modal, ModalBody, ModalFooter } from "./design-system/Modal";
+import { Button } from "./design-system/Button";
+import { Input } from "./design-system/Input";
 
 export interface FirstConfirmationModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ export const FirstConfirmationModal: React.FC<FirstConfirmationModalProps> = ({
   title = "Confirm Action",
   message = "Are you sure you want to proceed?",
   confirmText = "Continue",
-  cancelText = "Cancel"
+  cancelText = "Cancel",
 }) => {
   // Focus management
   const cancelButtonRef = React.useRef<HTMLButtonElement>(null);
@@ -114,7 +114,9 @@ export interface SecondConfirmationModalProps {
   loading?: boolean;
 }
 
-export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = ({
+export const SecondConfirmationModal: React.FC<
+  SecondConfirmationModalProps
+> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -124,10 +126,10 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
   placeholder = "Type confirmation text here...",
   confirmText = "Confirm Deletion",
   cancelText = "Cancel",
-  loading = false
+  loading = false,
 }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState("");
 
   // Refs for focus management
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -138,10 +140,10 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    
+
     // Clear error when user starts typing correctly
     if (error && value.trim() === confirmationText) {
-      setError('');
+      setError("");
     }
   };
 
@@ -150,14 +152,14 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
       setError(`Please type "${confirmationText}" exactly as shown`);
       return;
     }
-    
-    setError('');
+
+    setError("");
     onConfirm();
   };
 
   const handleClose = () => {
-    setInputValue('');
-    setError('');
+    setInputValue("");
+    setError("");
     onClose();
   };
 
@@ -171,14 +173,14 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
         }
       }, 100);
     } else {
-      setInputValue('');
-      setError('');
+      setInputValue("");
+      setError("");
     }
   }, [isOpen]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && isValid && !loading) {
+    if (e.key === "Enter" && isValid && !loading) {
       e.preventDefault();
       handleConfirm();
     }
@@ -231,7 +233,10 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
 
           {/* Confirmation Text Display */}
           <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3">
-            <p className="text-body-sm text-neutral-600 mb-1" id="confirmation-label">
+            <p
+              className="text-body-sm text-neutral-600 mb-1"
+              id="confirmation-label"
+            >
               Type this text exactly:
             </p>
             <p
@@ -279,7 +284,11 @@ export const SecondConfirmationModal: React.FC<SecondConfirmationModalProps> = (
           disabled={!isValid || loading}
           loading={loading}
           aria-describedby="confirmation-instructions"
-          aria-label={isValid ? confirmText : `${confirmText} (requires typing "${confirmationText}")`}
+          aria-label={
+            isValid
+              ? confirmText
+              : `${confirmText} (requires typing "${confirmationText}")`
+          }
         >
           {confirmText}
         </Button>
@@ -307,7 +316,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
   message = "Operation completed successfully.",
   showRegenerateOption = false,
   regenerateText = "Generate Sample Data",
-  closeText = "Close"
+  closeText = "Close",
 }) => {
   // Focus management
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);

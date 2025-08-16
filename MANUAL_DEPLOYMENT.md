@@ -12,6 +12,7 @@ This guide provides step-by-step instructions for manually deploying the HELOC A
 ## Deployment Files
 
 The `deployment` directory contains everything needed for production:
+
 - `server.js` - Main standalone server
 - `.next/` - Compiled application files
 - `public/` - Static assets
@@ -66,6 +67,7 @@ nano .env.local
 ```
 
 Required environment variables:
+
 ```env
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/heloc_db
@@ -144,6 +146,7 @@ WantedBy=multi-user.target
 ```
 
 Then:
+
 ```bash
 systemctl enable heloc-accelerator
 systemctl start heloc-accelerator
@@ -184,17 +187,19 @@ server {
 ## Step 8: Verify Deployment
 
 1. Check application status:
+
    ```bash
    # If using PM2
    pm2 status
    pm2 logs heloc-accelerator
-   
+
    # If using systemd
    systemctl status heloc-accelerator
    journalctl -u heloc-accelerator -f
    ```
 
 2. Test the application:
+
    ```bash
    curl http://localhost:3000/health
    ```
@@ -204,17 +209,20 @@ server {
 ## Troubleshooting
 
 ### Application won't start
+
 - Check logs for errors
 - Verify all environment variables are set
 - Ensure database connection is working
 - Check file permissions
 
 ### Blank pages or 404 errors
+
 - Verify `.next/static` directory exists
 - Check that `public` directory is present
 - Ensure Nginx is properly configured
 
 ### Database connection issues
+
 - Verify DATABASE_URL is correct
 - Check PostgreSQL is running
 - Ensure database user has proper permissions
@@ -254,6 +262,7 @@ pm2 start ecosystem.config.js --env production
 ## Monitoring
 
 Consider setting up:
+
 - PM2 monitoring dashboard
 - Application logs aggregation
 - Uptime monitoring
@@ -262,6 +271,7 @@ Consider setting up:
 ## Support
 
 If you encounter issues:
+
 1. Check application logs
 2. Verify all prerequisites are met
 3. Ensure environment variables are correct

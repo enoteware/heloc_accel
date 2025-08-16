@@ -299,7 +299,9 @@ input[type="week"],
 select,
 textarea {
   color: rgb(17 24 39) !important; /* gray-900 */
-  -webkit-text-fill-color: rgb(17 24 39) !important; /* Fix for Safari/Chrome autofill */
+  -webkit-text-fill-color: rgb(
+    17 24 39
+  ) !important; /* Fix for Safari/Chrome autofill */
 }
 
 /* Dark mode text color */

@@ -1,12 +1,12 @@
-import React from 'react';
-import Image from 'next/image';
-import { Link } from '@/i18n/routing';
+import React from "react";
+import Image from "next/image";
+import { Link } from "@/i18n/routing";
 
 export interface LogoProps {
   /** Logo variant to display */
-  variant?: 'default' | 'white' | 'dark';
+  variant?: "default" | "white" | "dark";
   /** Size of the logo */
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   /** Whether to show the text alongside the logo */
   showText?: boolean;
   /** Custom className for styling */
@@ -18,38 +18,38 @@ export interface LogoProps {
 }
 
 const sizeClasses = {
-  sm: 'h-8 w-auto',
-  md: 'h-12 w-auto',
-  lg: 'h-16 w-auto',
-  xl: 'h-24 w-auto'
+  sm: "h-8 w-auto",
+  md: "h-12 w-auto",
+  lg: "h-16 w-auto",
+  xl: "h-24 w-auto",
 };
 
 const textSizeClasses = {
-  sm: 'text-lg',
-  md: 'text-xl',
-  lg: 'text-2xl',
-  xl: 'text-3xl'
+  sm: "text-lg",
+  md: "text-xl",
+  lg: "text-2xl",
+  xl: "text-3xl",
 };
 
 export const Logo: React.FC<LogoProps> = ({
-  variant = 'default',
-  size = 'md',
+  variant = "default",
+  size = "md",
   showText = false,
-  className = '',
+  className = "",
   clickable = true,
-  priority = false
+  priority = false,
 }) => {
   // Determine which logo file to use based on variant
   const getLogoSrc = () => {
     // No basePath needed for Vercel deployment
     switch (variant) {
-      case 'white':
-        return '/ha_logo_w.svg';
-      case 'dark':
-        return '/heloc_accel.svg';
-      case 'default':
+      case "white":
+        return "/ha_logo_w.svg";
+      case "dark":
+        return "/heloc_accel.svg";
+      case "default":
       default:
-        return '/heloc_accel.svg';
+        return "/heloc_accel.svg";
     }
   };
 
@@ -64,7 +64,9 @@ export const Logo: React.FC<LogoProps> = ({
         priority={priority}
       />
       {showText && (
-        <span className={`font-bold text-gray-900 dark:text-white ${textSizeClasses[size]}`}>
+        <span
+          className={`font-bold text-gray-900 dark:text-white ${textSizeClasses[size]}`}
+        >
           HELOC Accelerator
         </span>
       )}

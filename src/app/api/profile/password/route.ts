@@ -1,32 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { query } from '@/lib/database'
-import { ApiResponse } from '@/lib/types'
-import bcrypt from 'bcryptjs'
+import { NextRequest, NextResponse } from "next/server";
+import { stackServerApp } from "@/stack";
+import { ApiResponse } from "@/lib/types";
 
 // PUT /api/profile/password - Change user password
 export async function PUT(request: NextRequest) {
   try {
-    // TODO: Implement Stack Auth server-side authentication
-    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+    // Get authenticated user from Stack Auth
+    const user = await stackServerApp.getUser({ tokenStore: request });
 
-    if (!isDemoMode) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Authentication not implemented for production mode'
-      }, { status: 501 })
+    if (!user) {
+      return NextResponse.json<ApiResponse>(
+        {
+          success: false,
+          error: "Authentication required",
+        },
+        { status: 401 },
+      );
     }
 
-    // In demo mode, just return a success response
-    return NextResponse.json<ApiResponse>({
-      success: true,
-      message: 'Password change not available in demo mode'
-    })
+    // Password changes are handled by Stack Auth directly
+    // This endpoint would redirect to Stack Auth's password change flow
+    // or handle it through Stack Auth's API
 
+    return NextResponse.json<ApiResponse>(
+      {
+        success: false,
+        error: "Password changes must be done through Stack Auth",
+        data: {
+          redirectUrl: `${process.env.NEXT_PUBLIC_STACK_URL || "/stack"}/password-change`,
+        },
+      },
+      { status: 400 },
+    );
   } catch (error) {
-    console.error('Change password error:', error)
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: 'Failed to change password'
-    }, { status: 500 })
+    console.error("Change password error:", error);
+    return NextResponse.json<ApiResponse>(
+      {
+        success: false,
+        error: "Failed to change password",
+      },
+      { status: 500 },
+    );
   }
 }

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-01-XX
 
 ### Added
+
 - **Core Calculator**: Complete HELOC acceleration calculator with mortgage comparison
 - **Interactive Charts**: Chart.js visualizations showing mortgage balance over time
 - **Demo Mode**: Full-featured demo with local storage and dummy user accounts
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Accessibility**: WCAG-compliant design with proper contrast ratios and ARIA labels
 
 ### Technical Features
+
 - **Next.js 14**: Modern React framework with App Router and TypeScript
 - **Authentication**: NextAuth.js with demo mode support
 - **Database**: PostgreSQL support with localStorage fallback for demo mode
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Performance**: Optimized loading with lazy loading and skeleton states
 
 ### Demo Mode Features
+
 - **No Sign-up Required**: Try all features without registration
 - **Local Data Storage**: Scenarios saved in browser localStorage
 - **Sample Data**: Pre-loaded realistic scenarios for testing
@@ -35,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Data Management**: Clear all data with double confirmation prompts
 
 ### Security & Performance
+
 - **Input Sanitization**: Comprehensive input validation and sanitization
 - **Rate Limiting**: API rate limiting for production use
 - **Error Handling**: Robust error handling with user-friendly messages
@@ -42,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security Headers**: Proper security headers and middleware
 
 ### UI/UX Improvements
+
 - **Form Field Text Fix**: Resolved white-on-white text visibility issues
 - **Loading States**: Skeleton loaders and loading spinners
 - **Error States**: Clear error messages and validation feedback
@@ -51,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned Features
+
 - User registration and authentication (production mode)
 - Email notifications for saved scenarios
 - PDF export of calculation results

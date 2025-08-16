@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, createContext, useContext } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, createContext, useContext } from "react";
+import { cn } from "@/lib/utils";
 
 interface TabsContextType {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  variant: 'default' | 'pills' | 'underline';
+  variant: "default" | "pills" | "underline";
 }
 
 const TabsContext = createContext<TabsContextType | undefined>(undefined);
@@ -14,7 +14,7 @@ const TabsContext = createContext<TabsContextType | undefined>(undefined);
 const useTabsContext = () => {
   const context = useContext(TabsContext);
   if (!context) {
-    throw new Error('Tabs components must be used within a Tabs provider');
+    throw new Error("Tabs components must be used within a Tabs provider");
   }
   return context;
 };
@@ -23,7 +23,7 @@ export interface TabsProps {
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
-  variant?: 'default' | 'pills' | 'underline';
+  variant?: "default" | "pills" | "underline";
   children: React.ReactNode;
   className?: string;
 }
@@ -32,14 +32,14 @@ export const Tabs: React.FC<TabsProps> = ({
   defaultValue,
   value,
   onValueChange,
-  variant = 'default',
+  variant = "default",
   children,
   className,
 }) => {
-  const [internalValue, setInternalValue] = useState(defaultValue || '');
-  
+  const [internalValue, setInternalValue] = useState(defaultValue || "");
+
   const activeTab = value !== undefined ? value : internalValue;
-  
+
   const setActiveTab = (tab: string) => {
     if (value === undefined) {
       setInternalValue(tab);
@@ -49,9 +49,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab, variant }}>
-      <div className={cn('w-full', className)}>
-        {children}
-      </div>
+      <div className={cn("w-full", className)}>{children}</div>
     </TabsContext.Provider>
   );
 };
@@ -63,20 +61,16 @@ export interface TabsListProps {
 
 export const TabsList: React.FC<TabsListProps> = ({ children, className }) => {
   const { variant } = useTabsContext();
-  
+
   const variantClasses = {
-    default: 'border-b border-neutral-200',
-    pills: 'bg-neutral-100 p-1 rounded-lg',
-    underline: 'border-b border-neutral-200',
+    default: "border-b border-neutral-200",
+    pills: "bg-neutral-100 p-1 rounded-lg",
+    underline: "border-b border-neutral-200",
   };
 
   return (
     <div
-      className={cn(
-        'flex',
-        variantClasses[variant],
-        className
-      )}
+      className={cn("flex", variantClasses[variant], className)}
       role="tablist"
     >
       {children}
@@ -108,25 +102,25 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
 
   const variantClasses = {
     default: cn(
-      'px-4 py-2 text-body-sm font-medium border-b-2 transition-colors',
+      "px-4 py-2 text-body-sm font-medium border-b-2 transition-colors",
       isActive
-        ? 'border-primary-500 text-primary-600'
-        : 'border-transparent text-neutral-600 hover:text-neutral-900 hover:border-neutral-300',
-      disabled && 'opacity-50 cursor-not-allowed'
+        ? "border-primary-500 text-primary-600"
+        : "border-transparent text-neutral-600 hover:text-neutral-900 hover:border-neutral-300",
+      disabled && "opacity-50 cursor-not-allowed",
     ),
     pills: cn(
-      'px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors',
+      "px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
       isActive
-        ? 'bg-white text-primary-600 shadow-sm'
-        : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50',
-      disabled && 'opacity-50 cursor-not-allowed'
+        ? "bg-white text-primary-600 shadow-sm"
+        : "text-neutral-600 hover:text-neutral-900 hover:bg-white/50",
+      disabled && "opacity-50 cursor-not-allowed",
     ),
     underline: cn(
-      'px-4 py-2 text-body-sm font-medium border-b-2 transition-colors',
+      "px-4 py-2 text-body-sm font-medium border-b-2 transition-colors",
       isActive
-        ? 'border-primary-500 text-primary-600'
-        : 'border-transparent text-neutral-600 hover:text-neutral-900',
-      disabled && 'opacity-50 cursor-not-allowed'
+        ? "border-primary-500 text-primary-600"
+        : "border-transparent text-neutral-600 hover:text-neutral-900",
+      disabled && "opacity-50 cursor-not-allowed",
     ),
   };
 
@@ -140,9 +134,9 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
       disabled={disabled}
       onClick={handleClick}
       className={cn(
-        'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+        "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
         variantClasses[variant],
-        className
+        className,
       )}
     >
       {children}
@@ -162,7 +156,7 @@ export const TabsContent: React.FC<TabsContentProps> = ({
   className,
 }) => {
   const { activeTab } = useTabsContext();
-  
+
   if (activeTab !== value) {
     return null;
   }
@@ -172,7 +166,7 @@ export const TabsContent: React.FC<TabsContentProps> = ({
       role="tabpanel"
       id={`tabpanel-${value}`}
       aria-labelledby={`tab-${value}`}
-      className={cn('mt-4', className)}
+      className={cn("mt-4", className)}
     >
       {children}
     </div>

@@ -1,34 +1,34 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 export interface ProgressProps {
   value: number;
   max?: number;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'success' | 'warning' | 'danger';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "success" | "warning" | "danger";
   showLabel?: boolean;
   label?: string;
   className?: string;
 }
 
 const progressSizes = {
-  sm: 'h-1',
-  md: 'h-2',
-  lg: 'h-3',
+  sm: "h-1",
+  md: "h-2",
+  lg: "h-3",
 };
 
 const progressVariants = {
-  default: 'bg-primary-500',
-  success: 'bg-green-500',
-  warning: 'bg-yellow-500',
-  danger: 'bg-red-500',
+  default: "bg-primary-500",
+  success: "bg-green-500",
+  warning: "bg-yellow-500",
+  danger: "bg-red-500",
 };
 
 export const Progress: React.FC<ProgressProps> = ({
   value,
   max = 100,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   showLabel = false,
   label,
   className,
@@ -36,11 +36,11 @@ export const Progress: React.FC<ProgressProps> = ({
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       {(showLabel || label) && (
         <div className="flex justify-between items-center mb-2">
           <span className="text-body-sm font-medium text-neutral-700">
-            {label || 'Progress'}
+            {label || "Progress"}
           </span>
           {showLabel && (
             <span className="text-body-sm text-neutral-600">
@@ -51,8 +51,8 @@ export const Progress: React.FC<ProgressProps> = ({
       )}
       <div
         className={cn(
-          'w-full bg-neutral-200 rounded-full overflow-hidden',
-          progressSizes[size]
+          "w-full bg-neutral-200 rounded-full overflow-hidden",
+          progressSizes[size],
         )}
         role="progressbar"
         aria-valuenow={value}
@@ -62,8 +62,8 @@ export const Progress: React.FC<ProgressProps> = ({
       >
         <div
           className={cn(
-            'h-full transition-all duration-300 ease-out rounded-full',
-            progressVariants[variant]
+            "h-full transition-all duration-300 ease-out rounded-full",
+            progressVariants[variant],
           )}
           style={{ width: `${percentage}%` }}
         />
@@ -77,7 +77,7 @@ export interface CircularProgressProps {
   max?: number;
   size?: number;
   strokeWidth?: number;
-  variant?: 'default' | 'success' | 'warning' | 'danger';
+  variant?: "default" | "success" | "warning" | "danger";
   showLabel?: boolean;
   className?: string;
 }
@@ -87,7 +87,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   max = 100,
   size = 120,
   strokeWidth = 8,
-  variant = 'default',
+  variant = "default",
   showLabel = false,
   className,
 }) => {
@@ -98,14 +98,19 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const colors = {
-    default: '#8095af',
-    success: '#22c55e',
-    warning: '#f59e0b',
-    danger: '#ef4444',
+    default: "#8095af",
+    success: "#22c55e",
+    warning: "#f59e0b",
+    danger: "#ef4444",
   };
 
   return (
-    <div className={cn('relative inline-flex items-center justify-center', className)}>
+    <div
+      className={cn(
+        "relative inline-flex items-center justify-center",
+        className,
+      )}
+    >
       <svg
         width={size}
         height={size}
@@ -150,36 +155,36 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 };
 
 export interface SpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'primary' | 'white';
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "default" | "primary" | "white";
   className?: string;
 }
 
 const spinnerSizes = {
-  sm: 'h-4 w-4',
-  md: 'h-6 w-6',
-  lg: 'h-8 w-8',
-  xl: 'h-12 w-12',
+  sm: "h-4 w-4",
+  md: "h-6 w-6",
+  lg: "h-8 w-8",
+  xl: "h-12 w-12",
 };
 
 const spinnerVariants = {
-  default: 'text-neutral-600',
-  primary: 'text-primary-600',
-  white: 'text-white',
+  default: "text-neutral-600",
+  primary: "text-primary-600",
+  white: "text-white",
 };
 
 export const Spinner: React.FC<SpinnerProps> = ({
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   className,
 }) => {
   return (
     <svg
       className={cn(
-        'animate-spin',
+        "animate-spin",
         spinnerSizes[size],
         spinnerVariants[variant],
-        className
+        className,
       )}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

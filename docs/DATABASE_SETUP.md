@@ -5,6 +5,7 @@ This guide covers setting up PostgreSQL for local development and syncing with y
 ## Quick Start
 
 ### Option 1: Automatic Setup (Recommended)
+
 ```bash
 # Auto-detects Docker or native PostgreSQL
 npm run db:setup
@@ -14,6 +15,7 @@ npm run db:status
 ```
 
 ### Option 2: Docker Setup (Isolated & Consistent)
+
 ```bash
 # Force Docker setup
 npm run db:setup:docker
@@ -23,6 +25,7 @@ docker-compose up -d postgres
 ```
 
 ### Option 3: Native PostgreSQL
+
 ```bash
 # Force native PostgreSQL setup
 npm run db:setup:native
@@ -33,6 +36,7 @@ npm run db:setup:native
 ### Docker Setup (Recommended for Development)
 
 **Advantages:**
+
 - ✅ Isolated environment
 - ✅ Consistent across team members
 - ✅ Easy to reset/recreate
@@ -40,9 +44,11 @@ npm run db:setup:native
 - ✅ No conflicts with system PostgreSQL
 
 **Requirements:**
+
 - Docker & Docker Compose installed
 
 **Setup:**
+
 ```bash
 # Start PostgreSQL with Docker
 docker-compose up -d postgres
@@ -55,20 +61,24 @@ docker-compose ps
 ```
 
 **Access:**
+
 - **Database:** `postgresql://heloc_user:heloc_password@localhost:5432/heloc_accelerator`
 - **pgAdmin:** http://localhost:8080 (admin@helocaccel.com / admin123)
 
 ### Native PostgreSQL Setup
 
 **Advantages:**
+
 - ✅ Direct system integration
 - ✅ Better performance
 - ✅ Familiar if you already use PostgreSQL
 
 **Requirements:**
+
 - PostgreSQL 12+ installed
 
 **macOS Installation:**
+
 ```bash
 # Install with Homebrew
 brew install postgresql@15
@@ -79,6 +89,7 @@ npm run db:setup:native
 ```
 
 **Ubuntu/Debian Installation:**
+
 ```bash
 # Install PostgreSQL
 sudo apt update
@@ -91,6 +102,7 @@ npm run db:setup:native
 ## Database Management
 
 ### Creating Test Users
+
 ```bash
 # Create default test user
 npm run db:create-user
@@ -100,12 +112,14 @@ node scripts/create-test-user.js user@example.com password123 John Doe
 ```
 
 ### Database Status
+
 ```bash
 # Check local and cloud database status
 npm run db:status
 ```
 
 ### Backups
+
 ```bash
 # Backup local database
 npm run db:backup
@@ -117,6 +131,7 @@ npm run db:backup
 ## Cloud Synchronization
 
 ### Setup Cloud Connection
+
 ```bash
 # Set your cloud database URL
 export CLOUD_DB_URL="postgresql://username:password@your-vps-ip:5432/heloc_accelerator"
@@ -126,6 +141,7 @@ echo "CLOUD_DB_URL=postgresql://username:password@your-vps-ip:5432/heloc_acceler
 ```
 
 ### Sync Operations
+
 ```bash
 # Sync local data to cloud (overwrites cloud)
 npm run db:sync:to-cloud
@@ -140,6 +156,7 @@ npm run db:status
 ## Environment Configuration
 
 ### Local Development (.env.local)
+
 ```bash
 # Copy example environment
 cp .env.example .env.local
@@ -150,7 +167,9 @@ CLOUD_DB_URL=postgresql://username:password@your-vps-ip:5432/heloc_accelerator
 ```
 
 ### Docker Environment
+
 The Docker setup automatically configures:
+
 - Database: `heloc_accelerator`
 - User: `heloc_user`
 - Password: `heloc_password`
@@ -159,6 +178,7 @@ The Docker setup automatically configures:
 ## Troubleshooting
 
 ### Docker Issues
+
 ```bash
 # Reset Docker setup
 docker-compose down -v
@@ -169,6 +189,7 @@ docker-compose logs postgres
 ```
 
 ### Connection Issues
+
 ```bash
 # Test local connection
 psql postgresql://heloc_user:heloc_password@localhost:5432/heloc_accelerator -c "SELECT version();"
@@ -178,6 +199,7 @@ psql "$CLOUD_DB_URL" -c "SELECT version();"
 ```
 
 ### Permission Issues
+
 ```bash
 # Fix native PostgreSQL permissions
 sudo -u postgres psql -c "ALTER USER heloc_user CREATEDB;"
@@ -187,6 +209,7 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE heloc_accelerator TO 
 ## Advanced Usage
 
 ### Manual Schema Updates
+
 ```bash
 # Apply schema changes
 psql "$DATABASE_URL" -f database/schema.sql
@@ -196,12 +219,15 @@ docker-compose exec postgres psql -U heloc_user -d heloc_accelerator -f /docker-
 ```
 
 ### Database Migrations
+
 Currently using direct SQL schema. For production, consider:
+
 - [node-pg-migrate](https://github.com/salsita/node-pg-migrate)
 - [Knex.js migrations](https://knexjs.org/guide/migrations.html)
 - [Prisma](https://www.prisma.io/)
 
 ### Performance Monitoring
+
 ```bash
 # Check database size
 psql "$DATABASE_URL" -c "SELECT pg_size_pretty(pg_database_size('heloc_accelerator'));"
@@ -213,6 +239,7 @@ psql "$DATABASE_URL" -c "SELECT schemaname,tablename,pg_size_pretty(pg_total_rel
 ## Security Considerations
 
 ### Production Setup
+
 - Use strong passwords
 - Enable SSL connections
 - Restrict network access
@@ -220,6 +247,7 @@ psql "$DATABASE_URL" -c "SELECT schemaname,tablename,pg_size_pretty(pg_total_rel
 - Monitor access logs
 
 ### Development Security
+
 - Never commit real credentials
 - Use `.env.local` for sensitive data
 - Rotate test passwords regularly

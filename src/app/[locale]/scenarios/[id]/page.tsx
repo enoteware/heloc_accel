@@ -1,65 +1,67 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useUser } from '@stackframe/stack'
-import { Icon } from '@/components/Icons'
-import Link from 'next/link'
-import ResultsDisplay from '@/components/ResultsDisplay'
-import InputSummary from '@/components/InputSummary'
-import type { DbScenario } from '@/lib/db'
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@stackframe/stack";
+import { Icon } from "@/components/Icons";
+import Link from "next/link";
+import ResultsDisplay from "@/components/ResultsDisplay";
+import InputSummary from "@/components/InputSummary";
+import type { DbScenario } from "@/lib/db";
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export default function ScenarioDetailPage({ params }: PageProps) {
-  const user = useUser()
-  const router = useRouter()
-  const [scenario, setScenario] = useState<DbScenario | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [scenarioId, setScenarioId] = useState<string | null>(null)
+  const user = useUser();
+  const router = useRouter();
+  const [scenario, setScenario] = useState<DbScenario | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [scenarioId, setScenarioId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadParams = async () => {
-      const { id } = await params
-      setScenarioId(id)
-    }
-    loadParams()
-  }, [params])
+      const { id } = await params;
+      setScenarioId(id);
+    };
+    loadParams();
+  }, [params]);
 
   useEffect(() => {
     if (!user) {
-      router.push('/handler/sign-in')
-      return
+      router.push("/handler/sign-in");
+      return;
     }
 
     const fetchScenario = async () => {
-      if (!scenarioId) return
-      
+      if (!scenarioId) return;
+
       try {
-        const response = await fetch(`/api/scenarios/${scenarioId}`)
+        const response = await fetch(`/api/scenarios/${scenarioId}`);
         if (!response.ok) {
           if (response.status === 404) {
-            throw new Error('Scenario not found')
+            throw new Error("Scenario not found");
           }
-          throw new Error('Failed to fetch scenario')
+          throw new Error("Failed to fetch scenario");
         }
-        const data = await response.json()
-        setScenario(data.scenario)
+        const data = await response.json();
+        setScenario(data.scenario);
       } catch (error) {
-        console.error('Error fetching scenario:', error)
-        setError(error instanceof Error ? error.message : 'Failed to load scenario')
+        console.error("Error fetching scenario:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to load scenario",
+        );
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     if (scenarioId) {
-      fetchScenario()
+      fetchScenario();
     }
-  }, [user, router, scenarioId])
+  }, [user, router, scenarioId]);
 
   if (loading) {
     return (
@@ -69,7 +71,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
           <p className="mt-4 text-gray-600">Loading scenario...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (error || !scenario) {
@@ -77,9 +79,13 @@ export default function ScenarioDetailPage({ params }: PageProps) {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <Icon name="alert" size="lg" className="text-red-600 mx-auto mb-4" />
+            <Icon
+              name="alert"
+              size="lg"
+              className="text-red-600 mx-auto mb-4"
+            />
             <h2 className="text-lg font-semibold text-red-900 mb-2">
-              {error || 'Scenario not found'}
+              {error || "Scenario not found"}
             </h2>
             <Link
               href="/scenarios"
@@ -91,7 +97,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Reconstruct the inputs and results from the saved data
@@ -113,15 +119,15 @@ export default function ScenarioDetailPage({ params }: PageProps) {
     propertyTaxMonthly: scenario.property_tax_monthly,
     insuranceMonthly: scenario.insurance_monthly,
     hoaFeesMonthly: scenario.hoa_fees_monthly,
-    pmiMonthly: scenario.pmi_monthly
-  }
+    pmiMonthly: scenario.pmi_monthly,
+  };
 
   const results = scenario.calculation_results_json || {
     traditional: {
       payoffMonths: scenario.traditional_payoff_months || 0,
       totalInterest: scenario.traditional_total_interest || 0,
       monthlyPayment: scenario.traditional_monthly_payment || 0,
-      totalPayments: scenario.traditional_total_payments || 0
+      totalPayments: scenario.traditional_total_payments || 0,
     },
     heloc: {
       payoffMonths: scenario.heloc_payoff_months || 0,
@@ -130,16 +136,16 @@ export default function ScenarioDetailPage({ params }: PageProps) {
       totalHelocInterest: scenario.heloc_total_heloc_interest || 0,
       maxHelocUsed: scenario.heloc_max_used || 0,
       averageHelocBalance: scenario.heloc_average_balance || 0,
-      schedule: scenario.heloc_schedule_json || []
+      schedule: scenario.heloc_schedule_json || [],
     },
     comparison: {
       timeSavedMonths: scenario.time_saved_months || 0,
       timeSavedYears: scenario.time_saved_years || 0,
       interestSaved: scenario.interest_saved || 0,
       percentageInterestSaved: scenario.percentage_interest_saved || 0,
-      monthlyPaymentDifference: 0
-    }
-  }
+      monthlyPaymentDifference: 0,
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -155,7 +161,9 @@ export default function ScenarioDetailPage({ params }: PageProps) {
                 <Icon name="arrow-left" size="sm" className="mr-2" />
                 Back to scenarios
               </Link>
-              <h1 className="text-3xl font-bold text-gray-900">{scenario.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {scenario.name}
+              </h1>
               {scenario.description && (
                 <p className="mt-2 text-gray-600">{scenario.description}</p>
               )}
@@ -178,11 +186,8 @@ export default function ScenarioDetailPage({ params }: PageProps) {
         </div>
 
         {/* Results Display */}
-        <ResultsDisplay
-          results={results}
-          inputs={inputs}
-        />
+        <ResultsDisplay results={results} inputs={inputs} />
       </div>
     </div>
-  )
+  );
 }

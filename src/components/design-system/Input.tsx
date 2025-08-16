@@ -1,7 +1,8 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -10,7 +11,10 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
+  (
+    { className, label, error, helperText, leftIcon, rightIcon, id, ...props },
+    ref,
+  ) => {
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
     const errorId = error ? `${inputId}-error` : undefined;
     const helperId = helperText && !error ? `${inputId}-helper` : undefined;
@@ -27,50 +31,71 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
+            <div
+              className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              aria-hidden="true"
+            >
               <div className="text-neutral-600 input-icon-left">{leftIcon}</div>
             </div>
           )}
           <input
             id={inputId}
             aria-invalid={!!error}
-            aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
+            aria-describedby={
+              [errorId, helperId].filter(Boolean).join(" ") || undefined
+            }
             className={cn(
               // Base styles
-              'block w-full rounded-lg border transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60',
-              'placeholder-neutral-500',
+              "block w-full rounded-lg border transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+              "disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60",
+              "placeholder-neutral-500",
               // Background and text colors - white background with black text as per style guide
-              '!bg-white !text-neutral-900',
+              "!bg-white !text-neutral-900",
               // Padding adjustments for icons
-              leftIcon ? 'pl-10' : 'pl-3',
-              rightIcon ? 'pr-10' : 'pr-3',
-              'py-2',
+              leftIcon ? "pl-10" : "pl-3",
+              rightIcon ? "pr-10" : "pr-3",
+              "py-2",
               // Error state
               error
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                : 'border-neutral-300 hover:border-neutral-400',
-              className
+                ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                : "border-neutral-300 hover:border-neutral-400",
+              className,
             )}
             ref={ref}
             {...props}
           />
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" aria-hidden="true">
-              <div className="text-neutral-600 input-icon-right">{rightIcon}</div>
+            <div
+              className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+              aria-hidden="true"
+            >
+              <div className="text-neutral-600 input-icon-right">
+                {rightIcon}
+              </div>
             </div>
           )}
         </div>
         {error && (
-          <p id={errorId} role="alert" className="mt-1 text-body-sm text-red-600 error-message">{error}</p>
+          <p
+            id={errorId}
+            role="alert"
+            className="mt-1 text-body-sm text-red-600 error-message"
+          >
+            {error}
+          </p>
         )}
         {helperText && !error && (
-          <p id={helperId} className="mt-1 text-body-sm text-neutral-600 helper-text">{helperText}</p>
+          <p
+            id={helperId}
+            className="mt-1 text-body-sm text-neutral-600 helper-text"
+          >
+            {helperText}
+          </p>
         )}
       </div>
     );
-  }
+  },
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";

@@ -1,7 +1,11 @@
 // Mortgage and HELOC calculation utilities
 
-import { CalculationError, ErrorCode, createErrorResponse } from './errors'
-import { debugLogger, debugLTVCalculation, debugCalculationError } from './debug-utils'
+import { CalculationError, ErrorCode, createErrorResponse } from "./errors";
+import {
+  debugLogger,
+  debugLTVCalculation,
+  debugCalculationError,
+} from "./debug-utils";
 
 /**
  * Calculate Loan-to-Value (LTV) ratio
@@ -10,54 +14,65 @@ import { debugLogger, debugLTVCalculation, debugCalculationError } from './debug
  * @returns LTV ratio as a percentage (0-100)
  * @throws CalculationError for invalid inputs
  */
-export function calculateLTV(loanAmount: number, propertyValue: number): number {
+export function calculateLTV(
+  loanAmount: number,
+  propertyValue: number,
+): number {
   // Handle edge cases
   if (loanAmount == null || propertyValue == null) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Both loan amount and original purchase price are required for LTV calculation',
-      userMessage: 'Please provide both loan amount and original purchase price',
-      suggestion: 'Enter valid numbers for both loan amount and original purchase price',
-      field: 'loanAmount,propertyValue',
-      value: { loanAmount, propertyValue }
-    })
+      message:
+        "Both loan amount and original purchase price are required for LTV calculation",
+      userMessage:
+        "Please provide both loan amount and original purchase price",
+      suggestion:
+        "Enter valid numbers for both loan amount and original purchase price",
+      field: "loanAmount,propertyValue",
+      value: { loanAmount, propertyValue },
+    });
   }
 
   // Convert to numbers and validate
-  const loan = Number(loanAmount)
-  const value = Number(propertyValue)
+  const loan = Number(loanAmount);
+  const value = Number(propertyValue);
 
   if (isNaN(loan) || isNaN(value)) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Loan amount and original purchase price must be valid numbers',
-      userMessage: 'Please enter valid numeric values',
-      suggestion: 'Use numbers only (e.g., 400000 for loan amount, 500000 for original purchase price)',
-      field: 'loanAmount,propertyValue',
-      value: { loanAmount, propertyValue }
-    })
+      message: "Loan amount and original purchase price must be valid numbers",
+      userMessage: "Please enter valid numeric values",
+      suggestion:
+        "Use numbers only (e.g., 400000 for loan amount, 500000 for original purchase price)",
+      field: "loanAmount,propertyValue",
+      value: { loanAmount, propertyValue },
+    });
   }
 
   if (loan < 0 || value <= 0) {
     throw new CalculationError({
       code: ErrorCode.INVALID_CALCULATION_INPUT,
-      message: 'Loan amount cannot be negative and original purchase price must be positive',
-      userMessage: 'Please enter positive values',
-      suggestion: 'Loan amount should be 0 or greater, original purchase price should be greater than 0',
-      field: 'loanAmount,propertyValue',
-      value: { loanAmount: loan, propertyValue: value }
-    })
+      message:
+        "Loan amount cannot be negative and original purchase price must be positive",
+      userMessage: "Please enter positive values",
+      suggestion:
+        "Loan amount should be 0 or greater, original purchase price should be greater than 0",
+      field: "loanAmount,propertyValue",
+      value: { loanAmount: loan, propertyValue: value },
+    });
   }
 
   // Calculate LTV as percentage
-  const ltvRatio = (loan / value) * 100
+  const ltvRatio = (loan / value) * 100;
 
   // Sanity check - LTV over 200% is likely an error
   if (ltvRatio > 200) {
-    console.warn(`Warning: LTV ratio is ${ltvRatio.toFixed(2)}% which seems unusually high`)
+    console.warn(
+      `Warning: LTV ratio is ${ltvRatio.toFixed(2)}% which seems unusually high`,
+    );
   }
 
-  return ltvRatio
+  return ltvRatio;
 }
 
 /**
@@ -66,7 +81,7 @@ export function calculateLTV(loanAmount: number, propertyValue: number): number 
  * @returns true if MIP/PMI is required (LTV > 80%)
  */
 export function isMIPRequired(ltvRatio: number): boolean {
-  return ltvRatio > 80
+  return ltvRatio > 80;
 }
 
 /**
@@ -75,13 +90,13 @@ export function isMIPRequired(ltvRatio: number): boolean {
  * @returns Annual MIP/PMI rate as decimal (e.g., 0.005 for 0.5%)
  */
 export function calculateStandardMIPRate(ltvRatio: number): number {
-  if (ltvRatio <= 80) return 0
+  if (ltvRatio <= 80) return 0;
 
   // Standard rates based on LTV ranges
-  if (ltvRatio <= 85) return 0.005  // 0.5%
-  if (ltvRatio <= 90) return 0.0075 // 0.75%
-  if (ltvRatio <= 95) return 0.01   // 1.0%
-  return 0.0125 // 1.25% for LTV > 95%
+  if (ltvRatio <= 85) return 0.005; // 0.5%
+  if (ltvRatio <= 90) return 0.0075; // 0.75%
+  if (ltvRatio <= 95) return 0.01; // 1.0%
+  return 0.0125; // 1.25% for LTV > 95%
 }
 
 /**
@@ -90,41 +105,54 @@ export function calculateStandardMIPRate(ltvRatio: number): number {
  * @param propertyValue - Current property value
  * @returns Object with success status, LTV ratio, and error message if applicable
  */
-export function safeLTVCalculation(loanAmount: number | string | null | undefined, propertyValue: number | string | null | undefined): {
-  success: boolean
-  ltvRatio: number
-  error?: string
-  canCalculate: boolean
+export function safeLTVCalculation(
+  loanAmount: number | string | null | undefined,
+  propertyValue: number | string | null | undefined,
+): {
+  success: boolean;
+  ltvRatio: number;
+  error?: string;
+  canCalculate: boolean;
 } {
   // Debug the calculation process
-  const debugInfo = debugLTVCalculation(loanAmount, propertyValue)
+  const debugInfo = debugLTVCalculation(loanAmount, propertyValue);
 
   // Handle null/undefined inputs
   if (loanAmount == null || propertyValue == null) {
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Both loan amount and original purchase price are required',
-      canCalculate: false
-    }
-    debugLogger.log('warn', 'ltv', 'LTV calculation failed: missing inputs', { loanAmount, propertyValue, result })
-    return result
+      error: "Both loan amount and original purchase price are required",
+      canCalculate: false,
+    };
+    debugLogger.log("warn", "ltv", "LTV calculation failed: missing inputs", {
+      loanAmount,
+      propertyValue,
+      result,
+    });
+    return result;
   }
 
   // Convert to numbers
-  const loan = Number(loanAmount)
-  const value = Number(propertyValue)
+  const loan = Number(loanAmount);
+  const value = Number(propertyValue);
 
   // Check for invalid numbers
   if (isNaN(loan) || isNaN(value)) {
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Loan amount and original purchase price must be valid numbers',
-      canCalculate: false
-    }
-    debugLogger.log('warn', 'ltv', 'LTV calculation failed: invalid numbers', { loanAmount, propertyValue, loan, value, result })
-    return result
+      error: "Loan amount and original purchase price must be valid numbers",
+      canCalculate: false,
+    };
+    debugLogger.log("warn", "ltv", "LTV calculation failed: invalid numbers", {
+      loanAmount,
+      propertyValue,
+      loan,
+      value,
+      result,
+    });
+    return result;
   }
 
   // Check for zero or negative values
@@ -132,31 +160,46 @@ export function safeLTVCalculation(loanAmount: number | string | null | undefine
     const result = {
       success: false,
       ltvRatio: 0,
-      error: 'Loan amount and original purchase price must be positive',
-      canCalculate: false
-    }
-    debugLogger.log('warn', 'ltv', 'LTV calculation failed: non-positive values', { loan, value, result })
-    return result
+      error: "Loan amount and original purchase price must be positive",
+      canCalculate: false,
+    };
+    debugLogger.log(
+      "warn",
+      "ltv",
+      "LTV calculation failed: non-positive values",
+      { loan, value, result },
+    );
+    return result;
   }
 
   try {
-    const ltvRatio = calculateLTV(loan, value)
+    const ltvRatio = calculateLTV(loan, value);
     const result = {
       success: true,
       ltvRatio,
-      canCalculate: true
-    }
-    debugLogger.log('info', 'ltv', 'LTV calculation successful', { loan, value, ltvRatio, result })
-    return result
+      canCalculate: true,
+    };
+    debugLogger.log("info", "ltv", "LTV calculation successful", {
+      loan,
+      value,
+      ltvRatio,
+      result,
+    });
+    return result;
   } catch (error) {
     const result = {
       success: false,
       ltvRatio: 0,
-      error: error instanceof Error ? error.message : 'LTV calculation failed',
-      canCalculate: false
-    }
-    debugCalculationError(error as Error, { loanAmount, propertyValue, loan, value })
-    return result
+      error: error instanceof Error ? error.message : "LTV calculation failed",
+      canCalculate: false,
+    };
+    debugCalculationError(error as Error, {
+      loanAmount,
+      propertyValue,
+      loan,
+      value,
+    });
+    return result;
   }
 }
 
@@ -166,42 +209,45 @@ export function safeLTVCalculation(loanAmount: number | string | null | undefine
  * @param ltvRatio - LTV ratio as percentage
  * @returns Suggested monthly PMI amount, or 0 if not required
  */
-export function calculateSuggestedMonthlyPMI(loanAmount: number, ltvRatio: number): number {
-  if (!isMIPRequired(ltvRatio)) return 0
+export function calculateSuggestedMonthlyPMI(
+  loanAmount: number,
+  ltvRatio: number,
+): number {
+  if (!isMIPRequired(ltvRatio)) return 0;
 
-  const annualRate = calculateStandardMIPRate(ltvRatio)
-  return Math.round((loanAmount * annualRate) / 12)
+  const annualRate = calculateStandardMIPRate(ltvRatio);
+  return Math.round((loanAmount * annualRate) / 12);
 }
 
 export interface MortgageInput {
-  principal: number
-  annualInterestRate: number
-  termInMonths: number
-  currentBalance?: number
-  monthlyPayment?: number
-  propertyValue?: number
-  pmiMonthly?: number
+  principal: number;
+  annualInterestRate: number;
+  termInMonths: number;
+  currentBalance?: number;
+  monthlyPayment?: number;
+  propertyValue?: number;
+  pmiMonthly?: number;
 }
 
 export interface MonthlyPayment {
-  month: number
-  beginningBalance: number
-  paymentAmount: number
-  principalPayment: number
-  interestPayment: number
-  endingBalance: number
-  cumulativeInterest: number
-  cumulativePrincipal: number
-  pmiPayment?: number
-  currentLTV?: number
+  month: number;
+  beginningBalance: number;
+  paymentAmount: number;
+  principalPayment: number;
+  interestPayment: number;
+  endingBalance: number;
+  cumulativeInterest: number;
+  cumulativePrincipal: number;
+  pmiPayment?: number;
+  currentLTV?: number;
 }
 
 export interface AmortizationSchedule {
-  monthlyPayment: number
-  totalInterest: number
-  totalPayments: number
-  payoffMonths: number
-  schedule: MonthlyPayment[]
+  monthlyPayment: number;
+  totalInterest: number;
+  totalPayments: number;
+  payoffMonths: number;
+  schedule: MonthlyPayment[];
 }
 
 /**
@@ -211,23 +257,25 @@ export interface AmortizationSchedule {
 export function calculateMonthlyPayment(
   principal: number,
   annualInterestRate: number,
-  termInMonths: number
+  termInMonths: number,
 ): number {
   if (annualInterestRate === 0) {
-    return principal / termInMonths
+    return principal / termInMonths;
   }
 
-  const monthlyRate = annualInterestRate / 12
-  const numerator = monthlyRate * Math.pow(1 + monthlyRate, termInMonths)
-  const denominator = Math.pow(1 + monthlyRate, termInMonths) - 1
+  const monthlyRate = annualInterestRate / 12;
+  const numerator = monthlyRate * Math.pow(1 + monthlyRate, termInMonths);
+  const denominator = Math.pow(1 + monthlyRate, termInMonths) - 1;
 
-  return principal * (numerator / denominator)
+  return principal * (numerator / denominator);
 }
 
 /**
  * Generate complete amortization schedule for a traditional mortgage
  */
-export function generateAmortizationSchedule(input: MortgageInput): AmortizationSchedule {
+export function generateAmortizationSchedule(
+  input: MortgageInput,
+): AmortizationSchedule {
   const {
     principal,
     annualInterestRate,
@@ -235,69 +283,74 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
     currentBalance = principal,
     monthlyPayment: providedPayment,
     propertyValue,
-    pmiMonthly = 0
-  } = input
+    pmiMonthly = 0,
+  } = input;
 
   // Validate inputs
   if (annualInterestRate < 0 || annualInterestRate > 1) {
     const errorDetails = createErrorResponse(ErrorCode.INVALID_INTEREST_RATE, {
-      value: (annualInterestRate * 100).toFixed(2) + '%'
-    })
-    throw new CalculationError(errorDetails)
+      value: (annualInterestRate * 100).toFixed(2) + "%",
+    });
+    throw new CalculationError(errorDetails);
   }
 
   if (termInMonths < 1 || termInMonths > 600) {
     const errorDetails = createErrorResponse(ErrorCode.INVALID_LOAN_TERM, {
-      value: termInMonths
-    })
-    throw new CalculationError(errorDetails)
+      value: termInMonths,
+    });
+    throw new CalculationError(errorDetails);
   }
 
-  const monthlyRate = annualInterestRate / 12
-  const monthlyPayment = providedPayment || calculateMonthlyPayment(principal, annualInterestRate, termInMonths)
+  const monthlyRate = annualInterestRate / 12;
+  const monthlyPayment =
+    providedPayment ||
+    calculateMonthlyPayment(principal, annualInterestRate, termInMonths);
 
-  const schedule: MonthlyPayment[] = []
-  let balance = currentBalance
-  let cumulativeInterest = 0
-  let cumulativePrincipal = 0
-  let month = 1
+  const schedule: MonthlyPayment[] = [];
+  let balance = currentBalance;
+  let cumulativeInterest = 0;
+  let cumulativePrincipal = 0;
+  let month = 1;
 
   while (balance > 0.01 && month <= termInMonths) {
-    const interestPayment = balance * monthlyRate
-    let principalPayment = monthlyPayment - interestPayment
+    const interestPayment = balance * monthlyRate;
+    let principalPayment = monthlyPayment - interestPayment;
 
     // Calculate current LTV and PMI payment
-    let currentPmiPayment = pmiMonthly
-    let currentLTV = 100
-    
+    let currentPmiPayment = pmiMonthly;
+    let currentLTV = 100;
+
     if (propertyValue && propertyValue > 0) {
-      currentLTV = (balance / propertyValue) * 100
+      currentLTV = (balance / propertyValue) * 100;
       // PMI is automatically removed when LTV reaches 78%
       if (currentLTV <= 78) {
-        currentPmiPayment = 0
+        currentPmiPayment = 0;
       }
     }
 
     // Check for negative amortization
     if (principalPayment < 0) {
       // Payment is less than interest - loan balance would increase
-      const errorDetails = createErrorResponse(ErrorCode.NEGATIVE_AMORTIZATION, {
-        payment: monthlyPayment.toFixed(2),
-        interest: interestPayment.toFixed(2)
-      })
-      throw new CalculationError(errorDetails)
+      const errorDetails = createErrorResponse(
+        ErrorCode.NEGATIVE_AMORTIZATION,
+        {
+          payment: monthlyPayment.toFixed(2),
+          interest: interestPayment.toFixed(2),
+        },
+      );
+      throw new CalculationError(errorDetails);
     }
 
     // Handle final payment
     if (principalPayment > balance) {
-      principalPayment = balance
+      principalPayment = balance;
     }
 
-    const actualPayment = principalPayment + interestPayment
-    const endingBalance = balance - principalPayment
+    const actualPayment = principalPayment + interestPayment;
+    const endingBalance = balance - principalPayment;
 
-    cumulativeInterest += interestPayment
-    cumulativePrincipal += principalPayment
+    cumulativeInterest += interestPayment;
+    cumulativePrincipal += principalPayment;
 
     schedule.push({
       month,
@@ -309,16 +362,18 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
       cumulativeInterest,
       cumulativePrincipal,
       pmiPayment: currentPmiPayment,
-      currentLTV: propertyValue ? currentLTV : undefined
-    })
+      currentLTV: propertyValue ? currentLTV : undefined,
+    });
 
-    balance = endingBalance
-    month++
+    balance = endingBalance;
+    month++;
   }
 
   // Check if the calculation hit the maximum term limit
   if (month > termInMonths && balance > 0.01) {
-    console.warn(`Warning: Loan not fully paid off after ${termInMonths} months. Remaining balance: $${balance.toFixed(2)}`)
+    console.warn(
+      `Warning: Loan not fully paid off after ${termInMonths} months. Remaining balance: $${balance.toFixed(2)}`,
+    );
   }
 
   return {
@@ -326,8 +381,8 @@ export function generateAmortizationSchedule(input: MortgageInput): Amortization
     totalInterest: cumulativeInterest,
     totalPayments: cumulativeInterest + cumulativePrincipal,
     payoffMonths: schedule.length,
-    schedule
-  }
+    schedule,
+  };
 }
 
 /**
@@ -337,20 +392,24 @@ export function calculateRemainingBalance(
   principal: number,
   annualInterestRate: number,
   termInMonths: number,
-  monthsPaid: number
+  monthsPaid: number,
 ): number {
-  if (monthsPaid >= termInMonths) return 0
-  if (monthsPaid <= 0) return principal
+  if (monthsPaid >= termInMonths) return 0;
+  if (monthsPaid <= 0) return principal;
 
-  const monthlyRate = annualInterestRate / 12
-  const monthlyPayment = calculateMonthlyPayment(principal, annualInterestRate, termInMonths)
+  const monthlyRate = annualInterestRate / 12;
+  const monthlyPayment = calculateMonthlyPayment(
+    principal,
+    annualInterestRate,
+    termInMonths,
+  );
 
   // Use the remaining balance formula
-  const remainingMonths = termInMonths - monthsPaid
-  const numerator = Math.pow(1 + monthlyRate, remainingMonths) - 1
-  const denominator = monthlyRate * Math.pow(1 + monthlyRate, remainingMonths)
+  const remainingMonths = termInMonths - monthsPaid;
+  const numerator = Math.pow(1 + monthlyRate, remainingMonths) - 1;
+  const denominator = monthlyRate * Math.pow(1 + monthlyRate, remainingMonths);
 
-  return monthlyPayment * (numerator / denominator)
+  return monthlyPayment * (numerator / denominator);
 }
 
 /**
@@ -360,31 +419,32 @@ export function calculatePayoffTimeWithExtraPayments(
   currentBalance: number,
   annualInterestRate: number,
   regularPayment: number,
-  extraPayment: number = 0
+  extraPayment: number = 0,
 ): { months: number; totalInterest: number; schedule: MonthlyPayment[] } {
-  const monthlyRate = annualInterestRate / 12
-  const totalPayment = regularPayment + extraPayment
+  const monthlyRate = annualInterestRate / 12;
+  const totalPayment = regularPayment + extraPayment;
 
-  const schedule: MonthlyPayment[] = []
-  let balance = currentBalance
-  let cumulativeInterest = 0
-  let cumulativePrincipal = 0
-  let month = 1
+  const schedule: MonthlyPayment[] = [];
+  let balance = currentBalance;
+  let cumulativeInterest = 0;
+  let cumulativePrincipal = 0;
+  let month = 1;
 
-  while (balance > 0.01 && month <= 600) { // Max 50 years
-    const interestPayment = balance * monthlyRate
-    let principalPayment = totalPayment - interestPayment
+  while (balance > 0.01 && month <= 600) {
+    // Max 50 years
+    const interestPayment = balance * monthlyRate;
+    let principalPayment = totalPayment - interestPayment;
 
     // Handle final payment
     if (principalPayment > balance) {
-      principalPayment = balance
+      principalPayment = balance;
     }
 
-    const actualPayment = principalPayment + interestPayment
-    const endingBalance = balance - principalPayment
+    const actualPayment = principalPayment + interestPayment;
+    const endingBalance = balance - principalPayment;
 
-    cumulativeInterest += interestPayment
-    cumulativePrincipal += principalPayment
+    cumulativeInterest += interestPayment;
+    cumulativePrincipal += principalPayment;
 
     schedule.push({
       month,
@@ -394,52 +454,52 @@ export function calculatePayoffTimeWithExtraPayments(
       interestPayment,
       endingBalance,
       cumulativeInterest,
-      cumulativePrincipal
-    })
+      cumulativePrincipal,
+    });
 
-    balance = endingBalance
-    month++
+    balance = endingBalance;
+    month++;
   }
 
   return {
     months: schedule.length,
     totalInterest: cumulativeInterest,
-    schedule
-  }
+    schedule,
+  };
 }
 
 // HELOC-specific interfaces and calculations
 
 export interface HELOCInput {
-  mortgageBalance: number
-  mortgageRate: number
-  mortgagePayment: number
-  helocLimit: number
-  helocRate: number
-  discretionaryIncome: number
-  helocAvailableCredit?: number
-  propertyValue?: number
-  pmiMonthly?: number
+  mortgageBalance: number;
+  mortgageRate: number;
+  mortgagePayment: number;
+  helocLimit: number;
+  helocRate: number;
+  discretionaryIncome: number;
+  helocAvailableCredit?: number;
+  propertyValue?: number;
+  pmiMonthly?: number;
 }
 
 export interface HELOCMonthlyPayment extends MonthlyPayment {
-  helocBalance: number
-  helocPayment: number
-  helocInterest: number
-  totalMonthlyPayment: number
-  discretionaryUsed: number
-  pmiPayment: number
-  currentEquityPercentage?: number
+  helocBalance: number;
+  helocPayment: number;
+  helocInterest: number;
+  totalMonthlyPayment: number;
+  discretionaryUsed: number;
+  pmiPayment: number;
+  currentEquityPercentage?: number;
 }
 
 export interface HELOCCalculationResult {
-  payoffMonths: number
-  totalInterest: number
-  totalHelocInterest: number
-  totalMortgageInterest: number
-  schedule: HELOCMonthlyPayment[]
-  maxHelocUsed: number
-  averageHelocBalance: number
+  payoffMonths: number;
+  totalInterest: number;
+  totalHelocInterest: number;
+  totalMortgageInterest: number;
+  schedule: HELOCMonthlyPayment[];
+  maxHelocUsed: number;
+  averageHelocBalance: number;
 }
 
 /**
@@ -447,7 +507,9 @@ export interface HELOCCalculationResult {
  * This implements the strategy where discretionary income is used to pay down the mortgage
  * using HELOC funds, then the discretionary income pays down the HELOC
  */
-export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationResult {
+export function calculateHELOCAcceleration(
+  input: HELOCInput,
+): HELOCCalculationResult {
   const {
     mortgageBalance,
     mortgageRate,
@@ -457,97 +519,111 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
     discretionaryIncome,
     helocAvailableCredit = helocLimit,
     propertyValue,
-    pmiMonthly = 0
-  } = input
+    pmiMonthly = 0,
+  } = input;
 
-  const mortgageMonthlyRate = mortgageRate / 12
-  const helocMonthlyRate = helocRate / 12
+  const mortgageMonthlyRate = mortgageRate / 12;
+  const helocMonthlyRate = helocRate / 12;
 
-  const schedule: HELOCMonthlyPayment[] = []
-  let mortgageBalanceRemaining = mortgageBalance
-  let helocBalance = 0
-  let month = 1
-  let totalMortgageInterest = 0
-  let totalHelocInterest = 0
-  let maxHelocUsed = 0
-  let totalHelocBalance = 0
+  const schedule: HELOCMonthlyPayment[] = [];
+  let mortgageBalanceRemaining = mortgageBalance;
+  let helocBalance = 0;
+  let month = 1;
+  let totalMortgageInterest = 0;
+  let totalHelocInterest = 0;
+  let maxHelocUsed = 0;
+  let totalHelocBalance = 0;
 
-  while (mortgageBalanceRemaining > 0.01 && month <= 600) { // Max 50 years
-    const beginningMortgageBalance = mortgageBalanceRemaining
-    const beginningHelocBalance = helocBalance
+  while (mortgageBalanceRemaining > 0.01 && month <= 600) {
+    // Max 50 years
+    const beginningMortgageBalance = mortgageBalanceRemaining;
+    const beginningHelocBalance = helocBalance;
 
     // Calculate mortgage interest for this month
-    const mortgageInterest = mortgageBalanceRemaining * mortgageMonthlyRate
+    const mortgageInterest = mortgageBalanceRemaining * mortgageMonthlyRate;
 
     // Calculate HELOC interest for this month
-    const helocInterest = helocBalance * helocMonthlyRate
+    const helocInterest = helocBalance * helocMonthlyRate;
 
     // Calculate PMI payment and equity percentage
-    let currentPmiPayment = pmiMonthly
-    let currentEquityPercentage = 0
-    let currentLTV = 100 // Default to 100% if no property value
-    
+    let currentPmiPayment = pmiMonthly;
+    let currentEquityPercentage = 0;
+    let currentLTV = 100; // Default to 100% if no property value
+
     if (propertyValue && propertyValue > 0) {
-      currentLTV = (mortgageBalanceRemaining / propertyValue) * 100
-      currentEquityPercentage = 100 - currentLTV
+      currentLTV = (mortgageBalanceRemaining / propertyValue) * 100;
+      currentEquityPercentage = 100 - currentLTV;
       // PMI is automatically removed when LTV reaches 78%
       if (currentLTV <= 78) {
-        currentPmiPayment = 0
+        currentPmiPayment = 0;
       }
     }
 
     // Determine how much discretionary income to use
-    let discretionaryUsed = discretionaryIncome
+    let discretionaryUsed = discretionaryIncome;
 
     // Strategy: Use discretionary income to pay down mortgage principal
     // If we need more than discretionary income, use HELOC (if available)
-    let mortgagePrincipalPayment = mortgagePayment - mortgageInterest
-    let additionalPrincipalPayment = 0
+    let mortgagePrincipalPayment = mortgagePayment - mortgageInterest;
+    let additionalPrincipalPayment = 0;
 
     // Use discretionary income for additional principal payment
     if (discretionaryUsed > 0) {
-      additionalPrincipalPayment = Math.min(discretionaryUsed, mortgageBalanceRemaining - mortgagePrincipalPayment)
+      additionalPrincipalPayment = Math.min(
+        discretionaryUsed,
+        mortgageBalanceRemaining - mortgagePrincipalPayment,
+      );
 
       // If we have more discretionary income than needed to pay off mortgage
       if (discretionaryUsed > additionalPrincipalPayment) {
         // Use remaining to pay down HELOC
-        const remainingDiscretionary = discretionaryUsed - additionalPrincipalPayment
-        const helocPayment = Math.min(remainingDiscretionary, helocBalance)
-        helocBalance -= helocPayment
-        discretionaryUsed = additionalPrincipalPayment + helocPayment
+        const remainingDiscretionary =
+          discretionaryUsed - additionalPrincipalPayment;
+        const helocPayment = Math.min(remainingDiscretionary, helocBalance);
+        helocBalance -= helocPayment;
+        discretionaryUsed = additionalPrincipalPayment + helocPayment;
       }
     }
 
     // If we can use HELOC to make an even larger principal payment
-    const helocAvailable = helocAvailableCredit - helocBalance
+    const helocAvailable = helocAvailableCredit - helocBalance;
     if (helocAvailable > 0 && discretionaryIncome > 0) {
       // Use HELOC to supplement the payment, but only if it makes sense
       // (i.e., mortgage rate > HELOC rate or we're close to payoff)
-      if (mortgageRate >= helocRate || mortgageBalanceRemaining < helocLimit * 0.1) {
+      if (
+        mortgageRate >= helocRate ||
+        mortgageBalanceRemaining < helocLimit * 0.1
+      ) {
         // Use HELOC to accelerate payoff - borrow up to discretionary income amount
         const additionalHelocUse = Math.min(
           helocAvailable,
-          Math.min(discretionaryIncome, mortgageBalanceRemaining - mortgagePrincipalPayment - additionalPrincipalPayment)
-        )
+          Math.min(
+            discretionaryIncome,
+            mortgageBalanceRemaining -
+              mortgagePrincipalPayment -
+              additionalPrincipalPayment,
+          ),
+        );
         if (additionalHelocUse > 0) {
-          helocBalance += additionalHelocUse
-          additionalPrincipalPayment += additionalHelocUse
+          helocBalance += additionalHelocUse;
+          additionalPrincipalPayment += additionalHelocUse;
         }
       }
     }
 
-    const totalPrincipalPayment = mortgagePrincipalPayment + additionalPrincipalPayment
-    const totalMortgagePayment = mortgageInterest + totalPrincipalPayment
+    const totalPrincipalPayment =
+      mortgagePrincipalPayment + additionalPrincipalPayment;
+    const totalMortgagePayment = mortgageInterest + totalPrincipalPayment;
 
     // Update balances
-    mortgageBalanceRemaining -= totalPrincipalPayment
-    if (mortgageBalanceRemaining < 0) mortgageBalanceRemaining = 0
+    mortgageBalanceRemaining -= totalPrincipalPayment;
+    if (mortgageBalanceRemaining < 0) mortgageBalanceRemaining = 0;
 
     // Track totals
-    totalMortgageInterest += mortgageInterest
-    totalHelocInterest += helocInterest
-    maxHelocUsed = Math.max(maxHelocUsed, helocBalance)
-    totalHelocBalance += helocBalance
+    totalMortgageInterest += mortgageInterest;
+    totalHelocInterest += helocInterest;
+    maxHelocUsed = Math.max(maxHelocUsed, helocBalance);
+    totalHelocBalance += helocBalance;
 
     schedule.push({
       month,
@@ -561,13 +637,14 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
       helocBalance: beginningHelocBalance,
       helocPayment: Math.max(0, beginningHelocBalance - helocBalance),
       helocInterest,
-      totalMonthlyPayment: totalMortgagePayment + helocInterest + currentPmiPayment,
+      totalMonthlyPayment:
+        totalMortgagePayment + helocInterest + currentPmiPayment,
       discretionaryUsed,
       pmiPayment: currentPmiPayment,
-      currentEquityPercentage
-    })
+      currentEquityPercentage,
+    });
 
-    month++
+    month++;
   }
 
   return {
@@ -577,8 +654,9 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
     totalMortgageInterest,
     schedule,
     maxHelocUsed,
-    averageHelocBalance: schedule.length > 0 ? totalHelocBalance / schedule.length : 0
-  }
+    averageHelocBalance:
+      schedule.length > 0 ? totalHelocBalance / schedule.length : 0,
+  };
 }
 
 /**
@@ -586,29 +664,34 @@ export function calculateHELOCAcceleration(input: HELOCInput): HELOCCalculationR
  */
 export function compareStrategies(
   mortgageInput: MortgageInput,
-  helocInput: HELOCInput
+  helocInput: HELOCInput,
 ): {
-  traditional: AmortizationSchedule
-  heloc: HELOCCalculationResult
+  traditional: AmortizationSchedule;
+  heloc: HELOCCalculationResult;
   comparison: {
-    timeSavedMonths: number
-    interestSaved: number
-    percentageInterestSaved: number
-    monthlyPaymentDifference: number
-  }
+    timeSavedMonths: number;
+    interestSaved: number;
+    percentageInterestSaved: number;
+    monthlyPaymentDifference: number;
+  };
 } {
-  const traditional = generateAmortizationSchedule(mortgageInput)
-  const heloc = calculateHELOCAcceleration(helocInput)
+  const traditional = generateAmortizationSchedule(mortgageInput);
+  const heloc = calculateHELOCAcceleration(helocInput);
 
-  const timeSavedMonths = traditional.payoffMonths - heloc.payoffMonths
-  const interestSaved = traditional.totalInterest - heloc.totalInterest
-  const percentageInterestSaved = (interestSaved / traditional.totalInterest) * 100
+  const timeSavedMonths = traditional.payoffMonths - heloc.payoffMonths;
+  const interestSaved = traditional.totalInterest - heloc.totalInterest;
+  const percentageInterestSaved =
+    (interestSaved / traditional.totalInterest) * 100;
 
   // Calculate average monthly payment difference
-  const traditionalAvgPayment = traditional.monthlyPayment
-  const helocAvgPayment = heloc.schedule.length > 0
-    ? heloc.schedule.reduce((sum, payment) => sum + payment.totalMonthlyPayment, 0) / heloc.schedule.length
-    : 0
+  const traditionalAvgPayment = traditional.monthlyPayment;
+  const helocAvgPayment =
+    heloc.schedule.length > 0
+      ? heloc.schedule.reduce(
+          (sum, payment) => sum + payment.totalMonthlyPayment,
+          0,
+        ) / heloc.schedule.length
+      : 0;
 
   return {
     traditional,
@@ -617,7 +700,7 @@ export function compareStrategies(
       timeSavedMonths,
       interestSaved,
       percentageInterestSaved,
-      monthlyPaymentDifference: helocAvgPayment - traditionalAvgPayment
-    }
-  }
+      monthlyPaymentDifference: helocAvgPayment - traditionalAvgPayment,
+    },
+  };
 }

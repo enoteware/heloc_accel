@@ -7,22 +7,24 @@ This project is configured to use **credential-based authentication only** (emai
 ### Configuration Details
 
 #### 1. Components Used
+
 - **CredentialSignIn**: Email/password sign-in only
 - **CredentialSignUp**: Email/password sign-up only
 - **No OAuth components**: OAuthButton, OAuthButtonGroup are not used
 
 #### 2. Handler Configuration
+
 ```typescript
 // src/app/[locale]/handler/[...stack]/page.tsx
-<StackHandler 
-  fullPage 
-  app={stackServerApp} 
+<StackHandler
+  fullPage
+  app={stackServerApp}
   routeProps={props}
   componentProps={{
-    SignIn: { 
+    SignIn: {
       firstTab: 'password'  // Forces password tab as default
     },
-    SignUp: { 
+    SignUp: {
       firstTab: 'password'  // Forces password tab as default
     }
   }}
@@ -30,6 +32,7 @@ This project is configured to use **credential-based authentication only** (emai
 ```
 
 #### 3. Stack Server App Configuration
+
 ```typescript
 // src/stack.ts
 export const stackServerApp = new StackServerApp({
@@ -38,8 +41,8 @@ export const stackServerApp = new StackServerApp({
     signIn: "/handler/sign-in",
     signUp: "/handler/sign-up",
     afterSignIn: "/dashboard",
-    afterSignUp: "/dashboard"
-  }
+    afterSignUp: "/dashboard",
+  },
 });
 ```
 

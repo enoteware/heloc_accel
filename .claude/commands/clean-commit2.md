@@ -33,6 +33,7 @@ npm run build           # Test production build
 ## What Gets Checked
 
 ### 1. Import Validation (`check:imports`)
+
 - ✅ All import statements resolve correctly
 - ✅ TypeScript path aliases (@/) work properly
 - ✅ No missing modules or components
@@ -40,27 +41,31 @@ npm run build           # Test production build
 - ✅ Circular dependencies identified
 
 **Common errors caught:**
+
 ```typescript
 // ❌ Module not found
-import { helper } from '@/lib/does-not-exist'
+import { helper } from "@/lib/does-not-exist";
 
 // ❌ Wrong case (on case-sensitive systems)
-import DemoAccountsInfo from '@/components/demoAccountsInfo'
+import DemoAccountsInfo from "@/components/demoAccountsInfo";
 ```
 
 ### 2. TypeScript Compilation
+
 - ✅ All types compile correctly
 - ✅ No type errors
 - ✅ Strict mode compliance
 - ✅ Import type vs value imports
 
 ### 3. ESLint Checks
+
 - ✅ Code style consistency
 - ✅ React hooks rules
 - ✅ Next.js specific rules
 - ✅ Import ordering
 
 ### 4. Vercel Deployment Checks (`check:vercel`)
+
 - ✅ No `output: 'standalone'` in next.config.js
 - ✅ vercel.json configuration valid
 - ✅ All files under 50MB limit
@@ -70,6 +75,7 @@ import DemoAccountsInfo from '@/components/demoAccountsInfo'
 - ✅ Production build in Vercel environment
 
 ### 5. Production Build Test
+
 - ✅ Full Next.js build succeeds
 - ✅ No build-time errors
 - ✅ Bundle size optimization
@@ -80,6 +86,7 @@ import DemoAccountsInfo from '@/components/demoAccountsInfo'
 ### Import Errors
 
 **Error: "Cannot resolve '@/lib/demo-storage'"**
+
 ```bash
 # First, check if the file exists
 ls src/lib/demo-storage.ts
@@ -94,6 +101,7 @@ npm run check:imports
 ### TypeScript Errors
 
 **Error: "Type 'CalculatorValidationInput' is not assignable..."**
+
 ```bash
 # Check TypeScript compilation
 npx tsc --noEmit
@@ -109,21 +117,23 @@ import type { CalculatorValidationInput } from '@/lib/validation'
 ### Vercel-Specific Issues
 
 **Error: "Standalone output mode is not compatible with Vercel"**
+
 ```javascript
 // In next.config.js, comment out or remove:
 // output: 'standalone'  // ❌ Not for Vercel
 
 // Or conditionally set it:
-output: process.env.VERCEL ? undefined : 'standalone'  // ✅
+output: process.env.VERCEL ? undefined : "standalone"; // ✅
 ```
 
 **Warning: "Hardcoded localhost URLs"**
+
 ```typescript
 // ❌ Avoid
-const apiUrl = 'http://localhost:3000/api'
+const apiUrl = "http://localhost:3000/api";
 
 // ✅ Use environment variables
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api'
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api";
 ```
 
 ## Deployment Workflows
@@ -131,6 +141,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api'
 ### For Vercel Deployment
 
 1. **Pre-deployment validation:**
+
    ```bash
    npm run pre-deploy
    ```
@@ -138,12 +149,14 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api'
 2. **Fix any errors found**
 
 3. **Commit changes:**
+
    ```bash
    git add .
    git commit -m "fix: resolve import errors and Vercel compatibility"
    ```
 
 4. **Push to GitHub:**
+
    ```bash
    git push origin main
    ```
@@ -153,6 +166,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api'
 ### For Traditional VPS Deployment
 
 1. **Run checks with standalone mode:**
+
    ```bash
    # Temporarily enable standalone in next.config.js
    npm run pre-deploy
@@ -196,6 +210,7 @@ LOG_LEVEL=info
 ### Build Fails Locally but Works on Vercel
 
 Check for:
+
 - Missing environment variables
 - Case sensitivity issues (macOS vs Linux)
 - Dev dependencies used in production code
@@ -203,11 +218,13 @@ Check for:
 ### Import Works in Dev but Fails in Build
 
 Common causes:
+
 - Dynamic imports without proper typing
 - Circular dependencies
 - Missing type declarations
 
 Run detailed check:
+
 ```bash
 npm run check:imports
 ```
@@ -224,6 +241,7 @@ npm run check:imports
 ## Script Maintenance
 
 The validation scripts are located in:
+
 - `scripts/pre-deploy-check.js` - Main orchestrator
 - `scripts/validate-imports.js` - Import validation
 - `scripts/vercel-check.js` - Vercel-specific checks

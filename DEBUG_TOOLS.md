@@ -17,6 +17,7 @@ We've implemented a comprehensive debugging system with the following components
 ## Debug Tools
 
 ### 1. Debug Log Viewer
+
 - **Location**: Bottom right corner button (📋 Debug Logs)
 - **Features**:
   - View all application logs
@@ -27,6 +28,7 @@ We've implemented a comprehensive debugging system with the following components
   - Clear logs
 
 ### 2. Debug Panel
+
 - **Location**: Bottom right corner button (🔧 Debug)
 - **Features**:
   - **Auth Tab**: Shows authentication status, cookies, and environment
@@ -36,11 +38,13 @@ We've implemented a comprehensive debugging system with the following components
 ### 3. Debug API Endpoints
 
 #### `/api/debug/auth`
+
 - Shows detailed authentication information
 - Includes cookies, headers, and Stack Auth status
 - Example: `curl http://localhost:3001/api/debug/auth`
 
 #### `/api/debug/status`
+
 - Shows system status including:
   - Node.js version and memory usage
   - Database connection status
@@ -48,40 +52,48 @@ We've implemented a comprehensive debugging system with the following components
 - Example: `curl http://localhost:3001/api/debug/status`
 
 #### `/api/test/stack-auth`
+
 - Comprehensive Stack Auth integration test
 - Tests configuration, authentication, and database access
 - Example: `curl http://localhost:3001/api/test/stack-auth`
 
 ### 4. Network Interceptor
+
 - Automatically logs all fetch requests
 - Captures request/response details
 - Includes timing information
 - Integrated with debug logger
 
 ### 5. API Client
+
 - Wrapper around fetch with automatic logging
 - Use `apiClient` or `api` exports from `/src/lib/api-client.ts`
 - Example:
+
   ```typescript
-  import { api } from '@/lib/api-client'
-  
-  const data = await api.get('/api/scenarios')
-  const result = await api.post('/api/scenarios', { inputs, results })
+  import { api } from "@/lib/api-client";
+
+  const data = await api.get("/api/scenarios");
+  const result = await api.post("/api/scenarios", { inputs, results });
   ```
 
 ## How to Use
 
 ### 1. Access Debug Test Page
+
 Navigate to: `http://localhost:3001/en/debug-test`
 
 This page provides:
+
 - Current user information
 - Buttons to run individual tests
 - Test results display
 - Access to all debug tools
 
 ### 2. Enable Debug Tools on Any Page
+
 The debug tools are available on:
+
 - Calculator page (`/calculator`)
 - Dashboard page (`/dashboard`)
 - Debug test page (`/debug-test`)
@@ -112,18 +124,21 @@ The debug tools are available on:
 ## Common Issues and Solutions
 
 ### Authentication Not Working
+
 1. Check Debug Panel > Auth tab
 2. Verify Stack Auth cookies are present
 3. Check environment variables are set correctly
 4. Run Stack Auth test for detailed diagnostics
 
 ### Scenarios Not Loading
+
 1. Check Debug Log Viewer for API errors
 2. Verify authentication status
 3. Check database connection in System tab
 4. Look for SQL errors in logs
 
 ### Save Scenario Failing
+
 1. Enable Debug Log Viewer
 2. Try saving a scenario
 3. Check for validation errors
@@ -132,20 +147,22 @@ The debug tools are available on:
 ## Development Tips
 
 ### Adding Debug Logs
+
 ```typescript
-import { logInfo, logError, logDebug } from '@/lib/debug-logger'
+import { logInfo, logError, logDebug } from "@/lib/debug-logger";
 
 // Info log
-logInfo('CategoryName', 'Operation started', { data })
+logInfo("CategoryName", "Operation started", { data });
 
 // Error log
-logError('CategoryName', 'Operation failed', error)
+logError("CategoryName", "Operation failed", error);
 
 // Debug log (more verbose)
-logDebug('CategoryName', 'Detailed info', { complexData })
+logDebug("CategoryName", "Detailed info", { complexData });
 ```
 
 ### Categories to Use
+
 - `Dashboard`: Dashboard operations
 - `Calculator`: Calculator operations
 - `SaveScenario`: Scenario saving
@@ -157,6 +174,7 @@ logDebug('CategoryName', 'Detailed info', { complexData })
 ## Production Considerations
 
 The debug tools are designed to be development-only features. In production:
+
 1. Debug Panel is only visible with specific flag
 2. Debug endpoints should be disabled
 3. Logging can be configured for different levels

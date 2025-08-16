@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 export interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
-  trigger?: 'hover' | 'click' | 'focus';
+  placement?: "top" | "bottom" | "left" | "right";
+  trigger?: "hover" | "click" | "focus";
   delay?: number;
   className?: string;
   contentClassName?: string;
@@ -16,8 +16,8 @@ export interface TooltipProps {
 export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
-  placement = 'top',
-  trigger = 'hover',
+  placement = "top",
+  trigger = "hover",
   delay = 200,
   className,
   contentClassName,
@@ -34,26 +34,39 @@ export const Tooltip: React.FC<TooltipProps> = ({
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollLeft =
+      window.pageXOffset || document.documentElement.scrollLeft;
 
     let top = 0;
     let left = 0;
 
     switch (placement) {
-      case 'top':
+      case "top":
         top = triggerRect.top + scrollTop - tooltipRect.height - 8;
-        left = triggerRect.left + scrollLeft + (triggerRect.width - tooltipRect.width) / 2;
+        left =
+          triggerRect.left +
+          scrollLeft +
+          (triggerRect.width - tooltipRect.width) / 2;
         break;
-      case 'bottom':
+      case "bottom":
         top = triggerRect.bottom + scrollTop + 8;
-        left = triggerRect.left + scrollLeft + (triggerRect.width - tooltipRect.width) / 2;
+        left =
+          triggerRect.left +
+          scrollLeft +
+          (triggerRect.width - tooltipRect.width) / 2;
         break;
-      case 'left':
-        top = triggerRect.top + scrollTop + (triggerRect.height - tooltipRect.height) / 2;
+      case "left":
+        top =
+          triggerRect.top +
+          scrollTop +
+          (triggerRect.height - tooltipRect.height) / 2;
         left = triggerRect.left + scrollLeft - tooltipRect.width - 8;
         break;
-      case 'right':
-        top = triggerRect.top + scrollTop + (triggerRect.height - tooltipRect.height) / 2;
+      case "right":
+        top =
+          triggerRect.top +
+          scrollTop +
+          (triggerRect.height - tooltipRect.height) / 2;
         left = triggerRect.right + scrollLeft + 8;
         break;
     }
@@ -99,12 +112,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleResize);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleResize);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleResize);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -114,10 +127,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const handleTriggerEvents = () => {
     const events: Record<string, () => void> = {};
 
-    if (trigger === 'hover') {
+    if (trigger === "hover") {
       events.onMouseEnter = showTooltip;
       events.onMouseLeave = hideTooltip;
-    } else if (trigger === 'click') {
+    } else if (trigger === "click") {
       events.onClick = () => {
         if (isVisible) {
           hideTooltip();
@@ -125,7 +138,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           showTooltip();
         }
       };
-    } else if (trigger === 'focus') {
+    } else if (trigger === "focus") {
       events.onFocus = showTooltip;
       events.onBlur = hideTooltip;
     }
@@ -135,10 +148,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const getArrowClasses = () => {
     const arrowClasses = {
-      top: 'bottom-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-900',
-      bottom: 'top-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-neutral-900',
-      left: 'right-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-l-4 border-transparent border-l-neutral-900',
-      right: 'left-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-r-4 border-transparent border-r-neutral-900',
+      top: "bottom-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-900",
+      bottom:
+        "top-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-neutral-900",
+      left: "right-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-l-4 border-transparent border-l-neutral-900",
+      right:
+        "left-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-r-4 border-transparent border-r-neutral-900",
     };
 
     return arrowClasses[placement];
@@ -148,7 +163,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     <>
       <div
         ref={triggerRef}
-        className={cn('inline-block', className)}
+        className={cn("inline-block", className)}
         {...handleTriggerEvents()}
       >
         {children}
@@ -158,9 +173,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <div
           ref={tooltipRef}
           className={cn(
-            'fixed z-50 px-3 py-2 text-body-sm text-white bg-neutral-900 rounded-md shadow-lg pointer-events-none',
-            'max-w-xs break-words',
-            contentClassName
+            "fixed z-50 px-3 py-2 text-body-sm text-white bg-neutral-900 rounded-md shadow-lg pointer-events-none",
+            "max-w-xs break-words",
+            contentClassName,
           )}
           style={{
             top: position.top,
@@ -169,7 +184,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           role="tooltip"
         >
           {content}
-          <div className={cn('absolute w-0 h-0', getArrowClasses())} />
+          <div className={cn("absolute w-0 h-0", getArrowClasses())} />
         </div>
       )}
     </>

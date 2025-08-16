@@ -7,8 +7,8 @@
  * This allows users to save as PDF or print the report
  */
 export function printReport() {
-  if (typeof window !== 'undefined') {
-    window.print()
+  if (typeof window !== "undefined") {
+    window.print();
   }
 }
 
@@ -16,28 +16,31 @@ export function printReport() {
  * Generates a filename for the report based on current date
  */
 export function generateReportFilename(scenarioName?: string): string {
-  const date = new Date()
-  const dateStr = date.toISOString().split('T')[0] // YYYY-MM-DD format
-  const baseName = scenarioName 
-    ? `HELOC-Report-${scenarioName.replace(/[^a-zA-Z0-9]/g, '-')}`
-    : 'HELOC-Report'
-  
-  return `${baseName}-${dateStr}.pdf`
+  const date = new Date();
+  const dateStr = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+  const baseName = scenarioName
+    ? `HELOC-Report-${scenarioName.replace(/[^a-zA-Z0-9]/g, "-")}`
+    : "HELOC-Report";
+
+  return `${baseName}-${dateStr}.pdf`;
 }
 
 /**
  * Creates a temporary print-only page with the report content
  * This allows printing just the report without other page elements
  */
-export function printReportInNewWindow(reportHTML: string, title: string = 'HELOC Report') {
-  const printWindow = window.open('', '_blank', 'width=800,height=600')
-  
+export function printReportInNewWindow(
+  reportHTML: string,
+  title: string = "HELOC Report",
+) {
+  const printWindow = window.open("", "_blank", "width=800,height=600");
+
   if (!printWindow) {
-    console.error('Failed to open print window')
-    return
+    console.error("Failed to open print window");
+    return;
   }
 
-  const printDocument = printWindow.document
+  const printDocument = printWindow.document;
   printDocument.write(`
     <!DOCTYPE html>
     <html>
@@ -211,25 +214,25 @@ export function printReportInNewWindow(reportHTML: string, title: string = 'HELO
         ${reportHTML}
       </body>
     </html>
-  `)
-  
-  printDocument.close()
-  
+  `);
+
+  printDocument.close();
+
   // Wait for content to load, then print
   printWindow.onload = () => {
-    printWindow.focus()
-    printWindow.print()
-    
+    printWindow.focus();
+    printWindow.print();
+
     // Close the window after printing (user can cancel if they want)
     printWindow.onafterprint = () => {
-      printWindow.close()
-    }
-  }
+      printWindow.close();
+    };
+  };
 }
 
 /**
  * Checks if the browser supports print functionality
  */
 export function isPrintSupported(): boolean {
-  return typeof window !== 'undefined' && typeof window.print === 'function'
+  return typeof window !== "undefined" && typeof window.print === "function";
 }

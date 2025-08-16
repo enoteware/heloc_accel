@@ -127,7 +127,7 @@
   .stack-credential-sign-up * {
     color: rgb(0, 0, 0) !important;
   }
-  
+
   [data-stack-auth] input,
   .stack-auth input,
   .stack-credential-sign-in input,
@@ -135,7 +135,7 @@
     background-color: rgb(255, 255, 255) !important;
     border: 2px solid rgb(0, 0, 0) !important;
   }
-  
+
   [data-stack-auth] button,
   .stack-auth button,
   .stack-credential-sign-in button,

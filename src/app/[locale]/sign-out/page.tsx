@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useUser } from "@stackframe/stack"
-import { useRouter } from "next/navigation"
+import { useEffect } from "react";
+import { useUser } from "@stackframe/stack";
+import { useRouter } from "next/navigation";
 
 export default function SignOutPage() {
-  const user = useUser()
-  const router = useRouter()
+  const user = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const performSignOut = async () => {
       try {
         if (user) {
           // Sign out the user using Stack Auth's client-side method
-          await user.signOut()
+          await user.signOut();
         }
-        
-        // Redirect to home page after sign out
-        router.push("/")
-      } catch (error) {
-        console.error("Sign out error:", error)
-        // Even if there's an error, redirect to home
-        router.push("/")
-      }
-    }
 
-    performSignOut()
-  }, [user, router])
+        // Redirect to home page after sign out
+        router.push("/");
+      } catch (error) {
+        console.error("Sign out error:", error);
+        // Even if there's an error, redirect to home
+        router.push("/");
+      }
+    };
+
+    performSignOut();
+  }, [user, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -44,5 +44,5 @@ export default function SignOutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,20 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { query } from '@/lib/database'
-import { ApiResponse } from '@/lib/types'
+import { NextRequest, NextResponse } from "next/server";
+import { query } from "@/lib/database";
+import { ApiResponse } from "@/lib/types";
 
 // GET /api/shared/[token] - Get a publicly shared scenario by token
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ token: string }> }
+  { params }: { params: Promise<{ token: string }> },
 ) {
   try {
-    const { token: shareToken } = await params
+    const { token: shareToken } = await params;
 
     if (!shareToken) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Share token is required'
-      }, { status: 400 })
+      return NextResponse.json<ApiResponse>(
+        {
+          success: false,
+          error: "Share token is required",
+        },
+        { status: 400 },
+      );
     }
 
     // Get scenario by share token (only if public)
@@ -30,18 +33,21 @@ export async function GET(
        FROM scenarios s
        JOIN users u ON s.user_id = u.id
        WHERE s.public_share_token = $1 AND s.is_public = true`,
-      [shareToken]
-    )
+      [shareToken],
+    );
 
     if (result.rows.length === 0) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: 'Shared scenario not found or no longer available'
-      }, { status: 404 })
+      return NextResponse.json<ApiResponse>(
+        {
+          success: false,
+          error: "Shared scenario not found or no longer available",
+        },
+        { status: 404 },
+      );
     }
 
-    const scenario = result.rows[0]
-    
+    const scenario = result.rows[0];
+
     // Format the response (exclude sensitive user data)
     const publicScenario = {
       id: scenario.id,
@@ -70,21 +76,25 @@ export async function GET(
       interest_saved: scenario.interest_saved,
       created_at: scenario.created_at.toISOString(),
       updated_at: scenario.updated_at.toISOString(),
-      shared_by: `${scenario.first_name || ''} ${scenario.last_name || ''}`.trim() || 'Anonymous'
-    }
+      shared_by:
+        `${scenario.first_name || ""} ${scenario.last_name || ""}`.trim() ||
+        "Anonymous",
+    };
 
     return NextResponse.json<ApiResponse>({
       success: true,
       data: publicScenario,
-      message: 'Shared scenario retrieved successfully'
-    })
-
+      message: "Shared scenario retrieved successfully",
+    });
   } catch (error) {
-    console.error('Get shared scenario error:', error)
+    console.error("Get shared scenario error:", error);
 
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: 'Failed to retrieve shared scenario'
-    }, { status: 500 })
+    return NextResponse.json<ApiResponse>(
+      {
+        success: false,
+        error: "Failed to retrieve shared scenario",
+      },
+      { status: 500 },
+    );
   }
 }

@@ -12,6 +12,6 @@ export const stackServerApp = new StackServerApp({
     signUp: "/en/handler/sign-up",
     afterSignIn: "/en/calculator",
     afterSignUp: "/en/calculator",
-    afterSignOut: "/"
-  }
+    afterSignOut: "/",
+  },
 });

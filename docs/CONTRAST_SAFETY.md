@@ -7,7 +7,7 @@ This guide ensures you **never** create white-on-white, black-on-black, or other
 Contrast issues make applications unusable for many users and fail WCAG accessibility standards. Common problems include:
 
 - **White text on white backgrounds** (completely invisible)
-- **Black text on black backgrounds** (completely invisible) 
+- **Black text on black backgrounds** (completely invisible)
 - **Light gray text on white backgrounds** (poor contrast)
 - **Dark text on dark backgrounds** (hard to read)
 
@@ -37,17 +37,17 @@ Use these pre-validated combinations instead of manual color mixing:
 The type system prevents dangerous combinations at compile time:
 
 ```typescript
-import { ContrastSafeProps } from '@/types/contrast';
+import { ContrastSafeProps } from "@/types/contrast";
 
 // ✅ SAFE - Types enforce valid combinations
-interface ButtonProps extends ContrastSafeProps<'primary-500'> {
+interface ButtonProps extends ContrastSafeProps<"primary-500"> {
   // textColor is automatically constrained to safe options
 }
 
 // ❌ COMPILE ERROR - Unsafe combinations won't compile
-const BadButton: ContrastSafeProps<'white'> = {
-  backgroundColor: 'white',
-  textColor: 'white' // ❌ TypeScript error!
+const BadButton: ContrastSafeProps<"white"> = {
+  backgroundColor: "white",
+  textColor: "white", // ❌ TypeScript error!
 };
 ```
 
@@ -56,19 +56,19 @@ const BadButton: ContrastSafeProps<'white'> = {
 For dynamic colors, use the validation hook:
 
 ```typescript
-import { useContrastValidation } from '@/hooks/useContrastValidation';
+import { useContrastValidation } from "@/hooks/useContrastValidation";
 
 function DynamicComponent({ bgColor, textColor }) {
   const { validateCombination, assertSafe } = useContrastValidation();
-  
+
   // ✅ Validate before applying
   const result = validateCombination(bgColor, textColor);
   if (!result.isValid) {
-    console.warn('Contrast issue:', result.errors);
+    console.warn("Contrast issue:", result.errors);
   }
-  
+
   // ✅ Or assert safety (throws in development)
-  assertSafe(bgColor, textColor, 'DynamicComponent');
+  assertSafe(bgColor, textColor, "DynamicComponent");
 }
 ```
 
@@ -102,15 +102,17 @@ Checking for color contrast issues...
 ## 📋 Quick Reference: Safe Combinations
 
 ### Buttons
+
 ```jsx
 // ✅ Always safe
 <Button variant="primary">Primary</Button>        // White text on primary-500
-<Button variant="secondary">Secondary</Button>    // White text on secondary-500  
+<Button variant="secondary">Secondary</Button>    // White text on secondary-500
 <Button variant="outline">Outline</Button>        // Primary-700 text on transparent
 <Button variant="ghost">Ghost</Button>            // Neutral-700 text on transparent
 ```
 
 ### Cards
+
 ```jsx
 // ✅ Pre-validated combinations
 <Card className="safe-card-light">Light card</Card>     // White bg, dark text
@@ -119,6 +121,7 @@ Checking for color contrast issues...
 ```
 
 ### Alerts
+
 ```jsx
 // ✅ All WCAG AA compliant
 <Alert variant="info">Info message</Alert>        // Blue-50 bg, blue-800 text
@@ -128,6 +131,7 @@ Checking for color contrast issues...
 ```
 
 ### Custom Components
+
 ```jsx
 // ✅ Use text-on-* utilities for guaranteed safety
 <div className="bg-primary-500 text-on-primary">
@@ -157,7 +161,7 @@ Add these to your VS Code snippets for quick safe combinations:
     "description": "Safe primary button with guaranteed contrast"
   },
   "Safe Card Light": {
-    "prefix": "safe-card-light", 
+    "prefix": "safe-card-light",
     "body": "<Card className=\"safe-card-light\">$1</Card>",
     "description": "Safe light card with readable text"
   }
@@ -196,9 +200,9 @@ If you need custom colors not covered by our safe utilities:
 ### 1. **Use the Validation Function**
 
 ```typescript
-import { validateContrast } from '@/lib/contrast-validation';
+import { validateContrast } from "@/lib/contrast-validation";
 
-const result = validateContrast('#ffffff', '#000000'); // white text, black bg
+const result = validateContrast("#ffffff", "#000000"); // white text, black bg
 if (result.isAccessible) {
   // Safe to use
 } else {
@@ -209,7 +213,7 @@ if (result.isAccessible) {
 ### 2. **Test Against WCAG Standards**
 
 - **AA Normal Text**: 4.5:1 contrast ratio minimum
-- **AA Large Text**: 3:1 contrast ratio minimum  
+- **AA Large Text**: 3:1 contrast ratio minimum
 - **AAA Normal Text**: 7:1 contrast ratio minimum
 - **AAA Large Text**: 4.5:1 contrast ratio minimum
 
@@ -220,7 +224,7 @@ If you find a good combination, add it to `SAFE_COMBINATIONS` in `src/lib/contra
 ```typescript
 export const SAFE_COMBINATIONS = {
   // Add your tested combination
-  'custom-blue-500': ['white', 'neutral-50'],
+  "custom-blue-500": ["white", "neutral-50"],
   // ...existing combinations
 };
 ```
@@ -249,22 +253,25 @@ Never use these patterns - they will be caught by our tooling:
 If you have existing code with contrast issues:
 
 ### 1. **Run the Scanner**
+
 ```bash
 npm run check:contrast
 ```
 
 ### 2. **Fix Critical Errors First**
+
 Replace dangerous combinations with safe utilities:
 
 ```jsx
 // ❌ Before
 <div className="bg-white text-white">
 
-// ✅ After  
+// ✅ After
 <div className="safe-neutral-light">
 ```
 
 ### 3. **Update Components**
+
 Use safe variants in your components:
 
 ```jsx
@@ -276,6 +283,7 @@ Use safe variants in your components:
 ```
 
 ### 4. **Test Everything**
+
 ```bash
 npm run test:accessibility
 npm run lint

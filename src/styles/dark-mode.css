@@ -6,12 +6,12 @@
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --bg-tertiary: #334155;
-  
+
   /* Text colors */
   --text-primary: #f8fafc;
   --text-secondary: #e2e8f0;
   --text-tertiary: #94a3b8;
-  
+
   /* Border colors */
   --border-primary: #334155;
   --border-secondary: #475569;
@@ -54,7 +54,9 @@
 
 .dark .card-elevated {
   @apply bg-neutral-800 border-neutral-700;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 .dark .card-outlined {
@@ -269,7 +271,8 @@
 }
 
 @keyframes dark-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

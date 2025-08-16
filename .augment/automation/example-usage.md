@@ -1,4 +1,5 @@
 # Augment Automation Examples
+
 ## Practical Usage of Claude Code-style Automation in Augment
 
 This document shows real examples of how to use the Augment automation framework in your daily development workflow.
@@ -10,43 +11,51 @@ This document shows real examples of how to use the Augment automation framework
 ```javascript
 // 1. Start with task planning
 await add_tasks({
-  tasks: [{
-    name: "Add Advanced HELOC Calculation",
-    description: "Implement new payment optimization algorithm with automated quality validation"
-  }]
+  tasks: [
+    {
+      name: "Add Advanced HELOC Calculation",
+      description:
+        "Implement new payment optimization algorithm with automated quality validation",
+    },
+  ],
 });
 
 // 2. Run pre-development health check
-await launch-process({
-  command: 'npm run augment:pre-edit',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 60
-});
+(await launch) -
+  process({
+    command: "npm run augment:pre-edit",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 60,
+  });
 
 // 3. Check current diagnostics
-await diagnostics({ paths: ['src/lib/calculations.ts'] });
+await diagnostics({ paths: ["src/lib/calculations.ts"] });
 
 // 4. Make the code changes
-await str-replace-editor({
-  command: 'str_replace',
-  path: 'src/lib/calculations.ts',
-  instruction_reminder: 'ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH.',
-  old_str: '// existing calculation logic',
-  new_str: '// new optimized calculation logic'
-});
+(await str) -
+  replace -
+  editor({
+    command: "str_replace",
+    path: "src/lib/calculations.ts",
+    instruction_reminder:
+      "ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH.",
+    old_str: "// existing calculation logic",
+    new_str: "// new optimized calculation logic",
+  });
 
 // 5. Run post-edit quality workflow
-await launch-process({
-  command: 'npm run augment:workflow:post',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 120
-});
+(await launch) -
+  process({
+    command: "npm run augment:workflow:post",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 120,
+  });
 
 // 6. Update task status based on results
 await update_tasks({
-  tasks: [{ task_id: "calculation-feature-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "calculation-feature-id", state: "COMPLETE" }],
 });
 ```
 
@@ -57,48 +66,55 @@ await update_tasks({
 ```javascript
 // 1. Create UI development task
 await add_tasks({
-  tasks: [{
-    name: "Enhance Calculator Form UI",
-    description: "Improve form layout and add validation indicators"
-  }]
+  tasks: [
+    {
+      name: "Enhance Calculator Form UI",
+      description: "Improve form layout and add validation indicators",
+    },
+  ],
 });
 
 // 2. Take baseline screenshot using Browser Tools MCP
-await browser_navigate_Playwright({ url: 'http://localhost:3000' });
-await browser_take_screenshot_Playwright({ 
-  filename: 'calculator-form-before.png',
-  fullPage: true 
+await browser_navigate_Playwright({ url: "http://localhost:3000" });
+await browser_take_screenshot_Playwright({
+  filename: "calculator-form-before.png",
+  fullPage: true,
 });
 
 // 3. Run UI-specific pre-checks
-await launch-process({
-  command: 'npm run augment:ui-check',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 60
-});
+(await launch) -
+  process({
+    command: "npm run augment:ui-check",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 60,
+  });
 
 // 4. Make UI changes
-await str-replace-editor({
-  command: 'str_replace',
-  path: 'src/components/CalculatorForm.tsx',
-  instruction_reminder: 'ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH.',
-  old_str: 'className="form-input"',
-  new_str: 'className="form-input focus:ring-2 focus:ring-blue-500"'
-});
+(await str) -
+  replace -
+  editor({
+    command: "str_replace",
+    path: "src/components/CalculatorForm.tsx",
+    instruction_reminder:
+      "ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH.",
+    old_str: 'className="form-input"',
+    new_str: 'className="form-input focus:ring-2 focus:ring-blue-500"',
+  });
 
 // 5. Run UI validation workflow
-await launch-process({
-  command: 'npm run augment:workflow:ui',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 90
-});
+(await launch) -
+  process({
+    command: "npm run augment:workflow:ui",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 90,
+  });
 
 // 6. Take after screenshot and compare
-await browser_take_screenshot_Playwright({ 
-  filename: 'calculator-form-after.png',
-  fullPage: true 
+await browser_take_screenshot_Playwright({
+  filename: "calculator-form-after.png",
+  fullPage: true,
 });
 
 // 7. Run accessibility check
@@ -106,7 +122,7 @@ await browser_snapshot_Playwright();
 
 // 8. Update task with validation results
 await update_tasks({
-  tasks: [{ task_id: "ui-enhancement-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "ui-enhancement-id", state: "COMPLETE" }],
 });
 ```
 
@@ -117,44 +133,48 @@ await update_tasks({
 ```javascript
 // 1. Create comprehensive review task
 await add_tasks({
-  tasks: [{
-    name: "Pre-Deployment Code Review",
-    description: "Comprehensive quality validation before deployment"
-  }]
+  tasks: [
+    {
+      name: "Pre-Deployment Code Review",
+      description: "Comprehensive quality validation before deployment",
+    },
+  ],
 });
 
 // 2. Run complete deployment readiness workflow
-await launch-process({
-  command: 'npm run augment:workflow:deploy',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 300
-});
+(await launch) -
+  process({
+    command: "npm run augment:workflow:deploy",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 300,
+  });
 
 // 3. Check for any remaining diagnostics issues
-await diagnostics({ 
-  paths: ['src/', 'pages/', 'components/'] 
+await diagnostics({
+  paths: ["src/", "pages/", "components/"],
 });
 
 // 4. Run E2E tests with Browser Tools MCP
-await browser_navigate_Playwright({ url: 'http://localhost:3000' });
-await browser_click_Playwright({ 
-  element: 'Calculate button',
-  ref: 'button[data-testid="calculate-btn"]'
+await browser_navigate_Playwright({ url: "http://localhost:3000" });
+await browser_click_Playwright({
+  element: "Calculate button",
+  ref: 'button[data-testid="calculate-btn"]',
 });
-await browser_wait_for_Playwright({ text: 'Results' });
+await browser_wait_for_Playwright({ text: "Results" });
 
 // 5. Generate deployment report
-await launch-process({
-  command: 'echo "Deployment readiness report:" && npm run augment:session',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 30
-});
+(await launch) -
+  process({
+    command: 'echo "Deployment readiness report:" && npm run augment:session',
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 30,
+  });
 
 // 6. Update task with final status
 await update_tasks({
-  tasks: [{ task_id: "review-task-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "review-task-id", state: "COMPLETE" }],
 });
 ```
 
@@ -165,47 +185,54 @@ await update_tasks({
 ```javascript
 // 1. Use Sequential Thinking MCP for systematic debugging
 await sequentialthinking_Sequential_thinking({
-  thought: "I need to debug a HELOC calculation accuracy issue. Let me break this down systematically: 1) Identify the specific calculation that's wrong, 2) Check the input validation, 3) Verify the mathematical formulas, 4) Test edge cases.",
+  thought:
+    "I need to debug a HELOC calculation accuracy issue. Let me break this down systematically: 1) Identify the specific calculation that's wrong, 2) Check the input validation, 3) Verify the mathematical formulas, 4) Test edge cases.",
   nextThoughtNeeded: true,
   thoughtNumber: 1,
-  totalThoughts: 5
+  totalThoughts: 5,
 });
 
 // 2. Create debugging task workflow
 await add_tasks({
-  tasks: [{
-    name: "Debug HELOC Calculation Accuracy",
-    description: "Systematic debugging of calculation discrepancies"
-  }]
+  tasks: [
+    {
+      name: "Debug HELOC Calculation Accuracy",
+      description: "Systematic debugging of calculation discrepancies",
+    },
+  ],
 });
 
 // 3. Run diagnostic checks on calculation files
-await diagnostics({ paths: ['src/lib/calculations.ts', 'src/lib/validation.ts'] });
+await diagnostics({
+  paths: ["src/lib/calculations.ts", "src/lib/validation.ts"],
+});
 
 // 4. Use PostgreSQL MCP to check database calculations
 await postgresql_query({
-  query: "SELECT * FROM calculation_logs WHERE accuracy_flag = false LIMIT 10"
+  query: "SELECT * FROM calculation_logs WHERE accuracy_flag = false LIMIT 10",
 });
 
 // 5. Continue sequential thinking
 await sequentialthinking_Sequential_thinking({
-  thought: "Based on the diagnostics and database query, I can see the issue is in the interest calculation formula. Let me verify the mathematical accuracy and check for edge cases.",
+  thought:
+    "Based on the diagnostics and database query, I can see the issue is in the interest calculation formula. Let me verify the mathematical accuracy and check for edge cases.",
   nextThoughtNeeded: true,
   thoughtNumber: 2,
-  totalThoughts: 5
+  totalThoughts: 5,
 });
 
 // 6. Run targeted tests
-await launch-process({
-  command: 'npm test -- --testNamePattern="calculation accuracy"',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 60
-});
+(await launch) -
+  process({
+    command: 'npm test -- --testNamePattern="calculation accuracy"',
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 60,
+  });
 
 // 7. Update task with findings
 await update_tasks({
-  tasks: [{ task_id: "debug-task-id", state: "IN_PROGRESS" }]
+  tasks: [{ task_id: "debug-task-id", state: "IN_PROGRESS" }],
 });
 ```
 
@@ -216,23 +243,26 @@ await update_tasks({
 ```javascript
 // 1. Create monitoring task
 await add_tasks({
-  tasks: [{
-    name: "Quality Monitoring Setup",
-    description: "Establish automated quality monitoring for the project"
-  }]
+  tasks: [
+    {
+      name: "Quality Monitoring Setup",
+      description: "Establish automated quality monitoring for the project",
+    },
+  ],
 });
 
 // 2. Run session status to get baseline
-await launch-process({
-  command: 'npm run augment:session',
-  cwd: '/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator',
-  wait: true,
-  max_wait_seconds: 30
-});
+(await launch) -
+  process({
+    command: "npm run augment:session",
+    cwd: "/Users/elliotnoteware/Documents/heloc_accel/heloc-accelerator",
+    wait: true,
+    max_wait_seconds: 30,
+  });
 
 // 3. Store quality standards in project memory
 await write_memory_serena({
-  memory_name: 'automated-quality-standards',
+  memory_name: "automated-quality-standards",
   content: `
 # Automated Quality Standards for HELOC Accelerator
 
@@ -259,20 +289,23 @@ await write_memory_serena({
 - Post-edit: Quality workflow + security scan
 - UI changes: Accessibility + design system check
 - Deployment: Full validation suite + E2E tests
-  `
+  `,
 });
 
 // 4. Set up automated task creation for quality issues
 await add_tasks({
-  tasks: [{
-    name: "Weekly Quality Review",
-    description: "Automated weekly quality metrics review and improvement planning"
-  }]
+  tasks: [
+    {
+      name: "Weekly Quality Review",
+      description:
+        "Automated weekly quality metrics review and improvement planning",
+    },
+  ],
 });
 
 // 5. Update monitoring task
 await update_tasks({
-  tasks: [{ task_id: "monitoring-task-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "monitoring-task-id", state: "COMPLETE" }],
 });
 ```
 
@@ -282,16 +315,17 @@ await update_tasks({
 
 ```javascript
 // Before making any code changes:
-await launch-process({ command: 'npm run augment:pre-edit', wait: true });
+(await launch) - process({ command: "npm run augment:pre-edit", wait: true });
 
 // After making changes:
-await launch-process({ command: 'npm run augment:post-edit', wait: true });
+(await launch) - process({ command: "npm run augment:post-edit", wait: true });
 
 // For UI work:
-await launch-process({ command: 'npm run augment:ui-check', wait: true });
+(await launch) - process({ command: "npm run augment:ui-check", wait: true });
 
 // Before deployment:
-await launch-process({ command: 'npm run augment:workflow:deploy', wait: true });
+(await launch) -
+  process({ command: "npm run augment:workflow:deploy", wait: true });
 ```
 
 ### **Task Management Integration**
@@ -302,19 +336,19 @@ await add_tasks({
   tasks: [
     {
       name: "Feature Development",
-      description: "Main feature development task"
+      description: "Main feature development task",
     },
     {
       name: "Quality Validation",
       description: "Automated quality checks",
-      parent_task_id: "feature-task-id"
+      parent_task_id: "feature-task-id",
     },
     {
-      name: "UI Consistency Check", 
+      name: "UI Consistency Check",
       description: "Design system compliance",
-      parent_task_id: "quality-task-id"
-    }
-  ]
+      parent_task_id: "quality-task-id",
+    },
+  ],
 });
 ```
 

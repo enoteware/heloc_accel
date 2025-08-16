@@ -51,6 +51,7 @@
 ## Debug Info:
 
 Check browser console for detailed logs:
+
 - Modal validation
 - API payload
 - Response status

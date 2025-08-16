@@ -179,7 +179,7 @@ export const config: NextAuthConfig = {
 // export const { handlers, signIn, signOut, auth } = NextAuth(config)
 
 // Temporary placeholder exports to prevent import errors
-export const handlers = { GET: () => {}, POST: () => {} }
-export const signIn = () => Promise.resolve()
-export const signOut = () => Promise.resolve()
-export const auth = () => Promise.resolve(null)
+export const handlers = { GET: () => {}, POST: () => {} };
+export const signIn = () => Promise.resolve();
+export const signOut = () => Promise.resolve();
+export const auth = () => Promise.resolve(null);

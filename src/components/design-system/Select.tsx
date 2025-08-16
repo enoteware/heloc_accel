@@ -1,7 +1,8 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -27,16 +28,16 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             className={cn(
               // Base styles
-              'block w-full rounded-lg border px-3 py-2 pr-10 transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              'disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50',
+              "block w-full rounded-lg border px-3 py-2 pr-10 transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+              "disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50",
               // Background and text colors - white background with black text as per style guide
-              'appearance-none !bg-white !text-neutral-900',
+              "appearance-none !bg-white !text-neutral-900",
               // Error state
               error
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                : 'border-neutral-300 hover:border-neutral-400',
-              className
+                ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                : "border-neutral-300 hover:border-neutral-400",
+              className,
             )}
             ref={ref}
             {...props}
@@ -68,15 +69,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             </svg>
           </div>
         </div>
-        {error && (
-          <p className="mt-1 text-body-sm text-red-600">{error}</p>
-        )}
+        {error && <p className="mt-1 text-body-sm text-red-600">{error}</p>}
         {helperText && !error && (
           <p className="mt-1 text-body-sm text-neutral-500">{helperText}</p>
         )}
       </div>
     );
-  }
+  },
 );
 
-Select.displayName = 'Select';
+Select.displayName = "Select";

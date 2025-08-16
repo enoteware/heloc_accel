@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Link } from '@/i18n/routing';
-import { useUser } from '@stackframe/stack';
-import NavigationIcon from './navigation/NavigationIcon';
+import React from "react";
+import { Link } from "@/i18n/routing";
+import { useUser } from "@stackframe/stack";
+import NavigationIcon from "./navigation/NavigationIcon";
 
 export const Footer: React.FC = () => {
   const user = useUser();
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,7 +19,8 @@ export const Footer: React.FC = () => {
               HELOC Accelerator
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Calculate potential savings using HELOC acceleration strategy to pay off your mortgage faster.
+              Calculate potential savings using HELOC acceleration strategy to
+              pay off your mortgage faster.
             </p>
           </div>
 
@@ -39,8 +39,8 @@ export const Footer: React.FC = () => {
                   <span>Formulas</span>
                 </Link>
               </li>
-              {/* Admin link for demo mode or admin users */}
-              {(isDemoMode || user?.primaryEmail === 'admin@helocaccelerator.com') && (
+              {/* Admin link for admin users */}
+              {user?.primaryEmail === "admin@helocaccelerator.com" && (
                 <li>
                   <Link
                     href="/admin"
@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
                 </li>
               )}
               {/* Development only */}
-              {process.env.NODE_ENV === 'development' && (
+              {process.env.NODE_ENV === "development" && (
                 <li>
                   <Link
                     href="/style-guide"
@@ -73,20 +73,20 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link
+                <a
                   href="/privacy"
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   Privacy Policy
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="/terms"
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   Terms of Service
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

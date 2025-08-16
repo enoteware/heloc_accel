@@ -1,18 +1,24 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { Users, Building, UserCheck, TrendingUp, FileText, Plus } from 'lucide-react'
-import StatsCard from './_components/StatsCard'
-import Link from 'next/link'
-import { getDemoAgents, getDemoActiveAgents, initializeDemoCompanyData } from '@/lib/company-data'
+import React, { useEffect, useState } from "react";
+import {
+  Users,
+  Building,
+  UserCheck,
+  TrendingUp,
+  FileText,
+  Plus,
+} from "lucide-react";
+import StatsCard from "./_components/StatsCard";
+import Link from "next/link";
 
 interface DashboardStats {
-  totalAgents: number
-  activeAgents: number
-  totalUsers: number
-  unassignedUsers: number
-  recentScenarios: number
-  documentsCount: number
+  totalAgents: number;
+  activeAgents: number;
+  totalUsers: number;
+  unassignedUsers: number;
+  recentScenarios: number;
+  documentsCount: number;
 }
 
 export default function AdminDashboard() {
@@ -22,48 +28,28 @@ export default function AdminDashboard() {
     totalUsers: 0,
     unassignedUsers: 0,
     recentScenarios: 0,
-    documentsCount: 0
-  })
-  const [loading, setLoading] = useState(true)
+    documentsCount: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-        
-        if (isDemoMode) {
-          // Initialize demo data
-          initializeDemoCompanyData()
-          
-          // Get demo stats
-          const agents = getDemoAgents()
-          const activeAgents = getDemoActiveAgents()
-          
-          setStats({
-            totalAgents: agents.length,
-            activeAgents: activeAgents.length,
-            totalUsers: 12, // Demo value
-            unassignedUsers: 3, // Demo value
-            recentScenarios: 45, // Demo value
-            documentsCount: 4 // Demo value
-          })
-        } else {
-          // In production, would fetch from API
-          const response = await fetch('/api/admin/stats')
-          if (response.ok) {
-            const data = await response.json()
-            setStats(data)
-          }
+        // Fetch from API
+        const response = await fetch("/api/admin/stats");
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
         }
       } catch (error) {
-        console.error('Error loading stats:', error)
+        console.error("Error loading stats:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadStats()
-  }, [])
+    loadStats();
+  }, []);
 
   return (
     <div>
@@ -96,7 +82,11 @@ export default function AdminDashboard() {
           value={stats.unassignedUsers}
           description="Need agent assignment"
           icon={Building}
-          trend={stats.unassignedUsers > 0 ? { value: 15, isPositive: false } : undefined}
+          trend={
+            stats.unassignedUsers > 0
+              ? { value: 15, isPositive: false }
+              : undefined
+          }
           loading={loading}
         />
         <StatsCard
@@ -165,13 +155,15 @@ export default function AdminDashboard() {
       {/* Recent Activity */}
       <div className="mt-8 bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Recent Activity
+          </h2>
         </div>
         <div className="p-6">
           <div className="space-y-4">
             {loading ? (
               <div className="animate-pulse space-y-4">
-                {[1, 2, 3].map(i => (
+                {[1, 2, 3].map((i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
                     <div className="flex-1">
@@ -188,7 +180,9 @@ export default function AdminDashboard() {
                     <UserCheck className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">New user John Smith assigned to Sarah Johnson</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      New user John Smith assigned to Sarah Johnson
+                    </p>
                     <p className="text-xs text-gray-500">2 hours ago</p>
                   </div>
                 </div>
@@ -197,7 +191,9 @@ export default function AdminDashboard() {
                     <TrendingUp className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">New scenario calculated: $125,000 potential savings</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      New scenario calculated: $125,000 potential savings
+                    </p>
                     <p className="text-xs text-gray-500">3 hours ago</p>
                   </div>
                 </div>
@@ -206,7 +202,9 @@ export default function AdminDashboard() {
                     <Users className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Agent Michael Chen updated availability</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Agent Michael Chen updated availability
+                    </p>
                     <p className="text-xs text-gray-500">5 hours ago</p>
                   </div>
                 </div>
@@ -216,5 +214,5 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

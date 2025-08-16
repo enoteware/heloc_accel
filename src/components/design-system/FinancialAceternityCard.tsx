@@ -5,40 +5,42 @@ import { useState, useEffect } from "react";
 export interface FinancialAceternityCardProps {
   title?: string;
   description?: string;
-  theme?: 'home' | 'money' | 'success' | 'planning' | 'family';
+  theme?: "home" | "money" | "success" | "planning" | "family";
   className?: string;
   children?: React.ReactNode;
   fallbackImage?: string;
   hoverGif?: string;
 }
 
-export default function FinancialAceternityCard({ 
+export default function FinancialAceternityCard({
   title = "Financial Success",
   description = "Achieve your homeownership and financial goals with strategic planning.",
-  theme = 'success',
+  theme = "success",
   className,
   children,
   fallbackImage = "https://images.unsplash.com/photo-1476842634003-7dcca8f832de?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80",
-  hoverGif = "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWlodTF3MjJ3NnJiY3Rlc2J0ZmE0c28yeWoxc3gxY2VtZzA5ejF1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/syEfLvksYQnmM/giphy.gif"
+  hoverGif = "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWlodTF3MjJ3NnJiY3Rlc2J0ZmE0c28yeWoxc3gxY2VtZzA5ejF1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/syEfLvksYQnmM/giphy.gif",
 }: FinancialAceternityCardProps) {
   const [backgroundImage, setBackgroundImage] = useState(fallbackImage);
   const [loading, setLoading] = useState(true);
-  const [photographer, setPhotographer] = useState('');
+  const [photographer, setPhotographer] = useState("");
 
   useEffect(() => {
     // Fetch one stable image for this card
     const fetchImage = async () => {
       try {
-        const response = await fetch(`/api/pexels/search?theme=${theme}&per_page=1&random=true`);
+        const response = await fetch(
+          `/api/pexels/search?theme=${theme}&per_page=1&random=true`,
+        );
         const data = await response.json();
-        
+
         if (data.success && data.data.photos.length > 0) {
           const photo = data.data.photos[0];
           setBackgroundImage(photo.src.large);
           setPhotographer(photo.photographer);
         }
       } catch (error) {
-        console.error('Failed to fetch image:', error);
+        console.error("Failed to fetch image:", error);
         // Keep fallback image
       } finally {
         setLoading(false);
@@ -57,16 +59,16 @@ export default function FinancialAceternityCard({
           // Always have a gradient overlay for text readability
           "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/70 before:via-black/20 before:to-transparent before:z-10",
           // Additional overlay on hover
-          "hover:after:content-[''] hover:after:absolute hover:after:inset-0 hover:after:bg-black hover:after:opacity-30 hover:after:z-20"
+          "hover:after:content-[''] hover:after:absolute hover:after:inset-0 hover:after:bg-black hover:after:opacity-30 hover:after:z-20",
         )}
         style={{
-          backgroundImage: `url(${backgroundImage})`
+          backgroundImage: `url(${backgroundImage})`,
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundImage = `url(${hoverGif})`
+          e.currentTarget.style.backgroundImage = `url(${hoverGif})`;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundImage = `url(${backgroundImage})`
+          e.currentTarget.style.backgroundImage = `url(${backgroundImage})`;
         }}
       >
         {loading && (
@@ -74,7 +76,7 @@ export default function FinancialAceternityCard({
             <div className="text-gray-400 text-sm">Loading image...</div>
           </div>
         )}
-        
+
         <div className="text relative z-50">
           {children ? (
             children
@@ -103,7 +105,9 @@ export default function FinancialAceternityCard({
 }
 
 // Preset cards for different financial themes
-export function HomeAceternityCard(props: Omit<FinancialAceternityCardProps, 'theme'>) {
+export function HomeAceternityCard(
+  props: Omit<FinancialAceternityCardProps, "theme">,
+) {
   return (
     <FinancialAceternityCard
       theme="home"
@@ -114,7 +118,9 @@ export function HomeAceternityCard(props: Omit<FinancialAceternityCardProps, 'th
   );
 }
 
-export function MoneyAceternityCard(props: Omit<FinancialAceternityCardProps, 'theme'>) {
+export function MoneyAceternityCard(
+  props: Omit<FinancialAceternityCardProps, "theme">,
+) {
   return (
     <FinancialAceternityCard
       theme="money"
@@ -125,7 +131,9 @@ export function MoneyAceternityCard(props: Omit<FinancialAceternityCardProps, 't
   );
 }
 
-export function SuccessAceternityCard(props: Omit<FinancialAceternityCardProps, 'theme'>) {
+export function SuccessAceternityCard(
+  props: Omit<FinancialAceternityCardProps, "theme">,
+) {
   return (
     <FinancialAceternityCard
       theme="success"
@@ -136,7 +144,9 @@ export function SuccessAceternityCard(props: Omit<FinancialAceternityCardProps, 
   );
 }
 
-export function PlanningAceternityCard(props: Omit<FinancialAceternityCardProps, 'theme'>) {
+export function PlanningAceternityCard(
+  props: Omit<FinancialAceternityCardProps, "theme">,
+) {
   return (
     <FinancialAceternityCard
       theme="planning"
@@ -147,7 +157,9 @@ export function PlanningAceternityCard(props: Omit<FinancialAceternityCardProps,
   );
 }
 
-export function FamilyAceternityCard(props: Omit<FinancialAceternityCardProps, 'theme'>) {
+export function FamilyAceternityCard(
+  props: Omit<FinancialAceternityCardProps, "theme">,
+) {
   return (
     <FinancialAceternityCard
       theme="family"

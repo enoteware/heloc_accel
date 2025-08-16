@@ -2,428 +2,444 @@
  * @jest-environment jsdom
  */
 
-import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { 
-  FirstConfirmationModal, 
-  SecondConfirmationModal, 
-  SuccessModal 
-} from '@/components/ConfirmationModals'
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import {
+  FirstConfirmationModal,
+  SecondConfirmationModal,
+  SuccessModal,
+} from "@/components/ConfirmationModals";
 
 // Mock the design system components
-jest.mock('@/components/design-system/Modal', () => ({
-  Modal: ({ children, isOpen, title, onClose }: any) => 
+jest.mock("@/components/design-system/Modal", () => ({
+  Modal: ({ children, isOpen, title, onClose }: any) =>
     isOpen ? (
       <div data-testid="modal" role="dialog" aria-labelledby="modal-title">
         <h1 id="modal-title">{title}</h1>
-        <button onClick={onClose} data-testid="modal-close">Close</button>
+        <button onClick={onClose} data-testid="modal-close">
+          Close
+        </button>
         {children}
       </div>
     ) : null,
-  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
-  ModalFooter: ({ children }: any) => <div data-testid="modal-footer">{children}</div>
-}))
+  ModalBody: ({ children }: any) => (
+    <div data-testid="modal-body">{children}</div>
+  ),
+  ModalFooter: ({ children }: any) => (
+    <div data-testid="modal-footer">{children}</div>
+  ),
+}));
 
-jest.mock('@/components/design-system/Button', () => {
-  const Button = React.forwardRef<HTMLButtonElement, any>(({ children, onClick, disabled, loading, variant, ...props }, ref) => (
-    <button 
-      ref={ref}
-      onClick={onClick} 
-      disabled={disabled || loading}
-      data-variant={variant}
-      data-loading={loading}
-      {...props}
-    >
-      {loading ? 'Loading...' : children}
-    </button>
-  ))
-  Button.displayName = 'Button'
-  return { Button }
-})
-
-jest.mock('@/components/design-system/Input', () => {
-  const Input = React.forwardRef<HTMLInputElement, any>(({ onChange, onKeyDown, error, ...props }, ref) => (
-    <div>
-      <input 
+jest.mock("@/components/design-system/Button", () => {
+  const Button = React.forwardRef<HTMLButtonElement, any>(
+    ({ children, onClick, disabled, loading, variant, ...props }, ref) => (
+      <button
         ref={ref}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
+        onClick={onClick}
+        disabled={disabled || loading}
+        data-variant={variant}
+        data-loading={loading}
         {...props}
-      />
-      {error && <span data-testid="input-error">{error}</span>}
-    </div>
-  ))
-  Input.displayName = 'Input'
-  return { Input }
-})
+      >
+        {loading ? "Loading..." : children}
+      </button>
+    ),
+  );
+  Button.displayName = "Button";
+  return { Button };
+});
 
-describe('FirstConfirmationModal', () => {
+jest.mock("@/components/design-system/Input", () => {
+  const Input = React.forwardRef<HTMLInputElement, any>(
+    ({ onChange, onKeyDown, error, ...props }, ref) => (
+      <div>
+        <input ref={ref} onChange={onChange} onKeyDown={onKeyDown} {...props} />
+        {error && <span data-testid="input-error">{error}</span>}
+      </div>
+    ),
+  );
+  Input.displayName = "Input";
+  return { Input };
+});
+
+describe("FirstConfirmationModal", () => {
   const defaultProps = {
     isOpen: true,
     onClose: jest.fn(),
     onConfirm: jest.fn(),
-    title: 'Test Confirmation',
-    message: 'Are you sure?',
-    confirmText: 'Confirm',
-    cancelText: 'Cancel'
-  }
+    title: "Test Confirmation",
+    message: "Are you sure?",
+    confirmText: "Confirm",
+    cancelText: "Cancel",
+  };
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should render when open', () => {
-    render(<FirstConfirmationModal {...defaultProps} />)
-    
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText('Test Confirmation')).toBeInTheDocument()
-    expect(screen.getByText('Are you sure?')).toBeInTheDocument()
-  })
+  it("should render when open", () => {
+    render(<FirstConfirmationModal {...defaultProps} />);
 
-  it('should not render when closed', () => {
-    render(<FirstConfirmationModal {...defaultProps} isOpen={false} />)
-    
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  })
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Test Confirmation")).toBeInTheDocument();
+    expect(screen.getByText("Are you sure?")).toBeInTheDocument();
+  });
 
-  it('should call onClose when cancel button is clicked', async () => {
-    const user = userEvent.setup()
-    render(<FirstConfirmationModal {...defaultProps} />)
-    
-    const cancelButton = screen.getByText('Cancel')
-    await user.click(cancelButton)
-    
-    expect(defaultProps.onClose).toHaveBeenCalledTimes(1)
-  })
+  it("should not render when closed", () => {
+    render(<FirstConfirmationModal {...defaultProps} isOpen={false} />);
 
-  it('should call onConfirm when confirm button is clicked', async () => {
-    const user = userEvent.setup()
-    render(<FirstConfirmationModal {...defaultProps} />)
-    
-    const confirmButton = screen.getByText('Confirm')
-    await user.click(confirmButton)
-    
-    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1)
-  })
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 
-  it('should have proper accessibility attributes', () => {
-    render(<FirstConfirmationModal {...defaultProps} />)
-    
-    const message = screen.getByText('Are you sure?')
-    expect(message).toHaveAttribute('role', 'alert')
-    expect(message).toHaveAttribute('aria-live', 'polite')
-    expect(message).toHaveAttribute('id', 'confirmation-message')
-  })
+  it("should call onClose when cancel button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<FirstConfirmationModal {...defaultProps} />);
 
-  it('should focus cancel button on open', async () => {
-    render(<FirstConfirmationModal {...defaultProps} />)
-    
+    const cancelButton = screen.getByText("Cancel");
+    await user.click(cancelButton);
+
+    expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("should call onConfirm when confirm button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<FirstConfirmationModal {...defaultProps} />);
+
+    const confirmButton = screen.getByText("Confirm");
+    await user.click(confirmButton);
+
+    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it("should have proper accessibility attributes", () => {
+    render(<FirstConfirmationModal {...defaultProps} />);
+
+    const message = screen.getByText("Are you sure?");
+    expect(message).toHaveAttribute("role", "alert");
+    expect(message).toHaveAttribute("aria-live", "polite");
+    expect(message).toHaveAttribute("id", "confirmation-message");
+  });
+
+  it("should focus cancel button on open", async () => {
+    render(<FirstConfirmationModal {...defaultProps} />);
+
     await waitFor(() => {
-      const cancelButton = screen.getByText('Cancel')
-      expect(cancelButton).toHaveFocus()
-    })
-  })
-})
+      const cancelButton = screen.getByText("Cancel");
+      expect(cancelButton).toHaveFocus();
+    });
+  });
+});
 
-describe('SecondConfirmationModal', () => {
+describe("SecondConfirmationModal", () => {
   const defaultProps = {
     isOpen: true,
     onClose: jest.fn(),
     onConfirm: jest.fn(),
-    title: 'Final Confirmation',
-    message: 'Type the confirmation text:',
-    confirmationText: 'DELETE ALL DATA',
-    placeholder: 'Type here...',
-    confirmText: 'Confirm',
-    cancelText: 'Cancel',
-    loading: false
-  }
+    title: "Final Confirmation",
+    message: "Type the confirmation text:",
+    confirmationText: "DELETE ALL DATA",
+    placeholder: "Type here...",
+    confirmText: "Confirm",
+    cancelText: "Cancel",
+    loading: false,
+  };
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should render when open', () => {
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText('Final Confirmation')).toBeInTheDocument()
-    expect(screen.getByText('Type the confirmation text:')).toBeInTheDocument()
-    expect(screen.getByText('DELETE ALL DATA')).toBeInTheDocument()
-  })
+  it("should render when open", () => {
+    render(<SecondConfirmationModal {...defaultProps} />);
 
-  it('should disable confirm button when input is empty', () => {
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const confirmButton = screen.getByText('Confirm')
-    expect(confirmButton).toBeDisabled()
-  })
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Final Confirmation")).toBeInTheDocument();
+    expect(screen.getByText("Type the confirmation text:")).toBeInTheDocument();
+    expect(screen.getByText("DELETE ALL DATA")).toBeInTheDocument();
+  });
 
-  it('should enable confirm button when correct text is entered', async () => {
-    const user = userEvent.setup()
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    await user.type(input, 'DELETE ALL DATA')
-    
-    const confirmButton = screen.getByText('Confirm')
-    expect(confirmButton).not.toBeDisabled()
-  })
+  it("should disable confirm button when input is empty", () => {
+    render(<SecondConfirmationModal {...defaultProps} />);
 
-  it('should show error when incorrect text is entered and confirm is clicked', async () => {
-    const user = userEvent.setup()
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    await user.type(input, 'wrong text')
-    
-    const confirmButton = screen.getByText('Confirm')
-    await user.click(confirmButton)
-    
-    expect(screen.getByTestId('input-error')).toHaveTextContent(
-      'Please type "DELETE ALL DATA" exactly as shown'
-    )
-    expect(defaultProps.onConfirm).not.toHaveBeenCalled()
-  })
+    const confirmButton = screen.getByText("Confirm");
+    expect(confirmButton).toBeDisabled();
+  });
 
-  it('should call onConfirm when correct text is entered and confirm is clicked', async () => {
-    const user = userEvent.setup()
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    await user.type(input, 'DELETE ALL DATA')
-    
-    const confirmButton = screen.getByText('Confirm')
-    await user.click(confirmButton)
-    
-    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1)
-  })
+  it("should enable confirm button when correct text is entered", async () => {
+    const user = userEvent.setup();
+    render(<SecondConfirmationModal {...defaultProps} />);
 
-  it('should handle Enter key press when text is valid', async () => {
-    const user = userEvent.setup()
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    await user.type(input, 'DELETE ALL DATA')
-    await user.keyboard('{Enter}')
-    
-    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1)
-  })
+    const input = screen.getByPlaceholderText("Type here...");
+    await user.type(input, "DELETE ALL DATA");
 
-  it('should not submit on Enter when text is invalid', async () => {
-    const user = userEvent.setup()
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    await user.type(input, 'wrong text')
-    await user.keyboard('{Enter}')
-    
-    expect(defaultProps.onConfirm).not.toHaveBeenCalled()
-  })
+    const confirmButton = screen.getByText("Confirm");
+    expect(confirmButton).not.toBeDisabled();
+  });
 
-  it('should show loading state', () => {
-    render(<SecondConfirmationModal {...defaultProps} loading={true} />)
-    
-    const confirmButton = screen.getByText('Loading...')
-    expect(confirmButton).toBeDisabled()
-    expect(confirmButton).toHaveAttribute('data-loading', 'true')
-  })
+  it("should show error when incorrect text is entered and confirm is clicked", async () => {
+    const user = userEvent.setup();
+    render(<SecondConfirmationModal {...defaultProps} />);
 
-  it('should clear input when modal closes and reopens', () => {
-    const { rerender } = render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...') as HTMLInputElement
-    fireEvent.change(input, { target: { value: 'some text' } })
-    expect(input.value).toBe('some text')
-    
+    const input = screen.getByPlaceholderText("Type here...");
+    await user.type(input, "wrong text");
+
+    const confirmButton = screen.getByText("Confirm");
+    await user.click(confirmButton);
+
+    expect(screen.getByTestId("input-error")).toHaveTextContent(
+      'Please type "DELETE ALL DATA" exactly as shown',
+    );
+    expect(defaultProps.onConfirm).not.toHaveBeenCalled();
+  });
+
+  it("should call onConfirm when correct text is entered and confirm is clicked", async () => {
+    const user = userEvent.setup();
+    render(<SecondConfirmationModal {...defaultProps} />);
+
+    const input = screen.getByPlaceholderText("Type here...");
+    await user.type(input, "DELETE ALL DATA");
+
+    const confirmButton = screen.getByText("Confirm");
+    await user.click(confirmButton);
+
+    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle Enter key press when text is valid", async () => {
+    const user = userEvent.setup();
+    render(<SecondConfirmationModal {...defaultProps} />);
+
+    const input = screen.getByPlaceholderText("Type here...");
+    await user.type(input, "DELETE ALL DATA");
+    await user.keyboard("{Enter}");
+
+    expect(defaultProps.onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not submit on Enter when text is invalid", async () => {
+    const user = userEvent.setup();
+    render(<SecondConfirmationModal {...defaultProps} />);
+
+    const input = screen.getByPlaceholderText("Type here...");
+    await user.type(input, "wrong text");
+    await user.keyboard("{Enter}");
+
+    expect(defaultProps.onConfirm).not.toHaveBeenCalled();
+  });
+
+  it("should show loading state", () => {
+    render(<SecondConfirmationModal {...defaultProps} loading={true} />);
+
+    const confirmButton = screen.getByText("Loading...");
+    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toHaveAttribute("data-loading", "true");
+  });
+
+  it("should clear input when modal closes and reopens", () => {
+    const { rerender } = render(<SecondConfirmationModal {...defaultProps} />);
+
+    const input = screen.getByPlaceholderText(
+      "Type here...",
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "some text" } });
+    expect(input.value).toBe("some text");
+
     // Close modal
-    rerender(<SecondConfirmationModal {...defaultProps} isOpen={false} />)
-    
+    rerender(<SecondConfirmationModal {...defaultProps} isOpen={false} />);
+
     // Reopen modal
-    rerender(<SecondConfirmationModal {...defaultProps} isOpen={true} />)
-    
-    const newInput = screen.getByPlaceholderText('Type here...') as HTMLInputElement
-    expect(newInput.value).toBe('')
-  })
+    rerender(<SecondConfirmationModal {...defaultProps} isOpen={true} />);
 
-  it('should have proper accessibility attributes', () => {
-    render(<SecondConfirmationModal {...defaultProps} />)
-    
-    const input = screen.getByPlaceholderText('Type here...')
-    expect(input).toHaveAttribute('aria-labelledby', 'confirmation-label')
-    expect(input).toHaveAttribute('aria-describedby', 'confirmation-text confirmation-instructions')
-    expect(input).toHaveAttribute('aria-required', 'true')
-  })
-})
+    const newInput = screen.getByPlaceholderText(
+      "Type here...",
+    ) as HTMLInputElement;
+    expect(newInput.value).toBe("");
+  });
 
-describe('SuccessModal', () => {
+  it("should have proper accessibility attributes", () => {
+    render(<SecondConfirmationModal {...defaultProps} />);
+
+    const input = screen.getByPlaceholderText("Type here...");
+    expect(input).toHaveAttribute("aria-labelledby", "confirmation-label");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "confirmation-text confirmation-instructions",
+    );
+    expect(input).toHaveAttribute("aria-required", "true");
+  });
+});
+
+describe("SuccessModal", () => {
   const defaultProps = {
     isOpen: true,
     onClose: jest.fn(),
     onRegenerateData: jest.fn(),
-    title: 'Success',
-    message: 'Operation completed successfully.',
+    title: "Success",
+    message: "Operation completed successfully.",
     showRegenerateOption: true,
-    regenerateText: 'Regenerate',
-    closeText: 'Close'
-  }
+    regenerateText: "Regenerate",
+    closeText: "Close",
+  };
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should render when open', () => {
-    render(<SuccessModal {...defaultProps} />)
-    
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText('Success')).toBeInTheDocument()
-    expect(screen.getByText('Operation completed successfully.')).toBeInTheDocument()
-  })
+  it("should render when open", () => {
+    render(<SuccessModal {...defaultProps} />);
 
-  it('should show regenerate button when showRegenerateOption is true', () => {
-    render(<SuccessModal {...defaultProps} />)
-    
-    expect(screen.getByText('Regenerate')).toBeInTheDocument()
-  })
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Success")).toBeInTheDocument();
+    expect(
+      screen.getByText("Operation completed successfully."),
+    ).toBeInTheDocument();
+  });
 
-  it('should hide regenerate button when showRegenerateOption is false', () => {
-    render(<SuccessModal {...defaultProps} showRegenerateOption={false} />)
-    
-    expect(screen.queryByText('Regenerate')).not.toBeInTheDocument()
-  })
+  it("should show regenerate button when showRegenerateOption is true", () => {
+    render(<SuccessModal {...defaultProps} />);
 
-  it('should call onRegenerateData when regenerate button is clicked', async () => {
-    const user = userEvent.setup()
-    render(<SuccessModal {...defaultProps} />)
-    
-    const regenerateButton = screen.getByText('Regenerate')
-    await user.click(regenerateButton)
-    
-    expect(defaultProps.onRegenerateData).toHaveBeenCalledTimes(1)
-  })
+    expect(screen.getByText("Regenerate")).toBeInTheDocument();
+  });
 
-describe('Modal Integration Tests', () => {
-  it('should handle complete confirmation flow', async () => {
-    const user = userEvent.setup()
-    const onConfirm = jest.fn()
-    const onClose = jest.fn()
+  it("should hide regenerate button when showRegenerateOption is false", () => {
+    render(<SuccessModal {...defaultProps} showRegenerateOption={false} />);
 
-    // First confirmation modal
-    const { rerender } = render(
-      <FirstConfirmationModal
-        isOpen={true}
-        onClose={onClose}
-        onConfirm={() => {
-          onConfirm()
-          // Simulate moving to second confirmation
-          rerender(
-            <SecondConfirmationModal
-              isOpen={true}
-              onClose={onClose}
-              onConfirm={onConfirm}
-              confirmationText="DELETE ALL DATA"
-            />
-          )
-        }}
-        title="Clear All Data"
-        message="This will delete all your data. Continue?"
-      />
-    )
+    expect(screen.queryByText("Regenerate")).not.toBeInTheDocument();
+  });
 
-    // Click confirm on first modal
-    const firstConfirmButton = screen.getByText('Continue')
-    await user.click(firstConfirmButton)
+  it("should call onRegenerateData when regenerate button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<SuccessModal {...defaultProps} />);
 
-    expect(onConfirm).toHaveBeenCalledTimes(1)
+    const regenerateButton = screen.getByText("Regenerate");
+    await user.click(regenerateButton);
 
-    // Now we should see the second confirmation modal
-    expect(screen.getByText('Final Confirmation')).toBeInTheDocument()
+    expect(defaultProps.onRegenerateData).toHaveBeenCalledTimes(1);
+  });
 
-    // Type the confirmation text
-    const input = screen.getByPlaceholderText('Type confirmation text here...')
-    await user.type(input, 'DELETE ALL DATA')
+  describe("Modal Integration Tests", () => {
+    it("should handle complete confirmation flow", async () => {
+      const user = userEvent.setup();
+      const onConfirm = jest.fn();
+      const onClose = jest.fn();
 
-    // Click confirm on second modal
-    const secondConfirmButton = screen.getByText('Confirm Deletion')
-    await user.click(secondConfirmButton)
+      // First confirmation modal
+      const { rerender } = render(
+        <FirstConfirmationModal
+          isOpen={true}
+          onClose={onClose}
+          onConfirm={() => {
+            onConfirm();
+            // Simulate moving to second confirmation
+            rerender(
+              <SecondConfirmationModal
+                isOpen={true}
+                onClose={onClose}
+                onConfirm={onConfirm}
+                confirmationText="DELETE ALL DATA"
+              />,
+            );
+          }}
+          title="Clear All Data"
+          message="This will delete all your data. Continue?"
+        />,
+      );
 
-    expect(onConfirm).toHaveBeenCalledTimes(2)
-  })
+      // Click confirm on first modal
+      const firstConfirmButton = screen.getByText("Continue");
+      await user.click(firstConfirmButton);
 
-  it('should handle cancellation at any step', async () => {
-    const user = userEvent.setup()
-    const onConfirm = jest.fn()
-    const onClose = jest.fn()
+      expect(onConfirm).toHaveBeenCalledTimes(1);
 
-    render(
-      <FirstConfirmationModal
-        isOpen={true}
-        onClose={onClose}
-        onConfirm={onConfirm}
-        title="Clear All Data"
-        message="This will delete all your data. Continue?"
-      />
-    )
+      // Now we should see the second confirmation modal
+      expect(screen.getByText("Final Confirmation")).toBeInTheDocument();
 
-    // Click cancel
-    const cancelButton = screen.getByText('Cancel')
-    await user.click(cancelButton)
+      // Type the confirmation text
+      const input = screen.getByPlaceholderText(
+        "Type confirmation text here...",
+      );
+      await user.type(input, "DELETE ALL DATA");
 
-    expect(onClose).toHaveBeenCalledTimes(1)
-    expect(onConfirm).not.toHaveBeenCalled()
-  })
+      // Click confirm on second modal
+      const secondConfirmButton = screen.getByText("Confirm Deletion");
+      await user.click(secondConfirmButton);
 
-  it('should handle keyboard navigation', async () => {
-    const user = userEvent.setup()
-    const onConfirm = jest.fn()
-    const onClose = jest.fn()
+      expect(onConfirm).toHaveBeenCalledTimes(2);
+    });
 
-    render(
-      <SecondConfirmationModal
-        isOpen={true}
-        onClose={onClose}
-        onConfirm={onConfirm}
-        confirmationText="DELETE ALL DATA"
-      />
-    )
+    it("should handle cancellation at any step", async () => {
+      const user = userEvent.setup();
+      const onConfirm = jest.fn();
+      const onClose = jest.fn();
 
-    // Tab to input and type
-    await user.tab()
-    await user.keyboard('DELETE ALL DATA')
+      render(
+        <FirstConfirmationModal
+          isOpen={true}
+          onClose={onClose}
+          onConfirm={onConfirm}
+          title="Clear All Data"
+          message="This will delete all your data. Continue?"
+        />,
+      );
 
-    // Press Enter to confirm
-    await user.keyboard('{Enter}')
+      // Click cancel
+      const cancelButton = screen.getByText("Cancel");
+      await user.click(cancelButton);
 
-    expect(onConfirm).toHaveBeenCalledTimes(1)
-  })
-})
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onConfirm).not.toHaveBeenCalled();
+    });
 
-  it('should call onClose when close button is clicked', async () => {
-    const user = userEvent.setup()
-    render(<SuccessModal {...defaultProps} />)
-    
-    const closeButton = screen.getByText('Close')
-    await user.click(closeButton)
-    
-    expect(defaultProps.onClose).toHaveBeenCalledTimes(1)
-  })
+    it("should handle keyboard navigation", async () => {
+      const user = userEvent.setup();
+      const onConfirm = jest.fn();
+      const onClose = jest.fn();
 
-  it('should focus close button on open', async () => {
-    render(<SuccessModal {...defaultProps} />)
-    
+      render(
+        <SecondConfirmationModal
+          isOpen={true}
+          onClose={onClose}
+          onConfirm={onConfirm}
+          confirmationText="DELETE ALL DATA"
+        />,
+      );
+
+      // Tab to input and type
+      await user.tab();
+      await user.keyboard("DELETE ALL DATA");
+
+      // Press Enter to confirm
+      await user.keyboard("{Enter}");
+
+      expect(onConfirm).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("should call onClose when close button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<SuccessModal {...defaultProps} />);
+
+    const closeButton = screen.getByText("Close");
+    await user.click(closeButton);
+
+    expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("should focus close button on open", async () => {
+    render(<SuccessModal {...defaultProps} />);
+
     await waitFor(() => {
-      const closeButton = screen.getByText('Close')
-      expect(closeButton).toHaveFocus()
-    })
-  })
+      const closeButton = screen.getByText("Close");
+      expect(closeButton).toHaveFocus();
+    });
+  });
 
-  it('should have proper accessibility attributes', () => {
-    render(<SuccessModal {...defaultProps} />)
-    
-    const message = screen.getByText('Operation completed successfully.')
-    expect(message).toHaveAttribute('role', 'status')
-    expect(message).toHaveAttribute('aria-live', 'polite')
-    expect(message).toHaveAttribute('id', 'success-message')
-  })
-})
+  it("should have proper accessibility attributes", () => {
+    render(<SuccessModal {...defaultProps} />);
+
+    const message = screen.getByText("Operation completed successfully.");
+    expect(message).toHaveAttribute("role", "status");
+    expect(message).toHaveAttribute("aria-live", "polite");
+    expect(message).toHaveAttribute("id", "success-message");
+  });
+});

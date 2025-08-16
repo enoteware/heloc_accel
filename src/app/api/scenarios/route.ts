@@ -1,31 +1,39 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { stackServerApp } from '@/stack'
-import pool from '@/lib/db'
-import { validateCalculatorInputs } from '@/lib/validation'
-import { logInfo, logError, logDebug } from '@/lib/debug-logger'
+import { NextRequest, NextResponse } from "next/server";
+import { stackServerApp } from "@/stack";
+import pool from "@/lib/db";
+import { validateCalculatorInputs } from "@/lib/validation";
+import { logInfo, logError, logDebug } from "@/lib/debug-logger";
 
 // GET /api/scenarios - List user's scenarios
 export async function GET(request: NextRequest) {
-  logInfo('API:Scenarios', 'GET /api/scenarios called')
-  
+  logInfo("API:Scenarios", "GET /api/scenarios called");
+
   try {
     let user;
     try {
-      user = await stackServerApp.getUser({ tokenStore: request })
-      logDebug('API:Scenarios', 'User authenticated', { userId: user?.id, email: user?.primaryEmail })
+      user = await stackServerApp.getUser({ tokenStore: request });
+      logDebug("API:Scenarios", "User authenticated", {
+        userId: user?.id,
+        email: user?.primaryEmail,
+      });
     } catch (error) {
-      logError('API:Scenarios', 'Stack Auth error', error)
-      return NextResponse.json({ error: 'Authentication error' }, { status: 401 })
-    }
-    
-    if (!user) {
-      logError('API:Scenarios', 'No user found in session')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      logError("API:Scenarios", "Stack Auth error", error);
+      return NextResponse.json(
+        { error: "Authentication error" },
+        { status: 401 },
+      );
     }
 
-    const client = await pool.connect()
+    if (!user) {
+      logError("API:Scenarios", "No user found in session");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const client = await pool.connect();
     try {
-      logDebug('API:Scenarios', 'Querying scenarios for user', { userId: user.id })
+      logDebug("API:Scenarios", "Querying scenarios for user", {
+        userId: user.id,
+      });
       const result = await client.query(
         `SELECT 
           id, 
@@ -40,88 +48,98 @@ export async function GET(request: NextRequest) {
         FROM scenarios 
         WHERE user_id = $1 
         ORDER BY updated_at DESC`,
-        [user.id]
-      )
+        [user.id],
+      );
 
-      logInfo('API:Scenarios', `Found ${result.rows.length} scenarios`, { userId: user.id })
-      return NextResponse.json({ scenarios: result.rows })
+      logInfo("API:Scenarios", `Found ${result.rows.length} scenarios`, {
+        userId: user.id,
+      });
+      return NextResponse.json({ scenarios: result.rows });
     } finally {
-      client.release()
+      client.release();
     }
   } catch (error) {
-    logError('API:Scenarios', 'Error fetching scenarios', error)
+    logError("API:Scenarios", "Error fetching scenarios", error);
     return NextResponse.json(
-      { error: 'Failed to fetch scenarios' },
-      { status: 500 }
-    )
+      { error: "Failed to fetch scenarios" },
+      { status: 500 },
+    );
   }
 }
 
 // POST /api/scenarios - Create new scenario
 export async function POST(request: NextRequest) {
-  logInfo('API:Scenarios', 'POST /api/scenarios called')
-  console.log('=== SCENARIOS POST ENDPOINT CALLED ===')
-  
+  logInfo("API:Scenarios", "POST /api/scenarios called");
+  console.log("=== SCENARIOS POST ENDPOINT CALLED ===");
+
   try {
     let user;
     try {
-      console.log('Attempting to get user from Stack Auth...')
-      user = await stackServerApp.getUser({ tokenStore: request })
-      console.log('User authentication result:', { 
-        success: !!user, 
-        userId: user?.id, 
-        email: user?.primaryEmail 
-      })
-      logDebug('API:Scenarios', 'User authenticated for POST', { userId: user?.id, email: user?.primaryEmail })
+      console.log("Attempting to get user from Stack Auth...");
+      user = await stackServerApp.getUser({ tokenStore: request });
+      console.log("User authentication result:", {
+        success: !!user,
+        userId: user?.id,
+        email: user?.primaryEmail,
+      });
+      logDebug("API:Scenarios", "User authenticated for POST", {
+        userId: user?.id,
+        email: user?.primaryEmail,
+      });
     } catch (error) {
-      console.error('Stack Auth error:', error)
-      logError('API:Scenarios', 'Stack Auth error in POST', error)
-      return NextResponse.json({ error: 'Authentication error' }, { status: 401 })
-    }
-    
-    if (!user) {
-      console.log('No user found - returning 401')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      console.error("Stack Auth error:", error);
+      logError("API:Scenarios", "Stack Auth error in POST", error);
+      return NextResponse.json(
+        { error: "Authentication error" },
+        { status: 401 },
+      );
     }
 
-    console.log('Parsing request body...')
-    const body = await request.json()
-    console.log('Body received:', JSON.stringify(body, null, 2))
-    const { inputs, results } = body
-    
-    logDebug('API:Scenarios', 'POST body received', { 
-      hasInputs: !!inputs, 
+    if (!user) {
+      console.log("No user found - returning 401");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    console.log("Parsing request body...");
+    const body = await request.json();
+    console.log("Body received:", JSON.stringify(body, null, 2));
+    const { inputs, results } = body;
+
+    logDebug("API:Scenarios", "POST body received", {
+      hasInputs: !!inputs,
       hasResults: !!results,
-      scenarioName: inputs?.scenarioName 
-    })
-    console.log('Extracted from body:', {
+      scenarioName: inputs?.scenarioName,
+    });
+    console.log("Extracted from body:", {
       hasInputs: !!inputs,
       hasResults: !!results,
       scenarioName: inputs?.scenarioName,
       inputKeys: inputs ? Object.keys(inputs) : [],
-      resultKeys: results ? Object.keys(results) : []
-    })
+      resultKeys: results ? Object.keys(results) : [],
+    });
 
     // Validate inputs
-    const validation = validateCalculatorInputs(inputs)
+    const validation = validateCalculatorInputs(inputs);
     if (!validation.isValid) {
-      logError('API:Scenarios', 'Validation failed', validation.errors)
+      logError("API:Scenarios", "Validation failed", validation.errors);
       return NextResponse.json(
-        { error: 'Invalid inputs', errors: validation.errors },
-        { status: 400 }
-      )
+        { error: "Invalid inputs", errors: validation.errors },
+        { status: 400 },
+      );
     }
 
-    const client = await pool.connect()
-    console.log('Database client connected')
+    const client = await pool.connect();
+    console.log("Database client connected");
     try {
-      logInfo('API:Scenarios', 'Inserting scenario into database', { scenarioName: inputs.scenarioName })
-      console.log('Preparing to insert scenario with values:', {
+      logInfo("API:Scenarios", "Inserting scenario into database", {
+        scenarioName: inputs.scenarioName,
+      });
+      console.log("Preparing to insert scenario with values:", {
         userId: user.id,
-        name: inputs.scenarioName || 'HELOC Analysis',
-        description: inputs.description || null
-      })
-      
+        name: inputs.scenarioName || "HELOC Analysis",
+        description: inputs.description || null,
+      });
+
       // Insert the scenario
       const insertResult = await client.query(
         `INSERT INTO scenarios (
@@ -172,7 +190,7 @@ export async function POST(request: NextRequest) {
         ) RETURNING id`,
         [
           user.id,
-          inputs.scenarioName || 'HELOC Analysis',
+          inputs.scenarioName || "HELOC Analysis",
           inputs.description || null,
           // Mortgage
           inputs.currentMortgageBalance,
@@ -211,28 +229,28 @@ export async function POST(request: NextRequest) {
           results.comparison.percentageInterestSaved,
           // JSON data
           JSON.stringify(results),
-          JSON.stringify(results.heloc.schedule)
-        ]
-      )
+          JSON.stringify(results.heloc.schedule),
+        ],
+      );
 
-      logInfo('API:Scenarios', 'Scenario saved successfully', { 
+      logInfo("API:Scenarios", "Scenario saved successfully", {
         scenarioId: insertResult.rows[0].id,
-        scenarioName: inputs.scenarioName 
-      })
-      
-      return NextResponse.json({ 
-        success: true, 
+        scenarioName: inputs.scenarioName,
+      });
+
+      return NextResponse.json({
+        success: true,
         scenarioId: insertResult.rows[0].id,
-        id: insertResult.rows[0].id // Add id field for compatibility
-      })
+        id: insertResult.rows[0].id, // Add id field for compatibility
+      });
     } finally {
-      client.release()
+      client.release();
     }
   } catch (error) {
-    logError('API:Scenarios', 'Error saving scenario', error)
+    logError("API:Scenarios", "Error saving scenario", error);
     return NextResponse.json(
-      { error: 'Failed to save scenario' },
-      { status: 500 }
-    )
+      { error: "Failed to save scenario" },
+      { status: 500 },
+    );
   }
 }

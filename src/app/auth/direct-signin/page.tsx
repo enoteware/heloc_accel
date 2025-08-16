@@ -1,51 +1,51 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DirectSignIn() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
       // Direct API call to test login
-      const response = await fetch('/api/auth/callback/credentials', {
-        method: 'POST',
+      const response = await fetch("/api/auth/callback/credentials", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
           password,
           csrfToken: await getCsrfToken(),
         }),
-      })
+      });
 
       if (response.ok) {
         // If login successful, redirect
-        window.location.href = '/calculator'
+        window.location.href = "/calculator";
       } else {
-        setError('Invalid email or password')
+        setError("Invalid email or password");
       }
     } catch (err) {
-      setError('An error occurred during sign in')
+      setError("An error occurred during sign in");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   async function getCsrfToken() {
-    const response = await fetch('/api/auth/csrf')
-    const data = await response.json()
-    return data.csrfToken
+    const response = await fetch("/api/auth/csrf");
+    const data = await response.json();
+    return data.csrfToken;
   }
 
   return (
@@ -69,7 +69,10 @@ export default function DirectSignIn() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -85,7 +88,10 @@ export default function DirectSignIn() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -107,7 +113,7 @@ export default function DirectSignIn() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
 
@@ -119,5 +125,5 @@ export default function DirectSignIn() {
         </form>
       </div>
     </div>
-  )
+  );
 }

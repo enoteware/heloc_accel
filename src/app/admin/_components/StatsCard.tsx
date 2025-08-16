@@ -1,25 +1,25 @@
-import React from 'react'
-import { LucideIcon } from 'lucide-react'
+import React from "react";
+import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
-  title: string
-  value: string | number
-  description?: string
-  icon: LucideIcon
+  title: string;
+  value: string | number;
+  description?: string;
+  icon: LucideIcon;
   trend?: {
-    value: number
-    isPositive: boolean
-  }
-  loading?: boolean
+    value: number;
+    isPositive: boolean;
+  };
+  loading?: boolean;
 }
 
-export default function StatsCard({ 
-  title, 
-  value, 
-  description, 
+export default function StatsCard({
+  title,
+  value,
+  description,
   icon: Icon,
   trend,
-  loading = false
+  loading = false,
 }: StatsCardProps) {
   if (loading) {
     return (
@@ -32,7 +32,7 @@ export default function StatsCard({
           <div className="h-12 w-12 bg-gray-200 rounded-lg"></div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -43,10 +43,13 @@ export default function StatsCard({
           <div className="mt-1 flex items-baseline gap-2">
             <p className="text-2xl font-bold text-gray-900">{value}</p>
             {trend && (
-              <span className={`text-sm font-medium ${
-                trend.isPositive ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {trend.isPositive ? '+' : ''}{trend.value}%
+              <span
+                className={`text-sm font-medium ${
+                  trend.isPositive ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {trend.isPositive ? "+" : ""}
+                {trend.value}%
               </span>
             )}
           </div>
@@ -61,5 +64,5 @@ export default function StatsCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

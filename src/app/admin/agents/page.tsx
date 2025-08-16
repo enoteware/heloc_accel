@@ -1,101 +1,87 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Users, Plus, Edit, Trash2, Search, Filter } from 'lucide-react'
-import { getDemoAgents } from '@/lib/company-data'
-import type { Agent } from '@/lib/company-data'
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { Users, Plus, Edit, Trash2, Search, Filter } from "lucide-react";
+import type { Agent } from "@/lib/company-data";
 
 export default function AgentsListPage() {
-  const [agents, setAgents] = useState<Agent[]>([])
-  const [filteredAgents, setFilteredAgents] = useState<Agent[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all')
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [filteredAgents, setFilteredAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterActive, setFilterActive] = useState<
+    "all" | "active" | "inactive"
+  >("all");
 
   // Load agents
   useEffect(() => {
     const loadAgents = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-        
-        if (isDemoMode) {
-          const demoAgents = getDemoAgents()
-          setAgents(demoAgents)
-          setFilteredAgents(demoAgents)
-        } else {
-          // In production, would fetch from API
-          const response = await fetch('/api/agents')
-          if (response.ok) {
-            const data = await response.json()
-            setAgents(data.data || [])
-            setFilteredAgents(data.data || [])
-          }
+        // Fetch from API
+        const response = await fetch("/api/agents");
+        if (response.ok) {
+          const data = await response.json();
+          setAgents(data.data || []);
+          setFilteredAgents(data.data || []);
         }
       } catch (error) {
-        console.error('Error loading agents:', error)
+        console.error("Error loading agents:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadAgents()
-  }, [])
+    loadAgents();
+  }, []);
 
   // Filter agents based on search and status
   useEffect(() => {
-    let filtered = agents
+    let filtered = agents;
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(agent => 
-        agent.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        agent.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        agent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (agent.phone && agent.phone.includes(searchTerm))
-      )
+      filtered = filtered.filter(
+        (agent) =>
+          agent.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          agent.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          agent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (agent.phone && agent.phone.includes(searchTerm)),
+      );
     }
 
     // Apply status filter
-    if (filterActive !== 'all') {
-      filtered = filtered.filter(agent => 
-        filterActive === 'active' ? agent.isActive : !agent.isActive
-      )
+    if (filterActive !== "all") {
+      filtered = filtered.filter((agent) =>
+        filterActive === "active" ? agent.isActive : !agent.isActive,
+      );
     }
 
-    setFilteredAgents(filtered)
-  }, [searchTerm, filterActive, agents])
+    setFilteredAgents(filtered);
+  }, [searchTerm, filterActive, agents]);
 
   const handleDelete = async (agentId: number) => {
-    if (!confirm('Are you sure you want to delete this agent?')) {
-      return
+    if (!confirm("Are you sure you want to delete this agent?")) {
+      return;
     }
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-      
-      if (isDemoMode) {
-        // Remove from local state in demo mode
-        setAgents(prev => prev.filter(a => a.id !== agentId))
-        alert('Agent deleted successfully!')
+      // Delete via API
+      const response = await fetch(`/api/agents/${agentId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setAgents((prev) => prev.filter((a) => a.id !== agentId));
+        alert("Agent deleted successfully!");
       } else {
-        // Delete via API
-        const response = await fetch(`/api/agents/${agentId}`, {
-          method: 'DELETE'
-        })
-        
-        if (response.ok) {
-          setAgents(prev => prev.filter(a => a.id !== agentId))
-          alert('Agent deleted successfully!')
-        } else {
-          throw new Error('Failed to delete agent')
-        }
+        throw new Error("Failed to delete agent");
       }
     } catch (error) {
-      console.error('Error deleting agent:', error)
-      alert('Failed to delete agent')
+      console.error("Error deleting agent:", error);
+      alert("Failed to delete agent");
     }
-  }
+  };
 
   return (
     <div>
@@ -144,7 +130,11 @@ export default function AgentsListPage() {
               <Filter className="h-5 w-5 text-gray-400" />
               <select
                 value={filterActive}
-                onChange={(e) => setFilterActive(e.target.value as 'all' | 'active' | 'inactive')}
+                onChange={(e) =>
+                  setFilterActive(
+                    e.target.value as "all" | "active" | "inactive",
+                  )
+                }
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">All Agents</option>
@@ -172,10 +162,9 @@ export default function AgentsListPage() {
           <div className="p-8 text-center">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600">
-              {searchTerm || filterActive !== 'all' 
-                ? 'No agents found matching your criteria'
-                : 'No agents added yet'
-              }
+              {searchTerm || filterActive !== "all"
+                ? "No agents found matching your criteria"
+                : "No agents added yet"}
             </p>
           </div>
         ) : (
@@ -215,15 +204,17 @@ export default function AgentsListPage() {
                     <div className="text-sm text-gray-500">{agent.phone}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {agent.nmlsNumber || '-'}
+                    {agent.nmlsNumber || "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      agent.isActive 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {agent.isActive ? 'Active' : 'Inactive'}
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        agent.isActive
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {agent.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -249,5 +240,5 @@ export default function AgentsListPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

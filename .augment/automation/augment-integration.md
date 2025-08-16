@@ -1,4 +1,5 @@
 # Augment Integration Guide
+
 ## Converting Claude Code Hooks to Augment Automation
 
 This guide shows how to implement Claude Code-style automated rules using Augment's native tools and capabilities.
@@ -6,6 +7,7 @@ This guide shows how to implement Claude Code-style automated rules using Augmen
 ## 🎯 **Core Concept**
 
 Instead of automatic hooks, Augment uses **explicit automation** through:
+
 - **Task Management** - Structured quality workflows
 - **Diagnostics Integration** - Real-time validation
 - **MCP Orchestration** - Specialized automation
@@ -19,14 +21,16 @@ Instead of automatic hooks, Augment uses **explicit automation** through:
 
 ```javascript
 // Before making changes, run:
-await diagnostics({ paths: ['src/'] });
-await launch-process({ 
-  command: 'node .augment/automation/quality-framework.js pre-edit',
-  wait: true 
-});
+await diagnostics({ paths: ["src/"] });
+(await launch) -
+  process({
+    command: "node .augment/automation/quality-framework.js pre-edit",
+    wait: true,
+  });
 ```
 
 **Integration with Editing Workflow**:
+
 ```javascript
 // 1. Check current state
 const issues = await diagnostics({ paths: filesToEdit });
@@ -51,21 +55,24 @@ if (preCheck.returnCode === 0) {
 ```javascript
 // After making changes, create quality assurance tasks
 await add_tasks({
-  tasks: [{
-    name: "Post-Edit Quality Check",
-    description: "Validate code changes meet quality standards"
-  }]
+  tasks: [
+    {
+      name: "Post-Edit Quality Check",
+      description: "Validate code changes meet quality standards",
+    },
+  ],
 });
 
 // Execute validation workflow
-await launch-process({
-  command: 'node .augment/automation/task-workflows.js post-edit',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/task-workflows.js post-edit",
+    wait: true,
+  });
 
 // Update task status based on results
 await update_tasks({
-  tasks: [{ task_id: "quality-check-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "quality-check-id", state: "COMPLETE" }],
 });
 ```
 
@@ -75,20 +82,22 @@ await update_tasks({
 
 ```javascript
 // When UI files are modified, run automated UI checks
-await browser_navigate_Playwright({ url: 'http://localhost:3000' });
-await browser_take_screenshot_Playwright({ filename: 'ui-before.png' });
+await browser_navigate_Playwright({ url: "http://localhost:3000" });
+await browser_take_screenshot_Playwright({ filename: "ui-before.png" });
 
 // Run UI validation
-await launch-process({
-  command: 'node .augment/automation/task-workflows.js ui',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/task-workflows.js ui",
+    wait: true,
+  });
 
 // Check contrast and accessibility
-await launch-process({
-  command: 'npm run check:contrast',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "npm run check:contrast",
+    wait: true,
+  });
 ```
 
 ### **4. Session Context (replaces SessionStart hooks)**
@@ -97,22 +106,25 @@ await launch-process({
 
 ```javascript
 // Load project context from memories
-const projectContext = await read_memory_serena({ 
-  memory_file_name: 'project-quality-standards.md' 
+const projectContext = await read_memory_serena({
+  memory_file_name: "project-quality-standards.md",
 });
 
 // Run session status check
-await launch-process({
-  command: 'node .augment/automation/quality-framework.js session-status',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/quality-framework.js session-status",
+    wait: true,
+  });
 
 // Create session tasks if needed
 await add_tasks({
-  tasks: [{
-    name: "Session Quality Review",
-    description: "Review current project state and quality metrics"
-  }]
+  tasks: [
+    {
+      name: "Session Quality Review",
+      description: "Review current project state and quality metrics",
+    },
+  ],
 });
 ```
 
@@ -123,33 +135,39 @@ await add_tasks({
 ```javascript
 // 1. Start with quality validation
 await add_tasks({
-  tasks: [{
-    name: "Implement HELOC Calculator Feature",
-    description: "Add new calculation algorithm with quality gates"
-  }]
+  tasks: [
+    {
+      name: "Implement HELOC Calculator Feature",
+      description: "Add new calculation algorithm with quality gates",
+    },
+  ],
 });
 
 // 2. Pre-development validation
-await launch-process({
-  command: 'node .augment/automation/quality-framework.js pre-edit',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/quality-framework.js pre-edit",
+    wait: true,
+  });
 
 // 3. Make changes with validation
-await str-replace-editor({
-  path: 'src/lib/calculations.ts',
-  // ... changes
-});
+(await str) -
+  replace -
+  editor({
+    path: "src/lib/calculations.ts",
+    // ... changes
+  });
 
 // 4. Post-development quality check
-await launch-process({
-  command: 'node .augment/automation/task-workflows.js post-edit',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/task-workflows.js post-edit",
+    wait: true,
+  });
 
 // 5. Update task status
 await update_tasks({
-  tasks: [{ task_id: "feature-task-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "feature-task-id", state: "COMPLETE" }],
 });
 ```
 
@@ -158,40 +176,48 @@ await update_tasks({
 ```javascript
 // 1. Create UI development workflow
 await add_tasks({
-  tasks: [{
-    name: "Update Button Component",
-    description: "Enhance design system button with new variants"
-  }]
+  tasks: [
+    {
+      name: "Update Button Component",
+      description: "Enhance design system button with new variants",
+    },
+  ],
 });
 
 // 2. Take baseline screenshot
-await browser_navigate_Playwright({ url: 'http://localhost:3000/design-system' });
-await browser_take_screenshot_Playwright({ filename: 'button-before.png' });
+await browser_navigate_Playwright({
+  url: "http://localhost:3000/design-system",
+});
+await browser_take_screenshot_Playwright({ filename: "button-before.png" });
 
 // 3. Make UI changes
-await str-replace-editor({
-  path: 'src/components/design-system/Button.tsx',
-  // ... changes
-});
+(await str) -
+  replace -
+  editor({
+    path: "src/components/design-system/Button.tsx",
+    // ... changes
+  });
 
 // 4. Run UI validation workflow
-await launch-process({
-  command: 'node .augment/automation/task-workflows.js ui',
-  wait: true
-});
+(await launch) -
+  process({
+    command: "node .augment/automation/task-workflows.js ui",
+    wait: true,
+  });
 
 // 5. Take after screenshot and compare
-await browser_take_screenshot_Playwright({ filename: 'button-after.png' });
+await browser_take_screenshot_Playwright({ filename: "button-after.png" });
 
 // 6. Update task with results
 await update_tasks({
-  tasks: [{ task_id: "ui-task-id", state: "COMPLETE" }]
+  tasks: [{ task_id: "ui-task-id", state: "COMPLETE" }],
 });
 ```
 
 ## 📋 **Task Workflow Templates**
 
 ### **Quality Gate Workflow**
+
 ```json
 {
   "name": "Quality Gate Validation",
@@ -216,6 +242,7 @@ await update_tasks({
 ```
 
 ### **Deployment Readiness Workflow**
+
 ```json
 {
   "name": "Deployment Readiness",
@@ -242,6 +269,7 @@ await update_tasks({
 ## 🔗 **MCP Integration**
 
 ### **Sequential Thinking for Complex Workflows**
+
 ```javascript
 // Use Sequential Thinking MCP for complex quality decisions
 await sequentialthinking_Sequential_thinking({
@@ -251,21 +279,25 @@ await sequentialthinking_Sequential_thinking({
 ```
 
 ### **Browser Tools for UI Validation**
+
 ```javascript
 // Automated UI testing with Browser Tools MCP
-await browser_navigate_Playwright({ url: 'http://localhost:3000' });
-await browser_click_Playwright({ element: 'Calculate button' });
+await browser_navigate_Playwright({ url: "http://localhost:3000" });
+await browser_click_Playwright({ element: "Calculate button" });
 await browser_snapshot_Playwright(); // Check accessibility
 ```
 
 ### **Context7 for Library Standards**
+
 ```javascript
 // Check library best practices
-await resolve-library-id_Context_7({ libraryName: 'next.js' });
-await get-library-docs_Context_7({ 
-  context7CompatibleLibraryID: '/vercel/next.js',
-  topic: 'best practices'
-});
+(await resolve) - library - id_Context_7({ libraryName: "next.js" });
+(await get) -
+  library -
+  docs_Context_7({
+    context7CompatibleLibraryID: "/vercel/next.js",
+    topic: "best practices",
+  });
 ```
 
 ## 💾 **Project Memory Integration**
@@ -274,7 +306,7 @@ Store quality standards in Serena memories:
 
 ```javascript
 await write_memory_serena({
-  memory_name: 'quality-standards',
+  memory_name: "quality-standards",
   content: `
 # HELOC Accelerator Quality Standards
 
@@ -292,7 +324,7 @@ await write_memory_serena({
 - WCAG AA compliance
 - Design system components only
 - Mobile-first responsive design
-  `
+  `,
 });
 ```
 

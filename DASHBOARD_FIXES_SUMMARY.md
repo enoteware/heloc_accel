@@ -21,6 +21,7 @@
 ## Ready for Testing:
 
 ### Navigation Links:
+
 - [x] Logo → Home page
 - [x] Calculator → `/calculator`
 - [x] Dashboard → `/dashboard`
@@ -29,10 +30,12 @@
 - [x] Sign Out → Logout and redirect
 
 ### Dashboard Actions:
+
 - [x] Create New Scenario → `/calculator`
 - [x] Compare Scenarios → `/compare` (when 2+ scenarios)
 
 ### Scenario Card Features:
+
 - [x] Edit (pencil icon) → `/calculator?edit=[id]`
 - [x] Duplicate (copy icon) → `/calculator?duplicate=[id]&name=[name]`
 - [x] Delete (trash icon) → DELETE `/api/scenarios/[id]`
@@ -40,6 +43,7 @@
 - [x] Share button → POST `/api/scenario/[id]/share`
 
 ### Selection & Comparison:
+
 - [x] Checkbox selection for comparison
 - [x] Compare button appears when 2+ selected
 - [x] Navigate to `/compare?scenarios=[id1,id2,...]`
@@ -52,6 +56,7 @@
 4. Report any errors or broken functionality
 
 ## Known Working Features:
+
 - User authentication with Stack Auth
 - Loading scenarios from database
 - Delete confirmation modal
@@ -59,6 +64,7 @@
 - Scenario selection for comparison
 
 ## Potential Issues to Watch:
+
 - Calculator page loading with scenario data (`?edit=` parameter)
 - Share functionality backend implementation
 - Compare page handling multiple scenario IDs

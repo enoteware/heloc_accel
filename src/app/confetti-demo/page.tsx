@@ -1,24 +1,24 @@
-'use client'
+"use client";
 
-import React, { useEffect } from 'react'
-import { useConfetti } from '@/hooks/useConfetti'
+import React, { useEffect } from "react";
+import { useConfetti } from "@/hooks/useConfetti";
 
 export default function ConfettiDemo() {
-  const { triggerConfetti } = useConfetti()
-  
+  const { triggerConfetti } = useConfetti();
+
   // Direct test function
   const testDirectConfetti = () => {
-    console.log('Testing direct confetti call...')
+    console.log("Testing direct confetti call...");
     // Dynamic import for client-side only
-    import('canvas-confetti').then((module) => {
-      const confetti = module.default
+    import("canvas-confetti").then((module) => {
+      const confetti = module.default;
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.6 }
-      })
-    })
-  }
+        origin: { y: 0.6 },
+      });
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
@@ -33,7 +33,8 @@ export default function ConfettiDemo() {
           </h2>
 
           <p className="text-gray-600 mb-6">
-            These confetti animations are triggered automatically when you achieve significant savings in the HELOC calculator.
+            These confetti animations are triggered automatically when you
+            achieve significant savings in the HELOC calculator.
           </p>
 
           <div className="mb-6">
@@ -47,27 +48,33 @@ export default function ConfettiDemo() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button
-              onClick={() => triggerConfetti({ type: 'success' })}
+              onClick={() => triggerConfetti({ type: "success" })}
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 shadow-md"
             >
               Success Confetti
-              <span className="block text-sm mt-1 opacity-90">($10k-$25k savings)</span>
+              <span className="block text-sm mt-1 opacity-90">
+                ($10k-$25k savings)
+              </span>
             </button>
 
             <button
-              onClick={() => triggerConfetti({ type: 'savings' })}
+              onClick={() => triggerConfetti({ type: "savings" })}
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 shadow-md"
             >
               Savings Confetti
-              <span className="block text-sm mt-1 opacity-90">($25k-$50k savings)</span>
+              <span className="block text-sm mt-1 opacity-90">
+                ($25k-$50k savings)
+              </span>
             </button>
 
             <button
-              onClick={() => triggerConfetti({ type: 'celebration' })}
+              onClick={() => triggerConfetti({ type: "celebration" })}
               className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 shadow-md"
             >
               Celebration Confetti
-              <span className="block text-sm mt-1 opacity-90">($50k+ savings)</span>
+              <span className="block text-sm mt-1 opacity-90">
+                ($50k+ savings)
+              </span>
             </button>
           </div>
 
@@ -76,21 +83,29 @@ export default function ConfettiDemo() {
               Automatic Triggers
             </h3>
             <ul className="text-sm text-blue-800 space-y-2">
-              <li>• Live calculator updates trigger confetti when savings thresholds are met</li>
-              <li>• Results page includes a &quot;Celebrate Savings!&quot; button</li>
-              <li>• Confetti respects user&apos;s reduced motion preferences</li>
+              <li>
+                • Live calculator updates trigger confetti when savings
+                thresholds are met
+              </li>
+              <li>
+                • Results page includes a &quot;Celebrate Savings!&quot; button
+              </li>
+              <li>
+                • Confetti respects user&apos;s reduced motion preferences
+              </li>
               <li>• Different animations based on savings amount</li>
             </ul>
           </div>
 
           <div className="mt-6 p-4 bg-gray-100 rounded-lg">
             <p className="text-sm text-gray-600">
-              <strong>Try it out:</strong> Click any button above to see the confetti animation. 
-              The animations use your app&apos;s color scheme and are optimized for performance.
+              <strong>Try it out:</strong> Click any button above to see the
+              confetti animation. The animations use your app&apos;s color
+              scheme and are optimized for performance.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,218 +1,280 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { UserCheck, Search, Filter, Users, AlertCircle } from 'lucide-react'
-import { getDemoAgents, getDemoActiveAgents } from '@/lib/company-data'
-import type { Agent } from '@/lib/company-data'
+import React, { useState, useEffect } from "react";
+import { UserCheck, Search, Filter, Users, AlertCircle } from "lucide-react";
+import { getDemoAgents, getDemoActiveAgents } from "@/lib/company-data";
+import type { Agent } from "@/lib/company-data";
 
 interface User {
-  id: string
-  name: string
-  email: string
-  createdAt: Date
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
 }
 
 interface Assignment {
-  userId: string
-  userName: string
-  userEmail: string
-  agentId: number | null
-  agentName: string | null
-  assignedAt: Date | null
+  userId: string;
+  userName: string;
+  userEmail: string;
+  agentId: number | null;
+  agentName: string | null;
+  assignedAt: Date | null;
 }
 
 export default function UserAssignmentsPage() {
-  const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [agents, setAgents] = useState<Agent[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<'all' | 'assigned' | 'unassigned'>('all')
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
-  const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
-  const [assigning, setAssigning] = useState(false)
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState<
+    "all" | "assigned" | "unassigned"
+  >("all");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null);
+  const [assigning, setAssigning] = useState(false);
 
   // Load data
   useEffect(() => {
     const loadData = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
-        
+        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
         if (isDemoMode) {
           // Load demo data
-          const demoAgents = getDemoActiveAgents()
-          setAgents(demoAgents)
+          const demoAgents = getDemoActiveAgents();
+          setAgents(demoAgents);
 
           // Create demo users
           const demoUsers: User[] = [
-            { id: '1', name: 'John Smith', email: 'john.smith@example.com', createdAt: new Date('2024-01-15') },
-            { id: '2', name: 'Jane Doe', email: 'jane.doe@example.com', createdAt: new Date('2024-01-20') },
-            { id: '3', name: 'Robert Johnson', email: 'robert.j@example.com', createdAt: new Date('2024-02-01') },
-            { id: '4', name: 'Maria Garcia', email: 'maria.g@example.com', createdAt: new Date('2024-02-10') },
-            { id: '5', name: 'David Lee', email: 'david.lee@example.com', createdAt: new Date('2024-02-15') },
-            { id: '6', name: 'Sarah Wilson', email: 'sarah.w@example.com', createdAt: new Date('2024-02-20') },
-          ]
+            {
+              id: "1",
+              name: "John Smith",
+              email: "john.smith@example.com",
+              createdAt: new Date("2024-01-15"),
+            },
+            {
+              id: "2",
+              name: "Jane Doe",
+              email: "jane.doe@example.com",
+              createdAt: new Date("2024-01-20"),
+            },
+            {
+              id: "3",
+              name: "Robert Johnson",
+              email: "robert.j@example.com",
+              createdAt: new Date("2024-02-01"),
+            },
+            {
+              id: "4",
+              name: "Maria Garcia",
+              email: "maria.g@example.com",
+              createdAt: new Date("2024-02-10"),
+            },
+            {
+              id: "5",
+              name: "David Lee",
+              email: "david.lee@example.com",
+              createdAt: new Date("2024-02-15"),
+            },
+            {
+              id: "6",
+              name: "Sarah Wilson",
+              email: "sarah.w@example.com",
+              createdAt: new Date("2024-02-20"),
+            },
+          ];
 
           // Get assignments from localStorage
-          const storedAssignments = localStorage.getItem('heloc_demo_user_agent_assignments')
-          const assignmentData = storedAssignments ? JSON.parse(storedAssignments) : []
+          const storedAssignments = localStorage.getItem(
+            "heloc_demo_user_agent_assignments",
+          );
+          const assignmentData = storedAssignments
+            ? JSON.parse(storedAssignments)
+            : [];
 
           // Create assignment records
-          const assignmentRecords: Assignment[] = demoUsers.map(user => {
-            const assignment = assignmentData.find((a: any) => a.userId === user.id)
-            const agent = assignment ? demoAgents.find(ag => ag.id === assignment.agentId) : null
-            
+          const assignmentRecords: Assignment[] = demoUsers.map((user) => {
+            const assignment = assignmentData.find(
+              (a: any) => a.userId === user.id,
+            );
+            const agent = assignment
+              ? demoAgents.find((ag) => ag.id === assignment.agentId)
+              : null;
+
             return {
               userId: user.id,
               userName: user.name,
               userEmail: user.email,
               agentId: assignment?.agentId || null,
               agentName: agent ? `${agent.firstName} ${agent.lastName}` : null,
-              assignedAt: assignment?.assignedAt ? new Date(assignment.assignedAt) : null
-            }
-          })
+              assignedAt: assignment?.assignedAt
+                ? new Date(assignment.assignedAt)
+                : null,
+            };
+          });
 
-          setAssignments(assignmentRecords)
+          setAssignments(assignmentRecords);
         } else {
           // In production, fetch from API
           const [assignmentsRes, agentsRes] = await Promise.all([
-            fetch('/api/admin/assignments'),
-            fetch('/api/agents?active=true')
-          ])
+            fetch("/api/admin/assignments"),
+            fetch("/api/agents?active=true"),
+          ]);
 
           if (assignmentsRes.ok && agentsRes.ok) {
-            const assignmentsData = await assignmentsRes.json()
-            const agentsData = await agentsRes.json()
-            
-            setAssignments(assignmentsData.data || [])
-            setAgents(agentsData.data || [])
+            const assignmentsData = await assignmentsRes.json();
+            const agentsData = await agentsRes.json();
+
+            setAssignments(assignmentsData.data || []);
+            setAgents(agentsData.data || []);
           }
         }
       } catch (error) {
-        console.error('Error loading assignments:', error)
+        console.error("Error loading assignments:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadData()
-  }, [])
+    loadData();
+  }, []);
 
   // Filter assignments
-  const filteredAssignments = assignments.filter(assignment => {
+  const filteredAssignments = assignments.filter((assignment) => {
     // Apply search filter
     if (searchTerm) {
-      const search = searchTerm.toLowerCase()
-      if (!assignment.userName.toLowerCase().includes(search) &&
-          !assignment.userEmail.toLowerCase().includes(search) &&
-          !(assignment.agentName && assignment.agentName.toLowerCase().includes(search))) {
-        return false
+      const search = searchTerm.toLowerCase();
+      if (
+        !assignment.userName.toLowerCase().includes(search) &&
+        !assignment.userEmail.toLowerCase().includes(search) &&
+        !(
+          assignment.agentName &&
+          assignment.agentName.toLowerCase().includes(search)
+        )
+      ) {
+        return false;
       }
     }
 
     // Apply status filter
-    if (filterType === 'assigned' && !assignment.agentId) return false
-    if (filterType === 'unassigned' && assignment.agentId) return false
+    if (filterType === "assigned" && !assignment.agentId) return false;
+    if (filterType === "unassigned" && assignment.agentId) return false;
 
-    return true
-  })
+    return true;
+  });
 
   const handleSelectUser = (userId: string) => {
-    setSelectedUsers(prev => 
-      prev.includes(userId) 
-        ? prev.filter(id => id !== userId)
-        : [...prev, userId]
-    )
-  }
+    setSelectedUsers((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId],
+    );
+  };
 
   const handleSelectAll = () => {
     if (selectedUsers.length === filteredAssignments.length) {
-      setSelectedUsers([])
+      setSelectedUsers([]);
     } else {
-      setSelectedUsers(filteredAssignments.map(a => a.userId))
+      setSelectedUsers(filteredAssignments.map((a) => a.userId));
     }
-  }
+  };
 
   const handleBulkAssign = async () => {
     if (!selectedAgentId || selectedUsers.length === 0) {
-      alert('Please select users and an agent')
-      return
+      alert("Please select users and an agent");
+      return;
     }
 
-    setAssigning(true)
+    setAssigning(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
       if (isDemoMode) {
         // Update demo assignments
-        const storedAssignments = localStorage.getItem('heloc_demo_user_agent_assignments')
-        const assignmentData = storedAssignments ? JSON.parse(storedAssignments) : []
+        const storedAssignments = localStorage.getItem(
+          "heloc_demo_user_agent_assignments",
+        );
+        const assignmentData = storedAssignments
+          ? JSON.parse(storedAssignments)
+          : [];
 
         // Update or create assignments
-        selectedUsers.forEach(userId => {
-          const existingIndex = assignmentData.findIndex((a: any) => a.userId === userId)
+        selectedUsers.forEach((userId) => {
+          const existingIndex = assignmentData.findIndex(
+            (a: any) => a.userId === userId,
+          );
           const assignment = {
             userId,
             agentId: selectedAgentId,
-            assignmentType: 'primary',
-            assignedAt: new Date()
-          }
+            assignmentType: "primary",
+            assignedAt: new Date(),
+          };
 
           if (existingIndex >= 0) {
-            assignmentData[existingIndex] = assignment
+            assignmentData[existingIndex] = assignment;
           } else {
-            assignmentData.push(assignment)
+            assignmentData.push(assignment);
           }
-        })
+        });
 
-        localStorage.setItem('heloc_demo_user_agent_assignments', JSON.stringify(assignmentData))
+        localStorage.setItem(
+          "heloc_demo_user_agent_assignments",
+          JSON.stringify(assignmentData),
+        );
 
         // Update UI
-        const agent = agents.find(a => a.id === selectedAgentId)
-        setAssignments(prev => prev.map(assignment => {
-          if (selectedUsers.includes(assignment.userId)) {
-            return {
-              ...assignment,
-              agentId: selectedAgentId,
-              agentName: agent ? `${agent.firstName} ${agent.lastName}` : null,
-              assignedAt: new Date()
+        const agent = agents.find((a) => a.id === selectedAgentId);
+        setAssignments((prev) =>
+          prev.map((assignment) => {
+            if (selectedUsers.includes(assignment.userId)) {
+              return {
+                ...assignment,
+                agentId: selectedAgentId,
+                agentName: agent
+                  ? `${agent.firstName} ${agent.lastName}`
+                  : null,
+                assignedAt: new Date(),
+              };
             }
-          }
-          return assignment
-        }))
+            return assignment;
+          }),
+        );
 
-        alert(`Successfully assigned ${selectedUsers.length} users to ${agent?.firstName} ${agent?.lastName}`)
-        setSelectedUsers([])
-        setSelectedAgentId(null)
+        alert(
+          `Successfully assigned ${selectedUsers.length} users to ${agent?.firstName} ${agent?.lastName}`,
+        );
+        setSelectedUsers([]);
+        setSelectedAgentId(null);
       } else {
         // In production, update via API
-        const response = await fetch('/api/admin/assignments/bulk', {
-          method: 'POST',
+        const response = await fetch("/api/admin/assignments/bulk", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userIds: selectedUsers,
-            agentId: selectedAgentId
+            agentId: selectedAgentId,
           }),
-        })
+        });
 
         if (response.ok) {
           // Reload assignments
-          window.location.reload()
+          window.location.reload();
         } else {
-          throw new Error('Failed to assign users')
+          throw new Error("Failed to assign users");
         }
       }
     } catch (error) {
-      console.error('Error assigning users:', error)
-      alert('Failed to assign users')
+      console.error("Error assigning users:", error);
+      alert("Failed to assign users");
     } finally {
-      setAssigning(false)
+      setAssigning(false);
     }
-  }
+  };
 
-  const unassignedCount = assignments.filter(a => !a.agentId).length
+  const unassignedCount = assignments.filter((a) => !a.agentId).length;
 
   return (
     <div>
@@ -233,8 +295,8 @@ export default function UserAssignmentsPage() {
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-yellow-600" />
             <p className="text-sm text-yellow-800">
-              <strong>{unassignedCount} users</strong> are not assigned to any agent.
-              Use the bulk assign feature below to assign them.
+              <strong>{unassignedCount} users</strong> are not assigned to any
+              agent. Use the bulk assign feature below to assign them.
             </p>
           </div>
         </div>
@@ -263,7 +325,11 @@ export default function UserAssignmentsPage() {
               <Filter className="h-5 w-5 text-gray-400" />
               <select
                 value={filterType}
-                onChange={(e) => setFilterType(e.target.value as 'all' | 'assigned' | 'unassigned')}
+                onChange={(e) =>
+                  setFilterType(
+                    e.target.value as "all" | "assigned" | "unassigned",
+                  )
+                }
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">All Users</option>
@@ -277,16 +343,19 @@ export default function UserAssignmentsPage() {
           {selectedUsers.length > 0 && (
             <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <p className="text-sm text-gray-600">
-                {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
+                {selectedUsers.length} user{selectedUsers.length > 1 ? "s" : ""}{" "}
+                selected
               </p>
               <div className="flex items-center gap-2">
                 <select
-                  value={selectedAgentId || ''}
-                  onChange={(e) => setSelectedAgentId(parseInt(e.target.value) || null)}
+                  value={selectedAgentId || ""}
+                  onChange={(e) =>
+                    setSelectedAgentId(parseInt(e.target.value) || null)
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Agent</option>
-                  {agents.map(agent => (
+                  {agents.map((agent) => (
                     <option key={agent.id} value={agent.id}>
                       {agent.firstName} {agent.lastName}
                     </option>
@@ -297,7 +366,7 @@ export default function UserAssignmentsPage() {
                   disabled={!selectedAgentId || assigning}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {assigning ? 'Assigning...' : 'Assign'}
+                  {assigning ? "Assigning..." : "Assign"}
                 </button>
               </div>
             </div>
@@ -320,7 +389,9 @@ export default function UserAssignmentsPage() {
         ) : filteredAssignments.length === 0 ? (
           <div className="p-8 text-center">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No users found matching your criteria</p>
+            <p className="text-gray-600">
+              No users found matching your criteria
+            </p>
           </div>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">
@@ -329,7 +400,9 @@ export default function UserAssignmentsPage() {
                 <th className="px-6 py-3 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedUsers.length === filteredAssignments.length}
+                    checked={
+                      selectedUsers.length === filteredAssignments.length
+                    }
                     onChange={handleSelectAll}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
@@ -364,37 +437,40 @@ export default function UserAssignmentsPage() {
                       <div className="text-sm font-medium text-gray-900">
                         {assignment.userName}
                       </div>
-                      <div className="text-sm text-gray-500">{assignment.userEmail}</div>
+                      <div className="text-sm text-gray-500">
+                        {assignment.userEmail}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {assignment.agentName ? (
-                      <span className="text-sm text-gray-900">{assignment.agentName}</span>
+                      <span className="text-sm text-gray-900">
+                        {assignment.agentName}
+                      </span>
                     ) : (
                       <span className="text-sm text-red-600">Unassigned</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {assignment.assignedAt 
+                    {assignment.assignedAt
                       ? new Date(assignment.assignedAt).toLocaleDateString()
-                      : '-'
-                    }
+                      : "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <select
-                      value={assignment.agentId || ''}
+                      value={assignment.agentId || ""}
                       onChange={async (e) => {
-                        const newAgentId = parseInt(e.target.value) || null
+                        const newAgentId = parseInt(e.target.value) || null;
                         if (newAgentId !== assignment.agentId) {
-                          setSelectedUsers([assignment.userId])
-                          setSelectedAgentId(newAgentId)
-                          await handleBulkAssign()
+                          setSelectedUsers([assignment.userId]);
+                          setSelectedAgentId(newAgentId);
+                          await handleBulkAssign();
                         }
                       }}
                       className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Unassigned</option>
-                      {agents.map(agent => (
+                      {agents.map((agent) => (
                         <option key={agent.id} value={agent.id}>
                           {agent.firstName} {agent.lastName}
                         </option>
@@ -408,5 +484,5 @@ export default function UserAssignmentsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

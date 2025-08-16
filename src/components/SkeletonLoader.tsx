@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 
 interface SkeletonLoaderProps {
-  className?: string
-  lines?: number
-  height?: string
+  className?: string;
+  lines?: number;
+  height?: string;
 }
 
-export default function SkeletonLoader({ 
-  className = '', 
-  lines = 3, 
-  height = 'h-4' 
+export default function SkeletonLoader({
+  className = "",
+  lines = 3,
+  height = "h-4",
 }: SkeletonLoaderProps) {
   return (
     <div className={`animate-pulse ${className}`}>
@@ -17,17 +17,15 @@ export default function SkeletonLoader({
         <div
           key={index}
           className={`bg-gray-200 rounded ${height} ${
-            index === lines - 1 ? '' : 'mb-3'
-          } ${
-            index === lines - 1 ? 'w-3/4' : 'w-full'
-          }`}
+            index === lines - 1 ? "" : "mb-3"
+          } ${index === lines - 1 ? "w-3/4" : "w-full"}`}
         ></div>
       ))}
     </div>
-  )
+  );
 }
 
-export function CardSkeleton({ className = '' }: { className?: string }) {
+export function CardSkeleton({ className = "" }: { className?: string }) {
   return (
     <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
       <div className="animate-pulse">
@@ -43,10 +41,10 @@ export function CardSkeleton({ className = '' }: { className?: string }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export function ChartSkeleton({ className = '' }: { className?: string }) {
+export function ChartSkeleton({ className = "" }: { className?: string }) {
   return (
     <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
       <div className="animate-pulse">
@@ -54,20 +52,22 @@ export function ChartSkeleton({ className = '' }: { className?: string }) {
         <div className="h-64 bg-gray-200 rounded"></div>
       </div>
     </div>
-  )
+  );
 }
 
-export function TableSkeleton({ 
-  rows = 5, 
-  columns = 4, 
-  className = '' 
-}: { 
-  rows?: number
-  columns?: number
-  className?: string 
+export function TableSkeleton({
+  rows = 5,
+  columns = 4,
+  className = "",
+}: {
+  rows?: number;
+  columns?: number;
+  className?: string;
 }) {
   return (
-    <div className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}>
+    <div
+      className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}
+    >
       <div className="animate-pulse">
         {/* Header */}
         <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
@@ -91,5 +91,5 @@ export function TableSkeleton({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,17 +1,22 @@
-import React from 'react'
-import { Tooltip } from '../design-system/Tooltip'
-import { CurrencyInput, PercentageInput, NumericInput, FormInput } from './FormInput'
+import React from "react";
+import { Tooltip } from "../design-system/Tooltip";
+import {
+  CurrencyInput,
+  PercentageInput,
+  NumericInput,
+  FormInput,
+} from "./FormInput";
 
 interface FormFieldWithTooltipProps {
-  name: string
-  register: any
-  errors: any
-  rules?: any
-  label?: string
-  placeholder?: string
-  disabled?: boolean
-  tooltip?: string
-  type?: 'currency' | 'percentage' | 'numeric' | 'text'
+  name: string;
+  register: any;
+  errors: any;
+  rules?: any;
+  label?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  tooltip?: string;
+  type?: "currency" | "percentage" | "numeric" | "text";
 }
 
 // Contextual help content for different fields
@@ -114,33 +119,33 @@ const FIELD_HELP_CONTENT: Record<string, string> = {
         <li>Higher amounts = faster payoff</li>
       </ul>
     </div>
-  `
-}
+  `,
+};
 
 export function FormFieldWithTooltip({
   name,
-  type = 'text',
+  type = "text",
   tooltip,
   label,
   ...props
 }: FormFieldWithTooltipProps) {
-  const helpContent = tooltip || FIELD_HELP_CONTENT[name] || ''
-  
+  const helpContent = tooltip || FIELD_HELP_CONTENT[name] || "";
+
   const renderInput = () => {
     switch (type) {
-      case 'currency':
-        return <CurrencyInput name={name} label={label} {...props} />
-      case 'percentage':
-        return <PercentageInput name={name} label={label} {...props} />
-      case 'numeric':
-        return <NumericInput name={name} label={label} {...props} />
+      case "currency":
+        return <CurrencyInput name={name} label={label} {...props} />;
+      case "percentage":
+        return <PercentageInput name={name} label={label} {...props} />;
+      case "numeric":
+        return <NumericInput name={name} label={label} {...props} />;
       default:
-        return <FormInput name={name} label={label} {...props} />
+        return <FormInput name={name} label={label} {...props} />;
     }
-  }
+  };
 
   if (!helpContent) {
-    return renderInput()
+    return renderInput();
   }
 
   return (
@@ -157,23 +162,27 @@ export function FormFieldWithTooltip({
           aria-label={`Help for ${label || name}`}
         >
           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+              clipRule="evenodd"
+            />
           </svg>
         </button>
       </Tooltip>
     </div>
-  )
+  );
 }
 
 // Export individual field components with tooltips
 export function CurrencyFieldWithTooltip(props: FormFieldWithTooltipProps) {
-  return <FormFieldWithTooltip {...props} type="currency" />
+  return <FormFieldWithTooltip {...props} type="currency" />;
 }
 
 export function PercentageFieldWithTooltip(props: FormFieldWithTooltipProps) {
-  return <FormFieldWithTooltip {...props} type="percentage" />
+  return <FormFieldWithTooltip {...props} type="percentage" />;
 }
 
 export function NumericFieldWithTooltip(props: FormFieldWithTooltipProps) {
-  return <FormFieldWithTooltip {...props} type="numeric" />
+  return <FormFieldWithTooltip {...props} type="numeric" />;
 }

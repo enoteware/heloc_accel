@@ -1,100 +1,102 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useUser } from '@stackframe/stack'
-import { Icon } from '@/components/Icons'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@stackframe/stack";
+import { Icon } from "@/components/Icons";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface ScenarioSummary {
-  id: string
-  name: string
-  description?: string
-  created_at: string
-  updated_at: string
-  traditional_payoff_months?: number
-  heloc_payoff_months?: number
-  time_saved_months?: number
-  interest_saved?: number
-  percentage_interest_saved?: number
+  id: string;
+  name: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+  traditional_payoff_months?: number;
+  heloc_payoff_months?: number;
+  time_saved_months?: number;
+  interest_saved?: number;
+  percentage_interest_saved?: number;
 }
 
 export default function ScenariosPage() {
-  const user = useUser()
-  const router = useRouter()
-  const t = useTranslations('scenarios')
-  const [scenarios, setScenarios] = useState<ScenarioSummary[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const user = useUser();
+  const router = useRouter();
+  const t = useTranslations("scenarios");
+  const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
-      router.push('/handler/sign-in')
-      return
+      router.push("/handler/sign-in");
+      return;
     }
 
-    fetchScenarios()
-  }, [user, router])
+    fetchScenarios();
+  }, [user, router]);
 
   const fetchScenarios = async () => {
     try {
-      const response = await fetch('/api/scenarios')
+      const response = await fetch("/api/scenarios");
       if (!response.ok) {
-        throw new Error('Failed to fetch scenarios')
+        throw new Error("Failed to fetch scenarios");
       }
-      const data = await response.json()
-      setScenarios(data.scenarios)
+      const data = await response.json();
+      setScenarios(data.scenarios);
     } catch (error) {
-      console.error('Error fetching scenarios:', error)
-      setError(error instanceof Error ? error.message : 'Failed to load scenarios')
+      console.error("Error fetching scenarios:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to load scenarios",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this scenario?')) {
-      return
+    if (!confirm("Are you sure you want to delete this scenario?")) {
+      return;
     }
 
-    setDeletingId(id)
+    setDeletingId(id);
     try {
       const response = await fetch(`/api/scenarios/${id}`, {
-        method: 'DELETE'
-      })
-      
+        method: "DELETE",
+      });
+
       if (!response.ok) {
-        throw new Error('Failed to delete scenario')
+        throw new Error("Failed to delete scenario");
       }
-      
+
       // Remove from local state
-      setScenarios(scenarios.filter(s => s.id !== id))
+      setScenarios(scenarios.filter((s) => s.id !== id));
     } catch (error) {
-      console.error('Error deleting scenario:', error)
-      alert('Failed to delete scenario')
+      console.error("Error deleting scenario:", error);
+      alert("Failed to delete scenario");
     } finally {
-      setDeletingId(null)
+      setDeletingId(null);
     }
-  }
+  };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    })
-  }
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   if (loading) {
     return (
@@ -104,7 +106,7 @@ export default function ScenariosPage() {
           <p className="mt-4 text-gray-600">Loading scenarios...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -143,12 +145,17 @@ export default function ScenariosPage() {
         {scenarios.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <div className="max-w-md mx-auto">
-              <Icon name="calculator" size="lg" className="text-gray-400 mx-auto mb-4" />
+              <Icon
+                name="calculator"
+                size="lg"
+                className="text-gray-400 mx-auto mb-4"
+              />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No scenarios yet
               </h3>
               <p className="text-gray-600 mb-6">
-                Create your first HELOC analysis scenario to see how much you can save on your mortgage.
+                Create your first HELOC analysis scenario to see how much you
+                can save on your mortgage.
               </p>
               <Link
                 href="/calculator"
@@ -195,25 +202,31 @@ export default function ScenariosPage() {
                   <div className="space-y-3 mb-4">
                     {scenario.interest_saved && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">Interest Saved:</span>
+                        <span className="text-sm text-gray-600">
+                          Interest Saved:
+                        </span>
                         <span className="text-sm font-semibold text-green-600">
                           {formatCurrency(scenario.interest_saved)}
                         </span>
                       </div>
                     )}
-                    
+
                     {scenario.time_saved_months && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">Time Saved:</span>
+                        <span className="text-sm text-gray-600">
+                          Time Saved:
+                        </span>
                         <span className="text-sm font-semibold text-blue-600">
                           {scenario.time_saved_months} months
                         </span>
                       </div>
                     )}
-                    
+
                     {scenario.percentage_interest_saved && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">Interest Reduction:</span>
+                        <span className="text-sm text-gray-600">
+                          Interest Reduction:
+                        </span>
                         <span className="text-sm font-semibold text-purple-600">
                           {scenario.percentage_interest_saved.toFixed(1)}%
                         </span>
@@ -251,5 +264,5 @@ export default function ScenariosPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

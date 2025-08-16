@@ -33,17 +33,18 @@
 
 ```javascript
 // Test auth status
-fetch('/api/test-auth', { credentials: 'include' })
-  .then(r => r.json())
-  .then(console.log)
+fetch("/api/test-auth", { credentials: "include" })
+  .then((r) => r.json())
+  .then(console.log);
 
 // Test scenarios API
-fetch('/api/scenarios', { credentials: 'include' })
-  .then(r => r.json())
-  .then(console.log)
+fetch("/api/scenarios", { credentials: "include" })
+  .then((r) => r.json())
+  .then(console.log);
 ```
 
 ## Expected Results:
+
 - Auth should show authenticated: true with user details
 - Scenarios should return an array of your saved scenarios
 

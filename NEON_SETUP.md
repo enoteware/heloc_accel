@@ -22,10 +22,11 @@ This guide will help you set up NEON PostgreSQL for the HELOC Accelerator projec
 
 1. Open `.env.local` in your project root
 2. Replace the `DATABASE_URL` placeholder with your actual NEON connection string:
+
    ```bash
    # Replace this line:
    DATABASE_URL=postgresql://[username]:[password]@[endpoint]/[database]?sslmode=require
-   
+
    # With your actual NEON connection string:
    DATABASE_URL=postgresql://your_username:your_password@ep-example-123456.region.aws.neon.tech/neondb?sslmode=require
    ```
@@ -39,6 +40,7 @@ npm run db:neon:test
 ```
 
 You should see:
+
 - ✅ Connected to NEON successfully!
 - Current time and database version
 - Number of tables (should be 0 initially)
@@ -52,6 +54,7 @@ npm run db:neon:setup
 ```
 
 This will:
+
 - Create all tables (users, scenarios, calculation_results, etc.)
 - Set up indexes for performance
 - Insert sample data for testing
@@ -66,6 +69,7 @@ npm run dev
 ```
 
 Then visit `http://localhost:3000` and verify:
+
 - ✅ Application loads without database errors
 - ✅ Demo mode works (if enabled)
 - ✅ User authentication works

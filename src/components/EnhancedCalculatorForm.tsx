@@ -1,23 +1,27 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { CalculationInput } from '@/lib/types'
-import { useCalculatorForm } from '@/hooks/useCalculatorForm'
-import { CurrencyFieldWithTooltip, PercentageFieldWithTooltip, NumericFieldWithTooltip } from '@/components/form/FormFieldWithTooltip'
-import { Button } from './design-system/Button'
-import { Card, CardContent, CardHeader, CardTitle } from './design-system/Card'
-import { Progress } from './design-system/Progress'
+import React from "react";
+import { CalculationInput } from "@/lib/types";
+import { useCalculatorForm } from "@/hooks/useCalculatorForm";
+import {
+  CurrencyFieldWithTooltip,
+  PercentageFieldWithTooltip,
+  NumericFieldWithTooltip,
+} from "@/components/form/FormFieldWithTooltip";
+import { Button } from "./design-system/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "./design-system/Card";
+import { Progress } from "./design-system/Progress";
 
 interface EnhancedCalculatorFormProps {
-  onSubmit: (data: CalculationInput) => void | Promise<void>
-  loading?: boolean
-  initialData?: Partial<CalculationInput>
+  onSubmit: (data: CalculationInput) => void | Promise<void>;
+  loading?: boolean;
+  initialData?: Partial<CalculationInput>;
 }
 
-export default function EnhancedCalculatorForm({ 
-  onSubmit, 
-  loading = false, 
-  initialData = {} 
+export default function EnhancedCalculatorForm({
+  onSubmit,
+  loading = false,
+  initialData = {},
 }: EnhancedCalculatorFormProps) {
   const {
     register,
@@ -27,46 +31,52 @@ export default function EnhancedCalculatorForm({
     touchedFields,
     validationRules,
     getFormProgress,
-    setValue
-  } = useCalculatorForm()
+    setValue,
+  } = useCalculatorForm();
 
-  const progress = getFormProgress()
+  const progress = getFormProgress();
 
   const handlePrefillDemo = () => {
     const demoData = {
-      currentMortgageBalance: '$350,000',
-      currentInterestRate: '6.5',
-      remainingTermMonths: '300',
-      monthlyPayment: '$2,347',
-      helocLimit: '$100,000',
-      helocInterestRate: '7.25',
-      monthlyIncome: '$8,500',
-      monthlyExpenses: '$3,900'
-    }
+      currentMortgageBalance: "$350,000",
+      currentInterestRate: "6.5",
+      remainingTermMonths: "300",
+      monthlyPayment: "$2,347",
+      helocLimit: "$100,000",
+      helocInterestRate: "7.25",
+      monthlyIncome: "$8,500",
+      monthlyExpenses: "$3,900",
+    };
 
     Object.entries(demoData).forEach(([field, value]) => {
-      setValue(field as any, value, { shouldValidate: true, shouldTouch: true })
-    })
-  }
+      setValue(field as any, value, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
+    });
+  };
 
   const handleClearForm = () => {
     const emptyData = {
-      currentMortgageBalance: '',
-      currentInterestRate: '',
-      remainingTermMonths: '',
-      monthlyPayment: '',
-      helocLimit: '',
-      helocInterestRate: '',
-      helocAvailableCredit: '',
-      monthlyIncome: '',
-      monthlyExpenses: '',
-      monthlyDiscretionaryIncome: ''
-    }
+      currentMortgageBalance: "",
+      currentInterestRate: "",
+      remainingTermMonths: "",
+      monthlyPayment: "",
+      helocLimit: "",
+      helocInterestRate: "",
+      helocAvailableCredit: "",
+      monthlyIncome: "",
+      monthlyExpenses: "",
+      monthlyDiscretionaryIncome: "",
+    };
 
     Object.entries(emptyData).forEach(([field, value]) => {
-      setValue(field as any, value, { shouldValidate: false, shouldTouch: false })
-    })
-  }
+      setValue(field as any, value, {
+        shouldValidate: false,
+        shouldTouch: false,
+      });
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -74,8 +84,12 @@ export default function EnhancedCalculatorForm({
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Form Progress</span>
-            <span className="text-sm text-gray-500">{progress.completed}/{progress.total} fields</span>
+            <span className="text-sm font-medium text-gray-700">
+              Form Progress
+            </span>
+            <span className="text-sm text-gray-500">
+              {progress.completed}/{progress.total} fields
+            </span>
           </div>
           <Progress value={progress.percentage} className="h-2" />
         </CardContent>
@@ -199,11 +213,12 @@ export default function EnhancedCalculatorForm({
                 disabled
               />
             </div>
-            
+
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-800">
-                <strong>Discretionary Income</strong> is automatically calculated as: 
-                Monthly Income - Monthly Expenses - Mortgage Payment. This amount will be used for HELOC acceleration.
+                <strong>Discretionary Income</strong> is automatically
+                calculated as: Monthly Income - Monthly Expenses - Mortgage
+                Payment. This amount will be used for HELOC acceleration.
               </p>
             </div>
           </CardContent>
@@ -219,9 +234,9 @@ export default function EnhancedCalculatorForm({
                 loading={loading}
                 className="flex-1"
               >
-                {loading ? 'Calculating...' : 'Calculate HELOC Acceleration'}
+                {loading ? "Calculating..." : "Calculate HELOC Acceleration"}
               </Button>
-              
+
               <Button
                 type="button"
                 variant="outline"
@@ -230,7 +245,7 @@ export default function EnhancedCalculatorForm({
               >
                 Demo Data
               </Button>
-              
+
               <Button
                 type="button"
                 variant="outline"
@@ -240,11 +255,12 @@ export default function EnhancedCalculatorForm({
                 Clear Form
               </Button>
             </div>
-            
+
             {!isValid && Object.keys(touchedFields).length > 0 && (
               <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800">
-                  Please complete all required fields and fix any validation errors before calculating.
+                  Please complete all required fields and fix any validation
+                  errors before calculating.
                 </p>
               </div>
             )}
@@ -252,5 +268,5 @@ export default function EnhancedCalculatorForm({
         </Card>
       </form>
     </div>
-  )
+  );
 }

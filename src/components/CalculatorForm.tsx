@@ -1,20 +1,32 @@
-'use client'
+"use client";
 
-import React, { useState, useMemo, useEffect } from 'react'
-import type { CalculatorValidationInput, ValidationError } from '@/lib/validation'
-import { Icon } from '@/components/Icons'
-import { safeLTVCalculation, isMIPRequired, calculateSuggestedMonthlyPMI } from '@/lib/calculations'
-import { FieldError } from '@/components/ValidationErrorDisplay'
-import { formatWithCommas } from '@/lib/format-utils'
+import React, { useState, useMemo, useEffect } from "react";
+import type {
+  CalculatorValidationInput,
+  ValidationError,
+} from "@/lib/validation";
+import { Icon } from "@/components/Icons";
+import {
+  safeLTVCalculation,
+  isMIPRequired,
+  calculateSuggestedMonthlyPMI,
+} from "@/lib/calculations";
+import { FieldError } from "@/components/ValidationErrorDisplay";
+import { formatWithCommas } from "@/lib/format-utils";
 
 interface CalculatorFormProps {
-  onSubmit: (data: CalculatorValidationInput) => void
-  loading?: boolean
-  initialData?: Partial<CalculatorValidationInput>
-  validationErrors?: ValidationError[]
+  onSubmit: (data: CalculatorValidationInput) => void;
+  loading?: boolean;
+  initialData?: Partial<CalculatorValidationInput>;
+  validationErrors?: ValidationError[];
 }
 
-export default function CalculatorForm({ onSubmit, loading = false, initialData = {}, validationErrors = [] }: CalculatorFormProps) {
+export default function CalculatorForm({
+  onSubmit,
+  loading = false,
+  initialData = {},
+  validationErrors = [],
+}: CalculatorFormProps) {
   const [formData, setFormData] = useState<CalculatorValidationInput>({
     currentMortgageBalance: initialData.currentMortgageBalance || 0,
     currentInterestRate: initialData.currentInterestRate || 0,
@@ -33,25 +45,28 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
     monthlyExpenses: initialData.monthlyExpenses || 0,
     monthlyDiscretionaryIncome: initialData.monthlyDiscretionaryIncome || 0,
     scenarioName: initialData.scenarioName,
-    description: initialData.description
-  })
+    description: initialData.description,
+  });
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Update errors when validation errors are passed from parent
   useEffect(() => {
     if (validationErrors.length > 0) {
-      const errorMap: Record<string, string> = {}
-      validationErrors.forEach(error => {
-        errorMap[error.field] = error.message
-      })
-      setErrors(errorMap)
+      const errorMap: Record<string, string> = {};
+      validationErrors.forEach((error) => {
+        errorMap[error.field] = error.message;
+      });
+      setErrors(errorMap);
     }
-  }, [validationErrors])
+  }, [validationErrors]);
 
   // Calculate LTV ratio and determine if MIP/PMI is required
   const ltvInfo = useMemo(() => {
-    const ltvResult = safeLTVCalculation(formData.currentMortgageBalance, formData.propertyValue)
+    const ltvResult = safeLTVCalculation(
+      formData.currentMortgageBalance,
+      formData.propertyValue,
+    );
 
     if (!ltvResult.success || !ltvResult.canCalculate) {
       return {
@@ -59,58 +74,65 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         isMIPRequired: false,
         suggestedMonthlyPMI: 0,
         canCalculateLTV: false,
-        error: ltvResult.error
-      }
+        error: ltvResult.error,
+      };
     }
 
-    const mipRequired = isMIPRequired(ltvResult.ltvRatio)
+    const mipRequired = isMIPRequired(ltvResult.ltvRatio);
     const suggestedMonthlyPMI = calculateSuggestedMonthlyPMI(
       Number(formData.currentMortgageBalance) || 0,
-      ltvResult.ltvRatio
-    )
+      ltvResult.ltvRatio,
+    );
 
     return {
       ltvRatio: ltvResult.ltvRatio,
       isMIPRequired: mipRequired,
       suggestedMonthlyPMI,
       canCalculateLTV: true,
-      error: undefined
-    }
-  }, [formData.currentMortgageBalance, formData.propertyValue])
+      error: undefined,
+    };
+  }, [formData.currentMortgageBalance, formData.propertyValue]);
 
-  const handleInputChange = (field: keyof CalculatorValidationInput, value: string | number) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof CalculatorValidationInput,
+    value: string | number,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }))
+      [field]: value,
+    }));
 
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [field]: ''
-      }))
+        [field]: "",
+      }));
     }
-  }
+  };
 
   // Automatically update PMI when LTV changes
   useEffect(() => {
     if (ltvInfo.canCalculateLTV) {
       // If LTV is 78% or below, automatically set PMI to 0
-      if (ltvInfo.ltvRatio <= 78 && formData.pmiMonthly && formData.pmiMonthly > 0) {
-        setFormData(prev => ({
+      if (
+        ltvInfo.ltvRatio <= 78 &&
+        formData.pmiMonthly &&
+        formData.pmiMonthly > 0
+      ) {
+        setFormData((prev) => ({
           ...prev,
-          pmiMonthly: 0
-        }))
+          pmiMonthly: 0,
+        }));
       }
     }
-  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV])
+  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrors({})
-    onSubmit(formData)
-  }
+    e.preventDefault();
+    setErrors({});
+    onSubmit(formData);
+  };
 
   const handlePrefillDemo = () => {
     const demoData: CalculatorValidationInput = {
@@ -130,13 +152,13 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
       monthlyNetIncome: 6200,
       monthlyExpenses: 3900,
       monthlyDiscretionaryIncome: 2300,
-      scenarioName: 'Demo Scenario',
-      description: 'Sample data for testing the HELOC acceleration strategy'
-    }
+      scenarioName: "Demo Scenario",
+      description: "Sample data for testing the HELOC acceleration strategy",
+    };
 
-    setFormData(demoData)
-    setErrors({})
-  }
+    setFormData(demoData);
+    setErrors({});
+  };
 
   const handleClearForm = () => {
     const emptyData: CalculatorValidationInput = {
@@ -157,21 +179,21 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
       monthlyExpenses: 0,
       monthlyDiscretionaryIncome: 0,
       scenarioName: undefined,
-      description: undefined
-    }
+      description: undefined,
+    };
 
-    setFormData(emptyData)
-    setErrors({})
-  }
+    setFormData(emptyData);
+    setErrors({});
+  };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value)
-  }
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -183,36 +205,56 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="currentMortgageBalance" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="currentMortgageBalance"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Current Mortgage Balance *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="currentMortgageBalance"
-                value={formData.currentMortgageBalance || ''}
-                onChange={(e) => handleInputChange('currentMortgageBalance', parseFloat(e.target.value) || 0)}
+                value={formData.currentMortgageBalance || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "currentMortgageBalance",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.currentMortgageBalance && (
-              <p className="mt-1 text-sm text-red-600">{errors.currentMortgageBalance}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.currentMortgageBalance}
+              </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="currentInterestRate" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="currentInterestRate"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Current Interest Rate * (%)
             </label>
             <div className="relative">
               <input
                 type="number"
                 id="currentInterestRate"
-                value={formData.currentInterestRate || ''}
-                onChange={(e) => handleInputChange('currentInterestRate', parseFloat(e.target.value) || 0)}
+                value={formData.currentInterestRate || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "currentInterestRate",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 step="0.01"
@@ -220,22 +262,34 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">%</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                %
+              </span>
             </div>
             {errors.currentInterestRate && (
-              <p className="mt-1 text-sm text-red-600">{errors.currentInterestRate}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.currentInterestRate}
+              </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="remainingTermMonths" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="remainingTermMonths"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Remaining Term (months) *
             </label>
             <input
               type="number"
               id="remainingTermMonths"
-              value={formData.remainingTermMonths || ''}
-              onChange={(e) => handleInputChange('remainingTermMonths', parseInt(e.target.value) || 0)}
+              value={formData.remainingTermMonths || ""}
+              onChange={(e) =>
+                handleInputChange(
+                  "remainingTermMonths",
+                  parseInt(e.target.value) || 0,
+                )
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
               placeholder=""
               min="1"
@@ -243,31 +297,47 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               required
             />
             {errors.remainingTermMonths && (
-              <p className="mt-1 text-sm text-red-600">{errors.remainingTermMonths}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.remainingTermMonths}
+              </p>
             )}
             <p className="mt-1 text-xs text-gray-700">
-              {formData.remainingTermMonths ? `${Math.round(formData.remainingTermMonths / 12 * 10) / 10} years` : ''}
+              {formData.remainingTermMonths
+                ? `${Math.round((formData.remainingTermMonths / 12) * 10) / 10} years`
+                : ""}
             </p>
           </div>
 
           <div>
-            <label htmlFor="monthlyPayment" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="monthlyPayment"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Current Monthly Payment *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="monthlyPayment"
-                value={formData.monthlyPayment || ''}
-                onChange={(e) => handleInputChange('monthlyPayment', parseFloat(e.target.value) || 0)}
+                value={formData.monthlyPayment || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "monthlyPayment",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyPayment && (
-              <p className="mt-1 text-sm text-red-600">{errors.monthlyPayment}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyPayment}
+              </p>
             )}
           </div>
         </div>
@@ -281,16 +351,26 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="helocLimit" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="helocLimit"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               HELOC Credit Limit *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="helocLimit"
-                value={formData.helocLimit || ''}
-                onChange={(e) => handleInputChange('helocLimit', parseFloat(e.target.value) || 0)}
+                value={formData.helocLimit || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "helocLimit",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
@@ -302,15 +382,23 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           </div>
 
           <div>
-            <label htmlFor="helocInterestRate" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="helocInterestRate"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               HELOC Interest Rate * (%)
             </label>
             <div className="relative">
               <input
                 type="number"
                 id="helocInterestRate"
-                value={formData.helocInterestRate || ''}
-                onChange={(e) => handleInputChange('helocInterestRate', parseFloat(e.target.value) || 0)}
+                value={formData.helocInterestRate || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "helocInterestRate",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 step="0.01"
@@ -318,10 +406,14 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">%</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                %
+              </span>
             </div>
             {errors.helocInterestRate && (
-              <p className="mt-1 text-sm text-red-600">{errors.helocInterestRate}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.helocInterestRate}
+              </p>
             )}
           </div>
         </div>
@@ -335,86 +427,134 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="monthlyGrossIncome" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="monthlyGrossIncome"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Gross Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="monthlyGrossIncome"
-                value={formData.monthlyGrossIncome || ''}
-                onChange={(e) => handleInputChange('monthlyGrossIncome', parseFloat(e.target.value) || 0)}
+                value={formData.monthlyGrossIncome || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "monthlyGrossIncome",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyGrossIncome && (
-              <p className="mt-1 text-sm text-red-600">{errors.monthlyGrossIncome}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyGrossIncome}
+              </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="monthlyNetIncome" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="monthlyNetIncome"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Net Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="monthlyNetIncome"
-                value={formData.monthlyNetIncome || ''}
-                onChange={(e) => handleInputChange('monthlyNetIncome', parseFloat(e.target.value) || 0)}
+                value={formData.monthlyNetIncome || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "monthlyNetIncome",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyNetIncome && (
-              <p className="mt-1 text-sm text-red-600">{errors.monthlyNetIncome}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyNetIncome}
+              </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="monthlyExpenses" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="monthlyExpenses"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Expenses *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="monthlyExpenses"
-                value={formData.monthlyExpenses || ''}
-                onChange={(e) => handleInputChange('monthlyExpenses', parseFloat(e.target.value) || 0)}
+                value={formData.monthlyExpenses || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "monthlyExpenses",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyExpenses && (
-              <p className="mt-1 text-sm text-red-600">{errors.monthlyExpenses}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyExpenses}
+              </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="monthlyDiscretionaryIncome" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="monthlyDiscretionaryIncome"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Discretionary Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="monthlyDiscretionaryIncome"
-                value={formData.monthlyDiscretionaryIncome || ''}
-                onChange={(e) => handleInputChange('monthlyDiscretionaryIncome', parseFloat(e.target.value) || 0)}
+                value={formData.monthlyDiscretionaryIncome || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "monthlyDiscretionaryIncome",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyDiscretionaryIncome && (
-              <p className="mt-1 text-sm text-red-600">{errors.monthlyDiscretionaryIncome}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyDiscretionaryIncome}
+              </p>
             )}
             <p className="mt-1 text-xs text-gray-700">
               Available for HELOC acceleration strategy
@@ -431,16 +571,26 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="propertyValue" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="propertyValue"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Original Purchase Price
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="propertyValue"
-                value={formData.propertyValue || ''}
-                onChange={(e) => handleInputChange('propertyValue', parseFloat(e.target.value) || 0)}
+                value={formData.propertyValue || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "propertyValue",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
               />
@@ -448,16 +598,26 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           </div>
 
           <div>
-            <label htmlFor="propertyTaxMonthly" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="propertyTaxMonthly"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Property Tax
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="propertyTaxMonthly"
-                value={formData.propertyTaxMonthly || ''}
-                onChange={(e) => handleInputChange('propertyTaxMonthly', parseFloat(e.target.value) || 0)}
+                value={formData.propertyTaxMonthly || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "propertyTaxMonthly",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
               />
@@ -465,16 +625,26 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           </div>
 
           <div>
-            <label htmlFor="insuranceMonthly" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="insuranceMonthly"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly Insurance
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="insuranceMonthly"
-                value={formData.insuranceMonthly || ''}
-                onChange={(e) => handleInputChange('insuranceMonthly', parseFloat(e.target.value) || 0)}
+                value={formData.insuranceMonthly || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "insuranceMonthly",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
               />
@@ -482,16 +652,26 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           </div>
 
           <div>
-            <label htmlFor="hoaFeesMonthly" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="hoaFeesMonthly"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Monthly HOA Fees
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                $
+              </span>
               <input
                 type="number"
                 id="hoaFeesMonthly"
-                value={formData.hoaFeesMonthly || ''}
-                onChange={(e) => handleInputChange('hoaFeesMonthly', parseFloat(e.target.value) || 0)}
+                value={formData.hoaFeesMonthly || ""}
+                onChange={(e) =>
+                  handleInputChange(
+                    "hoaFeesMonthly",
+                    parseFloat(e.target.value) || 0,
+                  )
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
                 placeholder=""
               />
@@ -503,12 +683,16 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
         {ltvInfo.canCalculateLTV && (
           <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-medium text-blue-900">Loan-to-Value Analysis</h4>
-              <span className={`text-sm font-semibold px-2 py-1 rounded ${
-                ltvInfo.isMIPRequired
-                  ? 'bg-orange-100 text-orange-800'
-                  : 'bg-green-100 text-green-800'
-              }`}>
+              <h4 className="text-sm font-medium text-blue-900">
+                Loan-to-Value Analysis
+              </h4>
+              <span
+                className={`text-sm font-semibold px-2 py-1 rounded ${
+                  ltvInfo.isMIPRequired
+                    ? "bg-orange-100 text-orange-800"
+                    : "bg-green-100 text-green-800"
+                }`}
+              >
                 LTV: {ltvInfo.ltvRatio.toFixed(1)}%
               </span>
             </div>
@@ -516,19 +700,19 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               {ltvInfo.ltvRatio > 80
                 ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
                 : ltvInfo.ltvRatio > 78
-                ? 'MIP/PMI may still be required (LTV between 78-80%). Check with your lender.'
-                : 'MIP/PMI is automatically removed when LTV reaches 78% or below.'
-              }
+                  ? "MIP/PMI may still be required (LTV between 78-80%). Check with your lender."
+                  : "MIP/PMI is automatically removed when LTV reaches 78% or below."}
             </p>
             {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
               <button
                 type="button"
                 onClick={() => {
-                  handleInputChange('pmiMonthly', ltvInfo.suggestedMonthlyPMI)
+                  handleInputChange("pmiMonthly", ltvInfo.suggestedMonthlyPMI);
                 }}
                 className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
               >
-                Use Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/mo
+                Use Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}
+                /mo
               </button>
             )}
           </div>
@@ -536,23 +720,32 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
 
         {/* Conditional PMI Field */}
         <div className="mt-4">
-          <label htmlFor="pmiMonthly" className={`block text-sm font-medium mb-1 ${
-            ltvInfo.isMIPRequired ? 'text-orange-700' : 'text-gray-700'
-          }`}>
+          <label
+            htmlFor="pmiMonthly"
+            className={`block text-sm font-medium mb-1 ${
+              ltvInfo.isMIPRequired ? "text-orange-700" : "text-gray-700"
+            }`}
+          >
             {ltvInfo.isMIPRequired ? "Monthly MIP/PMI *" : "Monthly MIP/PMI"}
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">$</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              $
+            </span>
             <input
               type="number"
               id="pmiMonthly"
-              value={formData.pmiMonthly || ''}
-              onChange={(e) => handleInputChange('pmiMonthly', parseFloat(e.target.value) || 0)}
+              value={formData.pmiMonthly || ""}
+              onChange={(e) =>
+                handleInputChange("pmiMonthly", parseFloat(e.target.value) || 0)
+              }
               className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
-                ltvInfo.isMIPRequired ? 'border-orange-300' : 'border-gray-300'
+                ltvInfo.isMIPRequired ? "border-orange-300" : "border-gray-300"
               }`}
               placeholder={
-                ltvInfo.canCalculateLTV && ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0
+                ltvInfo.canCalculateLTV &&
+                ltvInfo.isMIPRequired &&
+                ltvInfo.suggestedMonthlyPMI > 0
                   ? formatWithCommas(ltvInfo.suggestedMonthlyPMI)
                   : ""
               }
@@ -563,8 +756,7 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
               ? ltvInfo.isMIPRequired
                 ? "Required: Private Mortgage Insurance"
                 : "Optional: Private Mortgage Insurance (if still paying)"
-              : "Private Mortgage Insurance (if applicable)"
-            }
+              : "Private Mortgage Insurance (if applicable)"}
           </p>
         </div>
       </div>
@@ -602,9 +794,9 @@ export default function CalculatorForm({ onSubmit, loading = false, initialData 
           ) : (
             <Icon name="calculator" size="sm" />
           )}
-          <span>{loading ? 'Calculating...' : 'Calculate HELOC Strategy'}</span>
+          <span>{loading ? "Calculating..." : "Calculate HELOC Strategy"}</span>
         </button>
       </div>
     </form>
-  )
+  );
 }

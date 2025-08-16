@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import React from 'react';
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export const HeroHighlight = ({
   children,
@@ -26,8 +26,8 @@ export const HeroHighlight = ({
   return (
     <div
       className={cn(
-        'relative h-[24rem] md:h-[28rem] w-full group',
-        containerClassName
+        "relative h-[24rem] md:h-[28rem] w-full group",
+        containerClassName,
       )}
       onMouseMove={handleMouseMove}
     >
@@ -38,7 +38,7 @@ export const HeroHighlight = ({
           background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
         }}
       />
-      <div className={cn('relative z-20', className)}>{children}</div>
+      <div className={cn("relative z-20", className)}>{children}</div>
     </div>
   );
 };
@@ -53,24 +53,24 @@ export const Highlight = ({
   return (
     <motion.span
       initial={{
-        backgroundSize: '0% 100%',
+        backgroundSize: "0% 100%",
       }}
       animate={{
-        backgroundSize: '100% 100%',
+        backgroundSize: "100% 100%",
       }}
       transition={{
         duration: 2,
-        ease: 'linear',
+        ease: "linear",
         delay: 0.5,
       }}
       style={{
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'left center',
-        display: 'inline',
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "left center",
+        display: "inline",
       }}
       className={cn(
-        'relative inline-block pb-1 px-1 rounded-lg bg-gradient-to-r from-blue-300 to-blue-400 dark:from-blue-500 dark:to-blue-700',
-        className
+        "relative inline-block pb-1 px-1 rounded-lg bg-gradient-to-r from-blue-300 to-blue-400 dark:from-blue-500 dark:to-blue-700",
+        className,
       )}
     >
       {children}

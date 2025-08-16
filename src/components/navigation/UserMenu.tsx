@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useUser } from '@stackframe/stack';
-import { useRouter } from '@/i18n/routing';
-import { Dropdown, DropdownItem } from '@/components/design-system';
-import NavigationIcon from './NavigationIcon';
-import { cn } from '@/lib/utils';
-import { signOutAction } from '@/app/actions/auth';
+import React from "react";
+import { useUser } from "@stackframe/stack";
+import { useRouter } from "@/i18n/routing";
+import { Dropdown, DropdownItem } from "@/components/design-system";
+import NavigationIcon from "./NavigationIcon";
+import { cn } from "@/lib/utils";
+import { signOutAction } from "@/app/actions/auth";
 
 export interface UserMenuProps {
   className?: string;
-  placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+  placement?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
 }
 
 export const UserMenu: React.FC<UserMenuProps> = ({
   className,
-  placement = 'bottom-end',
+  placement = "bottom-end",
 }) => {
   const user = useUser();
   const session = user ? { user } : null;
-  const status = user ? 'authenticated' : 'unauthenticated';
+  const status = user ? "authenticated" : "unauthenticated";
   const router = useRouter();
 
   if (!session?.user) {
@@ -32,16 +32,16 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       return user.displayName;
     }
     if (user?.primaryEmail) {
-      return user.primaryEmail.split('@')[0];
+      return user.primaryEmail.split("@")[0];
     }
-    return 'User';
+    return "User";
   };
 
   // Get user initials for avatar
   const getUserInitials = () => {
     const name = getUserDisplayName();
-    
-    const parts = name.split(' ');
+
+    const parts = name.split(" ");
     if (parts.length >= 2) {
       return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
     }
@@ -54,25 +54,25 @@ export const UserMenu: React.FC<UserMenuProps> = ({
 
   const dropdownItems: DropdownItem[] = [
     {
-      id: 'profile',
-      label: 'Profile',
+      id: "profile",
+      label: "Profile",
       icon: <NavigationIcon name="user" size="sm" aria-hidden={true} />,
-      onClick: () => router.push('/profile'),
+      onClick: () => router.push("/profile"),
     },
     {
-      id: 'settings',
-      label: 'Settings',
+      id: "settings",
+      label: "Settings",
       icon: <NavigationIcon name="settings" size="sm" aria-hidden={true} />,
-      onClick: () => router.push('/profile'), // For now, settings go to profile
+      onClick: () => router.push("/profile"), // For now, settings go to profile
     },
     {
-      id: 'divider',
-      label: '',
+      id: "divider",
+      label: "",
       divider: true,
     },
     {
-      id: 'signout',
-      label: 'Sign Out',
+      id: "signout",
+      label: "Sign Out",
       icon: <NavigationIcon name="logout" size="sm" aria-hidden={true} />,
       onClick: handleSignOut,
     },
@@ -80,22 +80,26 @@ export const UserMenu: React.FC<UserMenuProps> = ({
 
   // User avatar trigger
   const userTrigger = (
-    <div className={cn(
-      'flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer',
-      'hover:bg-neutral-100 dark:hover:bg-neutral-800',
-      'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
-      'transition-all duration-200',
-      className
-    )}>
+    <div
+      className={cn(
+        "flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer",
+        "hover:bg-neutral-100 dark:hover:bg-neutral-800",
+        "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+        "transition-all duration-200",
+        className,
+      )}
+    >
       {/* User avatar */}
-      <div className={cn(
-        'flex items-center justify-center w-8 h-8 rounded-full',
-        'bg-primary-500 text-white text-sm font-medium',
-        'dark:bg-primary-600'
-      )}>
+      <div
+        className={cn(
+          "flex items-center justify-center w-8 h-8 rounded-full",
+          "bg-primary-500 text-white text-sm font-medium",
+          "dark:bg-primary-600",
+        )}
+      >
         {getUserInitials()}
       </div>
-      
+
       {/* User name and chevron */}
       <div className="hidden sm:flex items-center space-x-1">
         <span className="text-body-sm font-medium text-neutral-700 dark:text-neutral-300 truncate max-w-32">
