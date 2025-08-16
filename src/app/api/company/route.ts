@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stackServerApp } from "@/stack";
 import pool from "@/lib/db";
 import type { CompanySettings } from "@/lib/company-data";
+import { withAdminAuth, getOptionalUser } from "@/lib/api-auth";
 
 // GET /api/company - Get company settings
 export async function GET(request: NextRequest) {
@@ -71,29 +71,15 @@ export async function GET(request: NextRequest) {
 }
 
 // PUT /api/company - Update company settings (admin only)
-export async function PUT(request: NextRequest) {
+export const PUT = withAdminAuth(async (request: NextRequest, { user }) => {
   try {
-    // Get authenticated user from Stack Auth
-    const user = await stackServerApp.getUser({ tokenStore: request });
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Authentication required",
-        },
-        { status: 401 },
-      );
-    }
-
-    // TODO: Check for admin role when roles are implemented
-    // For now, restrict to prevent unauthorized updates
+    // For now, return a placeholder response until admin roles are fully implemented
     return NextResponse.json(
       {
         success: false,
-        error: "Admin access required",
+        error: "Company settings update not yet implemented",
       },
-      { status: 403 },
+      { status: 501 },
     );
 
     // When admin roles are implemented, uncomment the following:
@@ -154,4 +140,4 @@ export async function PUT(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});

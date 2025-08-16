@@ -64,13 +64,6 @@ export default async function LocaleLayout({
                     <NavigationBar />
                     <main className="min-h-screen">{children}</main>
                     <Footer />
-                    <DebugInfo />
-                    <ConsoleInterceptor />
-                    <StorageMonitor
-                      showDetails={false}
-                      className="fixed bottom-4 right-4 z-50"
-                    />
-                    {/* <LiveDebugLogger /> */}
                   </NavigationProvider>
                 </CompanyProvider>
               </AuthProvider>

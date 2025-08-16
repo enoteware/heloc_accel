@@ -19,14 +19,32 @@ export async function POST(request: NextRequest) {
       });
     } catch (error) {
       logError("API:LiveCalculation", "Stack Auth error", error);
-      return NextResponse.json(
-        { error: "Authentication error" },
-        { status: 401 },
-      );
+      // In development, use demo user
+      if (process.env.NODE_ENV === "development") {
+        logDebug("API:LiveCalculation", "Using demo user for development");
+        user = {
+          id: "7190217b-d9a1-436e-b6a4-78025c25f76a",
+          primaryEmail: "demo@example.com",
+        };
+      } else {
+        return NextResponse.json(
+          { error: "Authentication error" },
+          { status: 401 },
+        );
+      }
     }
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      // In development, use demo user
+      if (process.env.NODE_ENV === "development") {
+        logDebug("API:LiveCalculation", "Using demo user for development");
+        user = {
+          id: "7190217b-d9a1-436e-b6a4-78025c25f76a",
+          primaryEmail: "demo@example.com",
+        };
+      } else {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
     const body: LiveCalculationRequest = await request.json();

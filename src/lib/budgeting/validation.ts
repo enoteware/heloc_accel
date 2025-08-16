@@ -495,37 +495,45 @@ export function validateLiveCalculationRequest(
   }
 
   // Validate mortgage details
-  if (
-    !request.mortgageDetails.principal ||
-    request.mortgageDetails.principal <= 0
-  ) {
+  if (!request.mortgageDetails) {
     errors.push({
-      field: "mortgageDetails.principal",
-      message: "Mortgage principal must be positive",
+      field: "mortgageDetails",
+      message: "Mortgage details are required for HELOC calculations",
       severity: "error",
     });
-  }
+  } else {
+    if (
+      !request.mortgageDetails.principal ||
+      request.mortgageDetails.principal <= 0
+    ) {
+      errors.push({
+        field: "mortgageDetails.principal",
+        message: "Mortgage principal must be positive",
+        severity: "error",
+      });
+    }
 
-  if (
-    request.mortgageDetails.annualInterestRate < 0 ||
-    request.mortgageDetails.annualInterestRate > 0.2
-  ) {
-    errors.push({
-      field: "mortgageDetails.annualInterestRate",
-      message: "Interest rate must be between 0% and 20%",
-      severity: "error",
-    });
-  }
+    if (
+      request.mortgageDetails.annualInterestRate < 0 ||
+      request.mortgageDetails.annualInterestRate > 0.2
+    ) {
+      errors.push({
+        field: "mortgageDetails.annualInterestRate",
+        message: "Interest rate must be between 0% and 20%",
+        severity: "error",
+      });
+    }
 
-  if (
-    request.mortgageDetails.termInMonths < 12 ||
-    request.mortgageDetails.termInMonths > 600
-  ) {
-    errors.push({
-      field: "mortgageDetails.termInMonths",
-      message: "Mortgage term must be between 1 and 50 years",
-      severity: "error",
-    });
+    if (
+      request.mortgageDetails.termInMonths < 12 ||
+      request.mortgageDetails.termInMonths > 600
+    ) {
+      errors.push({
+        field: "mortgageDetails.termInMonths",
+        message: "Mortgage term must be between 1 and 50 years",
+        severity: "error",
+      });
+    }
   }
 
   // Validate HELOC details if provided
@@ -551,34 +559,39 @@ export function validateLiveCalculationRequest(
   }
 
   // Validate scenarios
-  request.scenarios.forEach((scenario, index) => {
-    if (scenario.amount === 0) {
-      errors.push({
-        field: `scenarios[${index}].amount`,
-        message: "Scenario amount cannot be zero",
-        severity: "error",
-      });
-    }
+  if (request.scenarios && Array.isArray(request.scenarios)) {
+    request.scenarios.forEach((scenario, index) => {
+      if (scenario.amount === 0) {
+        errors.push({
+          field: `scenarios[${index}].amount`,
+          message: "Scenario amount cannot be zero",
+          severity: "error",
+        });
+      }
 
-    if (scenario.startMonth < 1) {
-      errors.push({
-        field: `scenarios[${index}].startMonth`,
-        message: "Start month must be 1 or greater",
-        severity: "error",
-      });
-    }
+      if (scenario.startMonth < 1) {
+        errors.push({
+          field: `scenarios[${index}].startMonth`,
+          message: "Start month must be 1 or greater",
+          severity: "error",
+        });
+      }
 
-    if (scenario.endMonth && scenario.endMonth < scenario.startMonth) {
-      errors.push({
-        field: `scenarios[${index}].endMonth`,
-        message: "End month cannot be before start month",
-        severity: "error",
-      });
-    }
-  });
+      if (scenario.endMonth && scenario.endMonth < scenario.startMonth) {
+        errors.push({
+          field: `scenarios[${index}].endMonth`,
+          message: "End month cannot be before start month",
+          severity: "error",
+        });
+      }
+    });
+  }
 
   // Validate projection period
-  if (request.monthsToProject < 12 || request.monthsToProject > 600) {
+  if (
+    request.monthsToProject &&
+    (request.monthsToProject < 12 || request.monthsToProject > 600)
+  ) {
     errors.push({
       field: "monthsToProject",
       message: "Projection period must be between 1 and 50 years",

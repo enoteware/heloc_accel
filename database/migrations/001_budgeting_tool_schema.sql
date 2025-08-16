@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS expense_scenarios (
     is_active BOOLEAN DEFAULT true,
     is_recurring BOOLEAN DEFAULT true,
     is_essential BOOLEAN DEFAULT true,
+    is_fixed BOOLEAN DEFAULT false,
     priority_level INTEGER DEFAULT 5 CHECK (priority_level >= 1 AND priority_level <= 10),
     
     -- Metadata

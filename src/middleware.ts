@@ -26,16 +26,28 @@ function createLocaleAwareUrl(path: string, req: any): URL {
 }
 
 export default async function middleware(req: any) {
-  const isAdminPath = req.nextUrl.pathname.startsWith("/admin");
   const pathname = req.nextUrl.pathname;
+  const isApiPath = pathname.startsWith("/api/");
+  const isAdminPath = pathname.startsWith("/admin");
+  const isProtectedApiPath = isApiPath && !isPublicApiPath(pathname);
+  const isProtectedPagePath = isProtectedPageRoute(pathname);
 
-  // Check admin access
-  if (isAdminPath) {
+  // Check authentication for protected routes
+  if (isAdminPath || isProtectedApiPath || isProtectedPagePath) {
     try {
       // Get user from Stack Auth
       const user = await stackServerApp.getUser({ tokenStore: req });
 
       if (!user) {
+        // For API routes, return 401 instead of redirect
+        if (isProtectedApiPath) {
+          return NextResponse.json(
+            { error: "Authentication required" },
+            { status: 401 },
+          );
+        }
+
+        // For page routes, redirect to sign-in
         const loginUrl = createLocaleAwareUrl("/handler/sign-in", req);
         // Prevent redirect loop
         if (!pathname.includes("/handler/sign-in")) {
@@ -43,21 +55,39 @@ export default async function middleware(req: any) {
         }
       }
 
-      // Check for admin role
-      const isAdmin =
-        user?.primaryEmail === "admin@helocaccelerator.com" ||
-        user?.serverMetadata?.role === "admin" ||
-        user?.serverMetadata?.isAdmin === true;
+      // Check for admin role on admin paths
+      if (isAdminPath && user) {
+        const isAdmin =
+          user?.primaryEmail === "admin@helocaccelerator.com" ||
+          user?.serverMetadata?.role === "admin" ||
+          user?.serverMetadata?.isAdmin === true;
 
-      if (!isAdmin) {
-        const dashboardUrl = createLocaleAwareUrl("/dashboard", req);
-        // Prevent redirect loop
-        if (!pathname.includes("/dashboard")) {
-          return NextResponse.redirect(dashboardUrl);
+        if (!isAdmin) {
+          // For API routes, return 403
+          if (pathname.startsWith("/api/admin")) {
+            return NextResponse.json(
+              { error: "Admin access required" },
+              { status: 403 },
+            );
+          }
+
+          // For page routes, redirect to dashboard
+          const dashboardUrl = createLocaleAwareUrl("/dashboard", req);
+          if (!pathname.includes("/dashboard")) {
+            return NextResponse.redirect(dashboardUrl);
+          }
         }
       }
     } catch (error) {
-      // If Stack Auth fails, redirect to sign-in
+      // If Stack Auth fails
+      if (isProtectedApiPath) {
+        return NextResponse.json(
+          { error: "Authentication error" },
+          { status: 401 },
+        );
+      }
+
+      // For page routes, redirect to sign-in
       const loginUrl = createLocaleAwareUrl("/handler/sign-in", req);
       if (!pathname.includes("/handler/sign-in")) {
         return NextResponse.redirect(loginUrl);
@@ -65,20 +95,59 @@ export default async function middleware(req: any) {
     }
   }
 
-  // Apply internationalization middleware
+  // Skip internationalization for API routes
+  if (isApiPath) {
+    return NextResponse.next();
+  }
+
+  // Apply internationalization middleware for page routes only
   return intlMiddleware(req);
 }
 
-// Only run middleware on specific protected routes
+/**
+ * Check if an API path should be publicly accessible
+ */
+function isPublicApiPath(pathname: string): boolean {
+  const publicPaths = [
+    "/api/auth/", // Auth endpoints
+    "/api/company", // Company info (public)
+    "/api/test-auth", // Test endpoint
+    "/api/health", // Health check
+  ];
+
+  return publicPaths.some((path) => pathname.startsWith(path));
+}
+
+/**
+ * Check if a page route requires authentication
+ */
+function isProtectedPageRoute(pathname: string): boolean {
+  // Remove locale prefix for checking
+  const pathWithoutLocale =
+    pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?/, "") || "/";
+
+  const protectedPaths = [
+    "/dashboard",
+    "/profile",
+    "/calculator",
+    "/budgeting",
+    "/scenarios",
+    "/compare",
+  ];
+
+  return protectedPaths.some((path) => pathWithoutLocale.startsWith(path));
+}
+
+// Run middleware on protected routes including API routes
 export const config = {
   matcher: [
     /*
      * Match all paths except:
-     * - API routes
      * - Static files
      * - Stack Auth handler routes
      * - Images and other assets
+     * - Next.js internals
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*handler.*).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.ico|.*handler.*).*)",
   ],
 };

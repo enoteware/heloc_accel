@@ -95,6 +95,11 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     icon="calculator"
                   />
                   <NavigationLink
+                    href="/budgeting"
+                    label="Budgeting"
+                    icon="dollar-sign"
+                  />
+                  <NavigationLink
                     href="/dashboard"
                     label="Dashboard"
                     icon="dashboard"

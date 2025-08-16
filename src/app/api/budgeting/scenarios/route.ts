@@ -1,34 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stackServerApp } from "@/stack";
 import pool from "@/lib/db";
 import { validateBudgetScenarioRequest } from "@/lib/budgeting/validation";
 import { logInfo, logError, logDebug } from "@/lib/debug-logger";
 import type { CreateBudgetScenarioRequest } from "@/types/budgeting";
+import { withAuth } from "@/lib/api-auth";
 
 // GET /api/budgeting/scenarios - List user's budget scenarios
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, { user }) => {
   logInfo("API:BudgetScenarios", "GET /api/budgeting/scenarios called");
 
   try {
-    let user;
-    try {
-      user = await stackServerApp.getUser({ tokenStore: request });
-      logDebug("API:BudgetScenarios", "User authenticated", {
-        userId: user?.id,
-        email: user?.primaryEmail,
-      });
-    } catch (error) {
-      logError("API:BudgetScenarios", "Stack Auth error", error);
-      return NextResponse.json(
-        { error: "Authentication error" },
-        { status: 401 },
-      );
-    }
-
-    if (!user) {
-      logError("API:BudgetScenarios", "No user found in session");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    logDebug("API:BudgetScenarios", "User authenticated", {
+      userId: user.id,
+      email: user.primaryEmail,
+    });
 
     // Parse query parameters
     const { searchParams } = new URL(request.url);
@@ -114,6 +99,39 @@ export async function GET(request: NextRequest) {
       const countResult = await client.query(countQuery, countParams);
       const total = parseInt(countResult.rows[0].count);
 
+      // For each budget scenario, get income sources and expense categories
+      const budgetScenariosWithDetails = await Promise.all(
+        result.rows.map(async (scenario) => {
+          // Get income sources
+          const incomeResult = await client.query(
+            `SELECT
+              id, name, description, scenario_type, amount, start_month, end_month,
+              frequency, is_active, is_recurring, tax_rate, created_at, updated_at
+            FROM income_scenarios
+            WHERE budget_scenario_id = $1
+            ORDER BY start_month, created_at`,
+            [scenario.id],
+          );
+
+          // Get expense categories
+          const expenseResult = await client.query(
+            `SELECT
+              id, name, description, category, subcategory, amount, start_month, end_month,
+              frequency, is_active, is_recurring, is_essential, is_fixed, priority_level, created_at, updated_at
+            FROM expense_scenarios
+            WHERE budget_scenario_id = $1
+            ORDER BY start_month, created_at`,
+            [scenario.id],
+          );
+
+          return {
+            ...scenario,
+            income_sources: incomeResult.rows,
+            expense_categories: expenseResult.rows,
+          };
+        }),
+      );
+
       logInfo(
         "API:BudgetScenarios",
         `Found ${result.rows.length} budget scenarios`,
@@ -124,7 +142,7 @@ export async function GET(request: NextRequest) {
       );
 
       return NextResponse.json({
-        budgetScenarios: result.rows,
+        budgetScenarios: budgetScenariosWithDetails,
         pagination: {
           total,
           limit,
@@ -142,31 +160,17 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});
 
 // POST /api/budgeting/scenarios - Create new budget scenario
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { user }) => {
   logInfo("API:BudgetScenarios", "POST /api/budgeting/scenarios called");
 
   try {
-    let user;
-    try {
-      user = await stackServerApp.getUser({ tokenStore: request });
-      logDebug("API:BudgetScenarios", "User authenticated for POST", {
-        userId: user?.id,
-        email: user?.primaryEmail,
-      });
-    } catch (error) {
-      logError("API:BudgetScenarios", "Stack Auth error in POST", error);
-      return NextResponse.json(
-        { error: "Authentication error" },
-        { status: 401 },
-      );
-    }
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    logDebug("API:BudgetScenarios", "User authenticated for POST", {
+      userId: user.id,
+      email: user.primaryEmail,
+    });
 
     const body: CreateBudgetScenarioRequest = await request.json();
     logDebug("API:BudgetScenarios", "POST body received", {
@@ -278,4 +282,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});

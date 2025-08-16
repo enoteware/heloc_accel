@@ -37,6 +37,10 @@ import {
   ArrowLeft,
   MoreHorizontal,
   TrendingDown,
+  PlusCircle,
+  MinusCircle,
+  Heart,
+  Target,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -45,6 +49,7 @@ import { cn } from "@/lib/utils";
 export type IconName =
   | "calculator"
   | "dollar"
+  | "dollar-sign"
   | "calendar"
   | "home"
   | "trending-up"
@@ -67,7 +72,9 @@ export type IconName =
   | "chevron-down"
   | "chevron-up"
   | "plus"
+  | "plus-circle"
   | "minus"
+  | "minus-circle"
   | "refresh"
   | "file-text"
   | "credit-card"
@@ -81,11 +88,14 @@ export type IconName =
   | "arrow-down"
   | "arrow-right"
   | "arrow-left"
-  | "more-horizontal";
+  | "more-horizontal"
+  | "heart"
+  | "target";
 
 const iconMap: Record<IconName, LucideIcon> = {
   calculator: Calculator,
   dollar: DollarSign,
+  "dollar-sign": DollarSign,
   calendar: Calendar,
   home: Home,
   "trending-up": TrendingUp,
@@ -108,7 +118,9 @@ const iconMap: Record<IconName, LucideIcon> = {
   "chevron-down": ChevronDown,
   "chevron-up": ChevronUp,
   plus: Plus,
+  "plus-circle": PlusCircle,
   minus: Minus,
+  "minus-circle": MinusCircle,
   refresh: RefreshCw,
   "file-text": FileText,
   "credit-card": CreditCard,
@@ -123,6 +135,8 @@ const iconMap: Record<IconName, LucideIcon> = {
   "arrow-right": ArrowRight,
   "arrow-left": ArrowLeft,
   "more-horizontal": MoreHorizontal,
+  heart: Heart,
+  target: Target,
 };
 
 export interface IconProps extends Omit<LucideProps, "ref"> {
