@@ -81,14 +81,14 @@ export default function AmortizationTable({
 
         <div className="flex flex-wrap gap-2">
           {/* Highlight Mode Toggle */}
-          <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-card rounded-lg p-1">
             <button
               onClick={() => setHighlightMode("all")}
               className={cn(
                 "px-3 py-1 rounded text-sm font-medium transition-colors",
                 highlightMode === "all"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900",
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               All
@@ -98,8 +98,8 @@ export default function AmortizationTable({
               className={cn(
                 "px-3 py-1 rounded text-sm font-medium transition-colors",
                 highlightMode === "heloc"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900",
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               HELOC Only
@@ -109,8 +109,8 @@ export default function AmortizationTable({
               className={cn(
                 "px-3 py-1 rounded text-sm font-medium transition-colors",
                 highlightMode === "savings"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900",
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               Savings Only

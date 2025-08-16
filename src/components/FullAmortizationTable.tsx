@@ -167,7 +167,7 @@ export default function FullAmortizationTable({
             <Icon name="table" size="sm" className="text-gray-600" />
             Complete Amortization Schedule
           </h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Detailed month-by-month breakdown matching your Excel format
           </p>
         </div>
@@ -178,8 +178,8 @@ export default function FullAmortizationTable({
             className={cn(
               "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
               showAllColumns
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200",
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-card text-muted-foreground hover:bg-card/80",
             )}
           >
             <Icon
@@ -195,8 +195,8 @@ export default function FullAmortizationTable({
             className={cn(
               "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
               highlightPMI
-                ? "bg-purple-600 text-white hover:bg-purple-700"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200",
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-card text-muted-foreground hover:bg-card/80",
             )}
           >
             <Icon name="info" size="xs" className="mr-1 inline" />

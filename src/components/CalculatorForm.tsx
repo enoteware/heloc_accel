@@ -729,7 +729,7 @@ export default function CalculatorForm({
             {ltvInfo.isMIPRequired ? "Monthly MIP/PMI *" : "Monthly MIP/PMI"}
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
               $
             </span>
             <input
@@ -739,8 +739,8 @@ export default function CalculatorForm({
               onChange={(e) =>
                 handleInputChange("pmiMonthly", parseFloat(e.target.value) || 0)
               }
-              className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
-                ltvInfo.isMIPRequired ? "border-orange-300" : "border-gray-300"
+              className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent text-foreground bg-background ${
+                ltvInfo.isMIPRequired ? "border-destructive" : "border-input"
               }`}
               placeholder={
                 ltvInfo.canCalculateLTV &&
@@ -751,7 +751,7 @@ export default function CalculatorForm({
               }
             />
           </div>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {ltvInfo.canCalculateLTV
               ? ltvInfo.isMIPRequired
                 ? "Required: Private Mortgage Insurance"
