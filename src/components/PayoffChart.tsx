@@ -43,8 +43,8 @@ export default function PayoffChart({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
+    <div className="bg-card p-6 rounded-lg shadow-md">
+      <h3 className="text-lg font-semibold text-foreground mb-4">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

@@ -140,9 +140,9 @@ export default function LiveResultsPanel({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border border-green-200"
+        className="bg-card rounded-lg p-6 border border-border"
       >
-        <h3 className="text-lg font-semibold text-green-900 mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           {tResults("potentialSavingsWithHeloc")}
         </h3>
 
@@ -169,10 +169,10 @@ export default function LiveResultsPanel({
               className="space-y-3"
             >
               <div>
-                <p className="text-3xl font-bold text-green-700">
+                <p className="text-3xl font-bold text-foreground">
                   {formatCurrency(results.comparison.interestSaved)}
                 </p>
-                <p className="text-sm text-green-600">
+                <p className="text-sm text-muted-foreground">
                   {tResults("totalInterestSaved")}
                 </p>
               </div>
@@ -207,9 +207,9 @@ export default function LiveResultsPanel({
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="bg-white rounded-lg p-5 shadow-md border border-gray-200"
+          className="bg-card rounded-lg p-5 shadow-md border border-border"
         >
-          <h4 className="text-sm font-medium text-gray-600 mb-3">
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
             {tResults("traditionalMortgage")}
           </h4>
 
@@ -236,19 +236,19 @@ export default function LiveResultsPanel({
                 className="space-y-2"
               >
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-muted-foreground">
                     {tResults("payoffTime")}
                   </span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-foreground">
                     {(results.traditional.payoffMonths / 12).toFixed(1)}{" "}
                     {tResults("years")}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-muted-foreground">
                     {tResults("totalInterest")}
                   </span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-foreground">
                     {formatCurrency(results.traditional.totalInterest)}
                   </span>
                 </div>
@@ -270,9 +270,9 @@ export default function LiveResultsPanel({
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-5 shadow-md border border-blue-200"
+          className="bg-card rounded-lg p-5 shadow-md border border-border"
         >
-          <h4 className="text-sm font-medium text-blue-700 mb-3">
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
             {tResults("helocStrategy")}
           </h4>
 
@@ -299,24 +299,24 @@ export default function LiveResultsPanel({
                 className="space-y-2"
               >
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-blue-600">
+                  <span className="text-sm text-muted-foreground">
                     {tResults("payoffTime")}
                   </span>
-                  <span className="font-semibold text-blue-700">
+                  <span className="font-semibold text-foreground">
                     {(results.heloc.payoffMonths / 12).toFixed(1)}{" "}
                     {tResults("years")}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-blue-600">
+                  <span className="text-sm text-muted-foreground">
                     {tResults("totalInterest")}
                   </span>
-                  <span className="font-semibold text-blue-700">
+                  <span className="font-semibold text-foreground">
                     {formatCurrency(results.heloc.totalInterest)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-blue-600">
+                  <span className="text-sm text-muted-foreground">
                     {tResults("maxHelocUsed")}
                   </span>
                   <span className="font-semibold text-blue-700">

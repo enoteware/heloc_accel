@@ -162,36 +162,36 @@ ${formData.description ? formData.description : ""}`;
               <div className="space-y-4">
                 {/* Mortgage Details */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2 pb-1 border-b border-gray-200">
+                  <h4 className="text-sm font-medium text-foreground mb-2 pb-1 border-b border-border">
                     {t("mortgageDetails")}
                   </h4>
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         {t("currentBalance")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatCurrency(formData.currentMortgageBalance)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         {t("interestRate")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatPercent(formData.currentInterestRate)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         {t("remainingTerm")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatMonths(formData.remainingTermMonths)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         {t("monthlyPayment")}
                       </span>
                       <span className="text-sm font-medium text-gray-900">

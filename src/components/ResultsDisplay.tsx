@@ -111,7 +111,7 @@ export default function ResultsDisplay({
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Time Saved Card */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 relative overflow-hidden">
+        <div className="bg-card p-6 rounded-lg border border-border relative overflow-hidden">
           <div className="absolute top-2 right-2">
             <PaymentBadge
               amount="HELOC"
@@ -122,114 +122,114 @@ export default function ResultsDisplay({
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-600">
+              <p className="text-sm font-medium text-primary">
                 {tResults("timeSaved")}
               </p>
-              <p className="text-2xl font-bold text-green-900">
+              <p className="text-2xl font-bold text-foreground">
                 {results.comparison.timeSavedYears} {tResults("years")}
               </p>
-              <p className="text-sm text-green-700">
+              <p className="text-sm text-muted-foreground">
                 ({results.comparison.timeSavedMonths} {tResults("months")})
               </p>
             </div>
-            <div className="p-3 bg-green-200 rounded-full">
-              <Icon name="calendar" size="lg" className="text-green-600" />
+            <div className="p-3 bg-card rounded-full border border-border">
+              <Icon name="calendar" size="lg" className="text-primary" />
             </div>
           </div>
         </div>
 
         {/* Interest Saved Card */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+        <div className="bg-card p-6 rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-600">
+              <p className="text-sm font-medium text-primary">
                 {tResults("totalInterestSaved")}
               </p>
-              <p className="text-2xl font-bold text-blue-900">
+              <p className="text-2xl font-bold text-foreground">
                 {formatCurrency(results.comparison.interestSaved)}
               </p>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-muted-foreground">
                 {formatPercentage(results.comparison.percentageInterestSaved)}{" "}
                 savings
               </p>
             </div>
-            <div className="p-3 bg-blue-200 rounded-full">
-              <Icon name="dollar" size="lg" className="text-blue-600" />
+            <div className="p-3 bg-card rounded-full border border-border">
+              <Icon name="dollar" size="lg" className="text-primary" />
             </div>
           </div>
         </div>
 
         {/* Max HELOC Used Card */}
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+        <div className="bg-card p-6 rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-purple-600">
+              <p className="text-sm font-medium text-primary">
                 {tResults("maxHelocUsed")}
               </p>
-              <p className="text-2xl font-bold text-purple-900">
+              <p className="text-2xl font-bold text-foreground">
                 {formatCurrency(results.heloc.maxHelocUsed)}
               </p>
-              <p className="text-sm text-purple-700">
+              <p className="text-sm text-muted-foreground">
                 {tResults("peakUtilization")}
               </p>
             </div>
-            <div className="p-3 bg-purple-200 rounded-full">
-              <Icon name="bar-chart" size="lg" className="text-purple-600" />
+            <div className="p-3 bg-card rounded-full border border-border">
+              <Icon name="bar-chart" size="lg" className="text-primary" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Detailed Comparison */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-lg shadow-md overflow-hidden">
+        <div className="px-6 py-4 bg-card border-b border-border">
+          <h3 className="text-lg font-semibold text-foreground">
             {tResults("strategyComparison")}
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
+        <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border">
           {/* Traditional Strategy */}
           <div className="p-6">
             <div className="flex items-center mb-4">
-              <div className="p-2 bg-gray-100 rounded-lg mr-3">
-                <Icon name="home" size="sm" className="text-gray-600" />
+              <div className="p-2 bg-card rounded-lg mr-3 border border-border">
+                <Icon name="home" size="sm" className="text-muted-foreground" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-900">
+              <h4 className="text-lg font-semibold text-foreground">
                 {tResults("traditionalMortgage")}
               </h4>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("payoffTime")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatMonths(results.traditional.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("monthlyPayment")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.traditional.monthlyPayment)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("totalInterest")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.traditional.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("totalPayments")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.traditional.totalPayments)}
                 </span>
               </div>
@@ -239,52 +239,52 @@ export default function ResultsDisplay({
           {/* HELOC Strategy */}
           <div className="p-6">
             <div className="flex items-center mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg mr-3">
-                <Icon name="trending-up" size="sm" className="text-blue-600" />
+              <div className="p-2 bg-card rounded-lg mr-3 border border-border">
+                <Icon name="trending-up" size="sm" className="text-primary" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-900">
+              <h4 className="text-lg font-semibold text-foreground">
                 {tResults("helocAcceleration")}
               </h4>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("payoffTime")}:
                 </span>
-                <span className="text-sm font-medium text-green-600">
+                <span className="text-sm font-medium text-primary">
                   {formatMonths(results.heloc.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("totalInterest")}:
                 </span>
-                <span className="text-sm font-medium text-green-600">
+                <span className="text-sm font-medium text-primary">
                   {formatCurrency(results.heloc.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("mortgageInterest")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.heloc.totalMortgageInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("helocInterest")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.heloc.totalHelocInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {tResults("avgHelocBalance")}:
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(results.heloc.averageHelocBalance)}
                 </span>
               </div>
