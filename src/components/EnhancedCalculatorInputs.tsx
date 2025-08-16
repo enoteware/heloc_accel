@@ -110,13 +110,13 @@ export const EnhancedCurrencyInput: React.FC<EnhancedInputProps> = ({
     <div className="space-y-1">
       <div className="flex items-center gap-2">
         <label htmlFor={field} className={`block ${labelClasses}`}>
-          {label} {required && <span className="text-red-500">*</span>}
+          {label} {required && <span className="text-destructive">*</span>}
         </label>
         {tooltip && <InfoIcon tooltip={tooltip} />}
       </div>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm">
           $
         </span>
         <input
@@ -129,11 +129,11 @@ export const EnhancedCurrencyInput: React.FC<EnhancedInputProps> = ({
           onBlur={handleBlur}
           className={`w-full pl-8 pr-3 py-3 border rounded-lg transition-all duration-200 placeholder-custom ${inputClasses} ${
             error
-              ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
               : isEmpty
-                ? "border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50"
-                : "border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white"
-          } focus:outline-none dark:!text-white dark:bg-neutral-800`}
+                ? "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-card"
+                : "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-background"
+          } focus:outline-none text-foreground bg-background`}
           placeholder={placeholder}
           aria-describedby={error ? `${field}-error` : `${field}-description`}
           aria-invalid={error ? "true" : "false"}
@@ -143,7 +143,7 @@ export const EnhancedCurrencyInput: React.FC<EnhancedInputProps> = ({
       {error && (
         <p
           id={`${field}-error`}
-          className="mt-1 text-sm text-red-600"
+          className="mt-1 text-sm text-destructive"
           role="alert"
         >
           {error}
@@ -206,7 +206,7 @@ export const EnhancedPercentageInput: React.FC<EnhancedInputProps> = ({
         </label>
         {tooltip && <InfoIcon tooltip={tooltip} />}
       </div>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
         <input
           type="number"
@@ -218,11 +218,11 @@ export const EnhancedPercentageInput: React.FC<EnhancedInputProps> = ({
           onBlur={handleBlur}
           className={`w-full px-3 py-3 pr-8 border rounded-lg transition-all duration-200 placeholder-custom ${inputClasses} ${
             error
-              ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
               : isEmpty
-                ? "border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50"
-                : "border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white"
-          } focus:outline-none dark:!text-white dark:bg-neutral-800`}
+                ? "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-card"
+                : "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-background"
+          } focus:outline-none text-foreground bg-background`}
           placeholder={placeholder}
           step="0.01"
           min="0"
@@ -231,14 +231,14 @@ export const EnhancedPercentageInput: React.FC<EnhancedInputProps> = ({
           aria-invalid={error ? "true" : "false"}
           aria-required={required}
         />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
           %
         </span>
       </div>
       {error && (
         <p
           id={`${field}-error`}
-          className="mt-1 text-sm text-red-600"
+          className="mt-1 text-sm text-destructive"
           role="alert"
         >
           {error}
@@ -298,23 +298,23 @@ export const EnhancedNumberInput: React.FC<EnhancedInputProps> = ({
   const isEmpty = !value || value === 0 || value === "";
   const labelClasses =
     priority === "high"
-      ? "text-lg font-semibold text-gray-800 mb-1.5"
-      : "text-sm font-medium text-gray-700 mb-1";
+      ? "text-lg font-semibold text-foreground mb-1.5"
+      : "text-sm font-medium text-foreground mb-1";
 
   const inputClasses =
     priority === "high"
-      ? `text-lg font-semibold text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`
-      : `text-base text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`;
+      ? `text-lg font-semibold text-center ${isEmpty ? "text-muted-foreground" : "text-foreground"}`
+      : `text-base text-center ${isEmpty ? "text-muted-foreground" : "text-foreground"}`;
 
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-2">
         <label htmlFor={field} className={`block ${labelClasses}`}>
-          {label} {required && <span className="text-red-500">*</span>}
+          {label} {required && <span className="text-destructive">*</span>}
         </label>
         {tooltip && <InfoIcon tooltip={tooltip} />}
       </div>
-      <p className="text-xs text-gray-500 mb-2">{description}</p>
+      <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <input
         type="text"
         inputMode="numeric"
@@ -325,7 +325,7 @@ export const EnhancedNumberInput: React.FC<EnhancedInputProps> = ({
         onBlur={handleBlur}
         className={`w-full px-3 py-3 border rounded-lg transition-all duration-200 placeholder-custom ${inputClasses} ${
           error
-            ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+            ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
             : isEmpty
               ? "border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50"
               : "border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white"
@@ -336,14 +336,14 @@ export const EnhancedNumberInput: React.FC<EnhancedInputProps> = ({
       {error && (
         <p
           id={`${field}-error`}
-          className="mt-1 text-sm text-red-600"
+          className="mt-1 text-sm text-destructive"
           role="alert"
         >
           {error}
         </p>
       )}
       {field === "remainingTermMonths" && value && Number(value) > 0 && (
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-muted-foreground">
           {Math.round((Number(value) / 12) * 10) / 10} years
         </p>
       )}

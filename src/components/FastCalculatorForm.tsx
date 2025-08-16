@@ -900,7 +900,7 @@ export default function FastCalculatorForm({
               >
                 Remaining Term (years) <span className="text-red-500">*</span>
               </label>
-              <p className="text-xs text-gray-700 mb-2">
+              <p className="text-xs text-muted-foreground mb-2">
                 Number of years left on your current mortgage
               </p>
               <div className="relative">
@@ -916,10 +916,10 @@ export default function FastCalculatorForm({
                     handleInputChange("remainingTermYears", e.target.value)
                   }
                   onBlur={() => handleBlur("remainingTermYears")}
-                  className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800 ${
+                  className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 text-foreground bg-background ${
                     errors.remainingTermYears
-                      ? "border-red-300"
-                      : "border-gray-300"
+                      ? "border-destructive"
+                      : "border-input"
                   }`}
                   placeholder="e.g. 25"
                   min="1"
@@ -927,7 +927,7 @@ export default function FastCalculatorForm({
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <svg
-                    className="w-4 h-4 text-gray-400"
+                    className="w-4 h-4 text-muted-foreground"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -1352,10 +1352,10 @@ export default function FastCalculatorForm({
                     scenarioName: e.target.value,
                   }))
                 }
-                className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-custom dark:!text-white dark:bg-neutral-800 ${
+                className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 placeholder-custom text-foreground bg-background ${
                   !formData.scenarioName?.trim()
-                    ? "border-gray-200 hover:border-gray-300 bg-gray-50 text-gray-400"
-                    : "border-gray-300 hover:border-gray-400 bg-white !text-gray-900"
+                    ? "border-input hover:border-border bg-card text-muted-foreground"
+                    : "border-input hover:border-border bg-background text-foreground"
                 }`}
                 placeholder="My HELOC Strategy"
               />
@@ -1364,11 +1364,11 @@ export default function FastCalculatorForm({
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground mb-1"
               >
                 Description
               </label>
-              <p className="text-xs text-gray-700 mb-2">
+              <p className="text-xs text-muted-foreground mb-2">
                 Add notes about this scenario
               </p>
               <textarea
@@ -1380,10 +1380,10 @@ export default function FastCalculatorForm({
                     description: e.target.value,
                   }))
                 }
-                className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 placeholder-custom dark:!text-white dark:bg-neutral-800 ${
+                className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent resize-none transition-all duration-200 placeholder-custom text-foreground bg-background ${
                   !formData.description?.trim()
-                    ? "border-gray-200 hover:border-gray-300 bg-gray-50 text-gray-400"
-                    : "border-gray-300 hover:border-gray-400 bg-white !text-gray-900"
+                    ? "border-input hover:border-border bg-card text-muted-foreground"
+                    : "border-input hover:border-border bg-background text-foreground"
                 }`}
                 placeholder="Optional description of this scenario..."
                 rows={3}
