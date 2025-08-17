@@ -9,33 +9,73 @@ export async function GET(request: NextRequest) {
     // Company settings are public information, no authentication required
     // But we'll fetch from database in production
 
-    const client = await pool.connect();
-    try {
-      const result = await client.query(
-        "SELECT * FROM company_settings ORDER BY id LIMIT 1",
-      );
+    // If DATABASE_URL is not set, skip DB and return defaults
+    if (!process.env.DATABASE_URL) {
+      const defaultSettings: CompanySettings = {
+        id: 1,
+        companyName: "HELOC Accelerator Solutions",
+        companyAddress:
+          "123 Financial Plaza, Suite 100\nMortgage City, MC 12345",
+        companyPhone: "1-800-HELOC-01",
+        companyEmail: "info@helocaccelerator.com",
+        companyWebsite: "https://helocaccelerator.com",
+        companyLicenseNumber: "ML-123456",
+        companyNmlsNumber: "1234567",
+        companyDescription:
+          "Your trusted partner in mortgage acceleration strategies.",
+        primaryColor: "#2563eb",
+        secondaryColor: "#10b981",
+      };
+      return NextResponse.json({ success: true, data: defaultSettings });
+    }
 
-      if (result.rows.length > 0) {
-        const settings = result.rows[0];
-        return NextResponse.json({
-          success: true,
-          data: {
-            id: settings.id,
-            companyName: settings.company_name,
-            companyAddress: settings.company_address,
-            companyPhone: settings.company_phone,
-            companyEmail: settings.company_email,
-            companyWebsite: settings.company_website,
-            companyLicenseNumber: settings.company_license_number,
-            companyNmlsNumber: settings.company_nmls_number,
-            companyDescription: settings.company_description,
-            primaryColor: settings.primary_color,
-            secondaryColor: settings.secondary_color,
-          },
-        });
+    try {
+      const client = await pool.connect();
+      try {
+        const result = await client.query(
+          "SELECT * FROM company_settings ORDER BY id LIMIT 1",
+        );
+
+        if (result.rows.length > 0) {
+          const settings = result.rows[0];
+          return NextResponse.json({
+            success: true,
+            data: {
+              id: settings.id,
+              companyName: settings.company_name,
+              companyAddress: settings.company_address,
+              companyPhone: settings.company_phone,
+              companyEmail: settings.company_email,
+              companyWebsite: settings.company_website,
+              companyLicenseNumber: settings.company_license_number,
+              companyNmlsNumber: settings.company_nmls_number,
+              companyDescription: settings.company_description,
+              primaryColor: settings.primary_color,
+              secondaryColor: settings.secondary_color,
+            },
+          });
+        }
+      } finally {
+        client.release();
       }
-    } finally {
-      client.release();
+    } catch (dbError) {
+      // Fall back to defaults if DB connection fails
+      const defaultSettings: CompanySettings = {
+        id: 1,
+        companyName: "HELOC Accelerator Solutions",
+        companyAddress:
+          "123 Financial Plaza, Suite 100\nMortgage City, MC 12345",
+        companyPhone: "1-800-HELOC-01",
+        companyEmail: "info@helocaccelerator.com",
+        companyWebsite: "https://helocaccelerator.com",
+        companyLicenseNumber: "ML-123456",
+        companyNmlsNumber: "1234567",
+        companyDescription:
+          "Your trusted partner in mortgage acceleration strategies.",
+        primaryColor: "#2563eb",
+        secondaryColor: "#10b981",
+      };
+      return NextResponse.json({ success: true, data: defaultSettings });
     }
 
     // If no settings in database, return default settings

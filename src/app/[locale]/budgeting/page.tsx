@@ -99,7 +99,6 @@ export default function BudgetingPage() {
       const response = await fetch("/api/budgeting/scenarios");
       if (response.ok) {
         const data = await response.json();
-        // Ensure each scenario has income_sources and expense_categories arrays
         const scenariosWithDefaults = (data.budgetScenarios || []).map(
           (scenario: any) => ({
             ...scenario,
@@ -113,9 +112,37 @@ export default function BudgetingPage() {
         if (scenariosWithDefaults.length > 0) {
           setCurrentScenario(scenariosWithDefaults[0]);
         }
+        return;
+      }
+      // Fallback to local demo storage if API not available
+      const local =
+        typeof window !== "undefined" && window.localStorage
+          ? window.localStorage.getItem("heloc-demo-scenarios")
+          : null;
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length) {
+          setScenarios(parsed);
+          setCurrentScenario(parsed[0]);
+          return;
+        }
       }
     } catch (error) {
       console.error("Error fetching budgeting scenarios:", error);
+      // Try demo storage on error as well
+      try {
+        const local =
+          typeof window !== "undefined" && window.localStorage
+            ? window.localStorage.getItem("heloc-demo-scenarios")
+            : null;
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (Array.isArray(parsed) && parsed.length) {
+            setScenarios(parsed);
+            setCurrentScenario(parsed[0]);
+          }
+        }
+      } catch {}
     } finally {
       setLoading(false);
     }
@@ -124,12 +151,8 @@ export default function BudgetingPage() {
   const createNewScenario = async () => {
     setSaving(true);
     try {
-      // First, we need to get or create a parent scenario
-      // For now, let's use the existing scenario or create a simple one
-      const parentScenarioId = "edae077a-1a40-4d72-8923-b9927cea01f7"; // Use the existing scenario
-
-      console.log("Creating scenario with parentScenarioId:", parentScenarioId);
-
+      // Try API first
+      const parentScenarioId = "edae077a-1a40-4d72-8923-b9927cea01f7";
       const response = await fetch("/api/budgeting/scenarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -157,10 +180,44 @@ export default function BudgetingPage() {
         };
         setScenarios([...scenarios, newScenario]);
         setCurrentScenario(newScenario);
-      } else {
-        const errorData = await response.json();
-        console.error("Error creating scenario:", errorData);
+        return;
       }
+
+      // If API failed, save locally in demo storage as a fallback
+      const now = new Date().toISOString();
+      const demoScenario = {
+        id: `${Date.now()}`,
+        scenario_id: "demo",
+        name: "New Budget Scenario",
+        description: "Budget analysis for mortgage acceleration",
+        base_monthly_gross_income: 6000,
+        base_monthly_net_income: 5000,
+        base_monthly_expenses: 3000,
+        base_discretionary_income: 2000,
+        recommended_principal_payment: 1000,
+        principal_multiplier: 3.0,
+        auto_adjust_payments: true,
+        is_active: true,
+        created_at: now,
+        updated_at: now,
+        income_sources: [],
+        expense_categories: [],
+      } as BudgetingScenario;
+
+      const existing =
+        typeof window !== "undefined" && window.localStorage
+          ? window.localStorage.getItem("heloc-demo-scenarios")
+          : null;
+      const arr = existing ? JSON.parse(existing) : [];
+      const next = Array.isArray(arr) ? [...arr, demoScenario] : [demoScenario];
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem(
+          "heloc-demo-scenarios",
+          JSON.stringify(next),
+        );
+      }
+      setScenarios(next);
+      setCurrentScenario(demoScenario);
     } catch (error) {
       console.error("Error creating scenario:", error);
     } finally {
