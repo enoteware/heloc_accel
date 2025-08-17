@@ -83,8 +83,8 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     <div
       className={cn(
         "flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer",
-        "hover:bg-neutral-100 dark:hover:bg-neutral-800",
-        "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+        "hover:bg-muted",
+        "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         "transition-all duration-200",
         className,
       )}
@@ -93,8 +93,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       <div
         className={cn(
           "flex items-center justify-center w-8 h-8 rounded-full",
-          "bg-primary-500 text-white text-sm font-medium",
-          "dark:bg-primary-600",
+          "bg-primary text-primary-foreground text-sm font-medium",
         )}
       >
         {getUserInitials()}
@@ -102,14 +101,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({
 
       {/* User name and chevron */}
       <div className="hidden sm:flex items-center space-x-1">
-        <span className="text-body-sm font-medium text-neutral-700 dark:text-neutral-300 truncate max-w-32">
+        <span className="text-body-sm font-medium text-foreground truncate max-w-32">
           {getUserDisplayName()}
         </span>
         <NavigationIcon
           name="chevronDown"
           size="sm"
           aria-hidden={true}
-          className="text-neutral-500 dark:text-neutral-400"
+          className="text-muted-foreground"
         />
       </div>
     </div>

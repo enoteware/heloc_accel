@@ -64,9 +64,7 @@ export const Logo: React.FC<LogoProps> = ({
         priority={priority}
       />
       {showText && (
-        <span
-          className={`font-bold text-gray-900 dark:text-white ${textSizeClasses[size]}`}
-        >
+        <span className={`font-bold text-foreground ${textSizeClasses[size]}`}>
           HELOC Accelerator
         </span>
       )}

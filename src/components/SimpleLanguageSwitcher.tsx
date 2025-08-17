@@ -49,8 +49,8 @@ export default function SimpleLanguageSwitcher() {
         onClick={switchToEnglish}
         className={`px-2 py-1 rounded text-sm transition-colors ${
           locale === "en"
-            ? "bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300"
-            : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+            ? "bg-primary/15 text-primary"
+            : "text-muted-foreground hover:bg-muted"
         }`}
         aria-label="Switch to English"
       >
@@ -60,8 +60,8 @@ export default function SimpleLanguageSwitcher() {
         onClick={switchToSpanish}
         className={`px-2 py-1 rounded text-sm transition-colors ${
           locale === "es"
-            ? "bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300"
-            : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+            ? "bg-primary/15 text-primary"
+            : "text-muted-foreground hover:bg-muted"
         }`}
         aria-label="Switch to Spanish"
       >
