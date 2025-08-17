@@ -83,31 +83,6 @@ export default function BudgetingPage() {
 
   // No longer need form state since we're using BudgetForm component
 
-  // Handle authentication state
-  useEffect(() => {
-    // Give Stack Auth time to initialize
-    const timer = setTimeout(() => {
-      setAuthLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    // Only redirect after auth loading is complete
-    if (!authLoading && !user) {
-      router.push(
-        "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
-      );
-      return;
-    }
-
-    // Fetch scenarios only when user is available
-    if (!authLoading && user) {
-      fetchScenarios();
-    }
-  }, [user, router, authLoading, fetchScenarios]);
-
   const fetchScenarios = useCallback(async () => {
     try {
       const response = await fetch("/api/budgeting/scenarios");
@@ -141,6 +116,31 @@ export default function BudgetingPage() {
       setLoading(false);
     }
   }, [router]);
+
+  // Handle authentication state
+  useEffect(() => {
+    // Give Stack Auth time to initialize
+    const timer = setTimeout(() => {
+      setAuthLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Only redirect after auth loading is complete
+    if (!authLoading && !user) {
+      router.push(
+        "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
+      );
+      return;
+    }
+
+    // Fetch scenarios only when user is available
+    if (!authLoading && user) {
+      fetchScenarios();
+    }
+  }, [user, router, authLoading, fetchScenarios]);
 
   const createNewScenario = async () => {
     setSaving(true);
