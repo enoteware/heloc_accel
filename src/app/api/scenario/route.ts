@@ -1,28 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stackServerApp } from "@/stack";
 import pool from "@/lib/db";
 import {
   validateCalculatorInputs,
   sanitizeCalculatorInputs,
 } from "@/lib/validation";
 import { ApiResponse, CreateScenarioInput, Scenario } from "@/lib/types";
+import { withAuth } from "@/lib/api-auth";
 
 // GET /api/scenario - Get all scenarios for authenticated user
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, { user }) => {
   try {
-    // Get authenticated user from Stack Auth
-    const user = await stackServerApp.getUser({ tokenStore: request });
-
-    if (!user) {
-      return NextResponse.json<ApiResponse>(
-        {
-          success: false,
-          error: "Authentication required",
-        },
-        { status: 401 },
-      );
-    }
-
     // If DATABASE_URL is not set, return error
     if (!process.env.DATABASE_URL) {
       return NextResponse.json<ApiResponse>(
@@ -34,7 +21,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch user's scenarios from database
+    // Fetch user's scenarios from database using local user ID
     const client = await pool.connect();
     try {
       const result = await client.query(
@@ -50,7 +37,7 @@ export async function GET(request: NextRequest) {
          FROM scenarios 
          WHERE user_id = $1 
          ORDER BY updated_at DESC`,
-        [user.id],
+        [user.localUser.id],
       );
 
       const scenarios = result.rows.map((row) => ({
@@ -102,24 +89,11 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});
 
 // POST /api/scenario - Create new scenario
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { user }) => {
   try {
-    // Get authenticated user from Stack Auth
-    const user = await stackServerApp.getUser({ tokenStore: request });
-
-    if (!user) {
-      return NextResponse.json<ApiResponse>(
-        {
-          success: false,
-          error: "Authentication required",
-        },
-        { status: 401 },
-      );
-    }
-
     const body = await request.json();
 
     // Validate required fields
@@ -177,7 +151,7 @@ export async function POST(request: NextRequest) {
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24
         ) RETURNING id, name, description, created_at, updated_at`,
         [
-          user.id,
+          user.localUser.id,
           body.name,
           body.description || "",
           body.current_mortgage_balance || null,
@@ -230,4 +204,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});

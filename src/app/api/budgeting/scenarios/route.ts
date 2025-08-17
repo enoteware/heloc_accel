@@ -58,7 +58,7 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
         WHERE s.user_id = $1
       `;
 
-      const params: any[] = [user.id];
+      const params: any[] = [user.localUser.id];
       let paramIndex = 2;
 
       if (scenarioId) {
@@ -93,7 +93,7 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
         JOIN scenarios s ON bs.scenario_id = s.id
         WHERE s.user_id = $1
       `;
-      const countParams: any[] = [user.id];
+      const countParams: any[] = [user.localUser.id];
       let countParamIndex = 2;
 
       if (scenarioId) {
@@ -219,7 +219,7 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
       // Verify the parent scenario belongs to the user
       const scenarioCheck = await client.query(
         "SELECT id FROM scenarios WHERE id = $1 AND user_id = $2",
-        [body.scenarioId, user.id],
+        [body.scenarioId, user.localUser.id],
       );
 
       if (scenarioCheck.rows.length === 0) {

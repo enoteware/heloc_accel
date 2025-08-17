@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stackServerApp } from "@/stack";
 import { logger } from "@/lib/logger";
+import {
+  getOrCreateLocalUser,
+  updateLastLogin,
+  type LocalUser,
+} from "@/lib/user-sync";
 
 export interface AuthenticatedUser {
   id: string;
   primaryEmail: string;
   displayName?: string;
   serverMetadata?: any;
+  localUser: LocalUser;
 }
 
 export interface AuthResult {
@@ -22,6 +28,7 @@ export interface AuthError {
 
 /**
  * Authenticate a user from a Next.js API request using Stack Auth
+ * Also syncs with local database user
  * @param request - The Next.js request object
  * @returns Promise<AuthResult | AuthError>
  */
@@ -29,9 +36,9 @@ export async function authenticateApiRequest(
   request: NextRequest,
 ): Promise<AuthResult | AuthError> {
   try {
-    const user = await stackServerApp.getUser({ tokenStore: request });
+    const stackUser = await stackServerApp.getUser({ tokenStore: request });
 
-    if (!user) {
+    if (!stackUser) {
       logger.warn("API authentication failed: No user found", {
         path: request.nextUrl.pathname,
         method: request.method,
@@ -44,9 +51,16 @@ export async function authenticateApiRequest(
       };
     }
 
+    // Get or create local database user
+    const localUser = await getOrCreateLocalUser(stackUser);
+
+    // Update last login timestamp
+    await updateLastLogin(localUser.id);
+
     logger.info("API authentication successful", {
-      userId: user.id,
-      email: user.primaryEmail,
+      stackUserId: stackUser.id,
+      localUserId: localUser.id,
+      email: stackUser.primaryEmail,
       path: request.nextUrl.pathname,
       method: request.method,
     });
@@ -54,10 +68,11 @@ export async function authenticateApiRequest(
     return {
       success: true,
       user: {
-        id: user.id,
-        primaryEmail: user.primaryEmail || "",
-        displayName: user.displayName || "",
-        serverMetadata: user.serverMetadata,
+        id: stackUser.id,
+        primaryEmail: stackUser.primaryEmail || "",
+        displayName: stackUser.displayName || "",
+        serverMetadata: stackUser.serverMetadata,
+        localUser,
       },
     };
   } catch (error) {
@@ -167,17 +182,21 @@ export async function getOptionalUser(
   request: NextRequest,
 ): Promise<AuthenticatedUser | null> {
   try {
-    const user = await stackServerApp.getUser({ tokenStore: request });
+    const stackUser = await stackServerApp.getUser({ tokenStore: request });
 
-    if (!user) {
+    if (!stackUser) {
       return null;
     }
 
+    // Get or create local database user
+    const localUser = await getOrCreateLocalUser(stackUser);
+
     return {
-      id: user.id,
-      primaryEmail: user.primaryEmail || "",
-      displayName: user.displayName || "",
-      serverMetadata: user.serverMetadata,
+      id: stackUser.id,
+      primaryEmail: stackUser.primaryEmail || "",
+      displayName: stackUser.displayName || "",
+      serverMetadata: stackUser.serverMetadata,
+      localUser,
     };
   } catch (error) {
     logger.debug("Optional authentication failed", {
