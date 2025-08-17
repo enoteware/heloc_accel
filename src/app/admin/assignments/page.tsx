@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { UserCheck, Search, Filter, Users, AlertCircle } from "lucide-react";
-import { getDemoAgents, getDemoActiveAgents } from "@/lib/company-data";
 import type { Agent } from "@/lib/company-data";
 
 interface User {
@@ -37,97 +36,18 @@ export default function UserAssignmentsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+        // Fetch from API
+        const [assignmentsRes, agentsRes] = await Promise.all([
+          fetch("/api/admin/assignments"),
+          fetch("/api/agents?active=true"),
+        ]);
 
-        if (isDemoMode) {
-          // Load demo data
-          const demoAgents = getDemoActiveAgents();
-          setAgents(demoAgents);
+        if (assignmentsRes.ok && agentsRes.ok) {
+          const assignmentsData = await assignmentsRes.json();
+          const agentsData = await agentsRes.json();
 
-          // Create demo users
-          const demoUsers: User[] = [
-            {
-              id: "1",
-              name: "John Smith",
-              email: "john.smith@example.com",
-              createdAt: new Date("2024-01-15"),
-            },
-            {
-              id: "2",
-              name: "Jane Doe",
-              email: "jane.doe@example.com",
-              createdAt: new Date("2024-01-20"),
-            },
-            {
-              id: "3",
-              name: "Robert Johnson",
-              email: "robert.j@example.com",
-              createdAt: new Date("2024-02-01"),
-            },
-            {
-              id: "4",
-              name: "Maria Garcia",
-              email: "maria.g@example.com",
-              createdAt: new Date("2024-02-10"),
-            },
-            {
-              id: "5",
-              name: "David Lee",
-              email: "david.lee@example.com",
-              createdAt: new Date("2024-02-15"),
-            },
-            {
-              id: "6",
-              name: "Sarah Wilson",
-              email: "sarah.w@example.com",
-              createdAt: new Date("2024-02-20"),
-            },
-          ];
-
-          // Get assignments from localStorage
-          const storedAssignments = localStorage.getItem(
-            "heloc_demo_user_agent_assignments",
-          );
-          const assignmentData = storedAssignments
-            ? JSON.parse(storedAssignments)
-            : [];
-
-          // Create assignment records
-          const assignmentRecords: Assignment[] = demoUsers.map((user) => {
-            const assignment = assignmentData.find(
-              (a: any) => a.userId === user.id,
-            );
-            const agent = assignment
-              ? demoAgents.find((ag) => ag.id === assignment.agentId)
-              : null;
-
-            return {
-              userId: user.id,
-              userName: user.name,
-              userEmail: user.email,
-              agentId: assignment?.agentId || null,
-              agentName: agent ? `${agent.firstName} ${agent.lastName}` : null,
-              assignedAt: assignment?.assignedAt
-                ? new Date(assignment.assignedAt)
-                : null,
-            };
-          });
-
-          setAssignments(assignmentRecords);
-        } else {
-          // In production, fetch from API
-          const [assignmentsRes, agentsRes] = await Promise.all([
-            fetch("/api/admin/assignments"),
-            fetch("/api/agents?active=true"),
-          ]);
-
-          if (assignmentsRes.ok && agentsRes.ok) {
-            const assignmentsData = await assignmentsRes.json();
-            const agentsData = await agentsRes.json();
-
-            setAssignments(assignmentsData.data || []);
-            setAgents(agentsData.data || []);
-          }
+          setAssignments(assignmentsData.data || []);
+          setAgents(agentsData.data || []);
         }
       } catch (error) {
         console.error("Error loading assignments:", error);
@@ -188,83 +108,23 @@ export default function UserAssignmentsPage() {
     setAssigning(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      // Update via API
+      const response = await fetch("/api/admin/assignments/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userIds: selectedUsers,
+          agentId: selectedAgentId,
+        }),
+      });
 
-      if (isDemoMode) {
-        // Update demo assignments
-        const storedAssignments = localStorage.getItem(
-          "heloc_demo_user_agent_assignments",
-        );
-        const assignmentData = storedAssignments
-          ? JSON.parse(storedAssignments)
-          : [];
-
-        // Update or create assignments
-        selectedUsers.forEach((userId) => {
-          const existingIndex = assignmentData.findIndex(
-            (a: any) => a.userId === userId,
-          );
-          const assignment = {
-            userId,
-            agentId: selectedAgentId,
-            assignmentType: "primary",
-            assignedAt: new Date(),
-          };
-
-          if (existingIndex >= 0) {
-            assignmentData[existingIndex] = assignment;
-          } else {
-            assignmentData.push(assignment);
-          }
-        });
-
-        localStorage.setItem(
-          "heloc_demo_user_agent_assignments",
-          JSON.stringify(assignmentData),
-        );
-
-        // Update UI
-        const agent = agents.find((a) => a.id === selectedAgentId);
-        setAssignments((prev) =>
-          prev.map((assignment) => {
-            if (selectedUsers.includes(assignment.userId)) {
-              return {
-                ...assignment,
-                agentId: selectedAgentId,
-                agentName: agent
-                  ? `${agent.firstName} ${agent.lastName}`
-                  : null,
-                assignedAt: new Date(),
-              };
-            }
-            return assignment;
-          }),
-        );
-
-        alert(
-          `Successfully assigned ${selectedUsers.length} users to ${agent?.firstName} ${agent?.lastName}`,
-        );
-        setSelectedUsers([]);
-        setSelectedAgentId(null);
+      if (response.ok) {
+        // Reload assignments
+        window.location.reload();
       } else {
-        // In production, update via API
-        const response = await fetch("/api/admin/assignments/bulk", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userIds: selectedUsers,
-            agentId: selectedAgentId,
-          }),
-        });
-
-        if (response.ok) {
-          // Reload assignments
-          window.location.reload();
-        } else {
-          throw new Error("Failed to assign users");
-        }
+        throw new Error("Failed to assign users");
       }
     } catch (error) {
       console.error("Error assigning users:", error);

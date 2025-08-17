@@ -22,7 +22,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   }, [error]);
 
   const isDevelopment = process.env.NODE_ENV === "development";
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
   return (
     <html>
@@ -50,9 +49,8 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                 Application Error
               </h1>
               <p className="mt-2 text-center text-lg text-gray-600">
-                {isDemoMode
-                  ? "A critical error occurred in demo mode. This is unusual but not a cause for concern."
-                  : "A critical error occurred that prevented the application from loading properly."}
+                A critical error occurred that prevented the application from
+                loading properly.
               </p>
             </div>
 
@@ -105,15 +103,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               >
                 Reload Application
               </button>
-
-              {isDemoMode && (
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">
-                    Demo Mode: You can safely reload the page or try the
-                    calculator directly.
-                  </p>
-                </div>
-              )}
             </div>
 
             {/* Development error details */}

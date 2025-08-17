@@ -26,8 +26,28 @@ global.console = {
   // error: jest.fn(),
 };
 
+// Minimal polyfill for Response.json used by NextResponse.json in route handlers
+if (typeof Response === "function" && typeof Response.json !== "function") {
+  Response.json = (data, init) => {
+    const headers = new Headers(init && init.headers ? init.headers : {});
+    if (!headers.has("content-type")) {
+      headers.set("content-type", "application/json");
+    }
+    return new Response(JSON.stringify(data), { ...(init || {}), headers });
+  };
+}
+
+// Node polyfills for TextEncoder/TextDecoder (used by pg and others)
+try {
+  const { TextEncoder, TextDecoder } = require("util");
+  if (!global.TextEncoder) global.TextEncoder = TextEncoder;
+  if (!global.TextDecoder) global.TextDecoder = TextDecoder;
+} catch (_) {}
+
 // Mock fetch for API tests
-global.fetch = jest.fn();
+if (!global.fetch) {
+  global.fetch = jest.fn();
+}
 
 // Mock window.location for navigation tests
 Object.defineProperty(window, "location", {
@@ -82,6 +102,20 @@ jest.mock("next/navigation", () => ({
   }),
   useSearchParams: () => new URLSearchParams(),
   usePathname: () => "/",
+}));
+
+// Mock Next.js server helpers used by route handlers
+jest.mock("next/server", () => ({
+  NextResponse: {
+    json: (data, init) => {
+      const headers = new Headers({ "content-type": "application/json" });
+      return new Response(JSON.stringify(data), {
+        status: (init && init.status) || 200,
+        headers,
+      });
+    },
+  },
+  NextRequest: Request,
 }));
 
 // Mock window.localStorage

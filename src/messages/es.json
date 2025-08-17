@@ -314,5 +314,23 @@
       "signInError": "Ocurrió un error durante el inicio de sesión. Por favor intenta de nuevo.",
       "missingCredentials": "El correo electrónico y la contraseña son requeridos"
     }
+  },
+
+  "dataManagement": {
+    "title": "Gestión de Datos",
+    "clearAllUserData": "Borrar Todos los Datos del Usuario",
+    "clearAllData": "Borrar Todos los Datos",
+    "permanentlyDeleteDescription": "Eliminar permanentemente todos tus escenarios guardados, cálculos y datos de perfil. Esta acción no se puede deshacer.",
+    "clearDataConfirmTitle": "Borrar Todos los Datos del Usuario",
+    "clearDataConfirmMessage": "Esto eliminará permanentemente todos tus escenarios guardados, cálculos y datos de perfil. Esta acción no se puede deshacer. ¿Estás seguro de que quieres continuar?",
+    "yesContinue": "Sí, Continuar",
+    "finalConfirmation": "Confirmación Final",
+    "finalConfirmationMessage": "Esta acción eliminará permanentemente todos tus datos y no se puede deshacer. Por favor escribe el texto de confirmación a continuación:",
+    "deleteAllDataConfirmation": "ELIMINAR TODOS LOS DATOS",
+    "typeDeleteAllDataPlaceholder": "Escribe 'ELIMINAR TODOS LOS DATOS' para confirmar",
+    "confirmDeletion": "Confirmar Eliminación",
+    "dataClearedSuccessfully": "Datos Eliminados Exitosamente",
+    "dataClearedSuccessMessage": "Todos tus datos de usuario han sido eliminados permanentemente. Serás redirigido para actualizar la página.",
+    "continue": "Continuar"
   }
 }

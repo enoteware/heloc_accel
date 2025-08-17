@@ -310,5 +310,23 @@
       "signInError": "An error occurred during sign in. Please try again.",
       "missingCredentials": "Email and password are required"
     }
+  },
+
+  "dataManagement": {
+    "title": "Data Management",
+    "clearAllUserData": "Clear All User Data",
+    "clearAllData": "Clear All Data",
+    "permanentlyDeleteDescription": "Permanently delete all your saved scenarios, calculations, and profile data. This action cannot be undone.",
+    "clearDataConfirmTitle": "Clear All User Data",
+    "clearDataConfirmMessage": "This will permanently delete all your saved scenarios, calculations, and profile data. This action cannot be undone. Are you sure you want to continue?",
+    "yesContinue": "Yes, Continue",
+    "finalConfirmation": "Final Confirmation",
+    "finalConfirmationMessage": "This action will permanently delete all your data and cannot be undone. Please type the confirmation text below:",
+    "deleteAllDataConfirmation": "DELETE ALL DATA",
+    "typeDeleteAllDataPlaceholder": "Type 'DELETE ALL DATA' to confirm",
+    "confirmDeletion": "Confirm Deletion",
+    "dataClearedSuccessfully": "Data Cleared Successfully",
+    "dataClearedSuccessMessage": "All your user data has been permanently deleted. You will be redirected to refresh the page.",
+    "continue": "Continue"
   }
 }

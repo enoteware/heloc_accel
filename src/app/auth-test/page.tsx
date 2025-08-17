@@ -66,7 +66,6 @@ export default function AuthTestPage() {
         <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm text-gray-900">
           {JSON.stringify(
             {
-              NEXT_PUBLIC_DEMO_MODE: process.env.NEXT_PUBLIC_DEMO_MODE,
               NODE_ENV: process.env.NODE_ENV,
             },
             null,

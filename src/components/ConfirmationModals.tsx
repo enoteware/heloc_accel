@@ -330,6 +330,19 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
     }
   }, [isOpen]);
 
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [isOpen, onClose]);
+
   return (
     <Modal
       isOpen={isOpen}

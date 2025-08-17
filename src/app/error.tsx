@@ -16,7 +16,6 @@ export default function Error({ error, reset }: ErrorProps) {
   }, [error]);
 
   const isDevelopment = process.env.NODE_ENV === "development";
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -42,9 +41,8 @@ export default function Error({ error, reset }: ErrorProps) {
             Something went wrong
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {isDemoMode
-              ? "Don't worry, this is just demo mode. You can try again or go back to the calculator."
-              : "We're sorry for the inconvenience. Please try again or contact support if the problem persists."}
+            We're sorry for the inconvenience. Please try again or contact
+            support if the problem persists.
           </p>
         </div>
 
@@ -65,16 +63,6 @@ export default function Error({ error, reset }: ErrorProps) {
           <Button onClick={reset} variant="primary" className="w-full">
             Try Again
           </Button>
-
-          {isDemoMode && (
-            <Button
-              onClick={() => (window.location.href = "/calculator")}
-              variant="outline"
-              className="w-full"
-            >
-              Go to Calculator
-            </Button>
-          )}
 
           <Button
             onClick={() => (window.location.href = "/")}

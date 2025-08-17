@@ -7,56 +7,40 @@ import {
   exportAssignmentsToCSV,
   importAgentsFromCSV,
 } from "@/lib/export-utils";
-import { getDemoAgents } from "@/lib/company-data";
 
 export default function DocumentsPage() {
   const [importing, setImporting] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleExportAgents = () => {
-    const agents = getDemoAgents();
-    exportAgentsToCSV(agents);
+  const handleExportAgents = async () => {
+    try {
+      const response = await fetch("/api/agents");
+      if (response.ok) {
+        const data = await response.json();
+        exportAgentsToCSV(data.data || []);
+      } else {
+        alert("Failed to fetch agents for export");
+      }
+    } catch (error) {
+      console.error("Error exporting agents:", error);
+      alert("Failed to export agents");
+    }
   };
 
-  const handleExportAssignments = () => {
-    // Get assignments from localStorage
-    const storedAssignments = localStorage.getItem(
-      "heloc_demo_user_agent_assignments",
-    );
-    const assignmentData = storedAssignments
-      ? JSON.parse(storedAssignments)
-      : [];
-
-    // Create demo users for export
-    const demoUsers = [
-      { id: "1", name: "John Smith", email: "john.smith@example.com" },
-      { id: "2", name: "Jane Doe", email: "jane.doe@example.com" },
-      { id: "3", name: "Robert Johnson", email: "robert.j@example.com" },
-      { id: "4", name: "Maria Garcia", email: "maria.g@example.com" },
-      { id: "5", name: "David Lee", email: "david.lee@example.com" },
-      { id: "6", name: "Sarah Wilson", email: "sarah.w@example.com" },
-    ];
-
-    const agents = getDemoAgents();
-
-    // Create export data
-    const exportData = demoUsers.map((user) => {
-      const assignment = assignmentData.find((a: any) => a.userId === user.id);
-      const agent = assignment
-        ? agents.find((ag) => ag.id === assignment.agentId)
-        : null;
-
-      return {
-        userId: user.id,
-        userName: user.name,
-        userEmail: user.email,
-        agentId: assignment?.agentId || "",
-        agentName: agent ? `${agent.firstName} ${agent.lastName}` : "",
-        assignedAt: assignment?.assignedAt || "",
-      };
-    });
-
-    exportAssignmentsToCSV(exportData);
+  const handleExportAssignments = async () => {
+    try {
+      // Fetch assignments from API
+      const response = await fetch("/api/admin/assignments");
+      if (response.ok) {
+        const data = await response.json();
+        exportAssignmentsToCSV(data.data || []);
+      } else {
+        alert("Failed to fetch assignments for export");
+      }
+    } catch (error) {
+      console.error("Error exporting assignments:", error);
+      alert("Failed to export assignments");
+    }
   };
 
   const handleImportAgents = async (
@@ -70,23 +54,23 @@ export default function DocumentsPage() {
     try {
       const importedAgents = await importAgentsFromCSV(file);
 
-      // In demo mode, merge with existing agents
-      const existingAgents = getDemoAgents();
-      const maxId = Math.max(...existingAgents.map((a) => a.id || 0), 0);
+      // Import agents via API
+      const response = await fetch("/api/agents/import", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ agents: importedAgents }),
+      });
 
-      // Add imported agents with new IDs
-      const newAgents = importedAgents.map((agent, index) => ({
-        ...agent,
-        id: maxId + index + 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }));
-
-      // Save to localStorage
-      const allAgents = [...existingAgents, ...newAgents];
-      localStorage.setItem("heloc_demo_agents", JSON.stringify(allAgents));
-
-      alert(`Successfully imported ${newAgents.length} agents!`);
+      if (response.ok) {
+        const result = await response.json();
+        alert(
+          `Successfully imported ${result.count || importedAgents.length} agents!`,
+        );
+      } else {
+        throw new Error("Failed to import agents via API");
+      }
 
       // Reset file input
       if (fileInputRef.current) {

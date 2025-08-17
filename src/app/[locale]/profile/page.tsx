@@ -8,7 +8,12 @@ import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { ArrowLeft, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, Trash2 } from "lucide-react";
+import {
+  FirstConfirmationModal,
+  SecondConfirmationModal,
+  SuccessModal,
+} from "@/components/ConfirmationModals";
 
 interface UserProfile {
   id: string;
@@ -66,6 +71,12 @@ export default function ProfilePage() {
     confirmPassword: "",
   });
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+
+  // Data clearing state
+  const [showFirstConfirmation, setShowFirstConfirmation] = useState(false);
+  const [showSecondConfirmation, setShowSecondConfirmation] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [clearingData, setClearingData] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -193,6 +204,58 @@ export default function ProfilePage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  // Data clearing functions
+  const handleClearDataClick = () => {
+    setShowFirstConfirmation(true);
+  };
+
+  const handleFirstConfirmationProceed = () => {
+    setShowFirstConfirmation(false);
+    setShowSecondConfirmation(true);
+  };
+
+  const handleFirstConfirmationCancel = () => {
+    setShowFirstConfirmation(false);
+  };
+
+  const handleSecondConfirmationProceed = async () => {
+    setClearingData(true);
+    try {
+      // Clear user data via API
+      const response = await fetch("/api/profile/clear-data", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setShowSecondConfirmation(false);
+        setShowSuccessModal(true);
+      } else {
+        throw new Error("Failed to clear user data");
+      }
+    } catch (err) {
+      console.error("Error clearing data:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to clear user data",
+      );
+      setShowSecondConfirmation(false);
+    } finally {
+      setClearingData(false);
+    }
+  };
+
+  const handleSecondConfirmationCancel = () => {
+    setShowSecondConfirmation(false);
+  };
+
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false);
+    // Optionally refresh the page or redirect
+    window.location.reload();
   };
 
   const formatDate = (dateString: string) => {
@@ -782,8 +845,79 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
+
+          {/* Data Management Section */}
+          <div className="bg-card text-card-foreground rounded-lg shadow-md">
+            <div className="px-6 py-4 border-b border-border">
+              <h2 className="text-xl font-semibold text-foreground">
+                {t("dataManagement.title")}
+              </h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0">
+                      <Trash2 className="h-5 w-5 text-yellow-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-medium text-yellow-800">
+                        {t("dataManagement.clearAllUserData")}
+                      </h3>
+                      <p className="mt-1 text-sm text-yellow-700">
+                        {t("dataManagement.permanentlyDeleteDescription")}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={handleClearDataClick}
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      {t("dataManagement.clearAllData")}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Confirmation Modals */}
+      <FirstConfirmationModal
+        isOpen={showFirstConfirmation}
+        onClose={handleFirstConfirmationCancel}
+        onConfirm={handleFirstConfirmationProceed}
+        title={t("dataManagement.clearDataConfirmTitle")}
+        message={t("dataManagement.clearDataConfirmMessage")}
+        confirmText={t("dataManagement.yesContinue")}
+        cancelText={t("cancel")}
+      />
+
+      <SecondConfirmationModal
+        isOpen={showSecondConfirmation}
+        onClose={handleSecondConfirmationCancel}
+        onConfirm={handleSecondConfirmationProceed}
+        title={t("dataManagement.finalConfirmation")}
+        message={t("dataManagement.finalConfirmationMessage")}
+        confirmationText={t("dataManagement.deleteAllDataConfirmation")}
+        placeholder={t("dataManagement.typeDeleteAllDataPlaceholder")}
+        confirmText={t("dataManagement.confirmDeletion")}
+        cancelText={t("cancel")}
+        loading={clearingData}
+      />
+
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={handleSuccessModalClose}
+        title={t("dataManagement.dataClearedSuccessfully")}
+        message={t("dataManagement.dataClearedSuccessMessage")}
+        closeText={t("dataManagement.continue")}
+        showRegenerateOption={false}
+      />
     </div>
   );
 }

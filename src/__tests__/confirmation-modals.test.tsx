@@ -176,7 +176,7 @@ describe("SecondConfirmationModal", () => {
     expect(confirmButton).not.toBeDisabled();
   });
 
-  it("should show error when incorrect text is entered and confirm is clicked", async () => {
+  it("should disable confirm button when incorrect text is entered", async () => {
     const user = userEvent.setup();
     render(<SecondConfirmationModal {...defaultProps} />);
 
@@ -184,11 +184,7 @@ describe("SecondConfirmationModal", () => {
     await user.type(input, "wrong text");
 
     const confirmButton = screen.getByText("Confirm");
-    await user.click(confirmButton);
-
-    expect(screen.getByTestId("input-error")).toHaveTextContent(
-      'Please type "DELETE ALL DATA" exactly as shown',
-    );
+    expect(confirmButton).toBeDisabled();
     expect(defaultProps.onConfirm).not.toHaveBeenCalled();
   });
 
@@ -404,9 +400,12 @@ describe("SuccessModal", () => {
         />,
       );
 
-      // Tab to input and type
-      await user.tab();
-      await user.keyboard("DELETE ALL DATA");
+      // Focus input and type
+      const input = screen.getByPlaceholderText(
+        "Type confirmation text here...",
+      );
+      await user.click(input);
+      await user.type(input, "DELETE ALL DATA");
 
       // Press Enter to confirm
       await user.keyboard("{Enter}");
@@ -419,8 +418,11 @@ describe("SuccessModal", () => {
     const user = userEvent.setup();
     render(<SuccessModal {...defaultProps} />);
 
-    const closeButton = screen.getByText("Close");
-    await user.click(closeButton);
+    const buttons = screen.getAllByRole("button", { name: "Close" });
+    const primaryCloseButton = buttons.find(
+      (button) => button.getAttribute("data-variant") === "primary",
+    );
+    await user.click(primaryCloseButton!);
 
     expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
   });
@@ -429,8 +431,11 @@ describe("SuccessModal", () => {
     render(<SuccessModal {...defaultProps} />);
 
     await waitFor(() => {
-      const closeButton = screen.getByText("Close");
-      expect(closeButton).toHaveFocus();
+      const buttons = screen.getAllByRole("button", { name: "Close" });
+      const primaryCloseButton = buttons.find(
+        (button) => button.getAttribute("data-variant") === "primary",
+      );
+      expect(primaryCloseButton).toHaveFocus();
     });
   });
 

@@ -15,40 +15,20 @@ export default function NewAgentPage() {
     setLoading(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      // Save via API
+      const response = await fetch("/api/agents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-      if (isDemoMode) {
-        // In demo mode, save to localStorage
-        const agents = JSON.parse(
-          localStorage.getItem("heloc_demo_agents") || "[]",
-        );
-        const newAgent: Agent = {
-          ...(data as Agent),
-          id: Date.now(), // Generate temporary ID
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-        agents.push(newAgent);
-        localStorage.setItem("heloc_demo_agents", JSON.stringify(agents));
-
+      if (response.ok) {
         alert("Agent created successfully!");
         router.push("/admin/agents");
       } else {
-        // In production, save via API
-        const response = await fetch("/api/agents", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          alert("Agent created successfully!");
-          router.push("/admin/agents");
-        } else {
-          throw new Error("Failed to create agent");
-        }
+        throw new Error("Failed to create agent");
       }
     } catch (error) {
       console.error("Error creating agent:", error);

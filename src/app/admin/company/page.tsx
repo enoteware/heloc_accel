@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Building, Save, X } from "lucide-react";
 import { useCompany } from "@/contexts/CompanyContext";
-import {
-  getDemoCompanySettings,
-  updateDemoCompanySettings,
-} from "@/lib/company-data";
+
 import type { CompanySettings } from "@/lib/company-data";
 
 export default function CompanySettingsPage() {
@@ -33,12 +30,6 @@ export default function CompanySettingsPage() {
   useEffect(() => {
     if (companySettings) {
       setFormData(companySettings);
-    } else {
-      // Load from demo storage if available
-      const demoSettings = getDemoCompanySettings();
-      if (demoSettings) {
-        setFormData(demoSettings);
-      }
     }
   }, [companySettings]);
 
@@ -54,29 +45,20 @@ export default function CompanySettingsPage() {
     setSaving(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      // Update via API
+      const response = await fetch("/api/company", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      if (isDemoMode) {
-        // Update demo storage
-        updateDemoCompanySettings(formData);
+      if (response.ok) {
         await refreshCompanyData();
         alert("Company settings updated successfully!");
       } else {
-        // Update via API
-        const response = await fetch("/api/company", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          await refreshCompanyData();
-          alert("Company settings updated successfully!");
-        } else {
-          throw new Error("Failed to update settings");
-        }
+        throw new Error("Failed to update settings");
       }
     } catch (error) {
       console.error("Error saving company settings:", error);

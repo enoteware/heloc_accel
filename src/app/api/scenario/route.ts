@@ -91,7 +91,7 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
   }
 });
 
-// POST /api/scenario - Create new scenario
+// POST /api/scenario - Create new scenario (accepts camelCase or snake_case)
 export const POST = withAuth(async (request: NextRequest, { user }) => {
   try {
     const body = await request.json();
@@ -118,11 +118,105 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
       );
     }
 
-    // Sanitize and validate calculator inputs if provided
-    if (body.current_mortgage_balance) {
-      const sanitizedInputs = sanitizeCalculatorInputs(body);
-      const validation = validateCalculatorInputs(sanitizedInputs);
+    // Helper to read either camelCase or snake_case
+    const pick = (obj: any, camel: string, snake: string) =>
+      obj?.[camel] ?? obj?.[snake];
 
+    // Build a camelCase input for validation/sanitization
+    const camelInput = {
+      scenarioName: body.scenarioName ?? body.name, // used by validation
+      description: body.description,
+      currentMortgageBalance: pick(
+        body,
+        "currentMortgageBalance",
+        "current_mortgage_balance",
+      ),
+      currentInterestRate: pick(
+        body,
+        "currentInterestRate",
+        "current_interest_rate",
+      ),
+      remainingTermMonths: pick(
+        body,
+        "remainingTermMonths",
+        "remaining_term_months",
+      ),
+      monthlyPayment: pick(body, "monthlyPayment", "monthly_payment"),
+      helocLimit: pick(body, "helocLimit", "heloc_limit"),
+      helocInterestRate: pick(body, "helocInterestRate", "heloc_interest_rate"),
+      helocAvailableCredit: pick(
+        body,
+        "helocAvailableCredit",
+        "heloc_available_credit",
+      ),
+      monthlyGrossIncome: pick(
+        body,
+        "monthlyGrossIncome",
+        "monthly_gross_income",
+      ),
+      monthlyNetIncome: pick(body, "monthlyNetIncome", "monthly_net_income"),
+      monthlyExpenses: pick(body, "monthlyExpenses", "monthly_expenses"),
+      monthlyDiscretionaryIncome: pick(
+        body,
+        "monthlyDiscretionaryIncome",
+        "monthly_discretionary_income",
+      ),
+      propertyValue: pick(body, "propertyValue", "property_value"),
+      propertyTaxMonthly: pick(
+        body,
+        "propertyTaxMonthly",
+        "property_tax_monthly",
+      ),
+      insuranceMonthly: pick(body, "insuranceMonthly", "insurance_monthly"),
+      hoaFeesMonthly: pick(body, "hoaFeesMonthly", "hoa_fees_monthly"),
+      traditionalPayoffMonths: pick(
+        body,
+        "traditionalPayoffMonths",
+        "traditional_payoff_months",
+      ),
+      traditionalTotalInterest: pick(
+        body,
+        "traditionalTotalInterest",
+        "traditional_total_interest",
+      ),
+      helocPayoffMonths: pick(body, "helocPayoffMonths", "heloc_payoff_months"),
+      helocTotalInterest: pick(
+        body,
+        "helocTotalInterest",
+        "heloc_total_interest",
+      ),
+      timeSavedMonths: pick(body, "timeSavedMonths", "time_saved_months"),
+      interestSaved: pick(body, "interestSaved", "interest_saved"),
+    };
+
+    // Determine if we have calculator fields to validate
+    const hasCalculatorInputs = [
+      "currentMortgageBalance",
+      "currentInterestRate",
+      "remainingTermMonths",
+      "monthlyPayment",
+      "monthlyGrossIncome",
+      "monthlyNetIncome",
+      "monthlyExpenses",
+      "monthlyDiscretionaryIncome",
+    ].some((k) => camelInput[k as keyof typeof camelInput] !== undefined);
+
+    if (hasCalculatorInputs) {
+      const hadHelocLimit = camelInput.helocLimit !== undefined;
+      const hadHelocRate = camelInput.helocInterestRate !== undefined;
+      const hadHelocAvail = camelInput.helocAvailableCredit !== undefined;
+
+      const sanitizedInputs = sanitizeCalculatorInputs(camelInput);
+
+      // For validation, only include HELOC fields if they were actually provided
+      const sanitizedForValidation: any = { ...sanitizedInputs };
+      if (!(hadHelocLimit || hadHelocRate || hadHelocAvail)) {
+        delete sanitizedForValidation.helocLimit;
+        delete sanitizedForValidation.helocInterestRate;
+        delete sanitizedForValidation.helocAvailableCredit;
+      }
+
+      const validation = validateCalculatorInputs(sanitizedForValidation);
       if (!validation.isValid) {
         return NextResponse.json<ApiResponse>(
           {
@@ -132,6 +226,29 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
           },
           { status: 400 },
         );
+      }
+
+      // Use sanitized inputs for DB insert where applicable
+      camelInput.currentMortgageBalance =
+        sanitizedInputs.currentMortgageBalance;
+      camelInput.currentInterestRate = sanitizedInputs.currentInterestRate;
+      camelInput.remainingTermMonths = sanitizedInputs.remainingTermMonths;
+      camelInput.monthlyPayment = sanitizedInputs.monthlyPayment;
+      camelInput.monthlyGrossIncome = sanitizedInputs.monthlyGrossIncome;
+      camelInput.monthlyNetIncome = sanitizedInputs.monthlyNetIncome;
+      camelInput.monthlyExpenses = sanitizedInputs.monthlyExpenses;
+      camelInput.monthlyDiscretionaryIncome =
+        sanitizedInputs.monthlyDiscretionaryIncome;
+      camelInput.propertyValue = sanitizedInputs.propertyValue;
+      camelInput.propertyTaxMonthly = sanitizedInputs.propertyTaxMonthly;
+      camelInput.insuranceMonthly = sanitizedInputs.insuranceMonthly;
+      camelInput.hoaFeesMonthly = sanitizedInputs.hoaFeesMonthly;
+
+      // Only apply sanitized HELOC values if caller provided any HELOC fields
+      if (hadHelocLimit || hadHelocRate || hadHelocAvail) {
+        camelInput.helocLimit = sanitizedInputs.helocLimit;
+        camelInput.helocInterestRate = sanitizedInputs.helocInterestRate;
+        camelInput.helocAvailableCredit = sanitizedInputs.helocAvailableCredit;
       }
     }
 
@@ -153,44 +270,49 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
         [
           user.localUser.id,
           body.name,
-          body.description || "",
-          body.current_mortgage_balance || null,
-          body.current_interest_rate || null,
-          body.remaining_term_months || null,
-          body.monthly_payment || null,
-          body.heloc_limit || null,
-          body.heloc_interest_rate || null,
-          body.heloc_available_credit || null,
-          body.monthly_gross_income || null,
-          body.monthly_net_income || null,
-          body.monthly_expenses || null,
-          body.monthly_discretionary_income || null,
-          body.property_value || null,
-          body.property_tax_monthly || null,
-          body.insurance_monthly || null,
-          body.hoa_fees_monthly || null,
-          body.traditional_payoff_months || null,
-          body.traditional_total_interest || null,
-          body.heloc_payoff_months || null,
-          body.heloc_total_interest || null,
-          body.time_saved_months || null,
-          body.interest_saved || null,
+          camelInput.description || "",
+          camelInput.currentMortgageBalance ?? null,
+          camelInput.currentInterestRate ?? null,
+          camelInput.remainingTermMonths ?? null,
+          camelInput.monthlyPayment ?? null,
+          camelInput.helocLimit ?? null,
+          camelInput.helocInterestRate ?? null,
+          camelInput.helocAvailableCredit ?? null,
+          camelInput.monthlyGrossIncome ?? null,
+          camelInput.monthlyNetIncome ?? null,
+          camelInput.monthlyExpenses ?? null,
+          camelInput.monthlyDiscretionaryIncome ?? null,
+          camelInput.propertyValue ?? null,
+          camelInput.propertyTaxMonthly ?? null,
+          camelInput.insuranceMonthly ?? null,
+          camelInput.hoaFeesMonthly ?? null,
+          camelInput.traditionalPayoffMonths ?? null,
+          camelInput.traditionalTotalInterest ?? null,
+          camelInput.helocPayoffMonths ?? null,
+          camelInput.helocTotalInterest ?? null,
+          camelInput.timeSavedMonths ?? null,
+          camelInput.interestSaved ?? null,
         ],
       );
 
       const newScenario = result.rows[0];
 
-      return NextResponse.json<ApiResponse>({
-        success: true,
-        data: {
-          id: newScenario.id,
-          name: newScenario.name,
-          description: newScenario.description,
-          created_at: newScenario.created_at,
-          updated_at: newScenario.updated_at,
+      return NextResponse.json<ApiResponse>(
+        {
+          success: true,
+          data: {
+            scenario: {
+              id: newScenario.id,
+              name: newScenario.name,
+              description: newScenario.description,
+              created_at: newScenario.created_at,
+              updated_at: newScenario.updated_at,
+            },
+          },
+          message: "Scenario created successfully",
         },
-        message: "Scenario created successfully",
-      });
+        { status: 201 },
+      );
     } finally {
       client.release();
     }

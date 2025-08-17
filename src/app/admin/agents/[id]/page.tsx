@@ -5,7 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import AgentForm from "../../_components/AgentForm";
-import { getDemoAgent } from "@/lib/company-data";
 import type { Agent } from "@/lib/company-data";
 
 export default function EditAgentPage() {
@@ -21,18 +20,11 @@ export default function EditAgentPage() {
   useEffect(() => {
     const loadAgent = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-
-        if (isDemoMode) {
-          const demoAgent = getDemoAgent(agentId);
-          setAgent(demoAgent);
-        } else {
-          // In production, fetch from API
-          const response = await fetch(`/api/agents/${agentId}`);
-          if (response.ok) {
-            const data = await response.json();
-            setAgent(data.data);
-          }
+        // Fetch from API
+        const response = await fetch(`/api/agents/${agentId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAgent(data.data);
         }
       } catch (error) {
         console.error("Error loading agent:", error);
@@ -52,42 +44,20 @@ export default function EditAgentPage() {
     setSaving(true);
 
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      // Update via API
+      const response = await fetch(`/api/agents/${agentId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-      if (isDemoMode) {
-        // In demo mode, update localStorage
-        const agents = JSON.parse(
-          localStorage.getItem("heloc_demo_agents") || "[]",
-        );
-        const index = agents.findIndex((a: Agent) => a.id === agentId);
-
-        if (index !== -1) {
-          agents[index] = {
-            ...agents[index],
-            ...data,
-            updatedAt: new Date(),
-          };
-          localStorage.setItem("heloc_demo_agents", JSON.stringify(agents));
-        }
-
+      if (response.ok) {
         alert("Agent updated successfully!");
         router.push("/admin/agents");
       } else {
-        // In production, update via API
-        const response = await fetch(`/api/agents/${agentId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          alert("Agent updated successfully!");
-          router.push("/admin/agents");
-        } else {
-          throw new Error("Failed to update agent");
-        }
+        throw new Error("Failed to update agent");
       }
     } catch (error) {
       console.error("Error updating agent:", error);
