@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -76,23 +76,39 @@ export default function BudgetingPage() {
     useState<BudgetingScenario | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
     "income" | "expenses" | "analysis"
   >("income");
 
   // No longer need form state since we're using BudgetForm component
 
+  // Handle authentication state
   useEffect(() => {
-    if (!user) {
+    // Give Stack Auth time to initialize
+    const timer = setTimeout(() => {
+      setAuthLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Only redirect after auth loading is complete
+    if (!authLoading && !user) {
       router.push(
-        "/handler/sign-in?callbackUrl=" + encodeURIComponent("/budgeting"),
+        "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
       );
       return;
     }
-    fetchScenarios();
-  }, [user, router]);
 
-  const fetchScenarios = async () => {
+    // Fetch scenarios only when user is available
+    if (!authLoading && user) {
+      fetchScenarios();
+    }
+  }, [user, router, authLoading, fetchScenarios]);
+
+  const fetchScenarios = useCallback(async () => {
     try {
       const response = await fetch("/api/budgeting/scenarios");
       if (response.ok) {
@@ -110,6 +126,12 @@ export default function BudgetingPage() {
         if (scenariosWithDefaults.length > 0) {
           setCurrentScenario(scenariosWithDefaults[0]);
         }
+      } else if (response.status === 401) {
+        // Authentication required - redirect to sign in
+        router.push(
+          "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
+        );
+        return;
       } else {
         console.error("Failed to fetch scenarios:", response.status);
       }
@@ -118,7 +140,7 @@ export default function BudgetingPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
   const createNewScenario = async () => {
     setSaving(true);
@@ -285,12 +307,16 @@ export default function BudgetingPage() {
     }).format(amount);
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading budgeting tool...</p>
+          <p className="mt-4 text-gray-600">
+            {authLoading
+              ? "Checking authentication..."
+              : "Loading budgeting tool..."}
+          </p>
         </div>
       </div>
     );
