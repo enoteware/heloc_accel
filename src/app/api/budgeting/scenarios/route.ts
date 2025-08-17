@@ -15,6 +15,15 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
       email: user.primaryEmail,
     });
 
+    // If DATABASE_URL is not set, return empty scenarios
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json({
+        success: true,
+        budgetScenarios: [],
+        message: "No budget scenarios found (demo mode)",
+      });
+    }
+
     // Parse query parameters
     const { searchParams } = new URL(request.url);
     const scenarioId = searchParams.get("scenarioId");
@@ -177,6 +186,34 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
       scenarioId: body.scenarioId,
       name: body.name,
     });
+
+    // If DATABASE_URL is not set, return a mock budget scenario
+    if (!process.env.DATABASE_URL) {
+      const mockBudgetScenario = {
+        id: `demo-budget-${Date.now()}`,
+        scenario_id: body.scenarioId || "demo",
+        name: body.name,
+        description: body.description || "",
+        base_monthly_gross_income: body.baseMonthlyGrossIncome || 6000,
+        base_monthly_net_income: body.baseMonthlyNetIncome || 5000,
+        base_monthly_expenses: body.baseMonthlyExpenses || 3000,
+        base_discretionary_income: 2000,
+        recommended_principal_payment: 1000,
+        principal_multiplier: body.principalMultiplier || 3.0,
+        auto_adjust_payments: body.autoAdjustPayments || true,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        income_sources: [],
+        expense_categories: [],
+      };
+
+      return NextResponse.json({
+        success: true,
+        budgetScenario: mockBudgetScenario,
+        message: "Budget scenario created successfully (demo mode)",
+      });
+    }
 
     // Validate the request
     const validation = validateBudgetScenarioRequest(body);

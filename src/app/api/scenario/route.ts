@@ -23,6 +23,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // If DATABASE_URL is not set, return empty scenarios
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json<ApiResponse>({
+        success: true,
+        data: { scenarios: [] },
+        message: "No scenarios found (demo mode)",
+      });
+    }
+
     // Fetch user's scenarios from database
     const client = await pool.connect();
     try {
@@ -120,6 +129,23 @@ export async function POST(request: NextRequest) {
         },
         { status: 400 },
       );
+    }
+
+    // If DATABASE_URL is not set, return a mock scenario
+    if (!process.env.DATABASE_URL) {
+      const mockScenario = {
+        id: `demo-${Date.now()}`,
+        name: body.name,
+        description: body.description || "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      return NextResponse.json<ApiResponse>({
+        success: true,
+        data: { scenario: mockScenario },
+        message: "Scenario created successfully (demo mode)",
+      });
     }
 
     // Sanitize and validate calculator inputs if provided

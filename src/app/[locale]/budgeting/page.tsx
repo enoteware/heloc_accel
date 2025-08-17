@@ -130,8 +130,8 @@ export default function BudgetingPage() {
       const existingScenariosResponse = await fetch("/api/scenario");
       if (existingScenariosResponse.ok) {
         const existingData = await existingScenariosResponse.json();
-        if (existingData.success && existingData.scenarios?.length > 0) {
-          parentScenarioId = existingData.scenarios[0].id;
+        if (existingData.success && existingData.data?.scenarios?.length > 0) {
+          parentScenarioId = existingData.data.scenarios[0].id;
         }
       }
 
@@ -157,7 +157,7 @@ export default function BudgetingPage() {
         if (createParentResponse.ok) {
           const parentData = await createParentResponse.json();
           if (parentData.success) {
-            parentScenarioId = parentData.scenario.id;
+            parentScenarioId = parentData.data.scenario.id;
           }
         }
       }
