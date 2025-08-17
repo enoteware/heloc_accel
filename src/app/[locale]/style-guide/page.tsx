@@ -677,7 +677,7 @@ export default function StyleGuidePage() {
 
         {/* Spacing Section */}
         <section id="spacing" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Spacing</h2>
+          <h2 className="text-h2 text-foreground mb-6">Spacing</h2>
 
           <Card>
             <CardHeader>
@@ -703,13 +703,13 @@ export default function StyleGuidePage() {
                     className="flex items-center space-x-4"
                   >
                     <div
-                      className={`${spacing.class} h-4 bg-primary-500 rounded`}
+                      className={`${spacing.class} h-4 bg-primary rounded`}
                     ></div>
                     <div>
                       <div className="text-body-sm font-medium">
                         {spacing.name}
                       </div>
-                      <div className="text-caption text-neutral-500">
+                      <div className="text-caption text-muted-foreground">
                         {spacing.value}
                       </div>
                     </div>

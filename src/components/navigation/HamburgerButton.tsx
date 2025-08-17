@@ -22,9 +22,9 @@ export const HamburgerButton: React.FC<HamburgerButtonProps> = ({
       onClick={onClick}
       className={cn(
         "relative inline-flex items-center justify-center p-2 rounded-lg",
-        "text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100",
-        "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-        "dark:text-neutral-300 dark:hover:text-neutral-100 dark:hover:bg-neutral-800",
+        "text-muted-foreground hover:text-foreground hover:bg-muted",
+        "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+        "dark:text-muted-foreground dark:hover:text-foreground dark:hover:bg-muted",
         "transition-all duration-200",
         // Ensure minimum 44px touch target
         "min-h-[44px] min-w-[44px]",

@@ -60,7 +60,7 @@ export default function DebugPanel({
     return (
       <button
         onClick={onToggle}
-        className="fixed bottom-20 right-4 bg-purple-600 text-white px-3 py-2 rounded-lg shadow-lg hover:bg-purple-700 z-40 flex items-center space-x-2"
+        className="fixed bottom-20 right-4 bg-primary text-primary-foreground px-3 py-2 rounded-lg shadow-lg hover:bg-primary/90 z-40 flex items-center space-x-2"
         title="Open Debug Panel"
       >
         <svg
@@ -83,14 +83,14 @@ export default function DebugPanel({
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-purple-500 shadow-2xl z-40"
+      className="fixed bottom-0 left-0 right-0 bg-card border-t-2 border-primary shadow-2xl z-40"
       style={{ height: "40vh" }}
     >
       <div className="h-full flex flex-col">
         {/* Header */}
-        <div className="px-4 py-2 bg-purple-50 border-b border-purple-200 flex items-center justify-between">
+        <div className="px-4 py-2 bg-card border-b border-border flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-semibold text-purple-900">
+            <h3 className="text-lg font-semibold text-foreground">
               Debug Panel
             </h3>
             <div className="flex space-x-2">
@@ -98,8 +98,8 @@ export default function DebugPanel({
                 onClick={() => setActiveTab("auth")}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                   activeTab === "auth"
-                    ? "bg-purple-600 text-white"
-                    : "text-purple-600 hover:bg-purple-100"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-primary hover:bg-card/50"
                 }`}
               >
                 Auth
@@ -108,8 +108,8 @@ export default function DebugPanel({
                 onClick={() => setActiveTab("status")}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                   activeTab === "status"
-                    ? "bg-purple-600 text-white"
-                    : "text-purple-600 hover:bg-purple-100"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-primary hover:bg-card/50"
                 }`}
               >
                 System
@@ -118,8 +118,8 @@ export default function DebugPanel({
                 onClick={() => setActiveTab("user")}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                   activeTab === "user"
-                    ? "bg-purple-600 text-white"
-                    : "text-purple-600 hover:bg-purple-100"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-primary hover:bg-card/50"
                 }`}
               >
                 User
@@ -128,14 +128,14 @@ export default function DebugPanel({
             <button
               onClick={fetchDebugInfo}
               disabled={loading}
-              className="px-3 py-1 bg-purple-600 text-white rounded text-sm hover:bg-purple-700 disabled:opacity-50"
+              className="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 disabled:opacity-50"
             >
               {loading ? "Loading..." : "Refresh"}
             </button>
           </div>
           <button
             onClick={onToggle}
-            className="text-purple-400 hover:text-purple-600"
+            className="text-muted-foreground hover:text-foreground"
           >
             <svg
               className="w-6 h-6"
@@ -156,23 +156,25 @@ export default function DebugPanel({
         {/* Content */}
         <div className="flex-1 overflow-auto p-4">
           {debugInfo.error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-800">{debugInfo.error}</p>
+            <div className="bg-destructive/10 border border-destructive rounded-lg p-4">
+              <p className="text-destructive">{debugInfo.error}</p>
             </div>
           ) : (
             <div className="space-y-4">
               {activeTab === "auth" && debugInfo.auth && (
                 <div className="space-y-4">
                   {/* Authentication Status */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                  <div className="bg-card rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">
                       Authentication Status
                     </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center space-x-2">
-                        <span className="text-gray-600">Authenticated:</span>
+                        <span className="text-muted-foreground">
+                          Authenticated:
+                        </span>
                         <span
-                          className={`font-medium ${debugInfo.auth.authentication?.isAuthenticated ? "text-green-600" : "text-red-600"}`}
+                          className={`font-medium ${debugInfo.auth.authentication?.isAuthenticated ? "text-primary" : "text-destructive"}`}
                         >
                           {debugInfo.auth.authentication?.isAuthenticated
                             ? "Yes"
@@ -182,13 +184,17 @@ export default function DebugPanel({
                       {debugInfo.auth.authentication?.user && (
                         <>
                           <div className="flex items-center space-x-2">
-                            <span className="text-gray-600">User ID:</span>
+                            <span className="text-muted-foreground">
+                              User ID:
+                            </span>
                             <span className="font-mono text-xs">
                               {debugInfo.auth.authentication.user.id}
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className="text-gray-600">Email:</span>
+                            <span className="text-muted-foreground">
+                              Email:
+                            </span>
                             <span>
                               {debugInfo.auth.authentication.user.email}
                             </span>
@@ -206,12 +212,12 @@ export default function DebugPanel({
                   </div>
 
                   {/* Cookies */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                  <div className="bg-card rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">
                       Cookies
                     </h4>
                     <div className="space-y-2 text-sm">
-                      <p className="text-gray-600">
+                      <p className="text-muted-foreground">
                         Total cookies: {debugInfo.auth.cookies?.total || 0}
                       </p>
                       {debugInfo.auth.cookies?.stackRelated?.length > 0 && (
@@ -234,8 +240,8 @@ export default function DebugPanel({
                   </div>
 
                   {/* Environment */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                  <div className="bg-card rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">
                       Environment
                     </h4>
                     <div className="space-y-1 text-sm">
@@ -288,13 +294,13 @@ export default function DebugPanel({
                       <div className="flex items-center space-x-2">
                         <span>Connected:</span>
                         <span
-                          className={`font-medium ${debugInfo.status.database?.connected ? "text-green-600" : "text-red-600"}`}
+                          className={`font-medium ${debugInfo.status.database?.connected ? "text-primary" : "text-destructive"}`}
                         >
                           {debugInfo.status.database?.connected ? "Yes" : "No"}
                         </span>
                       </div>
                       {debugInfo.status.database?.error && (
-                        <p className="text-red-600 text-xs mt-1">
+                        <p className="text-destructive text-xs mt-1">
                           {debugInfo.status.database.error}
                         </p>
                       )}
@@ -318,8 +324,8 @@ export default function DebugPanel({
                   </div>
 
                   {/* Logs Summary */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">Logs</h4>
+                  <div className="bg-card rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Logs</h4>
                     <div className="space-y-1 text-sm">
                       <div>Total logs: {debugInfo.status.logs?.total || 0}</div>
                       {debugInfo.status.logs?.byLevel && (
@@ -333,12 +339,12 @@ export default function DebugPanel({
                                 <span
                                   className={`px-2 py-1 rounded text-xs font-medium ${
                                     level === "error"
-                                      ? "bg-red-100 text-red-700"
+                                      ? "bg-destructive/15 text-destructive"
                                       : level === "warn"
-                                        ? "bg-yellow-100 text-yellow-700"
+                                        ? "bg-accent/15 text-accent"
                                         : level === "info"
-                                          ? "bg-blue-100 text-blue-700"
-                                          : "bg-gray-100 text-gray-700"
+                                          ? "bg-accent/15 text-accent"
+                                          : "bg-muted text-foreground"
                                   }`}
                                 >
                                   {level}
@@ -357,8 +363,8 @@ export default function DebugPanel({
               )}
 
               {activeTab === "user" && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">
+                <div className="bg-card rounded-lg p-4">
+                  <h4 className="font-semibold text-foreground mb-2">
                     Current User (Client-Side)
                   </h4>
                   {user ? (
@@ -376,7 +382,7 @@ export default function DebugPanel({
                       )}
                     </pre>
                   ) : (
-                    <p className="text-gray-600">No user logged in</p>
+                    <p className="text-muted-foreground">No user logged in</p>
                   )}
                 </div>
               )}

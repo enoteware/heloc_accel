@@ -121,7 +121,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
       <div
         id="mobile-navigation-menu"
         className={cn(
-          "fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-neutral-900",
+          "fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-card",
           "shadow-xl border-l border-neutral-200 dark:border-neutral-800",
           "z-50 transform transition-transform duration-300 ease-in-out",
           "flex flex-col",
@@ -133,19 +133,16 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         aria-label="Navigation menu"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
-          <h2 className="text-h6 font-semibold text-neutral-900 dark:text-neutral-100">
-            Navigation
-          </h2>
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h2 className="text-h6 font-semibold text-foreground">Navigation</h2>
           <div className="flex items-center space-x-2">
             <SimpleLanguageSwitcher />
             <button
               type="button"
               onClick={onClose}
               className={cn(
-                "p-2 rounded-lg text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100",
-                "dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-neutral-800",
-                "focus:outline-none focus:ring-2 focus:ring-primary-500",
+                "p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted",
+                "focus:outline-none focus:ring-2 focus:ring-ring",
                 "transition-colors duration-200",
               )}
               aria-label="Close navigation menu"
@@ -157,23 +154,22 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
 
         {/* User info (if authenticated) */}
         {session?.user && (
-          <div className="p-4 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="p-4 border-b border-border">
             <div className="flex items-center space-x-3">
               <div
                 className={cn(
                   "flex items-center justify-center w-10 h-10 rounded-full",
-                  "bg-primary-500 text-white text-sm font-medium",
-                  "dark:bg-primary-600",
+                  "bg-primary text-primary-foreground text-sm font-medium",
                 )}
               >
                 {getUserInitials()}
               </div>
               <div>
-                <p className="text-body font-medium text-neutral-900 dark:text-neutral-100">
+                <p className="text-body font-medium text-foreground">
                   {getUserDisplayName()}
                 </p>
                 {user?.primaryEmail && (
-                  <p className="text-body-sm text-neutral-600 dark:text-neutral-400">
+                  <p className="text-body-sm text-muted-foreground">
                     {user.primaryEmail}
                   </p>
                 )}
@@ -234,15 +230,15 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         </nav>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-2">
+        <div className="p-4 border-t border-border space-y-2">
           {session?.user ? (
             <button
               type="button"
               onClick={handleSignOut}
               className={cn(
                 "flex items-center space-x-2 w-full px-3 py-2 rounded-lg",
-                "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20",
-                "focus:outline-none focus:ring-2 focus:ring-red-500",
+                "text-destructive hover:bg-destructive/10",
+                "focus:outline-none focus:ring-2 focus:ring-destructive",
                 "transition-colors duration-200",
               )}
             >
@@ -254,7 +250,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               href="/handler/sign-in"
               label="Sign In"
               icon="login"
-              className="w-full justify-start bg-primary-500 text-white hover:bg-primary-600"
+              className="w-full justify-start bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={handleLinkClick}
             />
           )}

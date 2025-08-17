@@ -37,16 +37,12 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
 
   const baseClasses = cn(
     "flex items-center space-x-2 px-3 py-2 rounded-lg text-body font-medium transition-all duration-200",
-    "hover:bg-neutral-100 hover:text-neutral-900",
-    "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-    "dark:hover:bg-neutral-800 dark:hover:text-neutral-100",
+    "hover:bg-muted hover:text-foreground",
+    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+    "dark:hover:bg-muted dark:hover:text-foreground",
     isActive
-      ? cn(
-          "bg-primary-50 text-primary-700 border border-primary-200",
-          "dark:bg-primary-900/20 dark:text-primary-300 dark:border-primary-800",
-          activeClassName,
-        )
-      : "text-neutral-700 dark:text-neutral-300",
+      ? cn("bg-card text-primary border border-border", activeClassName)
+      : "text-foreground",
     className,
   );
 
@@ -59,9 +55,7 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
           aria-hidden={true}
           className={cn(
             "flex-shrink-0",
-            isActive
-              ? "text-primary-600 dark:text-primary-400"
-              : "text-neutral-500 dark:text-neutral-400",
+            isActive ? "text-primary" : "text-muted-foreground",
           )}
         />
       )}
