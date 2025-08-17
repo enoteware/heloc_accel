@@ -108,7 +108,7 @@ jest.mock("@/components/design-system/Badge", () => ({
 }));
 
 describe("BudgetForm Component", () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = jest.fn(async (_data?: any) => {});
 
   beforeEach(() => {
     mockOnSubmit.mockClear();
@@ -348,7 +348,7 @@ describe("BudgetDashboard Component", () => {
   beforeEach(() => {
     mockOnScenarioUpdate.mockClear();
     // Mock fetch for API calls
-    global.fetch = jest.fn();
+    global.fetch = jest.fn() as any;
   });
 
   it("renders financial health score", () => {

@@ -22,6 +22,7 @@ interface MockPage {
   textContent: jest.Mock;
   isVisible: jest.Mock;
   screenshot: jest.Mock;
+  setViewportSize?: jest.Mock;
 }
 
 interface MockBrowser {
@@ -38,6 +39,7 @@ const mockPage: MockPage = {
   textContent: jest.fn(),
   isVisible: jest.fn(),
   screenshot: jest.fn(),
+  setViewportSize: jest.fn(),
 };
 
 const mockBrowser: MockBrowser = {
@@ -406,7 +408,7 @@ describe("Budgeting Tool E2E Tests", () => {
 
       try {
         await page.click('[data-testid="create-scenario-button"]');
-      } catch (error) {
+      } catch (error: any) {
         expect(error.message).toBe("Network error");
       }
 

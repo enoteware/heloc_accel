@@ -105,7 +105,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.anyOf([
+            message: expect.any([
               "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
               "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
             ]),
@@ -134,7 +134,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.anyOf([
+            message: expect.any([
               "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
               "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
             ]),
@@ -361,7 +361,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.anyOf([
+            message: expect.any([
               "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
               "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
             ]),

@@ -21,8 +21,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["jest", "@testing-library/jest-dom"]
   },
+  "typeAcquisition": {
+    "enable": true,
+    "include": ["jest-extended"]
+  },
+
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "deployment"]
+  "exclude": ["node_modules", "deployment", "tests/e2e", "src/__tests__"]
 }

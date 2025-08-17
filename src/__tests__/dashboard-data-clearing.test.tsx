@@ -125,7 +125,7 @@ jest.mock("@/components/design-system/Button", () => ({
 process.env.NEXT_PUBLIC_DEMO_MODE = "true";
 
 // Import Dashboard component after mocks
-import Dashboard from "@/app/dashboard/page";
+import Dashboard from "@/app/[locale]/dashboard/page";
 
 describe("Dashboard Data Clearing Integration", () => {
   const mockScenarios = [

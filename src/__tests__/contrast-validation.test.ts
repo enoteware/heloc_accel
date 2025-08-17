@@ -256,20 +256,20 @@ describe("Runtime Assertions", () => {
   describe("assertSafeContrast", () => {
     it("throws in development for unsafe combinations", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = "development";
+      (process.env as any).NODE_ENV = "development";
 
       expect(() => {
         assertSafeContrast("#ffffff", "#ffffff", "test-component");
       }).toThrow();
 
-      process.env.NODE_ENV = originalEnv;
+      (process.env as any).NODE_ENV = originalEnv as any;
     });
 
     it("logs warning in production for unsafe combinations", () => {
       const originalEnv = process.env.NODE_ENV;
       const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
 
-      process.env.NODE_ENV = "production";
+      (process.env as any).NODE_ENV = "production";
 
       assertSafeContrast("#ffffff", "#ffffff", "test-component");
 
@@ -278,7 +278,7 @@ describe("Runtime Assertions", () => {
       );
 
       consoleSpy.mockRestore();
-      process.env.NODE_ENV = originalEnv;
+      (process.env as any).NODE_ENV = originalEnv as any;
     });
 
     it("passes for safe combinations", () => {

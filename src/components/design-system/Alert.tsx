@@ -6,6 +6,8 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
   children: React.ReactNode;
   onClose?: () => void;
+  onDismiss?: () => void;
+  dismissible?: boolean;
 }
 
 const alertVariants = {
@@ -76,7 +78,16 @@ const icons = {
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   (
-    { className, variant = "info", title, children, onClose, ...props },
+    {
+      className,
+      variant = "info",
+      title,
+      children,
+      onClose,
+      onDismiss,
+      dismissible,
+      ...props
+    },
     ref,
   ) => {
     const variantStyles = alertVariants[variant];
@@ -113,12 +124,12 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
               {children}
             </div>
           </div>
-          {onClose && (
+          {(dismissible || onClose) && (
             <div className="ml-auto pl-3">
               <div className="-mx-1.5 -my-1.5">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={onClose ?? onDismiss}
                   className={cn(
                     "inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2",
                     "hover:bg-opacity-20 hover:bg-current",

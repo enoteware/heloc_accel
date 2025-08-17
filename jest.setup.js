@@ -4,6 +4,11 @@
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
+import { expect } from "@jest/globals";
+import matchers from "@testing-library/jest-dom/matchers";
+expect.extend(matchers);
+const { toHaveNoViolations } = require("jest-axe");
+expect.extend(toHaveNoViolations);
 
 // Mock environment variables for testing
 process.env.NEXTAUTH_SECRET = "test-secret";

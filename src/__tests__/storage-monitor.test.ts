@@ -5,7 +5,14 @@
 import { StorageMonitor } from "@/lib/storage-monitor";
 
 // Mock localStorage
-const localStorageMock = (() => {
+const localStorageMock: {
+  getItem: jest.Mock;
+  setItem: jest.Mock;
+  removeItem: jest.Mock;
+  clear: jest.Mock;
+  length: number;
+  key: jest.Mock;
+} = (() => {
   let store: Record<string, string> = {};
 
   return {
@@ -243,7 +250,7 @@ describe("StorageMonitor", () => {
       monitor.startMonitoring();
 
       // Create a mock that throws quota error
-      const mockSetItem = jest.fn(() => {
+      const mockSetItem: jest.Mock = jest.fn(() => {
         const error = new Error("QuotaExceededError");
         error.name = "QuotaExceededError";
         throw error;

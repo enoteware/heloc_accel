@@ -9,7 +9,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { Button } from "@/components/design-system/Button";
-import { Card } from "@/components/design-system/Card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/design-system/Card";
 import { Alert } from "@/components/design-system/Alert";
 import { Badge } from "@/components/design-system/Badge";
 import { validateTailwindCombination } from "@/lib/contrast-validation";
@@ -109,12 +115,12 @@ describe("Component Accessibility Tests", () => {
     it("should not have accessibility violations", async () => {
       const { container } = render(
         <Card>
-          <Card.Header>
-            <Card.Title>Test Card</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Test Card</CardTitle>
+          </CardHeader>
+          <CardContent>
             <p>This is test content for the card.</p>
-          </Card.Content>
+          </CardContent>
         </Card>,
       );
 
@@ -125,14 +131,14 @@ describe("Component Accessibility Tests", () => {
     it("should have proper heading hierarchy", () => {
       render(
         <Card>
-          <Card.Header>
-            <Card.Title>Main Title</Card.Title>
-            <Card.Description>Card description</Card.Description>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Main Title</CardTitle>
+            <CardDescription>Card description</CardDescription>
+          </CardHeader>
+          <CardContent>
             <h3>Section Title</h3>
             <p>Section content</p>
-          </Card.Content>
+          </CardContent>
         </Card>,
       );
 
