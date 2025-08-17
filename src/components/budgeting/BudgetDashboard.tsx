@@ -211,9 +211,9 @@ export default function BudgetDashboard({
 
   const healthScore = getFinancialHealthScore();
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 80) return "text-primary";
+    if (score >= 60) return "text-accent";
+    return "text-destructive";
   };
 
   const getScoreBadge = (score: number) => {
@@ -243,8 +243,8 @@ export default function BudgetDashboard({
               {healthScore}/100
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-600">Based on:</div>
-              <div className="text-xs text-gray-500">
+              <div className="text-sm text-muted-foreground">Based on:</div>
+              <div className="text-xs text-muted-foreground">
                 Income stability • Savings rate • Emergency fund • Expense
                 management
               </div>
@@ -252,14 +252,14 @@ export default function BudgetDashboard({
           </div>
 
           {/* Progress bar */}
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-muted rounded-full h-3">
             <div
               className={`h-3 rounded-full transition-all duration-500 ${
                 healthScore >= 80
-                  ? "bg-green-500"
+                  ? "bg-primary"
                   : healthScore >= 60
-                    ? "bg-yellow-500"
-                    : "bg-red-500"
+                    ? "bg-accent"
+                    : "bg-destructive"
               }`}
               style={{ width: `${healthScore}%` }}
             ></div>
@@ -271,7 +271,7 @@ export default function BudgetDashboard({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Icon name="target" size="sm" className="text-blue-500" />
+            <Icon name="target" size="sm" className="text-primary" />
             <span>HELOC Acceleration Strategy</span>
           </CardTitle>
         </CardHeader>
@@ -281,16 +281,16 @@ export default function BudgetDashboard({
               <Icon
                 name="alert"
                 size="lg"
-                className="text-yellow-500 mx-auto mb-3"
+                className="text-accent mx-auto mb-3"
               />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 Insufficient Discretionary Income
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-muted-foreground mb-4">
                 You need positive discretionary income to use HELOC acceleration
                 effectively.
               </p>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground">
                 Current deficit: {formatCurrency(Math.abs(discretionaryIncome))}
               </div>
             </div>
@@ -298,24 +298,24 @@ export default function BudgetDashboard({
             <div className="space-y-4">
               {/* Available funds */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-lg font-semibold text-blue-600">
+                <div className="text-center p-4 bg-card rounded-lg border border-border">
+                  <div className="text-lg font-semibold text-primary">
                     {formatCurrency(discretionaryIncome)}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Discretionary Income
                   </div>
                 </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-lg font-semibold text-green-600">
+                <div className="text-center p-4 bg-card rounded-lg border border-border">
+                  <div className="text-lg font-semibold text-primary">
                     {formatCurrency(availableForHeloc)}
                   </div>
                   <div className="text-sm text-gray-600">
                     Available for HELOC
                   </div>
                 </div>
-                <div className="text-center p-4 bg-purple-50 rounded-lg">
-                  <div className="text-lg font-semibold text-purple-600">
+                <div className="text-center p-4 bg-card rounded-lg border border-border">
+                  <div className="text-lg font-semibold text-primary">
                     {formatCurrency(suggestedHelocPayment)}
                   </div>
                   <div className="text-sm text-gray-600">Suggested Payment</div>
@@ -324,7 +324,7 @@ export default function BudgetDashboard({
 
               {/* HELOC Payment Percentage Slider */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   HELOC Payment Allocation: {helocPaymentPercentage}%
                 </label>
                 <input
@@ -336,7 +336,7 @@ export default function BudgetDashboard({
                   onChange={(e) =>
                     setHelocPaymentPercentage(parseInt(e.target.value))
                   }
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>Conservative (10%)</span>

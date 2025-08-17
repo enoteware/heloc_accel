@@ -317,22 +317,22 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Redirecting to login...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Redirecting to login...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Welcome back, {user?.displayName || user?.primaryEmail || "User"}!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Manage your HELOC acceleration scenarios and track your mortgage
             payoff progress.
           </p>
@@ -340,11 +340,11 @@ export default function Dashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-card rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-full">
+              <div className="p-3 bg-card rounded-full border border-border">
                 <svg
-                  className="w-6 h-6 text-blue-600"
+                  className="w-6 h-6 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

@@ -100,30 +100,32 @@ export default function ScenariosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading scenarios...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading scenarios...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Scenarios</h1>
-              <p className="mt-2 text-gray-600">
+              <h1 className="text-3xl font-bold text-foreground">
+                My Scenarios
+              </h1>
+              <p className="mt-2 text-muted-foreground">
                 View and manage your saved HELOC analysis scenarios
               </p>
             </div>
             <Link
               href="/calculator"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center space-x-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center space-x-2"
             >
               <Icon name="plus" size="sm" />
               <span>New Scenario</span>
@@ -133,33 +135,33 @@ export default function ScenariosPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="mb-6 bg-card border border-destructive rounded-lg p-4">
             <div className="flex items-center">
               <Icon name="alert" size="sm" className="text-red-600 mr-2" />
-              <p className="text-red-800">{error}</p>
+              <p className="text-destructive">{error}</p>
             </div>
           </div>
         )}
 
         {/* Scenarios Grid */}
         {scenarios.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
+          <div className="bg-card rounded-lg shadow-md p-12 text-center">
             <div className="max-w-md mx-auto">
               <Icon
                 name="calculator"
                 size="lg"
-                className="text-gray-400 mx-auto mb-4"
+                className="text-muted-foreground mx-auto mb-4"
               />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 No scenarios yet
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Create your first HELOC analysis scenario to see how much you
                 can save on your mortgage.
               </p>
               <Link
                 href="/calculator"
-                className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                className="inline-flex items-center space-x-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition duration-200"
               >
                 <Icon name="calculator" size="sm" />
                 <span>Create First Scenario</span>
@@ -171,17 +173,17 @@ export default function ScenariosPage() {
             {scenarios.map((scenario) => (
               <div
                 key={scenario.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+                className="bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 flex-1">
+                    <h3 className="text-lg font-semibold text-foreground flex-1">
                       {scenario.name}
                     </h3>
                     <button
                       onClick={() => handleDelete(scenario.id)}
                       disabled={deletingId === scenario.id}
-                      className="ml-2 text-gray-400 hover:text-red-600 transition-colors"
+                      className="ml-2 text-muted-foreground hover:text-destructive transition-colors"
                       title="Delete scenario"
                     >
                       {deletingId === scenario.id ? (
@@ -193,7 +195,7 @@ export default function ScenariosPage() {
                   </div>
 
                   {scenario.description && (
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="text-sm text-muted-foreground mb-4">
                       {scenario.description}
                     </p>
                   )}
@@ -202,10 +204,10 @@ export default function ScenariosPage() {
                   <div className="space-y-3 mb-4">
                     {scenario.interest_saved && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           Interest Saved:
                         </span>
-                        <span className="text-sm font-semibold text-green-600">
+                        <span className="text-sm font-semibold text-primary">
                           {formatCurrency(scenario.interest_saved)}
                         </span>
                       </div>
@@ -213,10 +215,10 @@ export default function ScenariosPage() {
 
                     {scenario.time_saved_months && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           Time Saved:
                         </span>
-                        <span className="text-sm font-semibold text-blue-600">
+                        <span className="text-sm font-semibold text-primary">
                           {scenario.time_saved_months} months
                         </span>
                       </div>
