@@ -127,9 +127,9 @@ export const ValidatedInput = React.forwardRef<
               // Base styles
               "block w-full rounded-lg border transition-all duration-200",
               "focus:outline-none focus:ring-2 focus:ring-offset-0",
-              "disabled:bg-neutral-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50",
-              "placeholder-neutral-400 dark:placeholder-neutral-500",
-              "bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100",
+              "disabled:bg-muted dark:disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+              "placeholder-muted-foreground dark:placeholder-muted-foreground",
+              "bg-background dark:bg-background text-foreground dark:text-foreground",
 
               // Padding adjustments for icons
               leftIcon ? "pl-10" : "pl-3",
@@ -138,10 +138,10 @@ export const ValidatedInput = React.forwardRef<
 
               // State-based styling
               hasError
-                ? "border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-500/20 dark:focus:ring-red-400/20"
+                ? "border-destructive dark:border-destructive focus:border-destructive dark:focus:border-destructive focus:ring-destructive/20 dark:focus:ring-destructive/20"
                 : success
-                  ? "border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-400 focus:ring-green-500/20 dark:focus:ring-green-400/20"
-                  : "border-neutral-300 dark:border-neutral-600 hover:border-neutral-400 dark:hover:border-neutral-500 focus:border-primary-500 dark:focus:border-primary-400 focus:ring-primary-500/20 dark:focus:ring-primary-400/20",
+                  ? "border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary/20 dark:focus:ring-primary/20"
+                  : "border-input dark:border-input hover:border-border dark:hover:border-border focus:border-ring dark:focus:border-ring focus:ring-ring/20 dark:focus:ring-ring/20",
 
               className,
             )}

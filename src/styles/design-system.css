@@ -113,17 +113,17 @@
 /* Input Base Classes */
 .input-base {
   @apply block w-full rounded-lg border px-3 py-2 transition-all duration-200;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
-  @apply disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60;
-  @apply placeholder-neutral-600 bg-white text-neutral-900;
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring;
+  @apply disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-60;
+  @apply placeholder-muted-foreground bg-background text-foreground;
 }
 
 .input-default {
-  @apply input-base border-neutral-300 hover:border-neutral-400;
+  @apply input-base border-input hover:border-border;
 }
 
 .input-error {
-  @apply input-base border-red-300 focus:border-red-500 focus:ring-red-500;
+  @apply input-base border-destructive focus:border-destructive focus:ring-destructive;
 }
 
 /* Card Base Classes */
@@ -132,15 +132,15 @@
 }
 
 .card-default {
-  @apply card-base bg-white border border-neutral-200;
+  @apply card-base bg-card border border-border;
 }
 
 .card-elevated {
-  @apply card-base bg-white shadow-lg border border-neutral-100;
+  @apply card-base bg-card shadow-lg border border-border;
 }
 
 .card-outlined {
-  @apply card-base bg-white border-2 border-neutral-300;
+  @apply card-base bg-card border-2 border-border;
 }
 
 /* Badge Base Classes */
@@ -149,31 +149,31 @@
 }
 
 .badge-default {
-  @apply badge-base bg-neutral-100 text-neutral-800 border-neutral-200;
+  @apply badge-base bg-muted text-foreground border-border;
 }
 
 .badge-primary {
-  @apply badge-base bg-primary-100 text-primary-800 border-primary-200;
+  @apply badge-base bg-primary/15 text-primary border-primary/30;
 }
 
 .badge-secondary {
-  @apply badge-base bg-secondary-100 text-secondary-800 border-secondary-200;
+  @apply badge-base bg-secondary/15 text-secondary border-secondary/30;
 }
 
 .badge-success {
-  @apply badge-base bg-green-100 text-green-800 border-green-200;
+  @apply badge-base bg-primary/15 text-primary border-primary/30;
 }
 
 .badge-warning {
-  @apply badge-base bg-yellow-100 text-yellow-800 border-yellow-200;
+  @apply badge-base bg-accent/15 text-accent border-accent/30;
 }
 
 .badge-danger {
-  @apply badge-base bg-red-100 text-red-800 border-red-200;
+  @apply badge-base bg-destructive/15 text-destructive border-destructive/30;
 }
 
 .badge-info {
-  @apply badge-base bg-blue-100 text-blue-800 border-blue-200;
+  @apply badge-base bg-accent/15 text-accent border-accent/30;
 }
 
 .badge-sm {
