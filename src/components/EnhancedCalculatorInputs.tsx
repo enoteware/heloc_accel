@@ -327,8 +327,8 @@ export const EnhancedNumberInput: React.FC<EnhancedInputProps> = ({
           error
             ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
             : isEmpty
-              ? "border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50"
-              : "border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white"
+              ? "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-muted"
+              : "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-background"
         } focus:outline-none dark:!text-white dark:bg-neutral-800`}
         placeholder={placeholder}
         aria-describedby={error ? `${field}-error` : `${field}-description`}

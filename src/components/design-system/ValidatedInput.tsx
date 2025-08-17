@@ -47,7 +47,7 @@ export const ValidatedInput = React.forwardRef<
       if (loading) {
         return (
           <svg
-            className="animate-spin h-4 w-4 text-neutral-400"
+            className="animate-spin h-4 w-4 text-muted-foreground"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -71,7 +71,7 @@ export const ValidatedInput = React.forwardRef<
       if (hasError) {
         return (
           <svg
-            className="h-4 w-4 text-red-500"
+            className="h-4 w-4 text-destructive"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -87,7 +87,7 @@ export const ValidatedInput = React.forwardRef<
       if (success) {
         return (
           <svg
-            className="h-4 w-4 text-green-500"
+            className="h-4 w-4 text-primary"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -115,9 +115,7 @@ export const ValidatedInput = React.forwardRef<
         <div className="relative">
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <div className="text-neutral-400 dark:text-neutral-500">
-                {leftIcon}
-              </div>
+              <div className="text-muted-foreground">{leftIcon}</div>
             </div>
           )}
 
@@ -230,19 +228,19 @@ export const ValidatedTextarea = React.forwardRef<
             // Base styles
             "block w-full rounded-lg border px-3 py-2 transition-all duration-200",
             "focus:outline-none focus:ring-2 focus:ring-offset-0",
-            "disabled:bg-neutral-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50",
-            "placeholder-neutral-400 dark:placeholder-neutral-500",
-            "bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100",
+            "disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+            "placeholder-muted-foreground",
+            "bg-background text-foreground",
 
             // Resize behavior
             resizeClasses[resize],
 
             // State-based styling
             hasError
-              ? "border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-500/20 dark:focus:ring-red-400/20"
+              ? "border-destructive focus:border-destructive focus:ring-destructive/20"
               : success
                 ? "border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-400 focus:ring-green-500/20 dark:focus:ring-green-400/20"
-                : "border-neutral-300 dark:border-neutral-600 hover:border-neutral-400 dark:hover:border-neutral-500 focus:border-primary-500 dark:focus:border-primary-400 focus:ring-primary-500/20 dark:focus:ring-primary-400/20",
+                : "border-input hover:border-border focus:border-ring focus:ring-ring/20",
 
             className,
           )}
