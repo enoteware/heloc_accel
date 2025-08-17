@@ -231,7 +231,7 @@ describe("Calculator Forms - LTV/PMI Integration Tests", () => {
         ];
 
         for (const { component: FormComponent, props } of forms) {
-          const { unmount } = render(<FormComponent {...props} />);
+          const { unmount } = render(<FormComponent {...(props as any)} />);
 
           // Fill in the test scenario values
           fireEvent.change(screen.getByLabelText(/mortgage balance/i), {

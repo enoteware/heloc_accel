@@ -36,7 +36,9 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
 
       // Fetch company settings from API
       const settingsResponse = await fetch("/api/company");
-      if (!settingsResponse.ok) {
+      if (settingsResponse.status === 503) {
+        throw new Error("Database not configured. Please contact support.");
+      } else if (!settingsResponse.ok) {
         throw new Error("Failed to fetch company settings");
       }
       const settingsData = await settingsResponse.json();
@@ -55,12 +57,18 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
             const agentData = await agentResponse.json();
             if (agentData.success) {
               setAssignedAgent(agentData.data);
+            } else {
+              // Explicit no-assignment path: clear any stale state
+              setAssignedAgent(null);
             }
           } else if (
             agentResponse.status === 401 ||
-            agentResponse.status === 403
+            agentResponse.status === 403 ||
+            agentResponse.status === 404 ||
+            agentResponse.status === 503
           ) {
-            // Not authenticated or forbidden; avoid noisy console errors
+            // Not authenticated/forbidden/no assignment/database not configured; avoid noisy console errors
+            setAssignedAgent(null);
           }
         } catch (e) {
           // Network failure; ignore silently for unauthenticated users

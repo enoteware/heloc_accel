@@ -26,23 +26,42 @@ export const GET = withAuth(
         );
       }
 
+      // If DATABASE_URL is not set, return error
+      if (!process.env.DATABASE_URL) {
+        return NextResponse.json(
+          { success: false, error: "Database not configured" },
+          { status: 503 },
+        );
+      }
+
       // Fetch agent assignment from database
-      const client = await pool.connect();
+      let client;
+      try {
+        client = await pool.connect();
+      } catch (connErr) {
+        console.error(
+          "DB connection error in GET /api/users/[id]/agent:",
+          connErr,
+        );
+        // Treat DB connection issues as "no assignment" for non-critical data
+        return NextResponse.json(
+          { success: false, error: "No agent assigned" },
+          { status: 404 },
+        );
+      }
+
       try {
         const result = await client.query(
-          `SELECT a.id, a.first_name, a.last_name, a.title, a.email, a.phone 
-         FROM agents a 
-         JOIN user_agent_assignments ua ON a.id = ua.agent_id 
+          `SELECT a.id, a.first_name, a.last_name, a.title, a.email, a.phone
+         FROM agents a
+         JOIN user_agent_assignments ua ON a.id = ua.agent_id
          WHERE ua.user_id = $1 AND a.is_active = true`,
           [userId],
         );
 
         if (result.rows.length === 0) {
           return NextResponse.json(
-            {
-              success: false,
-              error: "No agent assigned",
-            },
+            { success: false, error: "No agent assigned" },
             { status: 404 },
           );
         }
@@ -59,8 +78,24 @@ export const GET = withAuth(
             phone: agent.phone,
           },
         });
+      } catch (queryErr: any) {
+        // If table(s) are missing, treat as no assignment instead of 500
+        const message = queryErr?.message || String(queryErr);
+        const code = queryErr?.code;
+        if (code === "42P01" /* undefined_table */) {
+          console.warn("Agent assignment tables missing; returning 404");
+          return NextResponse.json(
+            { success: false, error: "No agent assigned" },
+            { status: 404 },
+          );
+        }
+        console.error("Query error in GET /api/users/[id]/agent:", message);
+        return NextResponse.json(
+          { success: false, error: "Failed to fetch agent assignment" },
+          { status: 500 },
+        );
       } finally {
-        client.release();
+        client?.release();
       }
     } catch (error) {
       console.error("Error fetching user agent:", error);

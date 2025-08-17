@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "../components/design-system/Button";
 
 export default function NotFound() {
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  const isDemoMode = false;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -30,9 +30,7 @@ export default function NotFound() {
             Page Not Found
           </h2>
           <p className="mt-2 text-lg text-gray-600">
-            {isDemoMode
-              ? "The page you're looking for doesn't exist in demo mode, but that's okay!"
-              : "Sorry, we couldn't find the page you're looking for."}
+            {"Sorry, we couldn't find the page you're looking for."}
           </p>
         </div>
 
@@ -80,14 +78,6 @@ export default function NotFound() {
               Try the Calculator
             </Button>
           </Link>
-
-          {isDemoMode && (
-            <Link href="/dashboard">
-              <Button variant="ghost" className="w-full">
-                View Demo Dashboard
-              </Button>
-            </Link>
-          )}
         </div>
 
         <div className="text-center">
@@ -102,38 +92,6 @@ export default function NotFound() {
             page.
           </p>
         </div>
-
-        {isDemoMode && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3 text-left">
-                <h3 className="text-sm font-medium text-green-800">
-                  Demo Mode Active
-                </h3>
-                <div className="mt-2 text-sm text-green-700">
-                  <p>
-                    You&apos;re in demo mode, so all features are available
-                    without signing up. Try exploring the calculator or
-                    dashboard!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

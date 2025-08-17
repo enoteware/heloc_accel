@@ -15,13 +15,15 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
       email: user.primaryEmail,
     });
 
-    // If DATABASE_URL is not set, return empty scenarios
+    // If DATABASE_URL is not set, return error
     if (!process.env.DATABASE_URL) {
-      return NextResponse.json({
-        success: true,
-        budgetScenarios: [],
-        message: "No budget scenarios found (demo mode)",
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Database not configured",
+        },
+        { status: 503 },
+      );
     }
 
     // Parse query parameters
@@ -187,35 +189,7 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
       name: body.name,
     });
 
-    // If DATABASE_URL is not set, return a mock budget scenario
-    if (!process.env.DATABASE_URL) {
-      const mockBudgetScenario = {
-        id: `demo-budget-${Date.now()}`,
-        scenario_id: body.scenarioId || "demo",
-        name: body.name,
-        description: body.description || "",
-        base_monthly_gross_income: body.baseMonthlyGrossIncome || 6000,
-        base_monthly_net_income: body.baseMonthlyNetIncome || 5000,
-        base_monthly_expenses: body.baseMonthlyExpenses || 3000,
-        base_discretionary_income: 2000,
-        recommended_principal_payment: 1000,
-        principal_multiplier: body.principalMultiplier || 3.0,
-        auto_adjust_payments: body.autoAdjustPayments || true,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        income_sources: [],
-        expense_categories: [],
-      };
-
-      return NextResponse.json({
-        success: true,
-        budgetScenario: mockBudgetScenario,
-        message: "Budget scenario created successfully (demo mode)",
-      });
-    }
-
-    // Validate the request
+    // Validate the request first
     const validation = validateBudgetScenarioRequest(body);
     if (!validation.isValid) {
       logError("API:BudgetScenarios", "Validation failed", validation.errors);
@@ -226,6 +200,17 @@ export const POST = withAuth(async (request: NextRequest, { user }) => {
           warnings: validation.warnings,
         },
         { status: 400 },
+      );
+    }
+
+    // If DATABASE_URL is not set, return error
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Database not configured",
+        },
+        { status: 503 },
       );
     }
 

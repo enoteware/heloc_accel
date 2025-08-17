@@ -133,6 +133,8 @@ export default function BudgetingPage() {
         if (existingData.success && existingData.data?.scenarios?.length > 0) {
           parentScenarioId = existingData.data.scenarios[0].id;
         }
+      } else if (existingScenariosResponse.status === 503) {
+        throw new Error("Database not configured. Please contact support.");
       }
 
       // If no parent scenario exists, create one
@@ -143,14 +145,14 @@ export default function BudgetingPage() {
           body: JSON.stringify({
             name: "Default Scenario",
             description: "Base scenario for budgeting analysis",
-            current_mortgage_balance: 250000,
-            current_interest_rate: 0.065,
-            remaining_term_months: 240,
-            monthly_payment: 1800,
-            monthly_gross_income: 6000,
-            monthly_net_income: 5000,
-            monthly_expenses: 3000,
-            monthly_discretionary_income: 2000,
+            currentMortgageBalance: 250000,
+            currentInterestRate: 0.065,
+            remainingTermMonths: 240,
+            monthlyPayment: 1800,
+            monthlyGrossIncome: 6000,
+            monthlyNetIncome: 5000,
+            monthlyExpenses: 3000,
+            monthlyDiscretionaryIncome: 2000,
           }),
         });
 
@@ -159,6 +161,8 @@ export default function BudgetingPage() {
           if (parentData.success) {
             parentScenarioId = parentData.data.scenario.id;
           }
+        } else if (createParentResponse.status === 503) {
+          throw new Error("Database not configured. Please contact support.");
         }
       }
 
@@ -194,6 +198,8 @@ export default function BudgetingPage() {
         };
         setScenarios([...scenarios, newScenario]);
         setCurrentScenario(newScenario);
+      } else if (response.status === 503) {
+        throw new Error("Database not configured. Please contact support.");
       } else {
         const errorData = await response.json();
         console.error("Error creating budget scenario:", errorData);

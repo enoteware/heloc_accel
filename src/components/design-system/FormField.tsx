@@ -32,15 +32,13 @@ export const FormField: React.FC<FormFieldProps> = ({
         <label
           className={cn(
             "block text-body-sm font-medium mb-1",
-            hasError
-              ? "text-red-700 dark:text-red-400"
-              : "text-blue-gray-700 dark:text-blue-gray-300",
+            hasError ? "text-destructive" : "text-foreground",
             labelClassName,
           )}
         >
           {label}
           {required && (
-            <span className="text-red-500 ml-1" aria-label="required">
+            <span className="text-destructive ml-1" aria-label="required">
               *
             </span>
           )}
@@ -51,10 +49,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 
       {error && (
         <p
-          className={cn(
-            "mt-1 text-body-sm text-red-600 dark:text-red-400",
-            errorClassName,
-          )}
+          className={cn("mt-1 text-body-sm text-destructive", errorClassName)}
           role="alert"
           aria-live="polite"
         >
@@ -65,7 +60,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       {helperText && !error && (
         <p
           className={cn(
-            "mt-1 text-body-sm text-neutral-500 dark:text-neutral-400",
+            "mt-1 text-body-sm text-muted-foreground",
             helperClassName,
           )}
         >
@@ -92,12 +87,12 @@ export const FormGroup: React.FC<FormGroupProps> = ({
   return (
     <fieldset className={cn("space-y-4", className)}>
       {title && (
-        <legend className="text-h5 font-semibold text-blue-gray-800 dark:text-blue-gray-100">
+        <legend className="text-h5 font-semibold text-foreground">
           {title}
         </legend>
       )}
       {description && (
-        <p className="text-body-sm text-neutral-600 dark:text-neutral-400 -mt-2">
+        <p className="text-body-sm text-muted-foreground -mt-2">
           {description}
         </p>
       )}
@@ -122,14 +117,12 @@ export const FormSection: React.FC<FormSectionProps> = ({
   return (
     <div className={cn("space-y-6", className)}>
       {(title || description) && (
-        <div className="border-b border-neutral-200 dark:border-neutral-700 pb-4">
+        <div className="border-b border-border pb-4">
           {title && (
-            <h3 className="text-h4 font-semibold text-blue-gray-800 dark:text-blue-gray-100">
-              {title}
-            </h3>
+            <h3 className="text-h4 font-semibold text-foreground">{title}</h3>
           )}
           {description && (
-            <p className="mt-1 text-body text-neutral-600 dark:text-neutral-400">
+            <p className="mt-1 text-body text-muted-foreground">
               {description}
             </p>
           )}

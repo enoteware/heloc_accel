@@ -304,10 +304,10 @@ export default function Dashboard() {
 
   if (user === undefined) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -358,21 +358,21 @@ export default function Dashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-muted-foreground">
                   Total Scenarios
                 </p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-foreground">
                   {scenarios.length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-card rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-full">
+              <div className="p-3 bg-muted rounded-full">
                 <svg
-                  className="w-6 h-6 text-green-600"
+                  className="w-6 h-6 text-accent"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -386,10 +386,10 @@ export default function Dashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-muted-foreground">
                   Potential Savings
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-accent">
                   {scenarios.length > 0
                     ? formatCurrency(
                         scenarios.reduce(
@@ -403,11 +403,11 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-card rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className="p-3 bg-purple-100 rounded-full">
+              <div className="p-3 bg-muted rounded-full">
                 <svg
-                  className="w-6 h-6 text-purple-600"
+                  className="w-6 h-6 text-accent"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -421,8 +421,10 @@ export default function Dashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Time Saved</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-sm font-medium text-muted-foreground">
+                  Time Saved
+                </p>
+                <p className="text-2xl font-bold text-accent">
                   {scenarios.length > 0
                     ? `${Math.round(scenarios.reduce((sum, s) => sum + ((s.traditional_payoff_months || 0) - (s.heloc_payoff_months || 0)), 0) / 12)} years`
                     : "0 years"}
@@ -433,29 +435,29 @@ export default function Dashboard() {
         </div>
 
         {/* Scenarios Section */}
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="px-6 py-4 border-b border-gray-200">
+        <div className="bg-card rounded-lg shadow-md">
+          <div className="px-6 py-4 border-b border-border">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-foreground">
                   Your Scenarios
                 </h2>
                 {selectedForComparison.length > 0 && (
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       {selectedForComparison.length} selected for comparison
                     </span>
                     {selectedForComparison.length >= 2 && (
                       <button
                         onClick={goToComparison}
-                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-medium transition duration-200"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-1 rounded text-sm font-medium transition duration-200"
                       >
                         Compare
                       </button>
                     )}
                     <button
                       onClick={() => setSelectedForComparison([])}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-muted-foreground hover:text-foreground"
                       title="Clear selection"
                     >
                       <svg
@@ -479,14 +481,14 @@ export default function Dashboard() {
                 {scenarios.length >= 2 && (
                   <Link
                     href="/compare"
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md text-sm font-medium transition duration-200"
                   >
                     Compare Scenarios
                   </Link>
                 )}
                 <Link
                   href="/calculator"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md text-sm font-medium transition duration-200"
                 >
                   Create New Scenario
                 </Link>
@@ -497,8 +499,10 @@ export default function Dashboard() {
           <div className="p-6">
             {loading ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-2 text-gray-600">Loading scenarios...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-2 text-muted-foreground">
+                  Loading scenarios...
+                </p>
               </div>
             ) : error ? (
               <div className="text-center py-8">
@@ -517,17 +521,17 @@ export default function Dashboard() {
                     />
                   </svg>
                 </div>
-                <p className="text-red-600">{error}</p>
+                <p className="text-destructive">{error}</p>
                 <button
                   onClick={loadScenarios}
-                  className="mt-2 text-blue-600 hover:text-blue-700 font-medium"
+                  className="mt-2 text-primary hover:text-primary/90 font-medium"
                 >
                   Try Again
                 </button>
               </div>
             ) : scenarios.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-gray-400 mb-4">
+                <div className="text-muted-foreground mb-4">
                   <svg
                     className="w-16 h-16 mx-auto"
                     fill="none"
@@ -542,15 +546,15 @@ export default function Dashboard() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   No scenarios yet
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Create your first HELOC acceleration scenario to get started.
                 </p>
                 <Link
                   href="/calculator"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-md font-medium transition duration-200"
                 >
                   Create Your First Scenario
                 </Link>
@@ -560,7 +564,7 @@ export default function Dashboard() {
                 {scenarios.map((scenario) => (
                   <div
                     key={scenario.id}
-                    className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition duration-200"
+                    className="border border-border rounded-lg p-6 hover:shadow-md transition duration-200"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center space-x-3">
@@ -568,20 +572,20 @@ export default function Dashboard() {
                           type="checkbox"
                           checked={selectedForComparison.includes(scenario.id)}
                           onChange={() => handleComparisonToggle(scenario.id)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-primary focus:ring-ring border-input rounded"
                           disabled={
                             !selectedForComparison.includes(scenario.id) &&
                             selectedForComparison.length >= 3
                           }
                         />
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        <h3 className="text-lg font-semibold text-foreground truncate">
                           {scenario.name}
                         </h3>
                       </div>
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEditScenario(scenario.id)}
-                          className="text-gray-400 hover:text-blue-600 transition duration-200"
+                          className="text-muted-foreground hover:text-primary transition duration-200"
                           title="Edit scenario"
                         >
                           <svg
@@ -600,7 +604,7 @@ export default function Dashboard() {
                         </button>
                         <button
                           onClick={() => handleDuplicateScenario(scenario)}
-                          className="text-gray-400 hover:text-green-600 transition duration-200"
+                          className="text-muted-foreground hover:text-accent transition duration-200"
                           title="Duplicate scenario"
                         >
                           <svg
@@ -619,7 +623,7 @@ export default function Dashboard() {
                         </button>
                         <button
                           onClick={() => handleDeleteScenario(scenario.id)}
-                          className="text-gray-400 hover:text-red-600 transition duration-200"
+                          className="text-muted-foreground hover:text-destructive transition duration-200"
                           title="Delete scenario"
                         >
                           <svg
@@ -640,7 +644,7 @@ export default function Dashboard() {
                     </div>
 
                     {scenario.description && (
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                         {scenario.description}
                       </p>
                     )}
@@ -648,8 +652,10 @@ export default function Dashboard() {
                     <div className="space-y-2 mb-4">
                       {scenario.interest_saved && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Interest Saved:</span>
-                          <span className="font-medium text-green-600">
+                          <span className="text-muted-foreground">
+                            Interest Saved:
+                          </span>
+                          <span className="font-medium text-accent">
                             {formatCurrency(scenario.interest_saved)}
                           </span>
                         </div>
@@ -658,8 +664,10 @@ export default function Dashboard() {
                       {scenario.traditional_payoff_months &&
                         scenario.heloc_payoff_months && (
                           <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Time Saved:</span>
-                            <span className="font-medium text-purple-600">
+                            <span className="text-muted-foreground">
+                              Time Saved:
+                            </span>
+                            <span className="font-medium text-accent">
                               {Math.round(
                                 (scenario.traditional_payoff_months -
                                   scenario.heloc_payoff_months) /
@@ -671,7 +679,7 @@ export default function Dashboard() {
                         )}
                     </div>
 
-                    <div className="flex justify-between items-center text-xs text-gray-500 mb-4">
+                    <div className="flex justify-between items-center text-xs text-muted-foreground mb-4">
                       <span>Created: {formatDate(scenario.created_at)}</span>
                       <span>Updated: {formatDate(scenario.updated_at)}</span>
                     </div>
@@ -679,13 +687,13 @@ export default function Dashboard() {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleEditScenario(scenario.id)}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm font-medium transition duration-200"
+                        className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-2 rounded text-sm font-medium transition duration-200"
                       >
                         View & Edit
                       </button>
                       <button
                         onClick={() => handleShareScenario(scenario)}
-                        className="px-3 py-2 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-200"
+                        className="px-3 py-2 border border-input rounded text-sm font-medium text-foreground hover:bg-muted transition duration-200"
                         title="Share scenario"
                       >
                         {scenario.is_public ? "Shared" : "Share"}
@@ -701,15 +709,15 @@ export default function Dashboard() {
 
       {/* Share Modal */}
       {shareModalOpen && selectedScenario && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-foreground/60 flex items-center justify-center z-50">
+          <div className="bg-card rounded-lg p-6 max-w-md w-full mx-4 border border-border">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 Share Scenario
               </h3>
               <button
                 onClick={() => setShareModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <svg
                   className="w-6 h-6"
@@ -728,7 +736,7 @@ export default function Dashboard() {
             </div>
 
             <div className="mb-4">
-              <p className="text-gray-600 mb-2">
+              <p className="text-muted-foreground mb-2">
                 Share &quot;{selectedScenario.name}&quot; with others using this
                 link:
               </p>
@@ -737,11 +745,11 @@ export default function Dashboard() {
                   type="text"
                   value={shareUrl}
                   readOnly
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm"
+                  className="flex-1 px-3 py-2 border border-input rounded-md bg-muted text-sm"
                 />
                 <button
                   onClick={copyShareUrl}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium transition duration-200"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-2 rounded-md text-sm font-medium transition duration-200"
                 >
                   Copy
                 </button>
@@ -783,7 +791,7 @@ export default function Dashboard() {
               </button>
               <button
                 onClick={() => setShareModalOpen(false)}
-                className="flex-1 safe-info hover:bg-blue-700 px-4 py-2 rounded-md font-medium transition duration-200"
+                className="flex-1 safe-info hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition duration-200"
               >
                 Done
               </button>
@@ -804,9 +812,9 @@ export default function Dashboard() {
         <ModalBody>
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0">
-              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-destructive/10 rounded-full">
                 <svg
-                  className="w-6 h-6 text-red-600"
+                  className="w-6 h-6 text-destructive"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

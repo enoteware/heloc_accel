@@ -273,7 +273,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="firstName"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       First Name *
                     </label>
@@ -294,7 +294,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="lastName"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       Last Name *
                     </label>
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-foreground mb-1"
                   >
                     Email Address *
                   </label>
@@ -338,7 +338,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="addressLine1"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("addressLine1")}
                       </label>
@@ -358,7 +358,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="addressLine2"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("addressLine2")}
                       </label>
@@ -378,7 +378,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="city"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("city")}
                       </label>
@@ -398,7 +398,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="state"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("state")}
                       </label>
@@ -418,7 +418,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="postalCode"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("postalCode")}
                       </label>
@@ -438,7 +438,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="country"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("country")}
                       </label>
@@ -458,7 +458,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="dateOfBirth"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("dateOfBirth")}
                       </label>
@@ -478,7 +478,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="ageRange"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("ageRange")}
                       </label>
@@ -498,7 +498,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="householdSize"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("householdSize")}
                       </label>
@@ -519,7 +519,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="maritalStatus"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("maritalStatus")}
                       </label>
@@ -539,7 +539,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="dependents"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-foreground mb-1"
                       >
                         {t("dependents")}
                       </label>
@@ -562,7 +562,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="phoneNumber"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       {t("phone")}
                     </label>
@@ -624,7 +624,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="currentPassword"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       Current Password *
                     </label>
@@ -645,7 +645,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="newPassword"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       New Password *
                     </label>
@@ -670,7 +670,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="confirmPassword"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-foreground mb-1"
                     >
                       Confirm New Password *
                     </label>
@@ -727,7 +727,7 @@ export default function ProfilePage() {
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-700">
+                    <h3 className="text-sm font-medium text-foreground">
                       Account Created
                     </h3>
                     <p className="text-gray-900">
@@ -735,7 +735,7 @@ export default function ProfilePage() {
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-700">
+                    <h3 className="text-sm font-medium text-foreground">
                       Last Updated
                     </h3>
                     <p className="text-gray-900">
@@ -744,7 +744,7 @@ export default function ProfilePage() {
                   </div>
                   {profile.lastLogin && (
                     <div>
-                      <h3 className="text-sm font-medium text-gray-700">
+                      <h3 className="text-sm font-medium text-foreground">
                         {t("lastLogin")}
                       </h3>
                       <p className="text-gray-900">
@@ -757,7 +757,7 @@ export default function ProfilePage() {
                       Email Verified
                     </h3>
                     <p
-                      className={`font-medium ${profile.emailVerified ? "text-green-600" : "text-red-600"}`}
+                      className={`font-medium ${profile.emailVerified ? "text-primary" : "text-destructive"}`}
                     >
                       {profile.emailVerified ? (
                         <>

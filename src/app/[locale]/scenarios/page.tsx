@@ -137,7 +137,7 @@ export default function ScenariosPage() {
         {error && (
           <div className="mb-6 bg-card border border-destructive rounded-lg p-4">
             <div className="flex items-center">
-              <Icon name="alert" size="sm" className="text-red-600 mr-2" />
+              <Icon name="alert" size="sm" className="text-destructive mr-2" />
               <p className="text-destructive">{error}</p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function ScenariosPage() {
 
                     {scenario.percentage_interest_saved && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           Interest Reduction:
                         </span>
                         <span className="text-sm font-semibold text-purple-600">
@@ -237,7 +237,7 @@ export default function ScenariosPage() {
                   </div>
 
                   {/* Dates */}
-                  <div className="text-xs text-gray-500 space-y-1 mb-4">
+                  <div className="text-xs text-muted-foreground space-y-1 mb-4">
                     <p>Created: {formatDate(scenario.created_at)}</p>
                     {scenario.updated_at !== scenario.created_at && (
                       <p>Updated: {formatDate(scenario.updated_at)}</p>
@@ -248,13 +248,13 @@ export default function ScenariosPage() {
                   <div className="flex space-x-2">
                     <Link
                       href={`/scenarios/${scenario.id}`}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded text-center text-sm transition duration-200"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded text-center text-sm transition duration-200"
                     >
                       View Details
                     </Link>
                     <Link
                       href={`/calculator?load=${scenario.id}`}
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded text-center text-sm transition duration-200"
+                      className="flex-1 bg-muted hover:bg-muted/80 text-foreground font-medium py-2 px-4 rounded text-center text-sm transition duration-200"
                     >
                       Load in Calculator
                     </Link>

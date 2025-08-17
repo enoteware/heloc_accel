@@ -35,22 +35,8 @@ test.describe("Home Page", () => {
     await page.waitForURL(/\/(calculator|auth\/signin)/);
   });
 
-  test("should display demo mode information when in demo mode", async ({
-    page,
-  }) => {
-    // Set demo mode environment variable
-    await page.addInitScript(() => {
-      (window as any).process = {
-        env: { NEXT_PUBLIC_DEMO_MODE: "true", NODE_ENV: "test" },
-      };
-    });
-
-    await page.goto("/");
-
-    // Check if demo mode banner is visible
-    await expect(page.locator("text=Demo Mode Active")).toBeVisible();
-    await expect(page.locator("text=No sign-up required")).toBeVisible();
-    await expect(page.locator("text=demo@helocaccel.com")).toBeVisible();
+  test.skip("demo mode banner is removed", async ({ page }) => {
+    // Demo mode UI has been removed in favor of real demo accounts.
   });
 
   test("should have responsive design", async ({ page }) => {
