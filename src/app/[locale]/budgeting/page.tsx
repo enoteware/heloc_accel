@@ -83,14 +83,12 @@ export default function BudgetingPage() {
   // No longer need form state since we're using BudgetForm component
 
   useEffect(() => {
-    // For demo purposes, allow access without authentication
-    // In production, uncomment the authentication check below
-    /*
     if (!user) {
-      router.push("/handler/sign-in");
+      router.push(
+        "/handler/sign-in?callbackUrl=" + encodeURIComponent("/budgeting"),
+      );
       return;
     }
-    */
     fetchScenarios();
   }, [user, router]);
 
@@ -112,37 +110,11 @@ export default function BudgetingPage() {
         if (scenariosWithDefaults.length > 0) {
           setCurrentScenario(scenariosWithDefaults[0]);
         }
-        return;
-      }
-      // Fallback to local demo storage if API not available
-      const local =
-        typeof window !== "undefined" && window.localStorage
-          ? window.localStorage.getItem("heloc-demo-scenarios")
-          : null;
-      if (local) {
-        const parsed = JSON.parse(local);
-        if (Array.isArray(parsed) && parsed.length) {
-          setScenarios(parsed);
-          setCurrentScenario(parsed[0]);
-          return;
-        }
+      } else {
+        console.error("Failed to fetch scenarios:", response.status);
       }
     } catch (error) {
       console.error("Error fetching budgeting scenarios:", error);
-      // Try demo storage on error as well
-      try {
-        const local =
-          typeof window !== "undefined" && window.localStorage
-            ? window.localStorage.getItem("heloc-demo-scenarios")
-            : null;
-        if (local) {
-          const parsed = JSON.parse(local);
-          if (Array.isArray(parsed) && parsed.length) {
-            setScenarios(parsed);
-            setCurrentScenario(parsed[0]);
-          }
-        }
-      } catch {}
     } finally {
       setLoading(false);
     }
@@ -151,8 +123,50 @@ export default function BudgetingPage() {
   const createNewScenario = async () => {
     setSaving(true);
     try {
-      // Try API first
-      const parentScenarioId = "edae077a-1a40-4d72-8923-b9927cea01f7";
+      // First create a parent scenario if needed
+      let parentScenarioId = null;
+
+      // Check if user has any existing scenarios to use as parent
+      const existingScenariosResponse = await fetch("/api/scenario");
+      if (existingScenariosResponse.ok) {
+        const existingData = await existingScenariosResponse.json();
+        if (existingData.success && existingData.scenarios?.length > 0) {
+          parentScenarioId = existingData.scenarios[0].id;
+        }
+      }
+
+      // If no parent scenario exists, create one
+      if (!parentScenarioId) {
+        const createParentResponse = await fetch("/api/scenario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "Default Scenario",
+            description: "Base scenario for budgeting analysis",
+            current_mortgage_balance: 250000,
+            current_interest_rate: 0.065,
+            remaining_term_months: 240,
+            monthly_payment: 1800,
+            monthly_gross_income: 6000,
+            monthly_net_income: 5000,
+            monthly_expenses: 3000,
+            monthly_discretionary_income: 2000,
+          }),
+        });
+
+        if (createParentResponse.ok) {
+          const parentData = await createParentResponse.json();
+          if (parentData.success) {
+            parentScenarioId = parentData.scenario.id;
+          }
+        }
+      }
+
+      if (!parentScenarioId) {
+        throw new Error("Failed to create or find parent scenario");
+      }
+
+      // Now create the budget scenario
       const response = await fetch("/api/budgeting/scenarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -180,46 +194,14 @@ export default function BudgetingPage() {
         };
         setScenarios([...scenarios, newScenario]);
         setCurrentScenario(newScenario);
-        return;
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating budget scenario:", errorData);
+        throw new Error(errorData.error || "Failed to create budget scenario");
       }
-
-      // If API failed, save locally in demo storage as a fallback
-      const now = new Date().toISOString();
-      const demoScenario = {
-        id: `${Date.now()}`,
-        scenario_id: "demo",
-        name: "New Budget Scenario",
-        description: "Budget analysis for mortgage acceleration",
-        base_monthly_gross_income: 6000,
-        base_monthly_net_income: 5000,
-        base_monthly_expenses: 3000,
-        base_discretionary_income: 2000,
-        recommended_principal_payment: 1000,
-        principal_multiplier: 3.0,
-        auto_adjust_payments: true,
-        is_active: true,
-        created_at: now,
-        updated_at: now,
-        income_sources: [],
-        expense_categories: [],
-      } as BudgetingScenario;
-
-      const existing =
-        typeof window !== "undefined" && window.localStorage
-          ? window.localStorage.getItem("heloc-demo-scenarios")
-          : null;
-      const arr = existing ? JSON.parse(existing) : [];
-      const next = Array.isArray(arr) ? [...arr, demoScenario] : [demoScenario];
-      if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.setItem(
-          "heloc-demo-scenarios",
-          JSON.stringify(next),
-        );
-      }
-      setScenarios(next);
-      setCurrentScenario(demoScenario);
     } catch (error) {
       console.error("Error creating scenario:", error);
+      alert("Failed to create scenario. Please try again.");
     } finally {
       setSaving(false);
     }
