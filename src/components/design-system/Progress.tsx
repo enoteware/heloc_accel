@@ -18,10 +18,10 @@ const progressSizes = {
 };
 
 const progressVariants = {
-  default: "bg-primary-500",
-  success: "bg-green-500",
-  warning: "bg-yellow-500",
-  danger: "bg-red-500",
+  default: "bg-primary",
+  success: "bg-primary",
+  warning: "bg-accent",
+  danger: "bg-destructive",
 };
 
 export const Progress: React.FC<ProgressProps> = ({
@@ -39,11 +39,11 @@ export const Progress: React.FC<ProgressProps> = ({
     <div className={cn("w-full", className)}>
       {(showLabel || label) && (
         <div className="flex justify-between items-center mb-2">
-          <span className="text-body-sm font-medium text-neutral-700">
+          <span className="text-body-sm font-medium text-foreground">
             {label || "Progress"}
           </span>
           {showLabel && (
-            <span className="text-body-sm text-neutral-600">
+            <span className="text-body-sm text-muted-foreground">
               {Math.round(percentage)}%
             </span>
           )}
@@ -51,7 +51,7 @@ export const Progress: React.FC<ProgressProps> = ({
       )}
       <div
         className={cn(
-          "w-full bg-neutral-200 rounded-full overflow-hidden",
+          "w-full bg-muted rounded-full overflow-hidden",
           progressSizes[size],
         )}
         role="progressbar"
@@ -98,10 +98,10 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const colors = {
-    default: "#8095af",
-    success: "#22c55e",
-    warning: "#f59e0b",
-    danger: "#ef4444",
+    default: "hsl(var(--primary))",
+    success: "hsl(var(--primary))",
+    warning: "hsl(var(--accent))",
+    danger: "hsl(var(--destructive))",
   };
 
   return (
@@ -125,7 +125,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#e5e7eb"
+          stroke="hsl(var(--muted))"
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -145,7 +145,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       </svg>
       {showLabel && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-body font-semibold text-neutral-700">
+          <span className="text-body font-semibold text-foreground">
             {Math.round(percentage)}%
           </span>
         </div>

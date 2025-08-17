@@ -18,7 +18,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-body-sm font-medium text-neutral-700 mb-1"
+            className="block text-body-sm font-medium text-foreground mb-1"
           >
             {label}
           </label>
@@ -29,14 +29,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               // Base styles
               "block w-full rounded-lg border px-3 py-2 pr-10 transition-all duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-              "disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
+              "disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
               // Background and text colors - white background with black text as per style guide
-              "appearance-none !bg-white !text-neutral-900",
+              "appearance-none !bg-background !text-foreground",
               // Error state
               error
-                ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                : "border-neutral-300 hover:border-neutral-400",
+                ? "border-destructive focus:border-destructive focus:ring-destructive"
+                : "border-input hover:border-border",
               className,
             )}
             ref={ref}
@@ -47,7 +47,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
-                className="!bg-white !text-neutral-900"
+                className="!bg-background !text-foreground"
               >
                 {option.label}
               </option>
@@ -56,7 +56,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           {/* Dropdown arrow */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
             <svg
-              className="h-5 w-5 text-neutral-400"
+              className="h-5 w-5 text-muted-foreground"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
@@ -69,9 +69,11 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             </svg>
           </div>
         </div>
-        {error && <p className="mt-1 text-body-sm text-red-600">{error}</p>}
+        {error && <p className="mt-1 text-body-sm text-destructive">{error}</p>}
         {helperText && !error && (
-          <p className="mt-1 text-body-sm text-neutral-500">{helperText}</p>
+          <p className="mt-1 text-body-sm text-muted-foreground">
+            {helperText}
+          </p>
         )}
       </div>
     );

@@ -86,7 +86,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {isOpen && (
         <div
           className={cn(
-            "absolute z-50 min-w-48 rounded-lg !bg-white shadow-lg border border-neutral-200 py-1",
+            "absolute z-50 min-w-48 rounded-lg bg-card shadow-lg border border-border py-1",
             placementClasses[placement],
             menuClassName,
           )}
@@ -98,7 +98,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
               return (
                 <div
                   key={`divider-${index}`}
-                  className="my-1 border-t border-neutral-200"
+                  className="my-1 border-t border-border"
                   role="separator"
                 />
               );
@@ -115,14 +115,14 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 className={cn(
                   "flex w-full items-center px-4 py-2 text-left text-body-sm transition-colors",
                   item.disabled
-                    ? "!text-neutral-400 cursor-not-allowed"
-                    : "!text-neutral-900 hover:bg-neutral-50 hover:!text-neutral-900 focus:bg-neutral-50 focus:!text-neutral-900",
+                    ? "!text-muted-foreground cursor-not-allowed"
+                    : "!text-foreground hover:bg-card/50 hover:!text-foreground focus:bg-card/50 focus:!text-foreground",
                   "focus:outline-none",
                 )}
                 role="menuitem"
               >
                 {item.icon && (
-                  <span className="mr-3 flex-shrink-0 text-neutral-400">
+                  <span className="mr-3 flex-shrink-0 text-muted-foreground">
                     {item.icon}
                   </span>
                 )}

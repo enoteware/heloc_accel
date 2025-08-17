@@ -148,12 +148,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const getArrowClasses = () => {
     const arrowClasses = {
-      top: "bottom-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-900",
+      top: "bottom-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-foreground",
       bottom:
-        "top-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-neutral-900",
-      left: "right-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-l-4 border-transparent border-l-neutral-900",
+        "top-[-4px] left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-foreground",
+      left: "right-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-l-4 border-transparent border-l-foreground",
       right:
-        "left-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-r-4 border-transparent border-r-neutral-900",
+        "left-[-4px] top-1/2 transform -translate-y-1/2 border-t-4 border-b-4 border-r-4 border-transparent border-r-foreground",
     };
 
     return arrowClasses[placement];
@@ -173,7 +173,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <div
           ref={tooltipRef}
           className={cn(
-            "fixed z-50 px-3 py-2 text-body-sm text-white bg-neutral-900 rounded-md shadow-lg pointer-events-none",
+            "fixed z-50 px-3 py-2 text-body-sm text-primary-foreground bg-foreground rounded-md shadow-lg pointer-events-none",
             "max-w-xs break-words",
             contentClassName,
           )}

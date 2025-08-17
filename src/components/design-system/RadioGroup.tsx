@@ -50,7 +50,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     return (
       <div className={cn("w-full", className)} ref={ref} {...props}>
         {label && (
-          <legend className="block text-body-sm font-medium text-neutral-700 mb-2">
+          <legend className="block text-body-sm font-medium text-foreground mb-2">
             {label}
           </legend>
         )}
@@ -76,10 +76,10 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
                     disabled={option.disabled}
                     onChange={() => handleChange(option.value)}
                     className={cn(
-                      "h-4 w-4 border-neutral-300 text-primary-600 transition-all duration-200",
-                      "focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+                      "h-4 w-4 border-input text-primary transition-all duration-200",
+                      "focus:ring-2 focus:ring-ring focus:ring-offset-2",
                       "disabled:cursor-not-allowed disabled:opacity-50",
-                      error && "border-red-300 focus:ring-red-500",
+                      error && "border-destructive focus:ring-destructive",
                     )}
                   />
                 </div>
@@ -89,7 +89,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
                     className={cn(
                       "font-medium cursor-pointer",
                       option.disabled && "cursor-not-allowed opacity-50",
-                      error ? "text-red-700" : "text-neutral-700",
+                      error ? "text-destructive" : "text-foreground",
                     )}
                   >
                     {option.label}
@@ -99,7 +99,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
                       className={cn(
                         "text-body-sm",
                         option.disabled && "opacity-50",
-                        error ? "text-red-600" : "text-neutral-500",
+                        error ? "text-destructive" : "text-muted-foreground",
                       )}
                     >
                       {option.description}
@@ -110,7 +110,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
             );
           })}
         </div>
-        {error && <p className="mt-2 text-body-sm text-red-600">{error}</p>}
+        {error && <p className="mt-2 text-body-sm text-destructive">{error}</p>}
       </div>
     );
   },

@@ -81,7 +81,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={cn(
-            "relative w-full transform rounded-lg bg-white shadow-xl transition-all",
+            "relative w-full transform rounded-lg bg-card shadow-xl transition-all",
             modalSizes[size],
           )}
           role="dialog"
@@ -91,12 +91,12 @@ export const Modal: React.FC<ModalProps> = ({
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between p-6 border-b border-border">
               <div>
                 {title && (
                   <h3
                     id="modal-title"
-                    className="text-h4 font-semibold text-gray-900"
+                    className="text-h4 font-semibold text-foreground"
                   >
                     {title}
                   </h3>
@@ -104,7 +104,7 @@ export const Modal: React.FC<ModalProps> = ({
                 {description && (
                   <p
                     id="modal-description"
-                    className="mt-1 text-body-sm text-neutral-600"
+                    className="mt-1 text-body-sm text-muted-foreground"
                   >
                     {description}
                   </p>
@@ -114,7 +114,7 @@ export const Modal: React.FC<ModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-md p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="rounded-md p-2 text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
                   aria-label="Close modal"
                 >
                   <svg
@@ -174,7 +174,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
 }) => (
   <div
     className={cn(
-      "flex justify-end space-x-3 pt-4 border-t border-neutral-200",
+      "flex justify-end space-x-3 pt-4 border-t border-border",
       className,
     )}
   >
