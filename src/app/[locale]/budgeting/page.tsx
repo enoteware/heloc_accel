@@ -102,10 +102,8 @@ export default function BudgetingPage() {
           setCurrentScenario(scenariosWithDefaults[0]);
         }
       } else if (response.status === 401) {
-        // Authentication required - redirect to sign in
-        router.push(
-          "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
-        );
+        // Authentication required - let main auth logic handle redirect
+        console.log("Authentication required for budget scenarios");
         return;
       } else {
         console.error("Failed to fetch scenarios:", response.status);
@@ -117,27 +115,29 @@ export default function BudgetingPage() {
     }
   }, [router]);
 
-  // Handle authentication state
+  // Handle authentication state with better Stack Auth integration
   useEffect(() => {
-    // Give Stack Auth time to initialize
+    // More generous timeout for Stack Auth initialization
     const timer = setTimeout(() => {
       setAuthLoading(false);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    // Only redirect after auth loading is complete
-    if (!authLoading && !user) {
+    // Only redirect after auth loading is complete AND we're sure user is null
+    if (!authLoading && user === null) {
+      console.log("Redirecting to sign-in: user not authenticated");
       router.push(
         "/handler/sign-in?callbackUrl=" + encodeURIComponent("/en/budgeting"),
       );
       return;
     }
 
-    // Fetch scenarios only when user is available
+    // Fetch scenarios only when user is available and auth loading is done
     if (!authLoading && user) {
+      console.log("User authenticated, fetching scenarios");
       fetchScenarios();
     }
   }, [user, router, authLoading, fetchScenarios]);
@@ -315,7 +315,9 @@ export default function BudgetingPage() {
           <p className="mt-4 text-gray-600">
             {authLoading
               ? "Checking authentication..."
-              : "Loading budgeting tool..."}
+              : loading
+                ? "Loading budgeting tool..."
+                : "Preparing budgeting interface..."}
           </p>
         </div>
       </div>
