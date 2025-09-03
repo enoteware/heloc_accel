@@ -1,0 +1,257 @@
+/**
+ * HELOC Accelerator Theme System
+ * Semantic design tokens for light and dark themes
+ * Uses CSS custom properties for consistent theming
+ */
+
+/* Base theme variables - Light theme (default) */
+:root {
+  /* Primary Colors */
+  --color-primary: 59 130 246; /* blue-500 */
+  --color-primary-foreground: 255 255 255; /* white */
+  --color-primary-hover: 37 99 235; /* blue-600 */
+  --color-primary-active: 29 78 216; /* blue-700 */
+
+  /* Secondary Colors */
+  --color-secondary: 100 116 139; /* slate-500 */
+  --color-secondary-foreground: 255 255 255; /* white */
+  --color-secondary-hover: 71 85 105; /* slate-600 */
+  --color-secondary-active: 51 65 85; /* slate-700 */
+
+  /* Accent Colors */
+  --color-accent: 16 185 129; /* emerald-500 */
+  --color-accent-foreground: 255 255 255; /* white */
+  --color-accent-hover: 5 150 105; /* emerald-600 */
+  --color-accent-active: 4 120 87; /* emerald-700 */
+
+  /* Background Colors */
+  --color-background: 255 255 255; /* white */
+  --color-background-secondary: 248 250 252; /* slate-50 */
+  --color-background-tertiary: 241 245 249; /* slate-100 */
+  --color-background-overlay: 0 0 0; /* black with opacity */
+
+  /* Surface Colors */
+  --color-surface: 255 255 255; /* white */
+  --color-surface-secondary: 248 250 252; /* slate-50 */
+  --color-surface-tertiary: 241 245 249; /* slate-100 */
+  --color-surface-hover: 241 245 249; /* slate-100 */
+  --color-surface-active: 226 232 240; /* slate-200 */
+
+  /* Text Colors */
+  --color-foreground: 15 23 42; /* slate-900 */
+  --color-foreground-secondary: 51 65 85; /* slate-700 */
+  --color-foreground-tertiary: 100 116 139; /* slate-500 */
+  --color-foreground-muted: 148 163 184; /* slate-400 */
+  --color-foreground-inverse: 255 255 255; /* white */
+
+  /* Border Colors */
+  --color-border: 226 232 240; /* slate-200 */
+  --color-border-secondary: 203 213 225; /* slate-300 */
+  --color-border-tertiary: 148 163 184; /* slate-400 */
+  --color-border-focus: 59 130 246; /* blue-500 */
+
+  /* State Colors */
+  --color-success: 34 197 94; /* green-500 */
+  --color-success-foreground: 255 255 255; /* white */
+  --color-success-background: 240 253 244; /* green-50 */
+  --color-success-border: 187 247 208; /* green-200 */
+
+  --color-warning: 245 158 11; /* amber-500 */
+  --color-warning-foreground: 255 255 255; /* white */
+  --color-warning-background: 255 251 235; /* amber-50 */
+  --color-warning-border: 252 211 77; /* amber-300 */
+
+  --color-error: 239 68 68; /* red-500 */
+  --color-error-foreground: 255 255 255; /* white */
+  --color-error-background: 254 242 242; /* red-50 */
+  --color-error-border: 252 165 165; /* red-300 */
+
+  --color-info: 59 130 246; /* blue-500 */
+  --color-info-foreground: 255 255 255; /* white */
+  --color-info-background: 239 246 255; /* blue-50 */
+  --color-info-border: 147 197 253; /* blue-300 */
+
+  /* Shadow Colors */
+  --color-shadow: 0 0 0; /* black */
+  --shadow-sm: 0 1px 2px 0 rgb(var(--color-shadow) / 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgb(var(--color-shadow) / 0.1),
+    0 2px 4px -2px rgb(var(--color-shadow) / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(var(--color-shadow) / 0.1),
+    0 4px 6px -4px rgb(var(--color-shadow) / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(var(--color-shadow) / 0.1),
+    0 8px 10px -6px rgb(var(--color-shadow) / 0.1);
+
+  /* Chart Colors */
+  --color-chart-primary: 59 130 246; /* blue-500 */
+  --color-chart-secondary: 16 185 129; /* emerald-500 */
+  --color-chart-tertiary: 245 158 11; /* amber-500 */
+  --color-chart-quaternary: 139 92 246; /* violet-500 */
+  --color-chart-quinary: 236 72 153; /* pink-500 */
+
+  /* Financial Colors */
+  --color-income: 34 197 94; /* green-500 */
+  --color-expense: 239 68 68; /* red-500 */
+  --color-savings: 59 130 246; /* blue-500 */
+  --color-debt: 245 158 11; /* amber-500 */
+
+  /* Opacity Values */
+  --opacity-overlay: 0.5;
+  --opacity-disabled: 0.5;
+  --opacity-hover: 0.8;
+  --opacity-focus: 0.9;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  /* Primary Colors */
+  --color-primary: 96 165 250; /* blue-400 */
+  --color-primary-foreground: 15 23 42; /* slate-900 */
+  --color-primary-hover: 59 130 246; /* blue-500 */
+  --color-primary-active: 37 99 235; /* blue-600 */
+
+  /* Secondary Colors */
+  --color-secondary: 148 163 184; /* slate-400 */
+  --color-secondary-foreground: 15 23 42; /* slate-900 */
+  --color-secondary-hover: 100 116 139; /* slate-500 */
+  --color-secondary-active: 71 85 105; /* slate-600 */
+
+  /* Accent Colors */
+  --color-accent: 52 211 153; /* emerald-400 */
+  --color-accent-foreground: 15 23 42; /* slate-900 */
+  --color-accent-hover: 16 185 129; /* emerald-500 */
+  --color-accent-active: 5 150 105; /* emerald-600 */
+
+  /* Background Colors */
+  --color-background: 15 23 42; /* slate-900 */
+  --color-background-secondary: 30 41 59; /* slate-800 */
+  --color-background-tertiary: 51 65 85; /* slate-700 */
+  --color-background-overlay: 255 255 255; /* white with opacity */
+
+  /* Surface Colors */
+  --color-surface: 30 41 59; /* slate-800 */
+  --color-surface-secondary: 51 65 85; /* slate-700 */
+  --color-surface-tertiary: 71 85 105; /* slate-600 */
+  --color-surface-hover: 51 65 85; /* slate-700 */
+  --color-surface-active: 71 85 105; /* slate-600 */
+
+  /* Text Colors */
+  --color-foreground: 248 250 252; /* slate-50 */
+  --color-foreground-secondary: 226 232 240; /* slate-200 */
+  --color-foreground-tertiary: 148 163 184; /* slate-400 */
+  --color-foreground-muted: 100 116 139; /* slate-500 */
+  --color-foreground-inverse: 15 23 42; /* slate-900 */
+
+  /* Border Colors */
+  --color-border: 71 85 105; /* slate-600 */
+  --color-border-secondary: 100 116 139; /* slate-500 */
+  --color-border-tertiary: 148 163 184; /* slate-400 */
+  --color-border-focus: 96 165 250; /* blue-400 */
+
+  /* State Colors - Adjusted for dark theme */
+  --color-success: 52 211 153; /* emerald-400 */
+  --color-success-background: 6 78 59; /* emerald-900 */
+  --color-success-border: 16 185 129; /* emerald-500 */
+
+  --color-warning: 251 191 36; /* amber-400 */
+  --color-warning-background: 120 53 15; /* amber-900 */
+  --color-warning-border: 245 158 11; /* amber-500 */
+
+  --color-error: 248 113 113; /* red-400 */
+  --color-error-background: 127 29 29; /* red-900 */
+  --color-error-border: 239 68 68; /* red-500 */
+
+  --color-info: 96 165 250; /* blue-400 */
+  --color-info-background: 30 58 138; /* blue-900 */
+  --color-info-border: 59 130 246; /* blue-500 */
+
+  /* Chart Colors - Adjusted for dark theme */
+  --color-chart-primary: 96 165 250; /* blue-400 */
+  --color-chart-secondary: 52 211 153; /* emerald-400 */
+  --color-chart-tertiary: 251 191 36; /* amber-400 */
+  --color-chart-quaternary: 167 139 250; /* violet-400 */
+  --color-chart-quinary: 244 114 182; /* pink-400 */
+
+  /* Financial Colors - Adjusted for dark theme */
+  --color-income: 52 211 153; /* emerald-400 */
+  --color-expense: 248 113 113; /* red-400 */
+  --color-savings: 96 165 250; /* blue-400 */
+  --color-debt: 251 191 36; /* amber-400 */
+}
+
+/* Utility classes for theme colors */
+.bg-primary {
+  background-color: rgb(var(--color-primary));
+}
+.bg-secondary {
+  background-color: rgb(var(--color-secondary));
+}
+.bg-accent {
+  background-color: rgb(var(--color-accent));
+}
+.bg-background {
+  background-color: rgb(var(--color-background));
+}
+.bg-surface {
+  background-color: rgb(var(--color-surface));
+}
+.bg-success {
+  background-color: rgb(var(--color-success));
+}
+.bg-warning {
+  background-color: rgb(var(--color-warning));
+}
+.bg-error {
+  background-color: rgb(var(--color-error));
+}
+.bg-info {
+  background-color: rgb(var(--color-info));
+}
+
+.text-primary {
+  color: rgb(var(--color-primary));
+}
+.text-secondary {
+  color: rgb(var(--color-secondary));
+}
+.text-accent {
+  color: rgb(var(--color-accent));
+}
+.text-foreground {
+  color: rgb(var(--color-foreground));
+}
+.text-foreground-secondary {
+  color: rgb(var(--color-foreground-secondary));
+}
+.text-foreground-muted {
+  color: rgb(var(--color-foreground-muted));
+}
+.text-success {
+  color: rgb(var(--color-success));
+}
+.text-warning {
+  color: rgb(var(--color-warning));
+}
+.text-error {
+  color: rgb(var(--color-error));
+}
+.text-info {
+  color: rgb(var(--color-info));
+}
+
+.border-primary {
+  border-color: rgb(var(--color-border));
+}
+.border-focus {
+  border-color: rgb(var(--color-border-focus));
+}
+
+/* Theme transition for smooth switching */
+* {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}

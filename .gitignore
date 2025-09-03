@@ -72,3 +72,80 @@ temp/
 
 # History directory
 /history/
+.history/
+
+# Sentry Config File
+.env.sentry-build-plugin
+sentry.*.config.ts
+sentry.*.config.js
+
+# Development and testing files
+.env.domain
+/scripts/dev-info.js
+/scripts/setup-*.js
+/scripts/remove-*.js
+/scripts/seed-*.js
+
+# Test and example directories
+**/test-forms/
+**/sentry-example-api/
+**/sentry-example-page/
+src/instrumentation*.ts
+src/instrumentation*.js
+
+# Documentation (development)
+/docs/DOMAIN_DEVELOPMENT.md
+
+# Theme development files (if not needed in production)
+# /src/styles/themes.css
+# /src/components/ThemeToggle.tsx
+# /src/contexts/ThemeContext.tsx
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor directories and files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.sublime-project
+*.sublime-workspace
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
