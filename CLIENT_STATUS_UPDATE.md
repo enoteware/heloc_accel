@@ -47,6 +47,7 @@ The HELOC Accelerator application is **fully functional and ready for comprehens
 - **Features:** Full access with sample scenarios pre-loaded
 
 **Application URL:** `http://localhost:3001` (or deployed URL)
+**Build Status URL:** `http://localhost:3001/api/build-log` (shareable build information)
 
 ---
 
@@ -84,6 +85,12 @@ The HELOC Accelerator application is **fully functional and ready for comprehens
 - ✅ Time comparison displays
 - ✅ Interest savings breakdowns
 - ✅ Professional financial reporting format
+
+### **Build & Deployment Tracking**
+- ✅ Real-time build status monitoring
+- ✅ Shareable build log with public URL
+- ✅ Version and commit tracking
+- ✅ Feature and fix documentation
 
 ---
 
@@ -127,6 +134,14 @@ The HELOC Accelerator application is **fully functional and ready for comprehens
 1. Resize browser window to mobile size
 2. Test calculator on tablet/mobile device
 3. Verify all features remain accessible
+```
+
+### **6. View Build Status & Share Updates**
+```
+1. Visit /api/build-log for shareable build status page
+2. Use "Copy Share URL" to get shareable link for stakeholders
+3. Check /en/build-status for integrated build information
+4. Share build log URL with team members or clients
 ```
 
 ---
