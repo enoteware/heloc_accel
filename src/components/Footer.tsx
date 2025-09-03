@@ -51,6 +51,17 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
               )}
+              <li>
+                <a
+                  href="/api/build-log"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 flex items-center space-x-2"
+                >
+                  <NavigationIcon name="info" size="sm" />
+                  <span>Build Status</span>
+                </a>
+              </li>
               {/* Development only */}
               {process.env.NODE_ENV === "development" && (
                 <li>
