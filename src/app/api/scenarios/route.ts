@@ -1,43 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stackServerApp } from "@/stack";
 import pool from "@/lib/db";
 import { validateCalculatorInputs } from "@/lib/validation";
 import { logInfo, logError, logDebug } from "@/lib/debug-logger";
+import { withAuth } from "@/lib/api-auth";
 
 // GET /api/scenarios - List user's scenarios
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, { user }) => {
   logInfo("API:Scenarios", "GET /api/scenarios called");
 
   try {
-    let user;
-    try {
-      user = await stackServerApp.getUser({ tokenStore: request });
-      logDebug("API:Scenarios", "User authenticated", {
-        userId: user?.id,
-        email: user?.primaryEmail,
-      });
-    } catch (error) {
-      logError("API:Scenarios", "Stack Auth error", error);
-      return NextResponse.json(
-        { error: "Authentication error" },
-        { status: 401 },
-      );
-    }
-
-    if (!user) {
-      logError("API:Scenarios", "No user found in session");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const client = await pool.connect();
     try {
       logDebug("API:Scenarios", "Querying scenarios for user", {
-        userId: user.id,
+        stackUserId: user.id,
+        localUserId: user.localUser.id,
+        email: user.primaryEmail,
       });
       const result = await client.query(
-        `SELECT 
-          id, 
-          name, 
+        `SELECT
+          id,
+          name,
           description,
           created_at,
           updated_at,
@@ -45,14 +27,16 @@ export async function GET(request: NextRequest) {
           heloc_payoff_months,
           time_saved_months,
           interest_saved
-        FROM scenarios 
-        WHERE user_id = $1 
+        FROM scenarios
+        WHERE user_id = $1
         ORDER BY updated_at DESC`,
-        [user.id],
+        [user.localUser.id],
       );
 
       logInfo("API:Scenarios", `Found ${result.rows.length} scenarios`, {
-        userId: user.id,
+        stackUserId: user.id,
+        localUserId: user.localUser.id,
+        scenarioCount: result.rows.length,
       });
       return NextResponse.json({ scenarios: result.rows });
     } finally {
@@ -65,54 +49,20 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});
 
 // POST /api/scenarios - Create new scenario
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { user }) => {
   logInfo("API:Scenarios", "POST /api/scenarios called");
-  // Removed debug log
 
   try {
-    let user;
-    try {
-      // Removed debug log
-      user = await stackServerApp.getUser({ tokenStore: request });
-      /* removed debug block */
-
-      logDebug("API:Scenarios", "User authenticated for POST", {
-        userId: user?.id,
-        email: user?.primaryEmail,
-      });
-    } catch (error) {
-      // Error already logged via logError
-      logError("API:Scenarios", "Stack Auth error in POST", error);
-      return NextResponse.json(
-        { error: "Authentication error" },
-        { status: 401 },
-      );
-    }
-
-    if (!user) {
-      console.log("No user found - returning 401");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    console.log("Parsing request body...");
     const body = await request.json();
-    console.log("Body received:", JSON.stringify(body, null, 2));
     const { inputs, results } = body;
 
     logDebug("API:Scenarios", "POST body received", {
       hasInputs: !!inputs,
       hasResults: !!results,
       scenarioName: inputs?.scenarioName,
-    });
-    console.log("Extracted from body:", {
-      hasInputs: !!inputs,
-      hasResults: !!results,
-      scenarioName: inputs?.scenarioName,
-      inputKeys: inputs ? Object.keys(inputs) : [],
-      resultKeys: results ? Object.keys(results) : [],
     });
 
     // Validate inputs
@@ -126,15 +76,9 @@ export async function POST(request: NextRequest) {
     }
 
     const client = await pool.connect();
-    console.log("Database client connected");
     try {
       logInfo("API:Scenarios", "Inserting scenario into database", {
         scenarioName: inputs.scenarioName,
-      });
-      console.log("Preparing to insert scenario with values:", {
-        userId: user.id,
-        name: inputs.scenarioName || "HELOC Analysis",
-        description: inputs.description || null,
       });
 
       // Insert the scenario
@@ -186,7 +130,7 @@ export async function POST(request: NextRequest) {
           $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36
         ) RETURNING id`,
         [
-          user.id,
+          user.localUser.id,
           inputs.scenarioName || "HELOC Analysis",
           inputs.description || null,
           // Mortgage
@@ -250,4 +194,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});

@@ -288,6 +288,23 @@
     "failed": "Failed",
     "processing": "Processing"
   },
+  "scenarios": {
+    "title": "My Scenarios",
+    "subtitle": "View and manage your saved HELOC analysis scenarios",
+    "newScenario": "New Scenario",
+    "createFirst": "Create First Scenario",
+    "noScenariosTitle": "No scenarios yet",
+    "noScenariosMessage": "Create your first HELOC analysis scenario to see how much you can save on your mortgage.",
+    "deleteConfirm": "Are you sure you want to delete this scenario?",
+    "deleteError": "Failed to delete scenario",
+    "loadingError": "Failed to load scenarios",
+    "backToScenarios": "Back to scenarios",
+    "createdOn": "Created on",
+    "lastUpdated": "Last updated",
+    "payoffTime": "Payoff Time",
+    "interestSaved": "Interest Saved",
+    "timeSaved": "Time Saved"
+  },
   "auth": {
     "signInTitle": "Sign in to your account",
     "signUpTitle": "Create a new account",

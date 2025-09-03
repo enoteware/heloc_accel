@@ -292,6 +292,23 @@
     "failed": "Falló",
     "processing": "Procesando"
   },
+  "scenarios": {
+    "title": "Mis Escenarios",
+    "subtitle": "Ver y gestionar sus escenarios guardados de análisis HELOC",
+    "newScenario": "Nuevo Escenario",
+    "createFirst": "Crear Primer Escenario",
+    "noScenariosTitle": "Aún no hay escenarios",
+    "noScenariosMessage": "Cree su primer escenario de análisis HELOC para ver cuánto puede ahorrar en su hipoteca.",
+    "deleteConfirm": "¿Está seguro de que desea eliminar este escenario?",
+    "deleteError": "Error al eliminar el escenario",
+    "loadingError": "Error al cargar los escenarios",
+    "backToScenarios": "Volver a escenarios",
+    "createdOn": "Creado el",
+    "lastUpdated": "Última actualización",
+    "payoffTime": "Tiempo de Pago",
+    "interestSaved": "Interés Ahorrado",
+    "timeSaved": "Tiempo Ahorrado"
+  },
   "auth": {
     "signInTitle": "Inicia sesión en tu cuenta",
     "signUpTitle": "Crear una nueva cuenta",
