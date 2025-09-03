@@ -127,6 +127,7 @@ function isPublicApiPath(pathname: string): boolean {
     "/api/company", // Company info (public)
     "/api/test-auth", // Test endpoint
     "/api/health", // Health check
+    "/api/build-log", // Build status (public for client sharing)
   ];
 
   return publicPaths.some((path) => pathname.startsWith(path));
