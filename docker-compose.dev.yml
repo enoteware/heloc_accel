@@ -1,14 +1,12 @@
-version: "3.8"
+
 
 services:
-  # HELOC Accelerator Application
+  # HELOC Accelerator Application (Development Mode)
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-      args:
-        - DOCKER_BUILD=true
-    container_name: heloc-app
+      dockerfile: Dockerfile.dev
+    container_name: heloc-app-dev
     environment:
       - NODE_ENV=development
       - PORT=3001
@@ -18,6 +16,8 @@ services:
       - NEXTAUTH_SECRET=dev-secret-key-change-in-production
       - JWT_SECRET=dev-jwt-secret-change-in-production
       - CORS_ORIGIN="http://${DOMAIN:-heloc.localhost:3000}"
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     ports:
       # Expose app on heloc.local:3000 (host:container)
       - "3000:3001"
@@ -26,22 +26,18 @@ services:
         condition: service_healthy
     restart: unless-stopped
     volumes:
-      # Mount source code for development (hot reload)
+      # Mount source code for hot reload
       - .:/app
       - /app/node_modules
       - /app/.next
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3001/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    # Use Turbopack for fast dev server inside Docker
+    # Use Turbopack for faster dev in Docker
     command: sh -c "npx next dev --port 3001 --hostname 0.0.0.0 --turbo"
+    stdin_open: true
+    tty: true
 
   postgres:
     image: postgres:15-alpine
-    container_name: heloc-postgres
+    container_name: heloc-postgres-dev
     environment:
       POSTGRES_DB: heloc_accelerator
       POSTGRES_USER: heloc_user
@@ -50,7 +46,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_dev_data:/var/lib/postgresql/data
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/02-init.sql
     restart: unless-stopped
@@ -63,7 +59,7 @@ services:
   # Optional: pgAdmin for database management
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: heloc-pgadmin
+    container_name: heloc-pgadmin-dev
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@helocaccel.com
       PGADMIN_DEFAULT_PASSWORD: admin123
@@ -71,15 +67,15 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - pgadmin_dev_data:/var/lib/pgadmin
     depends_on:
       - postgres
     restart: unless-stopped
 
 volumes:
-  postgres_data:
-  pgadmin_data:
+  postgres_dev_data:
+  pgadmin_dev_data:
 
 networks:
   default:
-    name: heloc-network
+    name: heloc-dev-network

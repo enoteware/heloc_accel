@@ -129,7 +129,7 @@ function CalculatorPageContent() {
           setEditingScenarioId(scenarioId);
         }
       } catch (err) {
-        console.error("Error loading scenario:", err);
+        logError("Calculator", "Error loading scenario", err);
         setError("Failed to load scenario data");
       } finally {
         setLoading(false);
@@ -158,10 +158,10 @@ function CalculatorPageContent() {
     setValidationErrors([]);
     setCurrentFormData(formData); // Store form data for saving
 
-    console.log("=== CALCULATION REQUEST START ===");
-    console.log("Form data received:", formData);
-    console.log("API URL:", getApiUrl("api/calculate"));
-    console.log("Request body:", JSON.stringify(formData, null, 2));
+    logDebug("Calculator", "Starting calculation request", {
+      apiUrl: getApiUrl("api/calculate"),
+      hasFormData: !!formData,
+    });
 
     try {
       const response = await fetch(getApiUrl("api/calculate"), {
@@ -172,39 +172,39 @@ function CalculatorPageContent() {
         body: JSON.stringify(formData),
       });
 
-      console.log("Response status:", response.status);
-      console.log(
-        "Response headers:",
-        Object.fromEntries(response.headers.entries()),
-      );
-
       const data = await response.json();
-      console.log("Response data:", data);
+
+      logDebug("Calculator", "API response received", {
+        status: response.status,
+        success: data.success,
+      });
 
       if (!response.ok) {
-        console.error("API Error Response:", data);
+        logError("Calculator", "API Error Response", data);
         if (data.data?.validationErrors) {
-          console.error("Validation Errors:", data.data.validationErrors);
+          logError(
+            "Calculator",
+            "Validation Errors",
+            data.data.validationErrors,
+          );
           setValidationErrors(data.data.validationErrors);
         }
         throw new Error(data.error || "Calculation failed");
       }
 
       if (data.success) {
-        console.log("Calculation successful!");
+        logInfo("Calculator", "Calculation successful");
         setResults(data.data);
       } else {
-        console.error("API returned unsuccessful result:", data);
+        logError("Calculator", "API returned unsuccessful result", data);
         throw new Error(data.error || "Calculation failed");
       }
     } catch (err) {
-      console.error("=== CALCULATION ERROR ===");
-      console.error("Error type:", err?.constructor?.name);
-      console.error("Error message:", err instanceof Error ? err.message : err);
-      console.error(
-        "Error stack:",
-        err instanceof Error ? err.stack : "No stack trace",
-      );
+      logError("Calculator", "Calculation error", {
+        errorType: err?.constructor?.name,
+        message: err instanceof Error ? err.message : err,
+        stack: err instanceof Error ? err.stack : "No stack trace",
+      });
 
       let errorMessage = "An error occurred during calculation";
       if (err instanceof Error) {
@@ -217,7 +217,7 @@ function CalculatorPageContent() {
       setError(errorMessage);
     } finally {
       setLoading(false);
-      console.log("=== CALCULATION REQUEST END ===");
+      logDebug("Calculator", "Calculation request completed");
     }
   };
 
@@ -269,16 +269,16 @@ function CalculatorPageContent() {
   );
 
   const handleSaveScenario = async () => {
-    console.log("=== SAVE SCENARIO BUTTON CLICKED ===");
-    console.log("Results available:", !!results);
-    console.log("Form data available:", !!currentFormData);
+    logDebug("Calculator", "Save scenario button clicked", {
+      hasResults: !!results,
+      hasFormData: !!currentFormData,
+    });
 
     if (!results || !currentFormData) {
-      console.log("❌ Cannot save: Missing results or form data");
+      logDebug("Calculator", "Cannot save: Missing results or form data");
       return;
     }
 
-    console.log("✅ Opening save modal");
     setShowSaveModal(true);
   };
 
@@ -300,7 +300,7 @@ function CalculatorPageContent() {
 
     setIsSaving(true);
     try {
-      console.log("🗄️ Saving to database via API");
+      logInfo("Calculator", "Saving scenario to database");
 
       // Save to database via API
       const payload = {
@@ -314,8 +314,6 @@ function CalculatorPageContent() {
 
       logDebug("SaveScenario", "API payload prepared", payload);
       logInfo("SaveScenario", "Making POST request to /api/scenarios");
-      console.log("📤 Sending save request to /api/scenarios");
-      console.log("Payload:", payload);
 
       const response = await fetch("/api/scenarios", {
         method: "POST",
@@ -326,28 +324,20 @@ function CalculatorPageContent() {
         body: JSON.stringify(payload),
       });
 
-      console.log("📥 Response received:", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok,
-      });
-
       logInfo("SaveScenario", `API response received: ${response.status}`);
 
       const data = await response.json();
-      console.log("📥 Response data:", data);
       logDebug("SaveScenario", "API response data", data);
 
       if (!response.ok) {
-        console.error("❌ API request failed:", {
-          status: response.status,
-          error: data.error || "Unknown error",
-          data: data,
-        });
         logError(
           "SaveScenario",
           `API request failed with status: ${response.status}`,
-          data,
+          {
+            status: response.status,
+            error: data.error || "Unknown error",
+            data: data,
+          },
         );
         throw new Error(data.error || "Failed to save scenario");
       }
@@ -361,15 +351,14 @@ function CalculatorPageContent() {
       // Redirect to dashboard to see saved scenarios
       router.push("/en/dashboard");
     } catch (error) {
-      logError("SaveScenario", "Failed to save scenario", error);
-      console.error("Error details:", {
+      logError("SaveScenario", "Failed to save scenario", {
+        error,
         name: error instanceof Error ? error.name : "Unknown",
         message: error instanceof Error ? error.message : error,
         stack: error instanceof Error ? error.stack : "No stack trace",
       });
       throw error; // Let the modal handle the error display
     } finally {
-      console.log("🔄 Setting isSaving to false");
       setIsSaving(false);
     }
   };
@@ -407,10 +396,10 @@ function CalculatorPageContent() {
 
   if (user === undefined) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-foreground-secondary">Loading...</p>
         </div>
       </div>
     );
@@ -421,7 +410,7 @@ function CalculatorPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -434,12 +423,12 @@ function CalculatorPageContent() {
               className="drop-shadow-md"
             />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             {editingScenarioId
               ? "Edit Scenario"
               : "HELOC Accelerator Calculator"}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto">
             {editingScenarioId
               ? "Update your HELOC acceleration scenario with new parameters"
               : "Compare traditional mortgage payments with HELOC acceleration strategy to see potential savings"}
@@ -447,17 +436,17 @@ function CalculatorPageContent() {
         </div>
 
         {/* User Welcome */}
-        <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+        <div className="bg-card border border-border rounded-lg shadow-md p-4 mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Welcome back,</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-foreground-secondary">Welcome back,</p>
+              <p className="text-lg font-semibold text-foreground">
                 {user?.displayName || user?.primaryEmail}
               </p>
             </div>
             <button
               onClick={() => router.push("/dashboard")}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="safe-link font-medium"
             >
               View Dashboard
             </button>
@@ -473,26 +462,11 @@ function CalculatorPageContent() {
                 showFieldNames={true}
               />
             ) : error ? (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="safe-alert-danger">
                 <div className="flex">
-                  <div className="flex-shrink-0">
-                    <svg
-                      className="h-5 w-5 text-red-400"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-destructive-foreground">
-                      Calculation Error
-                    </h3>
-                    <div className="mt-2 text-sm text-destructive-foreground">
+                  <div className="ml-1">
+                    <h3 className="text-sm font-medium">Calculation Error</h3>
+                    <div className="mt-2 text-sm">
                       <p>{error}</p>
                     </div>
                   </div>
@@ -556,7 +530,7 @@ function CalculatorPageContent() {
                 <div className="mt-6 text-center">
                   <button
                     onClick={handleSaveScenario}
-                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                    className="btn-primary font-medium py-2 px-6 rounded-lg"
                   >
                     Save This Scenario
                   </button>
@@ -598,10 +572,10 @@ function CalculatorPageContent() {
 
             <Suspense
               fallback={
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="bg-card border border-border rounded-lg shadow-md p-6">
                   <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                    <div className="h-64 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
+                    <div className="h-64 bg-muted rounded"></div>
                   </div>
                 </div>
               }
@@ -624,23 +598,23 @@ function CalculatorPageContent() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-12 pt-8 border-t border-gray-200">
+      <footer className="mt-12 pt-8 border-t border-border">
         <Disclaimer />
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div className="mt-8 text-center text-sm text-foreground-muted">
           <p>
             &copy; {new Date().getFullYear()} HELOC Accelerator. All rights
             reserved.
           </p>
           <p className="mt-2">
-            <a href="/terms" className="hover:text-gray-700 underline">
+            <a href="/terms" className="safe-link">
               Terms of Service
             </a>
             <span className="mx-2">•</span>
-            <a href="/privacy" className="hover:text-gray-700 underline">
+            <a href="/privacy" className="safe-link">
               Privacy Policy
             </a>
             <span className="mx-2">•</span>
-            <a href="/contact" className="hover:text-gray-700 underline">
+            <a href="/contact" className="safe-link">
               Contact Us
             </a>
           </p>
@@ -663,10 +637,15 @@ export default function CalculatorPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading calculator...</p>
+            <div
+              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto"
+              style={{ borderColor: "rgb(var(--color-primary))" }}
+            ></div>
+            <p className="mt-4 text-foreground-secondary">
+              Loading calculator...
+            </p>
           </div>
         </div>
       }

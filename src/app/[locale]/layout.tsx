@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/components/AuthProvider";
 import { NavigationProvider, NavigationBar } from "@/components/navigation";
-import { ThemeProvider } from "../../components/design-system/ThemeProvider";
+// Theme is provided at app root in src/app/layout.tsx
 // import EnvironmentBanner from '@/components/EnvironmentBanner'
 import { CompanyProvider } from "@/contexts/CompanyContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -53,17 +53,15 @@ export default async function LocaleLayout({
       <StackProvider app={stackServerApp}>
         <StackTheme>
           <NextIntlClientProvider messages={messages}>
-            <ThemeProvider>
-              <AuthProvider>
-                <CompanyProvider>
-                  <NavigationProvider>
-                    <NavigationBar />
-                    <main className="min-h-screen">{children}</main>
-                    <Footer />
-                  </NavigationProvider>
-                </CompanyProvider>
-              </AuthProvider>
-            </ThemeProvider>
+            <AuthProvider>
+              <CompanyProvider>
+                <NavigationProvider>
+                  <NavigationBar />
+                  <main className="min-h-screen">{children}</main>
+                  <Footer />
+                </NavigationProvider>
+              </CompanyProvider>
+            </AuthProvider>
           </NextIntlClientProvider>
         </StackTheme>
       </StackProvider>

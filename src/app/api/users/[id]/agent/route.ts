@@ -26,12 +26,12 @@ export const GET = withAuth(
         );
       }
 
-      // If DATABASE_URL is not set, return error
+      // If DATABASE_URL is not set, treat as no assignment (avoid noisy 404/503 on homepage)
       if (!process.env.DATABASE_URL) {
-        return NextResponse.json(
-          { success: false, error: "Database not configured" },
-          { status: 503 },
-        );
+        return NextResponse.json({
+          success: false,
+          error: "No agent assigned",
+        });
       }
 
       // Fetch agent assignment from database
@@ -44,10 +44,10 @@ export const GET = withAuth(
           connErr,
         );
         // Treat DB connection issues as "no assignment" for non-critical data
-        return NextResponse.json(
-          { success: false, error: "No agent assigned" },
-          { status: 404 },
-        );
+        return NextResponse.json({
+          success: false,
+          error: "No agent assigned",
+        });
       }
 
       try {
@@ -60,10 +60,11 @@ export const GET = withAuth(
         );
 
         if (result.rows.length === 0) {
-          return NextResponse.json(
-            { success: false, error: "No agent assigned" },
-            { status: 404 },
-          );
+          // No assignment is a normal state; return 200 with a clear payload
+          return NextResponse.json({
+            success: false,
+            error: "No agent assigned",
+          });
         }
 
         const agent = result.rows[0];
@@ -83,11 +84,13 @@ export const GET = withAuth(
         const message = queryErr?.message || String(queryErr);
         const code = queryErr?.code;
         if (code === "42P01" /* undefined_table */) {
-          console.warn("Agent assignment tables missing; returning 404");
-          return NextResponse.json(
-            { success: false, error: "No agent assigned" },
-            { status: 404 },
+          console.warn(
+            "Agent assignment tables missing; returning no assignment",
           );
+          return NextResponse.json({
+            success: false,
+            error: "No agent assigned",
+          });
         }
         console.error("Query error in GET /api/users/[id]/agent:", message);
         return NextResponse.json(

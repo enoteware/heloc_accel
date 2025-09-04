@@ -10,6 +10,7 @@ import UserMenu from "./UserMenu";
 import HamburgerButton from "./HamburgerButton";
 import MobileNavigationDrawer from "./MobileNavigationDrawer";
 import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
+import { CompactThemeToggle } from "@/components/ThemeToggle";
 
 export interface NavigationBarProps {
   className?: string;
@@ -28,7 +29,8 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Don't show navigation on auth pages unless explicitly requested
-  const isAuthPage = pathname.startsWith("/auth/");
+  const isAuthPage =
+    pathname.startsWith("/auth/") || pathname.includes("/handler/");
   if (isAuthPage && !showOnAuthPages) {
     return null;
   }
@@ -119,6 +121,11 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
             {/* Right side actions */}
             <div className="flex items-center space-x-2">
+              {/* Theme Toggle */}
+              <div className="hidden md:block">
+                <CompactThemeToggle />
+              </div>
+
               {/* Language Switcher */}
               <div className="hidden md:block">
                 <SimpleLanguageSwitcher />
@@ -133,7 +140,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     href="/handler/sign-in"
                     label="Sign In"
                     icon="login"
-                    className="bg-primary-500 text-white hover:bg-primary-600 border-transparent"
+                    className="btn-primary"
                   />
                 )}
               </div>

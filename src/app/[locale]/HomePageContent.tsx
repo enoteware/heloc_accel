@@ -71,7 +71,7 @@ export default function HomePageContent() {
             >
               <Link
                 href="/calculator"
-                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-all transform hover:scale-105"
+                className="btn-primary px-8 py-4 text-lg rounded-md hover:scale-105 transition-transform"
               >
                 {t("calculator.getStarted")}
               </Link>
@@ -104,7 +104,7 @@ export default function HomePageContent() {
 
         {/* Aceternity Demo Section */}
         <div className="mt-12 text-center">
-          <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="bg-card border border-border rounded-lg shadow-md p-8">
             <h3 className="text-xl font-semibold text-foreground mb-4">
               ✨ Enhanced with Aceternity UI
             </h3>

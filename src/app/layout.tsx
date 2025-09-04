@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,11 +11,16 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body
         className={`${inter.className} bg-background text-foreground`}
         suppressHydrationWarning
       >
-        {children}
+        <ThemeProvider defaultTheme="system" storageKey="heloc-theme">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
