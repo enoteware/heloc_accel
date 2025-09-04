@@ -60,15 +60,15 @@ export default function DebugLogViewer() {
   const getLevelColor = (level: string) => {
     switch (level) {
       case "error":
-        return "text-red-600 bg-red-50";
+        return "text-destructive bg-[rgb(var(--color-error-background))]";
       case "warn":
-        return "text-yellow-600 bg-yellow-50";
+        return "text-warning bg-[rgb(var(--color-warning-background))]";
       case "info":
-        return "text-blue-600 bg-blue-50";
+        return "text-info bg-[rgb(var(--color-info-background))]";
       case "debug":
-        return "text-gray-600 bg-gray-50";
+        return "text-foreground-muted bg-muted";
       default:
-        return "text-gray-600";
+        return "text-foreground-muted";
     }
   };
 
@@ -80,7 +80,11 @@ export default function DebugLogViewer() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg hover:bg-gray-700 z-50 flex items-center space-x-2"
+        className="fixed bottom-4 right-4 z-50 flex items-center space-x-2 px-3 py-2 rounded-lg shadow-lg"
+        style={{
+          backgroundColor: "rgb(var(--color-surface-tertiary))",
+          color: "rgb(var(--color-foreground))",
+        }}
         title="Open Debug Logs"
       >
         <svg
@@ -98,7 +102,13 @@ export default function DebugLogViewer() {
         </svg>
         <span>Debug Logs</span>
         {logs.length > 0 && (
-          <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+          <span
+            className="text-xs px-2 py-1 rounded-full"
+            style={{
+              backgroundColor: "rgb(var(--color-error))",
+              color: "rgb(var(--color-error-foreground))",
+            }}
+          >
             {logs.filter((l) => l.level === "error").length}
           </span>
         )}
@@ -107,14 +117,17 @@ export default function DebugLogViewer() {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl h-5/6 flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgb(var(--color-background-overlay) / 0.5)" }}
+    >
+      <div className="bg-card border border-border rounded-lg shadow-xl w-full max-w-6xl h-5/6 flex flex-col">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">Debug Logs</h2>
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-foreground">Debug Logs</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-foreground-muted hover:text-foreground"
           >
             <svg
               className="w-6 h-6"
@@ -133,11 +146,11 @@ export default function DebugLogViewer() {
         </div>
 
         {/* Filters */}
-        <div className="px-6 py-3 border-b border-gray-200 flex items-center space-x-4">
+        <div className="px-6 py-3 border-b border-border flex items-center space-x-4">
           <select
             value={filter.level}
             onChange={(e) => setFilter({ ...filter, level: e.target.value })}
-            className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+            className="px-3 py-1 border rounded-md text-sm bg-background text-foreground border-border"
           >
             <option value="">All Levels</option>
             <option value="error">Error</option>
@@ -149,7 +162,7 @@ export default function DebugLogViewer() {
           <select
             value={filter.category}
             onChange={(e) => setFilter({ ...filter, category: e.target.value })}
-            className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+            className="px-3 py-1 border rounded-md text-sm bg-background text-foreground border-border"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (
@@ -165,7 +178,7 @@ export default function DebugLogViewer() {
             onChange={(e) =>
               setFilter({ ...filter, limit: parseInt(e.target.value) || 100 })
             }
-            className="px-3 py-1 border border-gray-300 rounded-md text-sm w-20"
+            className="px-3 py-1 border rounded-md text-sm w-20 bg-background text-foreground border-border"
             placeholder="Limit"
             min="1"
             max="1000"
@@ -193,9 +206,9 @@ export default function DebugLogViewer() {
         </div>
 
         {/* Logs */}
-        <div className="flex-1 overflow-auto p-4 font-mono text-xs">
+        <div className="flex-1 overflow-auto p-4 font-mono text-xs bg-background text-foreground">
           {logs.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">
+            <div className="text-center text-foreground-muted py-8">
               No logs to display
             </div>
           ) : (
@@ -203,9 +216,7 @@ export default function DebugLogViewer() {
               {logs.map((log) => (
                 <div
                   key={log.id}
-                  className={`p-3 rounded-lg border ${
-                    log.level === "error" ? "border-red-200" : "border-gray-200"
-                  }`}
+                  className={`p-3 rounded-lg border ${log.level === "error" ? "border-destructive" : "border-border"}`}
                 >
                   <div className="flex items-start space-x-3">
                     <span
@@ -214,34 +225,41 @@ export default function DebugLogViewer() {
                       {log.level.toUpperCase()}
                     </span>
                     <div className="flex-1">
-                      <div className="flex items-center space-x-3 text-gray-600">
+                      <div className="flex items-center space-x-3 text-foreground-secondary">
                         <span>
                           {new Date(log.timestamp).toLocaleTimeString()}
                         </span>
-                        <span className="font-medium text-gray-800">
+                        <span className="font-medium text-foreground">
                           [{log.category}]
                         </span>
                         {log.userId && (
                           <span className="text-xs">User: {log.userId}</span>
                         )}
                       </div>
-                      <div className="mt-1 text-gray-800">{log.message}</div>
+                      <div className="mt-1 text-foreground">{log.message}</div>
                       {log.data && (
                         <details className="mt-2">
-                          <summary className="cursor-pointer text-gray-600 hover:text-gray-800">
+                          <summary className="cursor-pointer text-foreground-secondary hover:text-foreground">
                             Data
                           </summary>
-                          <pre className="mt-1 p-2 bg-gray-50 rounded overflow-auto text-xs">
+                          <pre className="mt-1 p-2 bg-muted rounded overflow-auto text-xs">
                             {JSON.stringify(log.data, null, 2)}
                           </pre>
                         </details>
                       )}
                       {log.stack && (
                         <details className="mt-2">
-                          <summary className="cursor-pointer text-red-600 hover:text-red-800">
+                          <summary className="cursor-pointer text-destructive hover:opacity-90">
                             Stack Trace
                           </summary>
-                          <pre className="mt-1 p-2 bg-red-50 rounded overflow-auto text-xs text-red-800">
+                          <pre
+                            className="mt-1 p-2 rounded overflow-auto text-xs"
+                            style={{
+                              backgroundColor:
+                                "rgb(var(--color-error-background))",
+                              color: "rgb(var(--color-error))",
+                            }}
+                          >
                             {log.stack}
                           </pre>
                         </details>
@@ -255,7 +273,7 @@ export default function DebugLogViewer() {
         </div>
 
         {/* Status Bar */}
-        <div className="px-6 py-2 border-t border-gray-200 text-sm text-gray-600">
+        <div className="px-6 py-2 border-t border-border text-sm text-foreground-secondary">
           Showing {logs.length} logs
         </div>
       </div>

@@ -9,8 +9,8 @@ const nextConfig = {
   // basePath: '/heloc',
   // assetPrefix: '/heloc',
 
-  // Output configuration removed for Vercel deployment
-  // output: 'standalone', // Only needed for self-hosting
+  // Output configuration for Docker deployment
+  output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
 
   // Performance optimizations
   compiler: {
@@ -55,10 +55,28 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     // Use TypeScript path mapping instead of manual aliases for better performance
     const path = require("path");
+    const webpackLib = require("webpack");
     config.resolve.alias = {
       ...config.resolve.alias,
       "@": path.resolve(__dirname, "src"),
     };
+
+    // Optional: allow offline builds by stubbing Google Fonts provider
+    if (process.env.OFFLINE_FONTS === "1") {
+      config.resolve.alias["next/font/google"] = path.resolve(
+        __dirname,
+        "src/mocks/next-font-google.js",
+      );
+
+      // Replace generated CSS requests from next/font with an empty CSS file
+      config.plugins = config.plugins || [];
+      config.plugins.push(
+        new webpackLib.NormalModuleReplacementPlugin(
+          /^next\/font\/google\/target\.css.*/,
+          path.resolve(__dirname, "src/mocks/next-font-target.css"),
+        ),
+      );
+    }
 
     // Ensure module resolution works properly
     config.resolve.extensions = [".tsx", ".ts", ".jsx", ".js", ".json"];
@@ -77,29 +95,11 @@ const nextConfig = {
       };
     }
 
-    // Production optimizations
-    if (!dev && !isServer) {
-      // Split chunks for better caching
-      config.optimization.splitChunks = {
-        chunks: "all",
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: "vendors",
-            chunks: "all",
-          },
-          common: {
-            name: "common",
-            minChunks: 2,
-            chunks: "all",
-            enforce: true,
-          },
-        },
-      };
-    }
+    // Rely on Next.js default optimizations for production to reduce build work
+    // (custom splitChunks removed for faster builds)
     return config;
   },
-  // Headers for better caching
+  // Headers for better caching and custom domain support
   async headers() {
     return [
       {
@@ -116,6 +116,19 @@ const nextConfig = {
           {
             key: "X-XSS-Protection",
             value: "1; mode=block",
+          },
+          // CORS support for custom domain development
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.CORS_ORIGIN || "http://localhost:3001",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, POST, PUT, DELETE, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization",
           },
         ],
       },
@@ -145,4 +158,37 @@ if (process.env.ANALYZE === "true" && process.env.NODE_ENV === "development") {
   }
 } else {
   module.exports = withNextIntl(nextConfig);
+}
+
+// Injected content via Sentry wizard below (gated to production with token)
+const { withSentryConfig } = require("@sentry/nextjs");
+
+const enableSentry =
+  process.env.VERCEL_ENV === "production" &&
+  Boolean(process.env.SENTRY_AUTH_TOKEN);
+
+if (enableSentry) {
+  module.exports = withSentryConfig(module.exports, {
+    // For all available options, see:
+    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+
+    org: "nds-2ap",
+    project: "heloc-accel",
+
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
+
+    // Keep uploads slimmer to reduce build time
+    widenClientFileUpload: false,
+
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // Note: This affects runtime, not build performance.
+    tunnelRoute: "/monitoring",
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    automaticVercelMonitors: true,
+  });
 }

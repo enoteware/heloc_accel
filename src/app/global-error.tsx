@@ -26,12 +26,12 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html>
       <body>
-        <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
           <div className="max-w-md w-full space-y-8">
             <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100">
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-[rgb(var(--color-error-background))]">
                 <svg
-                  className="h-8 w-8 text-red-600"
+                  className="h-8 w-8 text-destructive"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -45,20 +45,26 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                   />
                 </svg>
               </div>
-              <h1 className="mt-6 text-center text-4xl font-extrabold text-gray-900">
+              <h1 className="mt-6 text-center text-4xl font-extrabold text-foreground">
                 Application Error
               </h1>
-              <p className="mt-2 text-center text-lg text-gray-600">
+              <p className="mt-2 text-center text-lg text-foreground-secondary">
                 A critical error occurred that prevented the application from
                 loading properly.
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div
+              className="rounded-lg p-4 border"
+              style={{
+                backgroundColor: "rgb(var(--color-error-background))",
+                borderColor: "rgb(var(--color-error-border))",
+              }}
+            >
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg
-                    className="h-5 w-5 text-red-400"
+                    className="h-5 w-5 text-destructive"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -70,17 +76,17 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">
+                  <h3 className="text-sm font-medium text-destructive">
                     Critical Error
                   </h3>
-                  <div className="mt-2 text-sm text-red-700">
+                  <div className="mt-2 text-sm text-destructive">
                     <p>
                       {isDevelopment
                         ? error.message
                         : "The application encountered a critical error and cannot continue."}
                     </p>
                     {error.digest && (
-                      <p className="mt-1 text-xs text-red-600">
+                      <p className="mt-1 text-xs text-destructive">
                         Error ID: {error.digest}
                       </p>
                     )}
@@ -92,14 +98,14 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             <div className="space-y-4">
               <button
                 onClick={reset}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-destructive-foreground bg-destructive hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-destructive transition duration-200"
               >
                 Try to Recover
               </button>
 
               <button
                 onClick={() => (window.location.href = "/")}
-                className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200"
+                className="w-full flex justify-center py-3 px-4 border border-border rounded-md shadow-sm text-sm font-medium text-foreground bg-card hover:bg-card/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-destructive transition duration-200"
               >
                 Reload Application
               </button>
@@ -107,11 +113,11 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
 
             {/* Development error details */}
             {isDevelopment && (
-              <details className="mt-8 p-4 bg-gray-100 rounded-lg">
-                <summary className="text-sm font-medium text-gray-700 cursor-pointer">
+              <details className="mt-8 p-4 bg-card border border-border rounded-lg">
+                <summary className="text-sm font-medium text-foreground cursor-pointer">
                   Developer Details
                 </summary>
-                <div className="mt-2 text-xs text-gray-600 font-mono">
+                <div className="mt-2 text-xs text-foreground-secondary font-mono">
                   <p>
                     <strong>Error:</strong> {error.name}
                   </p>

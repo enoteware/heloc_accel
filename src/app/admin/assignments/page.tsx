@@ -141,20 +141,22 @@ export default function UserAssignmentsPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <UserCheck className="h-6 w-6 text-gray-600" />
-          <h1 className="text-2xl font-bold text-gray-900">User Assignments</h1>
+          <UserCheck className="h-6 w-6 text-foreground-secondary" />
+          <h1 className="text-2xl font-bold text-foreground">
+            User Assignments
+          </h1>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-foreground-secondary">
           Manage agent assignments for all users
         </p>
       </div>
 
       {/* Alert for unassigned users */}
       {unassignedCount > 0 && (
-        <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="mb-6 alert-warning">
           <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-yellow-600" />
-            <p className="text-sm text-yellow-800">
+            <AlertCircle className="h-5 w-5 text-warning" />
+            <p className="text-sm text-warning">
               <strong>{unassignedCount} users</strong> are not assigned to any
               agent. Use the bulk assign feature below to assign them.
             </p>
@@ -163,26 +165,26 @@ export default function UserAssignmentsPage() {
       )}
 
       {/* Filters and Actions */}
-      <div className="bg-white shadow rounded-lg mb-6">
-        <div className="p-4 border-b border-gray-200">
+      <div className="bg-card border border-border rounded-lg mb-6">
+        <div className="p-4 border-b border-border">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search users or agents..."
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default pl-10"
                 />
               </div>
             </div>
 
             {/* Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-gray-400" />
+              <Filter className="h-5 w-5 text-muted-foreground" />
               <select
                 value={filterType}
                 onChange={(e) =>
@@ -190,7 +192,7 @@ export default function UserAssignmentsPage() {
                     e.target.value as "all" | "assigned" | "unassigned",
                   )
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-default"
               >
                 <option value="all">All Users</option>
                 <option value="assigned">Assigned</option>
@@ -202,7 +204,7 @@ export default function UserAssignmentsPage() {
           {/* Bulk Actions */}
           {selectedUsers.length > 0 && (
             <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 {selectedUsers.length} user{selectedUsers.length > 1 ? "s" : ""}{" "}
                 selected
               </p>
@@ -212,7 +214,7 @@ export default function UserAssignmentsPage() {
                   onChange={(e) =>
                     setSelectedAgentId(parseInt(e.target.value) || null)
                   }
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default"
                 >
                   <option value="">Select Agent</option>
                   {agents.map((agent) => (
@@ -224,7 +226,7 @@ export default function UserAssignmentsPage() {
                 <button
                   onClick={handleBulkAssign}
                   disabled={!selectedAgentId || assigning}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary"
                 >
                   {assigning ? "Assigning..." : "Assign"}
                 </button>
@@ -234,28 +236,30 @@ export default function UserAssignmentsPage() {
         </div>
 
         {/* Results count */}
-        <div className="px-4 py-2 bg-gray-50 text-sm text-gray-600">
+        <div className="px-4 py-2 bg-muted text-sm text-foreground-secondary">
           Showing {filteredAssignments.length} of {assignments.length} users
         </div>
       </div>
 
       {/* Assignments Table */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
         {loading ? (
           <div className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading assignments...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-foreground-secondary">
+              Loading assignments...
+            </p>
           </div>
         ) : filteredAssignments.length === 0 ? (
           <div className="p-8 text-center">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">
+            <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-foreground-secondary">
               No users found matching your criteria
             </p>
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-muted">
               <tr>
                 <th className="px-6 py-3 text-left">
                   <input
@@ -264,54 +268,56 @@ export default function UserAssignmentsPage() {
                       selectedUsers.length === filteredAssignments.length
                     }
                     onChange={handleSelectAll}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary focus:ring-ring border-input rounded"
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider">
                   Assigned Agent
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider">
                   Assigned Date
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-card divide-y divide-border">
               {filteredAssignments.map((assignment) => (
-                <tr key={assignment.userId} className="hover:bg-gray-50">
+                <tr key={assignment.userId} className="hover:bg-muted">
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
                       checked={selectedUsers.includes(assignment.userId)}
                       onChange={() => handleSelectUser(assignment.userId)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-primary focus:ring-ring border-input rounded"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-foreground">
                         {assignment.userName}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-foreground-muted">
                         {assignment.userEmail}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {assignment.agentName ? (
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-foreground">
                         {assignment.agentName}
                       </span>
                     ) : (
-                      <span className="text-sm text-red-600">Unassigned</span>
+                      <span className="text-sm text-destructive">
+                        Unassigned
+                      </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground-muted">
                     {assignment.assignedAt
                       ? new Date(assignment.assignedAt).toLocaleDateString()
                       : "-"}
@@ -327,7 +333,7 @@ export default function UserAssignmentsPage() {
                           await handleBulkAssign();
                         }
                       }}
-                      className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="text-sm input-default px-2 py-1"
                     >
                       <option value="">Unassigned</option>
                       {agents.map((agent) => (

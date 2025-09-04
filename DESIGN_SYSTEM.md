@@ -199,6 +199,46 @@ Use pre-built CSS classes for quick styling:
 
 ## Implementation
 
+### Theming and Semantic Tokens
+
+This codebase uses semantic design tokens to support light and dark themes consistently across components.
+
+- Token source: `src/styles/themes.css` defines base (`:root`) and dark (`[data-theme="dark"]`) RGB channel variables like `--color-background`, `--color-foreground`, `--color-primary`, etc.
+- Tailwind mapping: `tailwind.config.js` maps utilities to these tokens, e.g. `bg-background`, `text-foreground`, `border-border`, `bg-card`, `text-muted-foreground`, and semantic states `info|success|warning|destructive` including `-foreground`, `-background`, `-border` variants.
+- Application: `ThemeProvider` sets both the `dark`/`light` class and `data-theme` attribute so both Tailwind dark variants and CSS variables resolve correctly.
+
+Recommended usage examples:
+
+- Surfaces and text:
+  - `bg-background`, `bg-card`, `text-foreground`, `text-foreground-secondary`, `text-foreground-muted`, `border-border`
+- Brand and actions:
+  - `bg-primary text-primary-foreground`, `bg-secondary text-secondary-foreground`
+- Status colors (theme-aware):
+  - `text-info`, `bg-info`, `border-info-border`
+  - `text-success`, `bg-success`, `border-success-border`
+  - `text-warning`, `bg-[rgb(var(--color-warning-background))]`, `border-warning-border`
+  - `text-destructive`, `bg-destructive`, `border-[rgb(var(--color-error-border))]`
+
+Migration tips (from Tailwind palette to tokens):
+
+- `text-gray-900` → `text-foreground`
+- `text-gray-700` → `text-foreground`
+- `text-gray-600` → `text-foreground-secondary`
+- `text-gray-500/400` → `text-foreground-muted`
+- `bg-white` / `bg-gray-50` → `bg-card` / `bg-muted`
+- `border-gray-200` → `border-border`
+- `text-blue-600` → `text-info` (or `text-primary` if brand)
+- `text-green-600` → `text-success`
+- `text-red-600` → `text-destructive`
+- `bg-green-50` → `bg-[rgb(var(--color-success-background))]`
+- `bg-blue-50` → `bg-info-background`
+
+Notes:
+
+- Prefer semantic tokens over numeric palette classes to ensure proper theming.
+- For subtle tinted backgrounds, use `/10` or `/15` opacity on semantic colors, e.g. `bg-secondary/10`.
+- If you need a non-exposed token layer, use arbitrary values: `bg-[rgb(var(--color-info-background))]`.
+
 ### 1. Import Styles
 
 Add the design system CSS to your main stylesheet:

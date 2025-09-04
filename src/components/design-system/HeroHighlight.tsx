@@ -31,13 +31,24 @@ export const HeroHighlight = ({
       )}
       onMouseMove={handleMouseMove}
     >
-      <div className="absolute inset-0 bg-dot-thick-neutral-300 dark:bg-dot-thick-neutral-800 pointer-events-none" />
+      {/* Dot pattern background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: `radial-gradient(circle, rgb(var(--color-border)) 1px, transparent 1px)`,
+          backgroundSize: "20px 20px",
+        }}
+      />
+
+      {/* Hover effect overlay */}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(var(--color-primary), 0.15), transparent 40%)`,
         }}
       />
+
+      {/* Content */}
       <div className={cn("relative z-20", className)}>{children}</div>
     </div>
   );
@@ -69,7 +80,8 @@ export const Highlight = ({
         display: "inline",
       }}
       className={cn(
-        "relative inline-block pb-1 px-1 rounded-lg bg-gradient-to-r from-blue-300 to-blue-400 dark:from-blue-500 dark:to-blue-700",
+        "relative inline-block pb-1 px-1 rounded-lg",
+        "bg-gradient-to-r from-blue-300 to-blue-400 dark:from-blue-500 dark:to-blue-700",
         className,
       )}
     >

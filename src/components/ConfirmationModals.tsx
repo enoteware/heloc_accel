@@ -47,9 +47,12 @@ export const FirstConfirmationModal: React.FC<FirstConfirmationModalProps> = ({
         <div className="flex items-start space-x-4">
           {/* Warning Icon */}
           <div className="flex-shrink-0" aria-hidden="true">
-            <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+            <div
+              className="flex items-center justify-center w-12 h-12 mx-auto rounded-full"
+              style={{ backgroundColor: "rgb(var(--color-error-background))" }}
+            >
               <svg
-                className="w-6 h-6 text-red-600"
+                className="w-6 h-6 text-destructive"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -69,7 +72,7 @@ export const FirstConfirmationModal: React.FC<FirstConfirmationModalProps> = ({
           {/* Message Content */}
           <div className="flex-1">
             <p
-              className="text-body text-neutral-700 leading-relaxed"
+              className="text-body text-foreground leading-relaxed"
               id="confirmation-message"
               role="alert"
               aria-live="polite"
@@ -200,9 +203,14 @@ export const SecondConfirmationModal: React.FC<
           {/* Warning Icon and Message */}
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0" aria-hidden="true">
-              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+              <div
+                className="flex items-center justify-center w-12 h-12 mx-auto rounded-full"
+                style={{
+                  backgroundColor: "rgb(var(--color-error-background))",
+                }}
+              >
                 <svg
-                  className="w-6 h-6 text-red-600"
+                  className="w-6 h-6 text-destructive"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -221,7 +229,7 @@ export const SecondConfirmationModal: React.FC<
 
             <div className="flex-1">
               <p
-                className="text-body text-neutral-700 leading-relaxed mb-4"
+                className="text-body text-foreground leading-relaxed mb-4"
                 id="confirmation-instructions"
                 role="alert"
                 aria-live="polite"
@@ -232,15 +240,18 @@ export const SecondConfirmationModal: React.FC<
           </div>
 
           {/* Confirmation Text Display */}
-          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3">
+          <div
+            className="rounded-lg p-3 border border-border"
+            style={{ backgroundColor: "rgb(var(--color-warning-background))" }}
+          >
             <p
-              className="text-body-sm text-neutral-600 mb-1"
+              className="text-body-sm text-foreground-secondary mb-1"
               id="confirmation-label"
             >
               Type this text exactly:
             </p>
             <p
-              className="font-mono text-body font-semibold text-red-600 bg-white border border-neutral-300 rounded px-2 py-1"
+              className="font-mono text-body font-semibold text-destructive bg-card border border-border rounded px-2 py-1"
               id="confirmation-text"
               aria-label={`Required confirmation text: ${confirmationText}`}
             >
@@ -356,14 +367,20 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
         <div className="flex items-start space-x-4">
           {/* Success Icon */}
           <div className="flex-shrink-0" aria-hidden="true">
-            <div className="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
+            <div
+              className="flex items-center justify-center w-12 h-12 mx-auto rounded-full"
+              style={{
+                backgroundColor: "rgb(var(--color-success-background))",
+              }}
+            >
               <svg
-                className="w-6 h-6 text-green-600"
+                className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
+                style={{ color: "rgb(var(--color-success))" }}
               >
                 <path
                   strokeLinecap="round"
@@ -378,7 +395,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           {/* Message Content */}
           <div className="flex-1">
             <p
-              className="text-body text-neutral-700 leading-relaxed"
+              className="text-body text-foreground-secondary leading-relaxed"
               id="success-message"
               role="status"
               aria-live="polite"

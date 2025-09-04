@@ -6,12 +6,12 @@ export default function NotFound() {
   const isDemoMode = false;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-md w-full space-y-8 text-center">
         <div>
-          <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-blue-100">
+          <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-[rgb(var(--color-info-background))]">
             <svg
-              className="h-8 w-8 text-blue-600"
+              className="h-8 w-8 text-info"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -25,20 +25,26 @@ export default function NotFound() {
               />
             </svg>
           </div>
-          <h1 className="mt-6 text-6xl font-extrabold text-gray-900">404</h1>
-          <h2 className="mt-2 text-3xl font-bold text-gray-900">
+          <h1 className="mt-6 text-6xl font-extrabold text-foreground">404</h1>
+          <h2 className="mt-2 text-3xl font-bold text-foreground">
             Page Not Found
           </h2>
-          <p className="mt-2 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-foreground-secondary">
             {"Sorry, we couldn't find the page you're looking for."}
           </p>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div
+          className="rounded-lg p-4 border"
+          style={{
+            backgroundColor: "rgb(var(--color-info-background))",
+            borderColor: "rgb(var(--color-info-border))",
+          }}
+        >
           <div className="flex">
             <div className="flex-shrink-0">
               <svg
-                className="h-5 w-5 text-blue-400"
+                className="h-5 w-5 text-info"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -50,10 +56,8 @@ export default function NotFound() {
               </svg>
             </div>
             <div className="ml-3 text-left">
-              <h3 className="text-sm font-medium text-blue-800">
-                Available Pages
-              </h3>
-              <div className="mt-2 text-sm text-blue-700">
+              <h3 className="text-sm font-medium text-info">Available Pages</h3>
+              <div className="mt-2 text-sm text-info">
                 <ul className="list-disc list-inside space-y-1">
                   <li>Home page</li>
                   <li>HELOC Calculator</li>
@@ -81,12 +85,9 @@ export default function NotFound() {
         </div>
 
         <div className="text-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-foreground-secondary">
             Need help? Check out our{" "}
-            <Link
-              href="/formulas"
-              className="text-blue-600 hover:text-blue-500 underline"
-            >
+            <Link href="/formulas" className="text-info hover:underline">
               formulas and methodology
             </Link>{" "}
             page.

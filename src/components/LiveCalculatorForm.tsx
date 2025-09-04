@@ -141,9 +141,56 @@ export default function LiveCalculatorForm({
     });
   };
 
-  const handlePrefillDemo = () => {
-    console.log("Fill Demo Data button clicked");
+  const getDemoScenarios = () => [
+    {
+      name: "Standard",
+      data: {
+        currentMortgageBalance: 350000,
+        currentInterestRate: 6.5,
+        remainingTermMonths: 300, // 25 years
+        monthlyPayment: 2347,
+        propertyValue: 500000,
+        propertyTaxMonthly: 583,
+        insuranceMonthly: 125,
+        hoaFeesMonthly: 0,
+        pmiMonthly: 175,
+        helocLimit: 100000,
+        helocInterestRate: 7.25,
+        helocAvailableCredit: 100000,
+        monthlyGrossIncome: 8500,
+        monthlyNetIncome: 6200,
+        monthlyExpenses: 3900,
+        monthlyDiscretionaryIncome: 2300,
+        scenarioName: "Standard Demo",
+        description: "Typical family scenario",
+      },
+    },
+    {
+      name: "High Income",
+      data: {
+        currentMortgageBalance: 750000,
+        currentInterestRate: 6.0,
+        remainingTermMonths: 240, // 20 years
+        monthlyPayment: 5373,
+        propertyValue: 1000000,
+        propertyTaxMonthly: 1250,
+        insuranceMonthly: 200,
+        hoaFeesMonthly: 150,
+        pmiMonthly: 0,
+        helocLimit: 200000,
+        helocInterestRate: 7.0,
+        helocAvailableCredit: 180000,
+        monthlyGrossIncome: 15000,
+        monthlyNetIncome: 11000,
+        monthlyExpenses: 6500,
+        monthlyDiscretionaryIncome: 4500,
+        scenarioName: "High Income Demo",
+        description: "High-income household",
+      },
+    },
+  ];
 
+  const handlePrefillDemo = (scenarioIndex = 0) => {
     // Clear form first to ensure clean state
     setFormData({
       currentMortgageBalance: 0,
@@ -168,28 +215,9 @@ export default function LiveCalculatorForm({
 
     // Then set demo data after a brief delay
     setTimeout(() => {
-      const demoData: CalculatorValidationInput = {
-        currentMortgageBalance: 350000,
-        currentInterestRate: 6.5,
-        remainingTermMonths: 300, // 25 years
-        monthlyPayment: 2347,
-        propertyValue: 500000,
-        propertyTaxMonthly: 583,
-        insuranceMonthly: 125,
-        hoaFeesMonthly: 0,
-        pmiMonthly: 175,
-        helocLimit: 100000,
-        helocInterestRate: 7.25,
-        helocAvailableCredit: 100000,
-        monthlyGrossIncome: 8500,
-        monthlyNetIncome: 6200,
-        monthlyExpenses: 3900,
-        monthlyDiscretionaryIncome: 2300,
-        scenarioName: "Demo Scenario",
-        description: "Sample data for testing the HELOC acceleration strategy",
-      };
+      const scenarios = getDemoScenarios();
+      const demoData = scenarios[scenarioIndex].data;
 
-      console.log("Setting demo data:", demoData);
       setFormData(demoData);
       // Clear any existing errors
       setErrors({});
@@ -228,34 +256,45 @@ export default function LiveCalculatorForm({
   return (
     <div className="space-y-6">
       {/* Top Actions Bar */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-card p-4 rounded-lg shadow-sm border border-border">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-900">{t("title")}</h2>
+          <h2 className="text-xl font-semibold text-foreground">
+            {t("title")}
+          </h2>
           <div className="flex items-center space-x-3">
-            <button
-              type="button"
-              onClick={handlePrefillDemo}
-              className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition duration-200"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span>{t("fillDemoData")}</span>
-            </button>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-foreground-secondary">
+                Quick Fill:
+              </span>
+              {getDemoScenarios().map((scenario, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => handlePrefillDemo(index)}
+                  className="flex items-center space-x-1 px-3 py-1 text-xs bg-success text-success-foreground rounded-md transition duration-200"
+                  title={scenario.data.description}
+                >
+                  <svg
+                    className="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <span>{scenario.name}</span>
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleClearForm}
-              className="flex items-center space-x-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition duration-200"
+              className="flex items-center space-x-2 btn-outline px-4 py-2 rounded-md"
             >
               <svg
                 className="w-4 h-4"
@@ -277,8 +316,8 @@ export default function LiveCalculatorForm({
       </div>
 
       {/* Mortgage Information Section */}
-      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+      <div className="bg-card p-5 rounded-lg shadow-sm border border-border">
+        <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
           <Home className="w-5 h-5" />
           {t("currentMortgage")}
         </h3>
@@ -286,12 +325,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="currentMortgageBalance"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("balance")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -304,7 +343,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -314,7 +353,7 @@ export default function LiveCalculatorForm({
             <div>
               <label
                 htmlFor="currentInterestRate"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 {t("interestRate")} (%)
               </label>
@@ -328,7 +367,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full rounded-md"
                 placeholder="0"
                 step="0.01"
                 min="0"
@@ -340,14 +379,14 @@ export default function LiveCalculatorForm({
               <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="remainingTerm"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground-secondary"
                 >
                   {t("remainingTerm")}
                 </label>
                 <button
                   type="button"
                   onClick={() => setUseYearsInput(!useYearsInput)}
-                  className="text-xs text-blue-600 hover:text-blue-700 underline"
+                  className="text-xs safe-link underline"
                 >
                   {useYearsInput ? t("switchToMonths") : t("switchToYears")}
                 </button>
@@ -369,15 +408,15 @@ export default function LiveCalculatorForm({
                         Math.round(years * 12),
                       );
                     }}
-                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="input-default w-full rounded-md"
                     placeholder="e.g. 25"
                     min="0.1"
                     max="40"
                     step="0.1"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-foreground-muted">
                     {formData.remainingTermMonths
-                      ? `= ${formData.remainingTermMonths} months`
+                      ? "= " + formData.remainingTermMonths + " months"
                       : t("enterYearsRemaining")}
                   </p>
                 </>
@@ -393,14 +432,16 @@ export default function LiveCalculatorForm({
                         parseInt(e.target.value) || 0,
                       )
                     }
-                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="input-default w-full rounded-md"
                     placeholder="e.g. 300"
                     min="1"
                     max="480"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-foreground-muted">
                     {formData.remainingTermMonths
-                      ? `= ${(formData.remainingTermMonths / 12).toFixed(1)} years`
+                      ? "= " +
+                        (formData.remainingTermMonths / 12).toFixed(1) +
+                        " years"
                       : "Enter months remaining"}
                   </p>
                 </>
@@ -411,12 +452,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="monthlyPayment"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("monthlyPayment")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -429,7 +470,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -438,8 +479,8 @@ export default function LiveCalculatorForm({
       </div>
 
       {/* HELOC Information Section */}
-      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+      <div className="bg-card p-5 rounded-lg shadow-sm border border-border">
+        <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
           <CreditCard className="w-5 h-5" />
           {t("heloc")}
         </h3>
@@ -447,12 +488,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="helocLimit"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("helocLimit")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -465,7 +506,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -474,7 +515,7 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="helocInterestRate"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("interestRate")} (%)
             </label>
@@ -488,7 +529,7 @@ export default function LiveCalculatorForm({
                   parseFloat(e.target.value) || 0,
                 )
               }
-              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-default w-full rounded-md"
               placeholder="0"
               step="0.01"
               min="0"
@@ -499,8 +540,8 @@ export default function LiveCalculatorForm({
       </div>
 
       {/* Income and Expenses Section */}
-      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+      <div className="bg-card p-5 rounded-lg shadow-sm border border-border">
+        <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
           <DollarSign className="w-5 h-5" />
           {t("income")}
         </h3>
@@ -509,12 +550,12 @@ export default function LiveCalculatorForm({
             <div>
               <label
                 htmlFor="monthlyGrossIncome"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 {t("grossIncome")}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                   $
                 </span>
                 <input
@@ -527,7 +568,7 @@ export default function LiveCalculatorForm({
                       parseFloat(e.target.value) || 0,
                     )
                   }
-                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-default w-full pl-8 rounded-md"
                   placeholder="0"
                 />
               </div>
@@ -536,12 +577,12 @@ export default function LiveCalculatorForm({
             <div>
               <label
                 htmlFor="monthlyNetIncome"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 {t("netIncome")}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                   $
                 </span>
                 <input
@@ -554,7 +595,7 @@ export default function LiveCalculatorForm({
                       parseFloat(e.target.value) || 0,
                     )
                   }
-                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-default w-full pl-8 rounded-md"
                   placeholder="0"
                 />
               </div>
@@ -565,12 +606,12 @@ export default function LiveCalculatorForm({
             <div>
               <label
                 htmlFor="monthlyExpenses"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 {t("expenses")}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                   $
                 </span>
                 <input
@@ -583,7 +624,7 @@ export default function LiveCalculatorForm({
                       parseFloat(e.target.value) || 0,
                     )
                   }
-                  className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-default w-full pl-8 rounded-md"
                   placeholder="0"
                 />
               </div>
@@ -592,12 +633,12 @@ export default function LiveCalculatorForm({
             <div>
               <label
                 htmlFor="monthlyDiscretionaryIncome"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 {t("discretionaryIncome")}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                   $
                 </span>
                 <input
@@ -605,12 +646,16 @@ export default function LiveCalculatorForm({
                   id="monthlyDiscretionaryIncome"
                   value={formData.monthlyDiscretionaryIncome || ""}
                   readOnly
-                  className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-md bg-blue-50 text-gray-700 cursor-not-allowed"
+                  className="w-full pl-8 pr-3 py-2 border rounded-md cursor-not-allowed text-foreground"
+                  style={{
+                    backgroundColor: "rgb(var(--color-info-background))",
+                    borderColor: "rgb(var(--color-info-border))",
+                  }}
                   placeholder="Auto-calculated"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <svg
-                    className="w-4 h-4 text-gray-400"
+                    className="w-4 h-4 text-foreground-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -624,7 +669,7 @@ export default function LiveCalculatorForm({
                   </svg>
                 </div>
               </div>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-foreground-muted">
                 {t("netIncomeMinusExpenses")} = $
                 {formData.monthlyDiscretionaryIncome?.toLocaleString() || "0"}
               </p>
@@ -634,8 +679,8 @@ export default function LiveCalculatorForm({
       </div>
 
       {/* Property Information Section */}
-      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2">
+      <div className="bg-card p-5 rounded-lg shadow-sm border border-border">
+        <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
           <Building className="w-5 h-5" />
           {t("propertyInfo")} ({t("optional")})
         </h3>
@@ -643,12 +688,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="propertyValue"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("propertyValue")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -661,7 +706,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -670,12 +715,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="propertyTaxMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("propertyTax")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -688,7 +733,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -697,12 +742,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="insuranceMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("insurance")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -715,7 +760,7 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
@@ -724,12 +769,12 @@ export default function LiveCalculatorForm({
           <div>
             <label
               htmlFor="hoaFeesMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               {t("hoaFees")}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -742,94 +787,98 @@ export default function LiveCalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder="0"
               />
             </div>
           </div>
+        </div>
 
-          {/* LTV Analysis */}
-          {ltvInfo.canCalculateLTV && (
-            <div className="col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium text-blue-900">
-                  LTV Analysis
-                </span>
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded ${
-                    ltvInfo.isMIPRequired
-                      ? "bg-orange-100 text-orange-800"
-                      : "bg-green-100 text-green-800"
-                  }`}
-                >
-                  {ltvInfo.ltvRatio.toFixed(1)}%
-                </span>
-              </div>
-              <p className="text-xs text-blue-700">
-                {ltvInfo.isMIPRequired
-                  ? `MIP/PMI required (LTV > 80%). Suggested: $${ltvInfo.suggestedMonthlyPMI}/month.`
-                  : "MIP/PMI typically not required (LTV ≤ 80%)."}
-              </p>
-              {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleInputChange(
-                      "pmiMonthly",
-                      ltvInfo.suggestedMonthlyPMI,
-                    );
-                  }}
-                  className="mt-2 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors"
-                >
-                  Use Suggested: ${ltvInfo.suggestedMonthlyPMI}/mo
-                </button>
-              )}
-            </div>
-          )}
-
-          <div>
-            <label
-              htmlFor="pmiMonthly"
-              className={`block text-sm font-medium text-gray-700 mb-1 ${
-                ltvInfo.isMIPRequired ? "text-orange-700" : ""
-              }`}
-            >
-              {ltvInfo.isMIPRequired ? `${t("pmi")} *` : t("pmi")}
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                $
+        {/* LTV Analysis */}
+        {ltvInfo.canCalculateLTV && (
+          <div
+            className="col-span-2 rounded-lg p-3 mb-2 border border-info-border"
+            style={{ backgroundColor: "rgb(var(--color-info-background))" }}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm font-medium text-info">
+                LTV Analysis
               </span>
-              <input
-                type="number"
-                id="pmiMonthly"
-                value={formData.pmiMonthly || ""}
-                onChange={(e) =>
-                  handleInputChange(
-                    "pmiMonthly",
-                    parseFloat(e.target.value) || 0,
-                  )
+              <span
+                className={
+                  "text-xs font-semibold px-2 py-1 rounded " +
+                  (ltvInfo.isMIPRequired
+                    ? "safe-warning-light"
+                    : "safe-success-light")
                 }
-                className={`w-full pl-8 pr-3 py-2 bg-background border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent ${
-                  ltvInfo.isMIPRequired ? "border-destructive" : "border-input"
-                }`}
-                placeholder={
-                  ltvInfo.canCalculateLTV &&
-                  ltvInfo.isMIPRequired &&
-                  ltvInfo.suggestedMonthlyPMI > 0
-                    ? ltvInfo.suggestedMonthlyPMI.toString()
-                    : "0"
-                }
-              />
+              >
+                {ltvInfo.ltvRatio.toFixed(1)}%
+              </span>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {ltvInfo.canCalculateLTV
-                ? ltvInfo.isMIPRequired
-                  ? t("requiredPMI")
-                  : t("optionalPMI")
-                : t("privateMortgageInsurance")}
+            <p className="text-xs text-info">
+              {ltvInfo.isMIPRequired
+                ? "MIP/PMI required (LTV > 80%). Suggested: " +
+                  ltvInfo.suggestedMonthlyPMI +
+                  "/month."
+                : "MIP/PMI typically not required (LTV <= 80%)."}
             </p>
+            {ltvInfo.isMIPRequired && ltvInfo.suggestedMonthlyPMI > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  handleInputChange("pmiMonthly", ltvInfo.suggestedMonthlyPMI);
+                }}
+                className="mt-2 text-xs btn-primary px-2 py-1 rounded"
+              >
+                {"Use Suggested: $" + ltvInfo.suggestedMonthlyPMI + "/mo"}
+              </button>
+            )}
           </div>
+        )}
+
+        <div>
+          <label
+            htmlFor="pmiMonthly"
+            className={
+              "block text-sm font-medium mb-1 " +
+              (ltvInfo.isMIPRequired
+                ? "text-warning"
+                : "text-foreground-secondary")
+            }
+          >
+            {ltvInfo.isMIPRequired ? t("pmi") + " *" : t("pmi")}
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              $
+            </span>
+            <input
+              type="number"
+              id="pmiMonthly"
+              value={formData.pmiMonthly || ""}
+              onChange={(e) =>
+                handleInputChange("pmiMonthly", parseFloat(e.target.value) || 0)
+              }
+              className={
+                "input-default w-full pl-8 rounded-md " +
+                (ltvInfo.isMIPRequired ? "border-warning" : "border-input")
+              }
+              placeholder={
+                ltvInfo.canCalculateLTV &&
+                ltvInfo.isMIPRequired &&
+                ltvInfo.suggestedMonthlyPMI > 0
+                  ? ltvInfo.suggestedMonthlyPMI.toString()
+                  : ""
+              }
+            />
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {ltvInfo.canCalculateLTV
+              ? ltvInfo.isMIPRequired
+                ? t("requiredPMI")
+                : t("optionalPMI")
+              : t("privateMortgageInsurance")}
+          </p>
         </div>
       </div>
     </div>

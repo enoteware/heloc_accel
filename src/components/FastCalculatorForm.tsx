@@ -601,28 +601,84 @@ export default function FastCalculatorForm({
     }
   };
 
-  const handlePrefillDemo = () => {
-    const demoData = {
-      currentMortgageBalance: 350000,
-      currentInterestRate: 6.5,
-      remainingTermYears: 25,
-      remainingTermMonths: 300,
-      monthlyPayment: 2347,
-      propertyValue: 500000,
-      propertyTaxMonthly: 583,
-      insuranceMonthly: 125,
-      hoaFeesMonthly: 0,
-      pmiMonthly: 175,
-      helocLimit: 100000,
-      helocInterestRate: 7.25,
-      helocAvailableCredit: 85000,
-      monthlyGrossIncome: 8500,
-      monthlyNetIncome: 6200,
-      monthlyExpenses: 3900,
-      monthlyDiscretionaryIncome: 2300,
-      scenarioName: "Demo Scenario",
-      description: "Sample data for testing the HELOC acceleration strategy",
-    };
+  const getDemoScenarios = () => [
+    {
+      name: "Standard Family",
+      data: {
+        currentMortgageBalance: 350000,
+        currentInterestRate: 6.5,
+        remainingTermYears: 25,
+        remainingTermMonths: 300,
+        monthlyPayment: 2347,
+        propertyValue: 500000,
+        propertyTaxMonthly: 583,
+        insuranceMonthly: 125,
+        hoaFeesMonthly: 0,
+        pmiMonthly: 175,
+        helocLimit: 100000,
+        helocInterestRate: 7.25,
+        helocAvailableCredit: 85000,
+        monthlyGrossIncome: 8500,
+        monthlyNetIncome: 6200,
+        monthlyExpenses: 3900,
+        monthlyDiscretionaryIncome: 2300,
+        scenarioName: "Standard Family Demo",
+        description: "Typical family with moderate income and expenses",
+      },
+    },
+    {
+      name: "High Income",
+      data: {
+        currentMortgageBalance: 750000,
+        currentInterestRate: 6.0,
+        remainingTermYears: 20,
+        remainingTermMonths: 240,
+        monthlyPayment: 5373,
+        propertyValue: 1000000,
+        propertyTaxMonthly: 1250,
+        insuranceMonthly: 200,
+        hoaFeesMonthly: 150,
+        pmiMonthly: 0,
+        helocLimit: 200000,
+        helocInterestRate: 7.0,
+        helocAvailableCredit: 180000,
+        monthlyGrossIncome: 15000,
+        monthlyNetIncome: 11000,
+        monthlyExpenses: 6500,
+        monthlyDiscretionaryIncome: 4500,
+        scenarioName: "High Income Demo",
+        description: "High-income household with larger mortgage",
+      },
+    },
+    {
+      name: "First-Time Buyer",
+      data: {
+        currentMortgageBalance: 280000,
+        currentInterestRate: 7.0,
+        remainingTermYears: 30,
+        remainingTermMonths: 360,
+        monthlyPayment: 1863,
+        propertyValue: 320000,
+        propertyTaxMonthly: 400,
+        insuranceMonthly: 100,
+        hoaFeesMonthly: 0,
+        pmiMonthly: 233,
+        helocLimit: 50000,
+        helocInterestRate: 8.0,
+        helocAvailableCredit: 45000,
+        monthlyGrossIncome: 6500,
+        monthlyNetIncome: 4800,
+        monthlyExpenses: 3200,
+        monthlyDiscretionaryIncome: 1600,
+        scenarioName: "First-Time Buyer Demo",
+        description: "Young couple with first home purchase",
+      },
+    },
+  ];
+
+  const handlePrefillDemo = (scenarioIndex = 0) => {
+    const scenarios = getDemoScenarios();
+    const demoData = scenarios[scenarioIndex].data;
 
     addDebugLog("Loading demo data with proper values", demoData);
 
@@ -646,11 +702,11 @@ export default function FastCalculatorForm({
         htmlFor={field}
         className="block text-sm font-medium text-foreground mb-1"
       >
-        {label} {required && <span className="text-red-500">*</span>}
+        {label} {required && <span className="text-destructive">*</span>}
       </label>
       <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
           $
         </span>
         <input
@@ -689,7 +745,7 @@ export default function FastCalculatorForm({
         htmlFor={field}
         className="block text-sm font-medium text-foreground mb-1"
       >
-        {label} {required && <span className="text-red-500">*</span>}
+        {label} {required && <span className="text-destructive">*</span>}
       </label>
       <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <div className="relative">
@@ -707,12 +763,12 @@ export default function FastCalculatorForm({
           min="0"
           max="30"
         />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
           %
         </span>
       </div>
       {errors[field] && (
-        <p className="mt-1 text-sm text-red-600">{errors[field]}</p>
+        <p className="mt-1 text-sm text-destructive">{errors[field]}</p>
       )}
     </div>
   );
@@ -733,7 +789,7 @@ export default function FastCalculatorForm({
         htmlFor={field}
         className="block text-sm font-medium text-foreground mb-1"
       >
-        {label} {required && <span className="text-red-500">*</span>}
+        {label} {required && <span className="text-destructive">*</span>}
       </label>
       <p className="text-xs text-muted-foreground mb-2">{description}</p>
       <input
@@ -766,9 +822,9 @@ export default function FastCalculatorForm({
       <CalculatorProgressBar formData={formData} />
       {/* Debug Console */}
       {debugLogs.length > 0 && (
-        <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs">
+        <div className="bg-card text-foreground border border-border p-4 rounded-lg font-mono text-xs">
           <div className="flex justify-between items-center mb-2">
-            <h4 className="text-green-300 font-bold">Debug Console</h4>
+            <h4 className="text-foreground font-bold">Debug Console</h4>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -781,10 +837,8 @@ export default function FastCalculatorForm({
                       const btn = document.activeElement as HTMLButtonElement;
                       const originalText = btn.textContent;
                       btn.textContent = "Copied!";
-                      btn.style.color = "#10b981";
                       setTimeout(() => {
                         btn.textContent = originalText;
-                        btn.style.color = "#9ca3af";
                       }, 1000);
                     })
                     .catch(() => {
@@ -795,25 +849,16 @@ export default function FastCalculatorForm({
                       textArea.select();
                       document.execCommand("copy");
                       document.body.removeChild(textArea);
-
-                      const btn = document.activeElement as HTMLButtonElement;
-                      const originalText = btn.textContent;
-                      btn.textContent = "Copied!";
-                      btn.style.color = "#10b981";
-                      setTimeout(() => {
-                        btn.textContent = originalText;
-                        btn.style.color = "#9ca3af";
-                      }, 1000);
                     });
                 }}
-                className="text-gray-400 hover:text-white text-xs px-2 py-1 border border-gray-600 rounded hover:border-gray-500"
+                className="btn-outline btn-sm"
               >
                 Copy
               </button>
               <button
                 type="button"
                 onClick={() => setDebugLogs([])}
-                className="text-gray-400 hover:text-white text-xs px-2 py-1 border border-gray-600 rounded hover:border-gray-500"
+                className="btn-outline btn-sm"
               >
                 Clear
               </button>
@@ -829,25 +874,42 @@ export default function FastCalculatorForm({
         </div>
       )}
 
-      {/* Demo Fill Button */}
-      <div className="flex justify-end items-center">
-        <button
-          type="button"
-          onClick={handlePrefillDemo}
-          className="px-4 py-2 text-sm bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
-        >
-          Fill with Demo Data
-        </button>
+      {/* Demo Fill Buttons */}
+      <div className="flex justify-end items-center mb-6 space-x-2">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-foreground-secondary">Quick Fill:</span>
+          {getDemoScenarios().map((scenario, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => handlePrefillDemo(index)}
+              className="btn-outline btn-sm"
+              title={scenario.data.description}
+            >
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span>{scenario.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Mortgage Information Section */}
-      <Card
-        variant="elevated"
-        className="bg-gradient-to-br from-blue-50 to-white"
-      >
+      <Card variant="elevated">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold text-blue-900 flex items-center gap-2">
+            <CardTitle className="text-xl font-bold flex items-center gap-2">
               🏠 Current Mortgage Information
             </CardTitle>
             <SectionCompletionIndicator
@@ -896,9 +958,10 @@ export default function FastCalculatorForm({
             <div>
               <label
                 htmlFor="remainingTermYears"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground mb-1"
               >
-                Remaining Term (years) <span className="text-red-500">*</span>
+                Remaining Term (years){" "}
+                <span className="text-destructive">*</span>
               </label>
               <p className="text-xs text-muted-foreground mb-2">
                 Number of years left on your current mortgage
@@ -916,11 +979,7 @@ export default function FastCalculatorForm({
                     handleInputChange("remainingTermYears", e.target.value)
                   }
                   onBlur={() => handleBlur("remainingTermYears")}
-                  className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 text-foreground bg-background ${
-                    errors.remainingTermYears
-                      ? "border-destructive"
-                      : "border-input"
-                  }`}
+                  className={`input-default ${errors.remainingTermYears ? "input-error" : ""}`}
                   placeholder="e.g. 25"
                   min="1"
                   max="40"
@@ -940,12 +999,12 @@ export default function FastCalculatorForm({
                 </div>
               </div>
               {formData.remainingTermYears && (
-                <p className="mt-1 text-xs text-gray-700">
+                <p className="mt-1 text-xs text-foreground-secondary">
                   = {formData.remainingTermYears * 12} months
                 </p>
               )}
               {errors.remainingTermYears && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-destructive">
                   {errors.remainingTermYears}
                 </p>
               )}
@@ -969,13 +1028,10 @@ export default function FastCalculatorForm({
       </Card>
 
       {/* HELOC Information Section */}
-      <Card
-        variant="elevated"
-        className="bg-gradient-to-br from-green-50 to-white"
-      >
+      <Card variant="elevated">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold text-green-900 flex items-center gap-2">
+            <CardTitle className="text-xl font-bold flex items-center gap-2">
               💳 HELOC Information
             </CardTitle>
             <SectionCompletionIndicator
@@ -1032,13 +1088,10 @@ export default function FastCalculatorForm({
       </Card>
 
       {/* Monthly Income & Expenses Section */}
-      <Card
-        variant="elevated"
-        className="bg-gradient-to-br from-purple-50 to-white"
-      >
+      <Card variant="elevated">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold text-purple-900 flex items-center gap-2">
+            <CardTitle className="text-xl font-bold flex items-center gap-2">
               💰 Monthly Income & Expenses
             </CardTitle>
             <SectionCompletionIndicator
@@ -1097,12 +1150,12 @@ export default function FastCalculatorForm({
             />
 
             <div className="md:col-span-2">
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg border border-green-200">
+              <div className="alert-info">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm font-semibold text-green-800 flex items-center">
+                    <h4 className="text-sm font-semibold text-success flex items-center">
                       <svg
-                        className="w-4 h-4 text-green-600 mr-2"
+                        className="w-4 h-4 text-success mr-2"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -1116,12 +1169,12 @@ export default function FastCalculatorForm({
                       </svg>
                       Monthly Discretionary Income
                     </h4>
-                    <p className="text-xs text-green-700 mt-1">
+                    <p className="text-xs text-success mt-1">
                       Available for additional mortgage payments
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-green-900">
+                    <div className="text-2xl font-bold text-success">
                       $
                       {formData.monthlyDiscretionaryIncome
                         ? new Intl.NumberFormat("en-US").format(
@@ -1129,7 +1182,7 @@ export default function FastCalculatorForm({
                           )
                         : "0"}
                     </div>
-                    <div className="text-xs text-green-700">
+                    <div className="text-xs text-success">
                       {formData.monthlyNetIncome && formData.monthlyExpenses
                         ? `$${new Intl.NumberFormat("en-US").format(typeof formData.monthlyNetIncome === "number" ? formData.monthlyNetIncome : 0)} - $${new Intl.NumberFormat("en-US").format(typeof formData.monthlyExpenses === "number" ? formData.monthlyExpenses : 0)}`
                         : "Enter income and expenses above"}
@@ -1137,9 +1190,9 @@ export default function FastCalculatorForm({
                   </div>
                 </div>
                 {formData.monthlyDiscretionaryIncome < 0 && (
-                  <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded flex items-start">
+                  <div className="mt-3 p-2 alert-danger flex items-start">
                     <svg
-                      className="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0"
+                      className="w-4 h-4 text-destructive mr-2 mt-0.5 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -1152,10 +1205,10 @@ export default function FastCalculatorForm({
                       />
                     </svg>
                     <div>
-                      <p className="text-xs font-medium text-red-800">
+                      <p className="text-xs font-medium text-destructive">
                         Budget Deficit
                       </p>
-                      <p className="text-xs text-red-700">
+                      <p className="text-xs text-destructive">
                         Your expenses exceed your net income. Consider reducing
                         expenses or the HELOC strategy may not be suitable.
                       </p>
@@ -1169,13 +1222,10 @@ export default function FastCalculatorForm({
       </Card>
 
       {/* Property Information Section */}
-      <Card
-        variant="outlined"
-        className="bg-gradient-to-br from-gray-50 to-white"
-      >
+      <Card variant="outlined">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-gray-700 flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
               🏘️ Property Information (Optional)
             </CardTitle>
             <SectionCompletionIndicator
@@ -1239,23 +1289,23 @@ export default function FastCalculatorForm({
             {/* Conditional MIP/PMI Field */}
             {ltvInfo.canCalculateLTV && (
               <div className="col-span-full">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="alert-info mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-blue-900">
+                    <h4 className="text-sm font-medium text-info">
                       Loan-to-Value Analysis
                     </h4>
                     <span
                       className={`text-sm font-semibold px-2 py-1 rounded ${
                         ltvInfo.isMIPRequired
-                          ? "bg-orange-100 text-orange-800"
-                          : "bg-green-100 text-green-800"
+                          ? "badge-warning"
+                          : "badge-success"
                       }`}
                     >
                       LTV: {ltvInfo.ltvRatio.toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-blue-700">
+                    <p className="text-xs text-info">
                       {ltvInfo.ltvRatio > 80
                         ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
                         : ltvInfo.ltvRatio > 78
@@ -1272,7 +1322,7 @@ export default function FastCalculatorForm({
                               ltvInfo.suggestedMonthlyPMI,
                             );
                           }}
-                          className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                          className="btn-primary btn-sm"
                         >
                           Use Suggested: $
                           {formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/mo
@@ -1321,12 +1371,9 @@ export default function FastCalculatorForm({
       </Card>
 
       {/* Scenario Details */}
-      <Card
-        variant="outlined"
-        className="bg-gradient-to-br from-indigo-50 to-white"
-      >
+      <Card variant="outlined">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-indigo-700 flex items-center gap-2">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2">
             📝 Scenario Details (Optional)
           </CardTitle>
         </CardHeader>
@@ -1335,11 +1382,11 @@ export default function FastCalculatorForm({
             <div>
               <label
                 htmlFor="scenarioName"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground mb-1"
               >
                 Scenario Name
               </label>
-              <p className="text-xs text-gray-700 mb-2">
+              <p className="text-xs text-foreground-secondary mb-2">
                 Give this scenario a memorable name
               </p>
               <input
@@ -1398,7 +1445,7 @@ export default function FastCalculatorForm({
         <button
           type="submit"
           disabled={loading}
-          className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-blue-400 disabled:to-blue-400 text-white font-bold text-lg py-4 px-8 sm:px-12 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none transition-all duration-200 flex items-center space-x-3 min-h-[44px] w-full sm:w-auto max-w-sm sm:max-w-none"
+          className="btn-primary btn-lg w-full sm:w-auto max-w-sm sm:max-w-none font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none transition-all duration-200 flex items-center space-x-3 min-h-[44px] group"
         >
           {loading && (
             <svg

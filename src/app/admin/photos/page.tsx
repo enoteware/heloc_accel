@@ -167,20 +167,20 @@ export default function PhotosAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="bg-card border border-border rounded-lg shadow-md p-6 mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Pexels Photo Management
           </h1>
-          <p className="text-gray-600">
+          <p className="text-foreground-secondary">
             Browse and manage stock photos for the HELOC Accelerator application
           </p>
         </div>
 
         {/* Search Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="bg-card border border-border rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Search Photos
           </h2>
           <div className="flex gap-4">
@@ -189,13 +189,13 @@ export default function PhotosAdminPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for photos..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-default flex-1 rounded-lg"
               onKeyPress={(e) => e.key === "Enter" && searchPhotos()}
             />
             <button
               onClick={searchPhotos}
               disabled={isSearching || !searchQuery.trim()}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 btn-primary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSearching ? "Searching..." : "Search"}
             </button>
@@ -203,7 +203,7 @@ export default function PhotosAdminPage() {
 
           {searchResults.length > 0 && (
             <div className="mt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <h3 className="text-lg font-medium text-foreground mb-4">
                 Search Results ({searchResults.length} photos)
               </h3>
               <PhotoGrid photos={searchResults} loading={false} error={null} />
@@ -216,21 +216,21 @@ export default function PhotosAdminPage() {
           {collections.map((collection) => (
             <div
               key={collection.theme}
-              className="bg-white rounded-lg shadow-md p-6"
+              className="bg-card border border-border rounded-lg shadow-md p-6"
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 capitalize">
+                  <h2 className="text-xl font-semibold text-foreground capitalize">
                     {collection.theme} Theme
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-foreground-secondary">
                     {FINANCIAL_THEMES[collection.theme].join(", ")}
                   </p>
                 </div>
                 <button
                   onClick={() => fetchThemePhotos(collection.theme)}
                   disabled={collection.loading}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  className="px-4 py-2 btn-primary rounded-lg disabled:opacity-50"
                 >
                   {collection.loading ? "Loading..." : "Load Photos"}
                 </button>
@@ -243,7 +243,7 @@ export default function PhotosAdminPage() {
               />
 
               {collection.photos.length > 0 && (
-                <div className="mt-4 text-sm text-gray-500">
+                <div className="mt-4 text-sm text-foreground-muted">
                   Loaded {collection.photos.length} photos
                 </div>
               )}
@@ -252,28 +252,34 @@ export default function PhotosAdminPage() {
         </div>
 
         {/* API Status */}
-        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="mt-8 bg-card border border-border rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             API Information
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <h3 className="font-medium text-gray-900">Rate Limits</h3>
-              <p className="text-gray-600">200 requests/hour, 20,000/month</p>
+              <h3 className="font-medium text-foreground">Rate Limits</h3>
+              <p className="text-foreground-secondary">
+                200 requests/hour, 20,000/month
+              </p>
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">Attribution</h3>
-              <p className="text-gray-600">Required for all photos used</p>
+              <h3 className="font-medium text-foreground">Attribution</h3>
+              <p className="text-foreground-secondary">
+                Required for all photos used
+              </p>
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">Available Themes</h3>
-              <p className="text-gray-600">
+              <h3 className="font-medium text-foreground">Available Themes</h3>
+              <p className="text-foreground-secondary">
                 {Object.keys(FINANCIAL_THEMES).join(", ")}
               </p>
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">Cache Duration</h3>
-              <p className="text-gray-600">15 minutes per request</p>
+              <h3 className="font-medium text-foreground">Cache Duration</h3>
+              <p className="text-foreground-secondary">
+                15 minutes per request
+              </p>
             </div>
           </div>
         </div>

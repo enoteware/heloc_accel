@@ -120,14 +120,14 @@ export default function BudgetSummary({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-foreground-secondary">
                   Monthly Income
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-success">
                   {formatCurrency(totalMonthlyIncome)}
                 </p>
               </div>
-              <Icon name="trending-up" size="lg" className="text-green-500" />
+              <Icon name="trending-up" size="lg" className="text-success" />
             </div>
           </CardContent>
         </Card>
@@ -136,14 +136,18 @@ export default function BudgetSummary({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-foreground-secondary">
                   Monthly Expenses
                 </p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-2xl font-bold text-destructive">
                   {formatCurrency(totalMonthlyExpenses)}
                 </p>
               </div>
-              <Icon name="trending-down" size="lg" className="text-red-500" />
+              <Icon
+                name="trending-down"
+                size="lg"
+                className="text-destructive"
+              />
             </div>
           </CardContent>
         </Card>
@@ -152,16 +156,16 @@ export default function BudgetSummary({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-foreground-secondary">
                   Discretionary
                 </p>
                 <p
-                  className={`text-2xl font-bold ${discretionaryIncome >= 0 ? "text-blue-600" : "text-red-600"}`}
+                  className={`text-2xl font-bold ${discretionaryIncome >= 0 ? "text-info" : "text-destructive"}`}
                 >
                   {formatCurrency(discretionaryIncome)}
                 </p>
               </div>
-              <Icon name="dollar-sign" size="lg" className="text-blue-500" />
+              <Icon name="dollar-sign" size="lg" className="text-info" />
             </div>
           </CardContent>
         </Card>
@@ -170,16 +174,16 @@ export default function BudgetSummary({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-foreground-secondary">
                   Savings Rate
                 </p>
                 <p
-                  className={`text-2xl font-bold ${savingsRate >= 20 ? "text-green-600" : savingsRate >= 10 ? "text-yellow-600" : "text-red-600"}`}
+                  className={`text-2xl font-bold ${savingsRate >= 20 ? "text-success" : savingsRate >= 10 ? "text-warning" : "text-destructive"}`}
                 >
                   {savingsRate.toFixed(1)}%
                 </p>
               </div>
-              <Icon name="target" size="lg" className="text-purple-500" />
+              <Icon name="target" size="lg" className="text-accent" />
             </div>
           </CardContent>
         </Card>
@@ -191,13 +195,13 @@ export default function BudgetSummary({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Icon name="trending-up" size="sm" className="text-green-500" />
+              <Icon name="trending-up" size="sm" className="text-success" />
               <span>Income Sources</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             {incomeSourcesData.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">
+              <p className="text-foreground-muted text-center py-4">
                 No income sources added
               </p>
             ) : (
@@ -205,11 +209,14 @@ export default function BudgetSummary({
                 {incomeSourcesData.map((income) => (
                   <div
                     key={income.id}
-                    className="flex items-center justify-between p-3 bg-green-50 rounded-lg"
+                    className="flex items-center justify-between p-3 rounded-lg"
+                    style={{
+                      backgroundColor: "rgb(var(--color-success-background))",
+                    }}
                   >
                     <div>
                       <div className="font-medium">{income.name}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-foreground-secondary">
                         {formatCurrency(Number(income.amount) || 0)}{" "}
                         {income.frequency}
                         {(income.is_primary ||
@@ -221,7 +228,7 @@ export default function BudgetSummary({
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-green-600">
+                      <div className="font-semibold text-success">
                         {formatCurrency(
                           calculateMonthlyAmount(
                             Number(income.amount) || 0,
@@ -229,7 +236,9 @@ export default function BudgetSummary({
                           ),
                         )}
                       </div>
-                      <div className="text-xs text-gray-500">monthly</div>
+                      <div className="text-xs text-foreground-muted">
+                        monthly
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -242,13 +251,13 @@ export default function BudgetSummary({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Icon name="credit-card" size="sm" className="text-red-500" />
+              <Icon name="credit-card" size="sm" className="text-destructive" />
               <span>Expense Categories</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             {Object.keys(expensesByCategory).length === 0 ? (
-              <p className="text-gray-500 text-center py-4">
+              <p className="text-foreground-muted text-center py-4">
                 No expenses added
               </p>
             ) : (
@@ -263,21 +272,26 @@ export default function BudgetSummary({
                     return (
                       <div
                         key={category}
-                        className="flex items-center justify-between p-3 bg-red-50 rounded-lg"
+                        className="flex items-center justify-between p-3 rounded-lg"
+                        style={{
+                          backgroundColor: "rgb(var(--color-error-background))",
+                        }}
                       >
                         <div>
                           <div className="font-medium capitalize">
                             {category}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-foreground-secondary">
                             {percentage.toFixed(1)}% of expenses
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold text-red-600">
+                          <div className="font-semibold text-destructive">
                             {formatCurrency(amount)}
                           </div>
-                          <div className="text-xs text-gray-500">monthly</div>
+                          <div className="text-xs text-foreground-muted">
+                            monthly
+                          </div>
                         </div>
                       </div>
                     );
@@ -292,22 +306,22 @@ export default function BudgetSummary({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Icon name="heart" size="sm" className="text-pink-500" />
+            <Icon name="heart" size="sm" className="text-accent" />
             <span>Financial Health</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-lg font-semibold">Fixed vs Variable</div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-foreground-secondary mt-1">
                 Fixed: {formatCurrency(fixedExpenses)} (
                 {totalMonthlyExpenses > 0
                   ? ((fixedExpenses / totalMonthlyExpenses) * 100).toFixed(1)
                   : 0}
                 %)
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-foreground-secondary">
                 Variable: {formatCurrency(variableExpenses)} (
                 {totalMonthlyExpenses > 0
                   ? ((variableExpenses / totalMonthlyExpenses) * 100).toFixed(1)
@@ -315,24 +329,24 @@ export default function BudgetSummary({
                 %)
               </div>
             </div>
-
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-lg font-semibold">Emergency Fund</div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-foreground-secondary mt-1">
                 Recommended: {formatCurrency(totalMonthlyExpenses * 3)}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-foreground-secondary">
                 (3 months of expenses)
               </div>
             </div>
-
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-lg font-semibold">HELOC Potential</div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-foreground-secondary mt-1">
                 Available:{" "}
                 {formatCurrency(Math.max(0, discretionaryIncome - 500))}
               </div>
-              <div className="text-sm text-gray-600">(after $500 buffer)</div>
+              <div className="text-sm text-foreground-secondary">
+                (after $500 buffer)
+              </div>
             </div>
           </div>
         </CardContent>

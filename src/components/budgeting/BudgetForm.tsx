@@ -35,6 +35,50 @@ export default function BudgetForm({
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Demo data for testing
+  const getDemoData = () => {
+    if (type === "income") {
+      const incomeExamples = [
+        { name: "Primary Job", amount: "8500", frequency: "monthly" },
+        { name: "Side Business", amount: "1200", frequency: "monthly" },
+        { name: "Rental Income", amount: "2000", frequency: "monthly" },
+        { name: "Freelance Work", amount: "800", frequency: "monthly" },
+      ];
+      const randomIncome =
+        incomeExamples[Math.floor(Math.random() * incomeExamples.length)];
+      return {
+        ...randomIncome,
+        category: "other",
+        is_primary: randomIncome.name === "Primary Job",
+        is_fixed: true,
+      };
+    } else {
+      const expenseExamples = [
+        { name: "Mortgage Payment", amount: "2347", category: "housing" },
+        { name: "Car Payment", amount: "450", category: "transportation" },
+        { name: "Groceries", amount: "800", category: "food" },
+        { name: "Utilities", amount: "250", category: "utilities" },
+        { name: "Insurance", amount: "300", category: "insurance" },
+        { name: "Gym Membership", amount: "80", category: "entertainment" },
+      ];
+      const randomExpense =
+        expenseExamples[Math.floor(Math.random() * expenseExamples.length)];
+      return {
+        ...randomExpense,
+        frequency: "monthly",
+        is_primary: false,
+        is_fixed: ["Mortgage Payment", "Car Payment", "Insurance"].includes(
+          randomExpense.name,
+        ),
+      };
+    }
+  };
+
+  const handleFillDemo = () => {
+    setFormData(getDemoData());
+    setErrors({});
+  };
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -110,14 +154,26 @@ export default function BudgetForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <Icon
-            name={type === "income" ? "plus-circle" : "minus-circle"}
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center space-x-2">
+            <Icon
+              name={type === "income" ? "plus-circle" : "minus-circle"}
+              size="sm"
+              className={type === "income" ? "text-green-500" : "text-red-500"}
+            />
+            <span>Add {type === "income" ? "Income Source" : "Expense"}</span>
+          </CardTitle>
+          <Button
+            type="button"
+            variant="outline"
             size="sm"
-            className={type === "income" ? "text-green-500" : "text-red-500"}
-          />
-          <span>Add {type === "income" ? "Income Source" : "Expense"}</span>
-        </CardTitle>
+            onClick={handleFillDemo}
+            className="text-xs"
+          >
+            <Icon name="zap" size="xs" className="mr-1" />
+            Fill Demo
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

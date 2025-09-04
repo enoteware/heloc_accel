@@ -90,17 +90,14 @@ export default function AgentsListPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <Users className="h-6 w-6 text-gray-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Agents</h1>
+              <Users className="h-6 w-6 text-foreground-secondary" />
+              <h1 className="text-2xl font-bold text-foreground">Agents</h1>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-foreground-secondary">
               Manage your loan officers and mortgage specialists
             </p>
           </div>
-          <Link
-            href="/admin/agents/new"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
+          <Link href="/admin/agents/new" className="btn btn-primary">
             <Plus className="h-5 w-5" />
             Add New Agent
           </Link>
@@ -108,26 +105,26 @@ export default function AgentsListPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white shadow rounded-lg mb-6">
-        <div className="p-4 border-b border-gray-200">
+      <div className="bg-card shadow rounded-lg mb-6">
+        <div className="p-4 border-b border-border">
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search agents by name, email, or phone..."
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full pl-10 pr-3 py-2"
                 />
               </div>
             </div>
 
             {/* Status Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-gray-400" />
+              <Filter className="h-5 w-5 text-muted-foreground" />
               <select
                 value={filterActive}
                 onChange={(e) =>
@@ -135,7 +132,7 @@ export default function AgentsListPage() {
                     e.target.value as "all" | "active" | "inactive",
                   )
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-default px-3 py-2"
               >
                 <option value="all">All Agents</option>
                 <option value="active">Active Only</option>
@@ -146,72 +143,74 @@ export default function AgentsListPage() {
         </div>
 
         {/* Results count */}
-        <div className="px-4 py-2 bg-gray-50 text-sm text-gray-600">
+        <div className="px-4 py-2 bg-muted text-sm text-foreground-secondary">
           Showing {filteredAgents.length} of {agents.length} agents
         </div>
       </div>
 
       {/* Agents Table */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
+      <div className="bg-card shadow rounded-lg overflow-hidden">
         {loading ? (
           <div className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading agents...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-foreground-secondary">Loading agents...</p>
           </div>
         ) : filteredAgents.length === 0 ? (
           <div className="p-8 text-center">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">
+            <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-foreground-secondary">
               {searchTerm || filterActive !== "all"
                 ? "No agents found matching your criteria"
                 : "No agents added yet"}
             </p>
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-muted">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Agent
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Contact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   NMLS #
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-card divide-y divide-border">
               {filteredAgents.map((agent) => (
-                <tr key={agent.id} className="hover:bg-gray-50">
+                <tr key={agent.id} className="hover:bg-muted">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-foreground">
                         {agent.firstName} {agent.lastName}
                       </div>
-                      <div className="text-sm text-gray-500">{agent.title}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {agent.title}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{agent.email}</div>
-                    <div className="text-sm text-gray-500">{agent.phone}</div>
+                    <div className="text-sm text-foreground">{agent.email}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {agent.phone}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {agent.nmlsNumber || "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        agent.isActive
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                      className={`badge ${
+                        agent.isActive ? "badge-success" : "badge-secondary"
                       }`}
                     >
                       {agent.isActive ? "Active" : "Inactive"}
@@ -221,13 +220,13 @@ export default function AgentsListPage() {
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/admin/agents/${agent.id}`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="safe-link"
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(agent.id!)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

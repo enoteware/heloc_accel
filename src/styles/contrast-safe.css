@@ -1,286 +1,344 @@
-/* 
- * HELOC Accelerator - Contrast-Safe Utility Classes
- * 
- * These utilities guarantee WCAG AA compliance and prevent
- * white-on-white, black-on-black, and other unreadable combinations.
+@reference "tailwindcss";
+/*
+ * HELOC Accelerator - Contrast-Safe Utility Classes (semantic tokens)
+ *
+ * All classes below are implemented with CSS variables from `themes.css`
+ * to ensure automatic light/dark support.
  */
 
-/* Contrast-Safe Text on Background Combinations */
+/* Contrast-Safe Text on Background */
 .text-on-primary {
-  @apply text-white;
+  color: rgb(var(--color-primary-foreground));
 }
-
-.text-on-primary-light {
-  @apply text-primary-900;
-}
-
 .text-on-secondary {
-  @apply text-white;
+  color: rgb(var(--color-secondary-foreground));
 }
-
-.text-on-secondary-light {
-  @apply text-secondary-900;
+.text-on-accent {
+  color: rgb(var(--color-accent-foreground));
 }
-
 .text-on-light {
-  @apply text-neutral-900;
+  color: rgb(var(--color-foreground));
 }
-
 .text-on-dark {
-  @apply text-white;
+  color: rgb(var(--color-foreground-inverse));
 }
-
 .text-on-white {
-  @apply text-neutral-900;
+  color: rgb(var(--color-foreground));
 }
 
-.text-on-neutral-50 {
-  @apply text-neutral-900;
-}
-
-.text-on-neutral-100 {
-  @apply text-neutral-800;
-}
-
-.text-on-neutral-200 {
-  @apply text-neutral-800;
-}
-
-.text-on-neutral-800 {
-  @apply text-white;
-}
-
-.text-on-neutral-900 {
-  @apply text-white;
-}
-
-/* Status Colors - Safe Combinations */
+/* Status text helpers */
 .text-on-success {
-  @apply text-white;
+  color: rgb(var(--color-success-foreground));
 }
-
-.text-on-success-light {
-  @apply text-green-800;
-}
-
 .text-on-warning {
-  @apply text-yellow-900;
+  color: rgb(var(--color-warning-foreground));
 }
-
-.text-on-warning-light {
-  @apply text-yellow-900;
-}
-
 .text-on-danger {
-  @apply text-white;
+  color: rgb(var(--color-error-foreground));
 }
-
-.text-on-danger-light {
-  @apply text-red-800;
-}
-
 .text-on-info {
-  @apply text-white;
+  color: rgb(var(--color-info-foreground));
 }
 
-.text-on-info-light {
-  @apply text-blue-800;
-}
-
-/* Compound Safe Classes - Background + Text in One */
+/* Compound Safe Classes - Background + Text */
 .safe-primary {
-  @apply bg-primary-500 text-white;
+  background-color: rgb(var(--color-primary));
+  color: rgb(var(--color-primary-foreground));
 }
 
 .safe-primary-light {
-  @apply bg-primary-100 text-primary-900;
+  background-color: rgb(var(--color-primary) / 0.15);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-primary) / 0.3);
 }
 
 .safe-secondary {
-  @apply bg-secondary-500 text-white;
+  background-color: rgb(var(--color-secondary));
+  color: rgb(var(--color-secondary-foreground));
 }
 
 .safe-secondary-light {
-  @apply bg-secondary-100 text-secondary-900;
+  background-color: rgb(var(--color-secondary) / 0.15);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-secondary) / 0.3);
 }
 
 .safe-neutral-light {
-  @apply bg-neutral-50 text-neutral-900;
+  background-color: rgb(var(--color-surface-secondary));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
 }
 
 .safe-neutral-dark {
-  @apply bg-neutral-800 text-white;
+  background-color: rgb(var(--color-surface));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
 }
 
 .safe-success {
-  @apply bg-green-500 text-white;
+  background-color: rgb(var(--color-success));
+  color: rgb(var(--color-success-foreground));
 }
 
 .safe-success-light {
-  @apply bg-green-100 text-green-800;
+  background-color: rgb(var(--color-success-background));
+  color: rgb(var(--color-success));
+  border: 1px solid rgb(var(--color-success-border));
 }
 
 .safe-warning {
-  @apply bg-yellow-400 text-yellow-900;
+  background-color: rgb(var(--color-warning));
+  color: rgb(var(--color-warning-foreground));
 }
 
 .safe-warning-light {
-  @apply bg-yellow-100 text-yellow-800;
+  background-color: rgb(var(--color-warning-background));
+  color: rgb(var(--color-warning));
+  border: 1px solid rgb(var(--color-warning-border));
 }
 
 .safe-danger {
-  @apply bg-red-500 text-white;
+  background-color: rgb(var(--color-error));
+  color: rgb(var(--color-error-foreground));
 }
 
 .safe-danger-light {
-  @apply bg-red-100 text-red-800;
+  background-color: rgb(var(--color-error-background));
+  color: rgb(var(--color-error));
+  border: 1px solid rgb(var(--color-error-border));
 }
 
 .safe-info {
-  @apply bg-blue-500 text-white;
+  background-color: rgb(var(--color-info));
+  color: rgb(var(--color-info-foreground));
 }
 
 .safe-info-light {
-  @apply bg-blue-100 text-blue-800;
+  background-color: rgb(var(--color-info-background));
+  color: rgb(var(--color-info));
+  border: 1px solid rgb(var(--color-info-border));
 }
 
-/* Interactive States - Hover/Focus Safe */
+/* Interactive States - Hover/Focus (token-based) */
 .safe-primary-interactive {
-  @apply safe-primary hover:bg-primary-600 focus:bg-primary-600;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  background-color: rgb(var(--color-primary));
+  color: rgb(var(--color-primary-foreground));
+}
+.safe-primary-interactive:hover {
+  background-color: rgb(var(--color-primary) / 0.9);
+}
+.safe-primary-interactive:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-primary) / 0.4);
 }
 
 .safe-secondary-interactive {
-  @apply safe-secondary hover:bg-secondary-600 focus:bg-secondary-600;
-  @apply focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  background-color: rgb(var(--color-secondary));
+  color: rgb(var(--color-secondary-foreground));
+}
+.safe-secondary-interactive:hover {
+  background-color: rgb(var(--color-secondary) / 0.9);
+}
+.safe-secondary-interactive:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-secondary) / 0.4);
 }
 
 .safe-outline-interactive {
-  @apply bg-transparent text-primary-700 border-primary-300;
-  @apply hover:bg-primary-50 hover:border-primary-400;
-  @apply focus:bg-primary-50 focus:border-primary-500;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  background-color: transparent;
+  color: rgb(var(--color-primary));
+  border: 1px solid rgb(var(--color-border));
+}
+.safe-outline-interactive:hover {
+  background-color: rgb(var(--color-surface-secondary));
+  border-color: rgb(var(--color-primary));
+}
+.safe-outline-interactive:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-primary) / 0.4);
 }
 
 .safe-ghost-interactive {
-  @apply bg-transparent text-neutral-700;
-  @apply hover:bg-neutral-100 hover:text-neutral-900;
-  @apply focus:bg-neutral-100 focus:text-neutral-900;
-  @apply focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2;
+  background-color: transparent;
+  color: rgb(var(--color-foreground));
+}
+.safe-ghost-interactive:hover {
+  background-color: rgb(var(--color-surface-secondary));
+  color: rgb(var(--color-foreground));
+}
+.safe-ghost-interactive:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.4);
 }
 
-/* Card Variants with Safe Text */
+/* Card Variants */
 .safe-card-light {
-  @apply bg-white text-neutral-900 border border-neutral-200;
+  background-color: rgb(var(--color-surface));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
 }
 
 .safe-card-dark {
-  @apply bg-neutral-800 text-white border border-neutral-700;
+  background-color: rgb(var(--color-background-secondary));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
 }
 
 .safe-card-primary {
-  @apply bg-primary-50 text-primary-900 border border-primary-200;
+  background-color: rgb(var(--color-primary) / 0.1);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-primary) / 0.3);
 }
 
 .safe-card-secondary {
-  @apply bg-secondary-50 text-secondary-900 border border-secondary-200;
+  background-color: rgb(var(--color-secondary) / 0.1);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-secondary) / 0.3);
 }
 
-/* Alert Variants - All WCAG Compliant */
+/* Alert Variants */
 .safe-alert-info {
-  @apply bg-blue-50 text-blue-800 border border-blue-200;
+  background-color: rgb(var(--color-info-background));
+  color: rgb(var(--color-info));
+  border: 1px solid rgb(var(--color-info-border));
 }
 
 .safe-alert-success {
-  @apply bg-green-50 text-green-800 border border-green-200;
+  background-color: rgb(var(--color-success-background));
+  color: rgb(var(--color-success));
+  border: 1px solid rgb(var(--color-success-border));
 }
 
 .safe-alert-warning {
-  @apply bg-yellow-50 text-yellow-800 border border-yellow-200;
+  background-color: rgb(var(--color-warning-background));
+  color: rgb(var(--color-warning));
+  border: 1px solid rgb(var(--color-warning-border));
 }
 
 .safe-alert-danger {
-  @apply bg-red-50 text-red-800 border border-red-200;
+  background-color: rgb(var(--color-error-background));
+  color: rgb(var(--color-error));
+  border: 1px solid rgb(var(--color-error-border));
 }
 
-/* Badge Variants - All WCAG Compliant */
+/* Badge Variants */
 .safe-badge-primary {
-  @apply bg-primary-100 text-primary-800 border border-primary-200;
+  background-color: rgb(var(--color-primary) / 0.15);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-primary) / 0.3);
 }
 
 .safe-badge-secondary {
-  @apply bg-secondary-100 text-secondary-800 border border-secondary-200;
+  background-color: rgb(var(--color-secondary) / 0.15);
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-secondary) / 0.3);
 }
 
 .safe-badge-success {
-  @apply bg-green-100 text-green-800 border border-green-200;
+  background-color: rgb(var(--color-success-background));
+  color: rgb(var(--color-success));
+  border: 1px solid rgb(var(--color-success-border));
 }
 
 .safe-badge-warning {
-  @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+  background-color: rgb(var(--color-warning-background));
+  color: rgb(var(--color-warning));
+  border: 1px solid rgb(var(--color-warning-border));
 }
 
 .safe-badge-danger {
-  @apply bg-red-100 text-red-800 border border-red-200;
+  background-color: rgb(var(--color-error-background));
+  color: rgb(var(--color-error));
+  border: 1px solid rgb(var(--color-error-border));
 }
 
 .safe-badge-neutral {
-  @apply bg-neutral-100 text-neutral-800 border border-neutral-200;
+  background-color: rgb(var(--color-surface-secondary));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
 }
 
 /* Input Safe Styles */
 .safe-input {
-  @apply bg-white text-neutral-900 border-neutral-300;
-  @apply placeholder-neutral-600;
-  @apply focus:border-primary-500 focus:ring-primary-500;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
+}
+.safe-input::placeholder {
+  color: rgb(var(--color-foreground-muted));
+}
+.safe-input:focus {
+  outline: none;
+  border-color: rgb(var(--color-border-focus));
+  box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.3);
 }
 
 .safe-input-dark {
-  @apply bg-neutral-800 text-white border-neutral-600;
-  @apply placeholder-neutral-400;
-  @apply focus:border-primary-400 focus:ring-primary-400;
+  background-color: rgb(var(--color-surface));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
+}
+.safe-input-dark::placeholder {
+  color: rgb(var(--color-foreground-muted));
+}
+.safe-input-dark:focus {
+  outline: none;
+  border-color: rgb(var(--color-border-focus));
+  box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.3);
 }
 
 .safe-input-error {
-  @apply bg-white text-neutral-900 border-red-300;
-  @apply placeholder-neutral-600;
-  @apply focus:border-red-500 focus:ring-red-500;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-error-border));
+}
+.safe-input-error:focus {
+  outline: none;
+  border-color: rgb(var(--color-error));
+  box-shadow: 0 0 0 2px rgb(var(--color-error) / 0.3);
 }
 
 /* Link Safe Styles */
 .safe-link {
-  @apply text-primary-700 hover:text-primary-800 underline;
+  color: rgb(var(--color-primary));
+  text-decoration: underline;
+}
+.safe-link:hover {
+  color: rgb(var(--color-primary) / 0.9);
 }
 
 .safe-link-light {
-  @apply text-primary-600 hover:text-primary-700 underline;
+  color: rgb(var(--color-primary));
+  text-decoration: underline;
+}
+.safe-link-light:hover {
+  color: rgb(var(--color-primary) / 0.9);
 }
 
 .safe-link-on-dark {
-  @apply text-primary-300 hover:text-primary-200 underline;
+  color: rgb(var(--color-primary));
+  text-decoration: underline;
+}
+.safe-link-on-dark:hover {
+  color: rgb(var(--color-primary) / 0.85);
 }
 
 /* Utility Classes for Manual Override */
 .force-readable {
-  /* Ensures text is always readable on any background */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  @apply font-medium;
+  font-weight: 500;
 }
 
 .force-readable-light {
-  /* For dark text on potentially light backgrounds */
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-  @apply font-medium text-neutral-900;
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
 }
 
-/* Debugging Helper - Shows Dangerous Combinations in Dev */
+/* Debugging Helper - highlight dangerous combos if surfaced */
 @media screen and (max-width: 0px) {
-  /* This will never match, it's just to create invalid CSS that dev tools will highlight */
   .bg-white.text-white,
-  .bg-neutral-50.text-white,
-  .bg-neutral-100.text-neutral-100,
-  .bg-neutral-900.text-neutral-900,
-  .bg-black.text-black {
+  .bg-[rgb(var(--color-surface-secondary))].text-[rgb(var(--color-foreground))] {
     outline: 3px solid red !important;
     outline-offset: -3px !important;
   }
@@ -289,18 +347,11 @@
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
   .safe-primary {
-    @apply bg-primary-600 text-white;
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--color-primary-foreground));
   }
-
   .safe-secondary {
-    @apply bg-secondary-600 text-white;
-  }
-
-  .safe-neutral-light {
-    @apply bg-white text-black border-2 border-black;
-  }
-
-  .safe-neutral-dark {
-    @apply bg-black text-white border-2 border-white;
+    background-color: rgb(var(--color-secondary));
+    color: rgb(var(--color-secondary-foreground));
   }
 }

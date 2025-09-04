@@ -22,60 +22,83 @@ export default function ErrorDisplay({
   onDismiss,
   onRetry,
 }: ErrorDisplayProps) {
-  const getErrorIcon = () => {
+  const getVariant = () => {
     switch (errorDetails?.errorCode) {
       case ErrorCode.NEGATIVE_AMORTIZATION:
       case ErrorCode.INSUFFICIENT_PAYMENT:
-        return <Icon name="alert" size="lg" className="text-orange-500" />;
+        return "warning" as const;
       case ErrorCode.VALIDATION_FAILED:
       case ErrorCode.INVALID_INTEREST_RATE:
       case ErrorCode.INVALID_LOAN_TERM:
-        return <Icon name="info" size="lg" className="text-yellow-500" />;
+        return "warning" as const;
       case ErrorCode.RATE_LIMIT_EXCEEDED:
-        return <Icon name="calendar" size="lg" className="text-blue-500" />;
+        return "info" as const;
       default:
-        return <Icon name="x-circle" size="lg" className="text-red-500" />;
+        return "destructive" as const;
     }
   };
-
-  const getErrorColor = () => {
-    switch (errorDetails?.errorCode) {
-      case ErrorCode.NEGATIVE_AMORTIZATION:
-      case ErrorCode.INSUFFICIENT_PAYMENT:
-        return "orange";
-      case ErrorCode.VALIDATION_FAILED:
-      case ErrorCode.INVALID_INTEREST_RATE:
-      case ErrorCode.INVALID_LOAN_TERM:
-        return "yellow";
-      case ErrorCode.RATE_LIMIT_EXCEEDED:
-        return "blue";
-      default:
-        return "red";
-    }
-  };
-
-  const color = getErrorColor();
+  const variant = getVariant();
 
   return (
     <div
-      className={`bg-${color}-50 border-2 border-${color}-200 rounded-lg p-4 mb-6`}
+      className={`rounded-lg p-4 mb-6 border ${
+        variant === "warning"
+          ? "border-warning-border bg-[rgb(var(--color-warning-background))]"
+          : variant === "info"
+            ? "border-info-border bg-[rgb(var(--color-info-background))]"
+            : "border-destructive bg-[rgb(var(--color-error-background))]"
+      }`}
     >
       <div className="flex">
-        <div className="flex-shrink-0">{getErrorIcon()}</div>
+        <div className="flex-shrink-0">
+          {variant === "warning" && (
+            <Icon name="alert" size="lg" className="text-warning" />
+          )}
+          {variant === "info" && (
+            <Icon name="info" size="lg" className="text-info" />
+          )}
+          {variant === "destructive" && (
+            <Icon name="x-circle" size="lg" className="text-destructive" />
+          )}
+        </div>
         <div className="ml-3 flex-1">
-          <h3 className={`text-sm font-medium text-${color}-800`}>
+          <h3
+            className={`text-sm font-medium ${
+              variant === "warning"
+                ? "text-warning"
+                : variant === "info"
+                  ? "text-info"
+                  : "text-destructive"
+            }`}
+          >
             {error || "An error occurred"}
           </h3>
 
           {errorDetails?.suggestion && (
-            <div className={`mt-2 text-sm text-${color}-700`}>
+            <div
+              className={`mt-2 text-sm ${
+                variant === "warning"
+                  ? "text-warning"
+                  : variant === "info"
+                    ? "text-info"
+                    : "text-destructive"
+              }`}
+            >
               <p className="font-medium mb-1">What to do:</p>
               <p className="whitespace-pre-line">{errorDetails.suggestion}</p>
             </div>
           )}
 
           {errorDetails?.field && (
-            <div className={`mt-2 text-xs text-${color}-600`}>
+            <div
+              className={`mt-2 text-xs ${
+                variant === "warning"
+                  ? "text-warning"
+                  : variant === "info"
+                    ? "text-info"
+                    : "text-destructive"
+              }`}
+            >
               <span className="font-medium">Related field:</span>{" "}
               {errorDetails.field}
             </div>
@@ -85,12 +108,24 @@ export default function ErrorDisplay({
             errorDetails?.technicalMessage && (
               <details className="mt-3">
                 <summary
-                  className={`text-xs text-${color}-600 cursor-pointer hover:text-${color}-700`}
+                  className={`text-xs cursor-pointer ${
+                    variant === "warning"
+                      ? "text-warning hover:underline"
+                      : variant === "info"
+                        ? "text-info hover:underline"
+                        : "text-destructive hover:underline"
+                  }`}
                 >
                   Technical details
                 </summary>
                 <pre
-                  className={`mt-1 text-xs text-${color}-600 overflow-x-auto`}
+                  className={`mt-1 text-xs ${
+                    variant === "warning"
+                      ? "text-warning"
+                      : variant === "info"
+                        ? "text-info"
+                        : "text-destructive"
+                  } overflow-x-auto`}
                 >
                   {errorDetails.technicalMessage}
                 </pre>
@@ -101,7 +136,13 @@ export default function ErrorDisplay({
             {onRetry && (
               <button
                 onClick={onRetry}
-                className={`text-sm bg-${color}-100 hover:bg-${color}-200 text-${color}-800 font-medium py-1 px-3 rounded transition-colors duration-200`}
+                className={`text-sm font-medium py-1 px-3 rounded transition-colors duration-200 ${
+                  variant === "warning"
+                    ? "bg-warning/15 text-warning hover:bg-warning/25"
+                    : variant === "info"
+                      ? "bg-info/15 text-info hover:bg-info/25"
+                      : "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                }`}
               >
                 Try Again
               </button>
@@ -109,7 +150,13 @@ export default function ErrorDisplay({
             {onDismiss && (
               <button
                 onClick={onDismiss}
-                className={`text-sm text-${color}-600 hover:text-${color}-700 font-medium`}
+                className={`text-sm font-medium ${
+                  variant === "warning"
+                    ? "text-warning hover:underline"
+                    : variant === "info"
+                      ? "text-info hover:underline"
+                      : "text-destructive hover:underline"
+                }`}
               >
                 Dismiss
               </button>
@@ -130,7 +177,9 @@ export function InlineError({
   className?: string;
 }) {
   return (
-    <div className={`flex items-center mt-1 text-sm text-red-600 ${className}`}>
+    <div
+      className={`flex items-center mt-1 text-sm text-destructive ${className}`}
+    >
       <Icon name="alert" size="xs" className="mr-1" />
       {message}
     </div>

@@ -163,8 +163,12 @@ export default function FullAmortizationTable({
       {/* Header with Controls */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Icon name="table" size="sm" className="text-gray-600" />
+          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <Icon
+              name="table"
+              size="sm"
+              className="text-foreground-secondary"
+            />
             Complete Amortization Schedule
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -204,7 +208,7 @@ export default function FullAmortizationTable({
           </button>
 
           <button
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-success text-success-foreground rounded-lg hover:bg-success/90 transition-colors text-sm font-medium"
             onClick={() => {
               exportAmortizationToCSV(schedule, inputs);
             }}
@@ -217,15 +221,18 @@ export default function FullAmortizationTable({
 
       {/* Key Milestones */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div
+          className="p-4 rounded-lg border border-info-border"
+          style={{ backgroundColor: "rgb(var(--color-info-background))" }}
+        >
           <div className="flex items-center gap-2 mb-2">
-            <Icon name="home" size="sm" className="text-blue-600" />
-            <h4 className="font-semibold text-blue-900">Mortgage Payoff</h4>
+            <Icon name="home" size="sm" className="text-info" />
+            <h4 className="font-semibold text-info">Mortgage Payoff</h4>
           </div>
-          <p className="text-2xl font-bold text-blue-900">
+          <p className="text-2xl font-bold text-info">
             Month {schedule.length}
           </p>
-          <p className="text-sm text-blue-700">
+          <p className="text-sm text-info">
             Total saved:{" "}
             {formatCurrency(
               amortizationData[amortizationData.length - 1]
@@ -235,19 +242,21 @@ export default function FullAmortizationTable({
         </div>
 
         {pmiDropOffMonth && (
-          <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+          <div
+            className="p-4 rounded-lg border border-border"
+            style={{
+              backgroundColor: "rgb(var(--color-accent-foreground))",
+              opacity: 0.1,
+            }}
+          >
             <div className="flex items-center gap-2 mb-2">
-              <Icon
-                name="trending-down"
-                size="sm"
-                className="text-purple-600"
-              />
-              <h4 className="font-semibold text-purple-900">PMI Drops Off</h4>
+              <Icon name="trending-down" size="sm" className="text-accent" />
+              <h4 className="font-semibold text-accent">PMI Drops Off</h4>
             </div>
-            <p className="text-2xl font-bold text-purple-900">
+            <p className="text-2xl font-bold text-accent">
               Month {pmiDropOffMonth}
             </p>
-            <p className="text-sm text-purple-700">
+            <p className="text-sm text-accent">
               LTV reaches 80%, saving {formatCurrency(inputs.pmiMonthly || 0)}
               /mo
             </p>
@@ -255,32 +264,35 @@ export default function FullAmortizationTable({
         )}
 
         {helocPaidOffMonth > 0 && (
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+          <div
+            className="p-4 rounded-lg border border-success-border"
+            style={{ backgroundColor: "rgb(var(--color-success-background))" }}
+          >
             <div className="flex items-center gap-2 mb-2">
-              <Icon name="check-circle" size="sm" className="text-green-600" />
-              <h4 className="font-semibold text-green-900">HELOC Paid Off</h4>
+              <Icon name="check-circle" size="sm" className="text-success" />
+              <h4 className="font-semibold text-success">HELOC Paid Off</h4>
             </div>
-            <p className="text-2xl font-bold text-green-900">
+            <p className="text-2xl font-bold text-success">
               Month {helocPaidOffMonth}
             </p>
-            <p className="text-sm text-green-700">All HELOC balance cleared</p>
+            <p className="text-sm text-success">All HELOC balance cleared</p>
           </div>
         )}
       </div>
 
       {/* Main Table */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-        <table className="min-w-full divide-y divide-gray-200">
+      <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
+        <table className="min-w-full divide-y divide-border bg-card">
           <thead>
-            <tr className="bg-gray-50">
-              <th className="sticky left-0 z-10 bg-gray-50 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">
+            <tr className="bg-muted">
+              <th className="sticky left-0 z-10 bg-muted px-3 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider border-r border-border">
                 Month
               </th>
 
               {/* Mortgage Balance Section */}
               <th
                 colSpan={3}
-                className="px-3 py-2 text-center text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-r border-gray-200 bg-gray-100"
+                className="px-3 py-2 text-center text-xs font-medium text-foreground uppercase tracking-wider border-b border-r border-border bg-muted"
               >
                 Mortgage
               </th>
@@ -289,7 +301,7 @@ export default function FullAmortizationTable({
               {(showAllColumns || true) && (
                 <th
                   colSpan={3}
-                  className="px-3 py-2 text-center text-xs font-medium text-blue-700 uppercase tracking-wider border-b border-r border-gray-200 bg-blue-50"
+                  className="px-3 py-2 text-center text-xs font-medium text-info uppercase tracking-wider border-b border-r border-info-border bg-info-background"
                 >
                   Cash Flow
                 </th>
@@ -298,7 +310,7 @@ export default function FullAmortizationTable({
               {/* HELOC Section */}
               <th
                 colSpan={5}
-                className="px-3 py-2 text-center text-xs font-medium text-secondary-700 uppercase tracking-wider border-b border-r border-gray-200 bg-secondary-50"
+                className="px-3 py-2 text-center text-xs font-medium text-secondary uppercase tracking-wider border-b border-r border-border bg-secondary/10"
               >
                 HELOC Strategy
               </th>
@@ -308,13 +320,13 @@ export default function FullAmortizationTable({
                 <>
                   <th
                     colSpan={2}
-                    className="px-3 py-2 text-center text-xs font-medium text-purple-700 uppercase tracking-wider border-b border-r border-gray-200 bg-purple-50"
+                    className="px-3 py-2 text-center text-xs font-medium text-accent uppercase tracking-wider border-b border-r border-border bg-accent/10"
                   >
                     PMI/LTV
                   </th>
                   <th
                     colSpan={3}
-                    className="px-3 py-2 text-center text-xs font-medium text-green-700 uppercase tracking-wider border-b border-gray-200 bg-green-50"
+                    className="px-3 py-2 text-center text-xs font-medium text-success uppercase tracking-wider border-b border-border bg-[rgb(var(--color-success-background))]"
                   >
                     Totals
                   </th>
@@ -322,51 +334,51 @@ export default function FullAmortizationTable({
               )}
             </tr>
 
-            <tr className="bg-gray-50">
-              <th className="sticky left-0 z-10 bg-gray-50 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">
+            <tr className="bg-muted">
+              <th className="sticky left-0 z-10 bg-muted px-3 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider border-r border-border">
                 #
               </th>
 
               {/* Mortgage columns */}
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Balance
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Payment
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider border-r border-border whitespace-nowrap">
                 Principal
               </th>
 
               {/* Cash Flow columns */}
               {(showAllColumns || true) && (
                 <>
-                  <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                  <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                     Deposit
                   </th>
-                  <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                  <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                     Expenses
                   </th>
-                  <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 whitespace-nowrap">
+                  <th className="px-3 py-3 text-right text-xs font-medium text-info uppercase tracking-wider border-r border-border whitespace-nowrap">
                     Net Surplus
                   </th>
                 </>
               )}
 
               {/* HELOC columns */}
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Room
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-secondary-700 uppercase tracking-wider bg-secondary-50 whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-secondary uppercase tracking-wider bg-secondary/10 whitespace-nowrap">
                 Extra Pay
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Net Change
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Balance
               </th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 whitespace-nowrap">
+              <th className="px-3 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider border-r border-border whitespace-nowrap">
                 Interest
               </th>
 
@@ -422,53 +434,53 @@ export default function FullAmortizationTable({
                     </td>
 
                     {/* Mortgage columns */}
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                       {formatCurrency(row.mortgageBalance)}
                     </td>
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                       {formatCurrency(row.mortgagePayment)}
                     </td>
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 border-r border-gray-200 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground border-r border-border whitespace-nowrap">
                       {formatCurrency(row.principalPayment)}
                     </td>
 
                     {/* Cash Flow columns */}
                     {(showAllColumns || true) && (
                       <>
-                        <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                           {formatCurrency(row.monthlyDeposit)}
                         </td>
-                        <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                           {formatCurrency(row.monthlyExpenses)}
                         </td>
-                        <td className="px-3 py-2 text-sm text-right font-medium text-blue-700 border-r border-gray-200 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right font-medium text-info border-r border-border whitespace-nowrap">
                           {formatCurrency(row.netSurplus)}
                         </td>
                       </>
                     )}
 
                     {/* HELOC columns */}
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                       {formatCurrency(row.usableHelocRoom)}
                     </td>
                     <td
                       className={cn(
                         "px-3 py-2 text-sm text-right font-semibold whitespace-nowrap",
                         row.extraPaymentToMortgage > 0
-                          ? "bg-secondary-50 text-secondary-700"
-                          : "text-gray-400",
+                          ? "bg-secondary/10 text-secondary"
+                          : "text-foreground-muted",
                       )}
                     >
                       {formatCurrency(row.extraPaymentToMortgage)}
                     </td>
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                       <span
                         className={cn(
                           row.netChangeInHeloc > 0
-                            ? "text-red-600"
+                            ? "text-destructive"
                             : row.netChangeInHeloc < 0
-                              ? "text-green-600"
-                              : "text-gray-400",
+                              ? "text-success"
+                              : "text-foreground-muted",
                         )}
                       >
                         {row.netChangeInHeloc > 0 ? "+" : ""}
@@ -479,13 +491,13 @@ export default function FullAmortizationTable({
                       className={cn(
                         "px-3 py-2 text-sm text-right whitespace-nowrap",
                         isHelocActive
-                          ? "font-medium text-blue-700"
-                          : "text-gray-400",
+                          ? "font-medium text-info"
+                          : "text-foreground-muted",
                       )}
                     >
                       {formatCurrency(row.helocBalance)}
                     </td>
-                    <td className="px-3 py-2 text-sm text-right text-gray-700 border-r border-gray-200 whitespace-nowrap">
+                    <td className="px-3 py-2 text-sm text-right text-foreground border-r border-border whitespace-nowrap">
                       {formatCurrency(row.helocInterest)}
                     </td>
 
@@ -496,30 +508,30 @@ export default function FullAmortizationTable({
                           className={cn(
                             "px-3 py-2 text-sm text-right whitespace-nowrap",
                             isPMIActive && highlightPMI
-                              ? "bg-purple-50 text-purple-700 font-medium"
-                              : "text-gray-700",
+                              ? "bg-accent/10 text-accent font-medium"
+                              : "text-foreground",
                           )}
                         >
                           {formatCurrency(row.pmiCost)}
                         </td>
                         <td
                           className={cn(
-                            "px-3 py-2 text-sm text-right border-r border-gray-200 whitespace-nowrap",
+                            "px-3 py-2 text-sm text-right border-r border-border whitespace-nowrap",
                             row.ltvRatio > 80
-                              ? "text-red-600"
-                              : "text-green-600",
+                              ? "text-destructive"
+                              : "text-success",
                             "font-medium",
                           )}
                         >
                           {formatPercent(row.ltvRatio)}
                         </td>
-                        <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                           {formatCurrency(row.cumulativeInterest)}
                         </td>
-                        <td className="px-3 py-2 text-sm text-right text-gray-700 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right text-foreground whitespace-nowrap">
                           {formatCurrency(row.cumulativePrincipal)}
                         </td>
-                        <td className="px-3 py-2 text-sm text-right font-semibold text-green-700 bg-green-50 whitespace-nowrap">
+                        <td className="px-3 py-2 text-sm text-right font-semibold text-success bg-[rgb(var(--color-success-background))] whitespace-nowrap">
                           {formatCurrency(row.totalInterestPaid)}
                         </td>
                       </>
@@ -531,22 +543,27 @@ export default function FullAmortizationTable({
                     <tr>
                       <td
                         colSpan={showAllColumns ? 16 : 12}
-                        className="px-6 py-4 bg-blue-50 border-b border-blue-200"
+                        className="px-6 py-4 border-b border-info-border"
+                        style={{
+                          backgroundColor: "rgb(var(--color-info-background))",
+                        }}
                       >
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                           <div>
-                            <h5 className="font-semibold text-gray-900 mb-2">
+                            <h5 className="font-semibold text-foreground mb-2">
                               Payment Breakdown
                             </h5>
                             <div className="space-y-1">
                               <div className="flex justify-between">
-                                <span className="text-gray-600">Interest:</span>
+                                <span className="text-foreground-secondary">
+                                  Interest:
+                                </span>
                                 <span className="font-medium">
                                   {formatCurrency(row.interestPayment)}
                                 </span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">
+                                <span className="text-foreground-secondary">
                                   Principal:
                                 </span>
                                 <span className="font-medium">
@@ -555,8 +572,10 @@ export default function FullAmortizationTable({
                               </div>
                               {row.pmiCost > 0 && (
                                 <div className="flex justify-between">
-                                  <span className="text-gray-600">PMI:</span>
-                                  <span className="font-medium text-purple-700">
+                                  <span className="text-foreground-secondary">
+                                    PMI:
+                                  </span>
+                                  <span className="font-medium text-accent">
                                     {formatCurrency(row.pmiCost)}
                                   </span>
                                 </div>
@@ -565,12 +584,12 @@ export default function FullAmortizationTable({
                           </div>
 
                           <div>
-                            <h5 className="font-semibold text-gray-900 mb-2">
+                            <h5 className="font-semibold text-foreground mb-2">
                               HELOC Details
                             </h5>
                             <div className="space-y-1">
                               <div className="flex justify-between">
-                                <span className="text-gray-600">
+                                <span className="text-foreground-secondary">
                                   Available:
                                 </span>
                                 <span className="font-medium">
@@ -578,13 +597,17 @@ export default function FullAmortizationTable({
                                 </span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">Used:</span>
+                                <span className="text-foreground-secondary">
+                                  Used:
+                                </span>
                                 <span className="font-medium">
                                   {formatCurrency(row.helocBalance)}
                                 </span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">Interest:</span>
+                                <span className="text-foreground-secondary">
+                                  Interest:
+                                </span>
                                 <span className="font-medium">
                                   {formatCurrency(row.helocInterest)}
                                 </span>
@@ -593,27 +616,27 @@ export default function FullAmortizationTable({
                           </div>
 
                           <div>
-                            <h5 className="font-semibold text-gray-900 mb-2">
+                            <h5 className="font-semibold text-foreground mb-2">
                               Progress
                             </h5>
                             <div className="space-y-1">
                               <div className="flex justify-between">
-                                <span className="text-gray-600">
+                                <span className="text-foreground-secondary">
                                   LTV Ratio:
                                 </span>
                                 <span
                                   className={cn(
                                     "font-medium",
                                     row.ltvRatio > 80
-                                      ? "text-red-600"
-                                      : "text-green-600",
+                                      ? "text-destructive"
+                                      : "text-success",
                                   )}
                                 >
                                   {formatPercent(row.ltvRatio)}
                                 </span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">
+                                <span className="text-foreground-secondary">
                                   Total Interest:
                                 </span>
                                 <span className="font-medium">
@@ -632,28 +655,26 @@ export default function FullAmortizationTable({
           </tbody>
 
           {/* Summary Footer */}
-          <tfoot className="bg-gray-50">
+          <tfoot className="bg-muted">
             <tr className="font-semibold">
-              <td className="sticky left-0 z-10 bg-gray-50 px-3 py-3 text-sm text-gray-900 border-r border-gray-200">
+              <td className="sticky left-0 z-10 bg-muted px-3 py-3 text-sm text-foreground border-r border-border">
                 Total
               </td>
               <td
                 colSpan={showAllColumns ? 15 : 11}
-                className="px-3 py-3 text-sm text-right text-gray-900"
+                className="px-3 py-3 text-sm text-right text-foreground"
               >
                 <div className="flex justify-end items-center gap-6">
                   <span>Total Interest Paid:</span>
-                  <span className="text-lg text-green-700">
+                  <span className="text-lg text-success">
                     {formatCurrency(
                       amortizationData[amortizationData.length - 1]
                         ?.totalInterestPaid || 0,
                     )}
                   </span>
-                  <span className="text-gray-500">|</span>
+                  <span className="text-foreground-muted">|</span>
                   <span>Months to Payoff:</span>
-                  <span className="text-lg text-blue-700">
-                    {schedule.length}
-                  </span>
+                  <span className="text-lg text-info">{schedule.length}</span>
                 </div>
               </td>
             </tr>
@@ -662,28 +683,30 @@ export default function FullAmortizationTable({
       </div>
 
       {/* Table Legend */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h4 className="text-sm font-semibold text-gray-900 mb-2">
+      <div className="bg-card border border-border p-4 rounded-lg">
+        <h4 className="text-sm font-semibold text-foreground mb-2">
           Column Guide
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-secondary-50 border border-secondary-200 rounded"></div>
-            <span className="text-gray-600">
+            <div className="w-3 h-3 bg-secondary/10 border border-border rounded"></div>
+            <span className="text-foreground-secondary">
               Extra Payment (HELOC Strategy)
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-purple-50 border border-purple-200 rounded"></div>
-            <span className="text-gray-600">PMI Active (LTV &gt; 80%)</span>
+            <div className="w-3 h-3 bg-accent/10 border border-border rounded"></div>
+            <span className="text-foreground-secondary">
+              PMI Active (LTV &gt; 80%)
+            </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-50 border border-green-200 rounded"></div>
-            <span className="text-gray-600">Cumulative Totals</span>
+            <div className="w-3 h-3 bg-[rgb(var(--color-success-background))] border border-success-border rounded"></div>
+            <span className="text-foreground-secondary">Cumulative Totals</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-yellow-50 border border-yellow-200 rounded"></div>
-            <span className="text-gray-600">Milestone Month</span>
+            <div className="w-3 h-3 bg-[rgb(var(--color-warning-background))] border border-warning-border rounded"></div>
+            <span className="text-foreground-secondary">Milestone Month</span>
           </div>
         </div>
       </div>

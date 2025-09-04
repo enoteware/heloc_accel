@@ -15,6 +15,7 @@ import {
   ErrorCode,
   createErrorResponse,
 } from "@/lib/errors";
+import { logError } from "@/lib/debug-logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,19 +28,14 @@ export async function POST(request: NextRequest) {
     // This endpoint is public - calculations don't require authentication
 
     const body = await request.json();
-    console.log("Raw request body:", body);
 
     // Sanitize inputs
     const sanitizedInputs = sanitizeCalculatorInputs(body);
-    console.log("Sanitized inputs:", sanitizedInputs);
 
     // Validate inputs
     const validation = validateCalculatorInputs(sanitizedInputs);
-    console.log("Validation result:", validation);
 
     if (!validation.isValid) {
-      console.log("Validation failed with errors:", validation.errors);
-
       // Create a user-friendly error message
       const errorCount = validation.errors.length;
       const primaryError = validation.errors[0];
@@ -194,7 +190,7 @@ export async function POST(request: NextRequest) {
 
     return applySecurityHeaders(successResponse, defaultSecurityHeaders);
   } catch (error) {
-    console.error("Calculation error:", error);
+    logError("API:Calculate", "Calculation error", error);
 
     // Extract detailed error information
     const errorDetails = extractErrorDetails(error);

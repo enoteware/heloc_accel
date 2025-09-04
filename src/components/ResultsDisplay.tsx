@@ -357,13 +357,16 @@ export default function ResultsDisplay({
       )}
 
       {/* Monthly HELOC Payment Strategy */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
-          <h3 className="text-lg font-semibold text-blue-900 flex items-center">
-            <Icon name="trending-up" size="sm" className="text-blue-600 mr-2" />
+      <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+        <div
+          className="px-6 py-4 border-b border-info-border"
+          style={{ backgroundColor: "rgb(var(--color-info-background))" }}
+        >
+          <h3 className="text-lg font-semibold text-info flex items-center">
+            <Icon name="trending-up" size="sm" className="text-info mr-2" />
             {tResults("monthlyHelocPaymentStrategy")}
           </h3>
-          <p className="text-sm text-blue-700 mt-1">
+          <p className="text-sm text-info mt-1">
             {tResults("monthlyHelocPaymentDescription")}
           </p>
         </div>
@@ -412,14 +415,19 @@ export default function ResultsDisplay({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <h4 className="text-base font-semibold text-foreground mb-3 flex items-center">
                       <span className="safe-badge-info text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         STEP 1
                       </span>
                       {tResults("initialHelocDraw")}
                     </h4>
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-blue-800 mb-2">
+                    <div
+                      className="p-4 rounded-lg border border-info-border"
+                      style={{
+                        backgroundColor: "rgb(var(--color-info-background))",
+                      }}
+                    >
+                      <p className="text-sm text-info mb-2">
                         <strong>
                           Month {firstHelocDrawMonth?.month || 1}:
                         </strong>{" "}
@@ -427,20 +435,20 @@ export default function ResultsDisplay({
                       </p>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-blue-700">
+                          <span className="text-info">
                             {tResults("initialDrawAmount")}:
                           </span>
-                          <span className="font-medium text-blue-900">
+                          <span className="font-medium text-info">
                             {formatCurrency(
                               firstHelocDrawMonth?.helocBalance || 0,
                             )}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-blue-700">
+                          <span className="text-info">
                             {tResults("monthlyDiscretionaryIncome")}:
                           </span>
-                          <span className="font-medium text-blue-900">
+                          <span className="font-medium text-info">
                             {formatCurrency(avgDiscretionaryUsed)}
                           </span>
                         </div>
@@ -449,35 +457,40 @@ export default function ResultsDisplay({
                   </div>
 
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <h4 className="text-base font-semibold text-foreground mb-3 flex items-center">
                       <span className="safe-badge-success text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         STEP 2
                       </span>
                       {tResults("monthlyHelocPayments")}
                     </h4>
-                    <div className="bg-green-50 p-4 rounded-lg">
+                    <div
+                      className="p-4 rounded-lg border border-success-border"
+                      style={{
+                        backgroundColor: "rgb(var(--color-success-background))",
+                      }}
+                    >
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-green-700">
+                          <span className="text-success">
                             {tResults("averageMonthlyHelocInterest")}:
                           </span>
-                          <span className="font-medium text-green-900">
+                          <span className="font-medium text-success">
                             {formatCurrency(avgHelocInterest)}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-green-700">
+                          <span className="text-success">
                             {tResults("discretionaryIncomeForPaydown")}:
                           </span>
-                          <span className="font-medium text-green-900">
+                          <span className="font-medium text-success">
                             {formatCurrency(avgDiscretionaryUsed)}
                           </span>
                         </div>
-                        <div className="flex justify-between border-t border-green-200 pt-2">
-                          <span className="text-green-700 font-medium">
+                        <div className="flex justify-between border-t border-success-border pt-2">
+                          <span className="text-success font-medium">
                             {tResults("netMonthlyHelocReduction")}:
                           </span>
-                          <span className="font-semibold text-green-900">
+                          <span className="font-semibold text-success">
                             {formatCurrency(
                               Math.max(
                                 0,
@@ -493,58 +506,58 @@ export default function ResultsDisplay({
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
-                      <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
+                    <h4 className="text-base font-semibold text-foreground mb-3 flex items-center">
+                      <span className="bg-accent/10 text-accent text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
                         TIMING
                       </span>
                       {tResults("keyMilestones")}
                     </h4>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-card border border-border rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {tResults("peakHelocUsage")}
                           </p>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-foreground-secondary">
                             Month {maxHelocMonth.month}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-semibold text-purple-900">
+                          <p className="text-sm font-semibold text-accent">
                             {formatCurrency(maxHelocMonth.helocBalance)}
                           </p>
                         </div>
                       </div>
 
                       {firstPaydownMonth && (
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between p-3 bg-card border border-border rounded-lg">
                           <div>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm font-medium text-foreground">
                               {tResults("firstHelocPaydown")}
                             </p>
-                            <p className="text-xs text-gray-600">
+                            <p className="text-xs text-foreground-secondary">
                               Month {firstPaydownMonth.month}
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-semibold text-green-900">
+                            <p className="text-sm font-semibold text-success">
                               -{formatCurrency(firstPaydownMonth.helocPayment)}
                             </p>
                           </div>
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-card border border-border rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {tResults("fullPayoff")}
                           </p>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-foreground-secondary">
                             Month {results.heloc.payoffMonths}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-semibold text-green-900">
+                          <p className="text-sm font-semibold text-success">
                             {tResults("debtFree")}
                           </p>
                         </div>
@@ -620,7 +633,7 @@ export default function ResultsDisplay({
               }
             }}
             disabled={isSaving}
-            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+            className="bg-success hover:bg-success/90 disabled:bg-muted text-success-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
           >
             {isSaving ? (
               <>
@@ -711,7 +724,7 @@ export default function ResultsDisplay({
               }
             }
           }}
-          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
         >
           <Icon name="print" size="sm" />
           <span>{tResults("printReport")}</span>
@@ -720,7 +733,7 @@ export default function ResultsDisplay({
         {onNewCalculation && (
           <button
             onClick={onNewCalculation}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
           >
             <Icon name="calculator" size="sm" />
             <span>New Calculation</span>
@@ -729,7 +742,7 @@ export default function ResultsDisplay({
 
         <button
           onClick={() => triggerConfetti({ type: "celebration" })}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+          className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
         >
           <span>🎉</span>
           <span>Celebrate Savings!</span>
@@ -737,17 +750,20 @@ export default function ResultsDisplay({
       </div>
 
       {/* Key Insights with Success Image */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+      <div
+        className="p-6 rounded-lg border border-info-border"
+        style={{ backgroundColor: "rgb(var(--color-info-background))" }}
+      >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Icon name="info" size="sm" className="text-blue-600 mr-2" />
+            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
+              <Icon name="info" size="sm" className="text-info mr-2" />
               Key Insights
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="space-y-2">
-                <p className="text-gray-700">
+                <p className="text-foreground-secondary">
                   <span className="font-medium">
                     {tResults("strategyEffectiveness")}:
                   </span>{" "}
@@ -756,7 +772,7 @@ export default function ResultsDisplay({
                   })}
                 </p>
 
-                <p className="text-gray-700">
+                <p className="text-foreground-secondary">
                   <span className="font-medium">{tResults("timeSaved")}:</span>{" "}
                   {tResults("timeSavingsDescription", {
                     years: results.comparison.timeSavedYears,
@@ -765,7 +781,7 @@ export default function ResultsDisplay({
               </div>
 
               <div className="space-y-2">
-                <p className="text-gray-700">
+                <p className="text-foreground-secondary">
                   <span className="font-medium">
                     {tResults("helocUtilization")}:
                   </span>{" "}
@@ -774,7 +790,7 @@ export default function ResultsDisplay({
                   })}
                 </p>
 
-                <p className="text-gray-700">
+                <p className="text-foreground-secondary">
                   <span className="font-medium">
                     {tResults("interestReduction")}:
                   </span>{" "}
@@ -803,16 +819,19 @@ export default function ResultsDisplay({
       </div>
 
       {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <div
+        className="rounded-lg p-4 border border-warning-border"
+        style={{ backgroundColor: "rgb(var(--color-warning-background))" }}
+      >
         <div className="flex">
           <div className="flex-shrink-0">
-            <Icon name="alert" size="sm" className="text-yellow-400" />
+            <Icon name="alert" size="sm" className="text-warning" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-yellow-800">
+            <h3 className="text-sm font-medium text-warning">
               {tResults("importantDisclaimer")}
             </h3>
-            <div className="mt-2 text-sm text-yellow-700">
+            <div className="mt-2 text-sm text-warning">
               <p>{tResults("disclaimerText")}</p>
             </div>
           </div>
@@ -823,14 +842,19 @@ export default function ResultsDisplay({
       {(saveSuccess || saveError) && (
         <div className="fixed bottom-4 right-4 z-50 max-w-md">
           {saveSuccess && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg">
+            <div
+              className="rounded-lg p-4 shadow-lg border border-success-border"
+              style={{
+                backgroundColor: "rgb(var(--color-success-background))",
+              }}
+            >
               <div className="flex items-center">
                 <Icon
                   name="check-circle"
                   size="sm"
-                  className="text-green-600 mr-2"
+                  className="text-success mr-2"
                 />
-                <p className="text-green-800 font-medium">
+                <p className="text-success font-medium">
                   Scenario saved successfully!
                 </p>
               </div>
@@ -838,10 +862,17 @@ export default function ResultsDisplay({
           )}
 
           {saveError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 shadow-lg">
+            <div
+              className="rounded-lg p-4 shadow-lg border border-destructive"
+              style={{ backgroundColor: "rgb(var(--color-error-background))" }}
+            >
               <div className="flex items-center">
-                <Icon name="x-circle" size="sm" className="text-red-600 mr-2" />
-                <p className="text-red-800">{saveError}</p>
+                <Icon
+                  name="x-circle"
+                  size="sm"
+                  className="text-destructive mr-2"
+                />
+                <p className="text-destructive">{saveError}</p>
               </div>
             </div>
           )}

@@ -202,8 +202,14 @@ export default function DebugPanel({
                         </>
                       )}
                       {debugInfo.auth.authentication?.error && (
-                        <div className="mt-2 p-2 bg-red-50 rounded">
-                          <p className="text-sm text-red-800">
+                        <div
+                          className="mt-2 p-2 rounded"
+                          style={{
+                            backgroundColor:
+                              "rgb(var(--color-error-background))",
+                          }}
+                        >
+                          <p className="text-sm text-destructive">
                             {debugInfo.auth.authentication.error.message}
                           </p>
                         </div>
@@ -266,8 +272,10 @@ export default function DebugPanel({
               {activeTab === "status" && debugInfo.status && (
                 <div className="space-y-4">
                   {/* System Info */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">System</h4>
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">
+                      System
+                    </h4>
                     <div className="space-y-1 text-sm">
                       <div>Node: {debugInfo.status.system?.nodeVersion}</div>
                       <div>Platform: {debugInfo.status.system?.platform}</div>
@@ -286,8 +294,8 @@ export default function DebugPanel({
                   </div>
 
                   {/* Database Status */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">
                       Database
                     </h4>
                     <div className="space-y-1 text-sm">
@@ -305,7 +313,7 @@ export default function DebugPanel({
                         </p>
                       )}
                       {debugInfo.status.database?.poolStats && (
-                        <div className="mt-2 text-xs">
+                        <div className="mt-2 text-xs text-foreground-secondary">
                           <div>
                             Total connections:{" "}
                             {debugInfo.status.database.poolStats.totalCount}

@@ -367,7 +367,7 @@ export function validateMortgageInputs(
       ) {
         const warningMessage = `MIP/PMI may not be required when LTV is ${ltvRatio.toFixed(1)}% (≤80%). Consider removing PMI.`;
         // Log the warning but don't add it to validation errors
-        console.info("PMI Warning:", warningMessage);
+        // Note: PMI warning logged for monitoring
 
         // Report validation warning for monitoring
         reportFormValidationError(
@@ -380,7 +380,7 @@ export function validateMortgageInputs(
       }
     } catch (error) {
       // LTV calculation failed - report this error
-      console.warn("LTV calculation failed during validation:", error);
+      // Note: LTV calculation error logged for monitoring
       errorMonitor.reportCalculationError(
         "ltv",
         {
@@ -548,40 +548,28 @@ export function validateCalculatorInputs(
 ): ValidationResult {
   const errors: ValidationError[] = [];
 
-  console.log("=== API VALIDATION START ===", input);
-
   // Validate mortgage inputs
-  console.log("Validating mortgage inputs...");
   const mortgageValidation = validateMortgageInputs(input);
-  console.log("Mortgage validation result:", mortgageValidation);
   errors.push(...mortgageValidation.errors);
 
   // Validate HELOC inputs only if provided
   if (input.helocLimit !== undefined || input.helocInterestRate !== undefined) {
-    console.log("Validating HELOC inputs...");
     const helocValidation = validateHELOCInputs(input as HELOCValidationInput);
-    console.log("HELOC validation result:", helocValidation);
     errors.push(...helocValidation.errors);
   }
 
   // Validate income inputs
-  console.log("Validating income inputs...");
   const incomeValidation = validateIncomeInputs(input);
-  console.log("Income validation result:", incomeValidation);
   errors.push(...incomeValidation.errors);
 
   // Cross-validation between sections
-  console.log("Performing cross-validation checks...");
 
   if (
     input.helocLimit &&
     input.helocAvailableCredit &&
     input.helocAvailableCredit > input.helocLimit
   ) {
-    console.log("HELOC credit validation failed:", {
-      limit: input.helocLimit,
-      available: input.helocAvailableCredit,
-    });
+    // HELOC credit validation failed
     errors.push({
       field: "helocAvailableCredit",
       message: `Available credit ($${input.helocAvailableCredit.toLocaleString()}) cannot exceed your HELOC limit ($${input.helocLimit.toLocaleString()}). Please check your HELOC statement for the correct amounts.`,
@@ -608,10 +596,6 @@ export function validateCalculatorInputs(
       message: `Scenario name is too long (${input.scenarioName.length} characters). Please use a shorter name (maximum 255 characters).`,
     });
   }
-
-  console.log("=== API VALIDATION END ===");
-  console.log("Total validation errors:", errors.length);
-  console.log("All validation errors:", errors);
 
   return {
     isValid: errors.length === 0,

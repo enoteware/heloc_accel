@@ -73,10 +73,12 @@ export default function CompanySettingsPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <Building className="h-6 w-6 text-gray-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Company Settings</h1>
+          <Building className="h-6 w-6 text-foreground-secondary" />
+          <h1 className="text-2xl font-bold text-foreground">
+            Company Settings
+          </h1>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-foreground-secondary">
           Manage your company information and branding
         </p>
       </div>
@@ -84,9 +86,9 @@ export default function CompanySettingsPage() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-card border border-border shadow rounded-lg">
+          <div className="px-6 py-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">
               Basic Information
             </h2>
           </div>
@@ -95,7 +97,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Company Name *
                 </label>
@@ -104,7 +106,7 @@ export default function CompanySettingsPage() {
                   id="companyName"
                   value={formData.companyName}
                   onChange={(e) => handleChange("companyName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   required
                 />
               </div>
@@ -112,7 +114,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyPhone"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Phone Number *
                 </label>
@@ -121,7 +123,7 @@ export default function CompanySettingsPage() {
                   id="companyPhone"
                   value={formData.companyPhone || ""}
                   onChange={(e) => handleChange("companyPhone", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   placeholder="1-800-HELOC-01"
                   required
                 />
@@ -130,7 +132,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyEmail"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Email Address *
                 </label>
@@ -139,7 +141,7 @@ export default function CompanySettingsPage() {
                   id="companyEmail"
                   value={formData.companyEmail || ""}
                   onChange={(e) => handleChange("companyEmail", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   required
                 />
               </div>
@@ -147,7 +149,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyWebsite"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Website
                 </label>
@@ -158,7 +160,7 @@ export default function CompanySettingsPage() {
                   onChange={(e) =>
                     handleChange("companyWebsite", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   placeholder="https://example.com"
                 />
               </div>
@@ -167,7 +169,7 @@ export default function CompanySettingsPage() {
             <div>
               <label
                 htmlFor="companyAddress"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 Company Address
               </label>
@@ -176,7 +178,7 @@ export default function CompanySettingsPage() {
                 value={formData.companyAddress || ""}
                 onChange={(e) => handleChange("companyAddress", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-default w-full rounded-md"
                 placeholder="123 Main Street, Suite 100&#10;City, State 12345"
               />
             </div>
@@ -184,7 +186,7 @@ export default function CompanySettingsPage() {
             <div>
               <label
                 htmlFor="companyDescription"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 Company Description
               </label>
@@ -195,7 +197,7 @@ export default function CompanySettingsPage() {
                   handleChange("companyDescription", e.target.value)
                 }
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-default w-full rounded-md"
                 placeholder="Brief description of your company and services..."
               />
             </div>
@@ -203,9 +205,9 @@ export default function CompanySettingsPage() {
         </div>
 
         {/* Licensing Information */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-card border border-border shadow rounded-lg">
+          <div className="px-6 py-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">
               Licensing Information
             </h2>
           </div>
@@ -214,7 +216,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyLicenseNumber"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Company License Number
                 </label>
@@ -225,7 +227,7 @@ export default function CompanySettingsPage() {
                   onChange={(e) =>
                     handleChange("companyLicenseNumber", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   placeholder="ML-123456"
                 />
               </div>
@@ -233,7 +235,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="companyNmlsNumber"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   NMLS Number
                 </label>
@@ -244,7 +246,7 @@ export default function CompanySettingsPage() {
                   onChange={(e) =>
                     handleChange("companyNmlsNumber", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-default w-full rounded-md"
                   placeholder="1234567"
                 />
               </div>
@@ -253,15 +255,15 @@ export default function CompanySettingsPage() {
         </div>
 
         {/* Branding */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Branding</h2>
+        <div className="bg-card border border-border shadow rounded-lg">
+          <div className="px-6 py-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">Branding</h2>
           </div>
           <div className="p-6 space-y-4">
             <div>
               <label
                 htmlFor="companyLogoUrl"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground-secondary mb-1"
               >
                 Logo URL
               </label>
@@ -270,7 +272,7 @@ export default function CompanySettingsPage() {
                 id="companyLogoUrl"
                 value={formData.companyLogoUrl || ""}
                 onChange={(e) => handleChange("companyLogoUrl", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-default w-full rounded-md"
                 placeholder="https://example.com/logo.png"
               />
             </div>
@@ -279,7 +281,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="primaryColor"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Primary Color
                 </label>
@@ -291,7 +293,7 @@ export default function CompanySettingsPage() {
                     onChange={(e) =>
                       handleChange("primaryColor", e.target.value)
                     }
-                    className="h-10 w-16 border border-gray-300 rounded-md cursor-pointer"
+                    className="h-10 w-16 border border-border rounded-md cursor-pointer bg-card"
                   />
                   <input
                     type="text"
@@ -299,7 +301,7 @@ export default function CompanySettingsPage() {
                     onChange={(e) =>
                       handleChange("primaryColor", e.target.value)
                     }
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-default flex-1 rounded-md"
                     placeholder="#2563eb"
                   />
                 </div>
@@ -308,7 +310,7 @@ export default function CompanySettingsPage() {
               <div>
                 <label
                   htmlFor="secondaryColor"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-foreground-secondary mb-1"
                 >
                   Secondary Color
                 </label>
@@ -320,7 +322,7 @@ export default function CompanySettingsPage() {
                     onChange={(e) =>
                       handleChange("secondaryColor", e.target.value)
                     }
-                    className="h-10 w-16 border border-gray-300 rounded-md cursor-pointer"
+                    className="h-10 w-16 border border-border rounded-md cursor-pointer bg-card"
                   />
                   <input
                     type="text"
@@ -328,7 +330,7 @@ export default function CompanySettingsPage() {
                     onChange={(e) =>
                       handleChange("secondaryColor", e.target.value)
                     }
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-default flex-1 rounded-md"
                     placeholder="#10b981"
                   />
                 </div>
@@ -342,7 +344,7 @@ export default function CompanySettingsPage() {
           <button
             type="button"
             onClick={() => router.push("/admin")}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors flex items-center gap-2"
+            className="btn-outline px-4 py-2 rounded-md flex items-center gap-2"
           >
             <X className="h-4 w-4" />
             Cancel
@@ -350,7 +352,7 @@ export default function CompanySettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving..." : "Save Changes"}

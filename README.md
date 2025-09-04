@@ -67,10 +67,14 @@ A comprehensive web application for analyzing HELOC (Home Equity Line of Credit)
 5. Run the development server:
 
    ```bash
-   npm run dev
+   npm run dev              # Start development server on port 3001
+   npm run dev:open         # Start server and open browser automatically
+   npm run dev:info         # Display development configuration info
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3001](http://localhost:3001) in your browser.
+
+   > **Note**: This project uses port **3001** to avoid conflicts with other Next.js projects.
 
 ## 🎯 Features
 
@@ -107,6 +111,93 @@ See the deployment documentation for detailed setup instructions.
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
+
+## 🔧 Development Configuration
+
+### Unique Port Setup
+
+This project is configured to run on **port 3001** to avoid conflicts with other Next.js applications:
+
+- **Development**: `http://localhost:3001`
+- **Production**: `http://localhost:3001`
+- **Network Access**: `http://[your-ip]:3001`
+
+### Environment Variables
+
+Key environment variables for port configuration:
+- `PORT=3001`
+- `NEXTAUTH_URL=http://localhost:3001`
+- `CORS_ORIGIN=http://localhost:3001`
+
+### Development Commands
+
+```bash
+# Standard Development
+npm run dev          # Start development server (localhost:3001)
+npm run dev:open     # Start server and open browser
+
+# Custom Domain Development
+npm run domain:setup        # Set up heloc-dev.local domain
+npm run dev:domain          # Start with custom domain
+npm run dev:domain:open     # Start domain server and open browser
+npm run dev:domain:https    # Start with HTTPS (requires setup)
+
+# HTTPS Development
+npm run https:setup         # Generate SSL certificates
+npm run dev:domain:https    # Start HTTPS development server
+
+# Utilities
+npm run dev:info     # Show development configuration
+npm run domain:remove      # Remove custom domain mapping
+npm run build        # Build for production
+npm start            # Start production server
+```
+
+### Custom Domain Setup
+
+The HELOC Accelerator supports custom domain development for a more professional development experience:
+
+#### Quick Setup:
+```bash
+npm run domain:setup        # Configure heloc-dev.local
+npm run dev:domain:open     # Start and open http://heloc-dev.local:3001
+```
+
+#### HTTPS Setup (Optional):
+```bash
+npm run https:setup         # Generate SSL certificates
+npm run dev:domain:https    # Start https://heloc-dev.local:3001
+```
+
+#### Manual Setup (if automated setup fails):
+1. **Add to hosts file** (`/etc/hosts` on macOS/Linux, `C:\Windows\System32\drivers\etc\hosts` on Windows):
+   ```
+   127.0.0.1 heloc-dev.local
+   ```
+
+2. **Start development server**:
+   ```bash
+   npm run dev:domain
+   ```
+
+3. **Access your application**:
+   - HTTP: `http://heloc-dev.local:3001`
+   - HTTPS: `https://heloc-dev.local:3001` (after certificate setup)
+
+### External Domain Access
+
+For mobile testing, team sharing, or external access:
+
+```bash
+# Install ngrok (if not installed)
+brew install ngrok/ngrok/ngrok  # macOS
+npm install -g ngrok            # Cross-platform
+
+# Start tunnel
+npm run tunnel                  # Creates https://xxx.ngrok.io URL
+```
+
+📖 **For comprehensive domain setup instructions, see [Domain Development Guide](docs/DOMAIN_DEVELOPMENT.md)**
 
 ## License
 

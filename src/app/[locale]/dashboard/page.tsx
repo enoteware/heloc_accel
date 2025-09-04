@@ -170,7 +170,7 @@ export default function Dashboard() {
       setShowDeleteConfirmation(false);
       setScenarioToDelete(null);
     } catch (err) {
-      console.error("Error deleting scenario:", err);
+      logError("Dashboard", "Error deleting scenario", err);
       const errorMessage =
         err instanceof Error ? err.message : "Failed to delete scenario";
       setError(errorMessage);
@@ -255,7 +255,7 @@ export default function Dashboard() {
         throw new Error(data.error || "Failed to update sharing settings");
       }
     } catch (err) {
-      console.error("Error updating sharing:", err);
+      logError("Dashboard", "Error updating sharing", err);
       setError("Failed to update sharing settings");
     } finally {
       setSharingLoading(false);
@@ -268,7 +268,7 @@ export default function Dashboard() {
       // You could add a toast notification here
       alert("Share link copied to clipboard!");
     } catch (err) {
-      console.error("Failed to copy:", err);
+      logError("Dashboard", "Failed to copy to clipboard", err);
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
       textArea.value = shareUrl;
@@ -756,12 +756,16 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3 mb-4">
+            <div
+              className="rounded-md p-3 mb-4 border border-info-border"
+              style={{ backgroundColor: "rgb(var(--color-info-background))" }}
+            >
               <div className="flex">
                 <svg
-                  className="w-5 h-5 text-yellow-400 mr-2"
+                  className="w-5 h-5 mr-2"
                   fill="currentColor"
                   viewBox="0 0 20 20"
+                  style={{ color: "rgb(var(--color-info))" }}
                 >
                   <path
                     fillRule="evenodd"
@@ -770,7 +774,7 @@ export default function Dashboard() {
                   />
                 </svg>
                 <div>
-                  <p className="text-sm text-yellow-800">
+                  <p className="text-sm text-info">
                     <strong>Note:</strong> Anyone with this link can view your
                     scenario data. You can disable sharing at any time.
                   </p>
@@ -784,7 +788,7 @@ export default function Dashboard() {
                   toggleScenarioSharing(selectedScenario.id, false);
                   setShareModalOpen(false);
                 }}
-                className="flex-1 safe-neutral-light hover:bg-gray-200 px-4 py-2 rounded-md font-medium transition duration-200"
+                className="flex-1 safe-neutral-light px-4 py-2 rounded-md font-medium transition duration-200"
                 disabled={sharingLoading}
               >
                 Disable Sharing

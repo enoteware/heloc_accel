@@ -15,23 +15,19 @@ export default function LanguageSwitcher() {
   const locale = useLocale();
 
   const handleLanguageChange = (newLocale: string) => {
-    console.log("Current pathname:", pathname);
-    console.log("Switching from", locale, "to", newLocale);
-
     // Manual URL construction to ensure it works
     const currentPath = pathname.replace(/^\/[a-z]{2}/, "") || "/";
     const newUrl = `/${newLocale}${currentPath}`;
 
-    console.log("Navigating to:", newUrl);
     router.push(newUrl);
   };
 
   return (
-    <div className="relative bg-white rounded-md shadow-sm">
+    <div className="relative bg-card border border-border rounded-md shadow-sm">
       <select
         value={locale}
         onChange={(e) => handleLanguageChange(e.target.value)}
-        className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+        className="appearance-none bg-card border border-border rounded-md px-3 py-2 pr-8 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
         aria-label="Select language"
       >
         {languages.map((lang) => (
@@ -40,7 +36,7 @@ export default function LanguageSwitcher() {
           </option>
         ))}
       </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground-secondary">
         <svg
           className="fill-current h-4 w-4"
           xmlns="http://www.w3.org/2000/svg"

@@ -6,6 +6,7 @@ import {
   debugLTVCalculation,
   debugCalculationError,
 } from "./debug-utils";
+import { logWarn } from "./debug-logger";
 
 /**
  * Calculate Loan-to-Value (LTV) ratio
@@ -67,8 +68,9 @@ export function calculateLTV(
 
   // Sanity check - LTV over 200% is likely an error
   if (ltvRatio > 200) {
-    console.warn(
-      `Warning: LTV ratio is ${ltvRatio.toFixed(2)}% which seems unusually high`,
+    logWarn(
+      "Calculation",
+      `LTV ratio is ${ltvRatio.toFixed(2)}% which seems unusually high`,
     );
   }
 
@@ -371,8 +373,9 @@ export function generateAmortizationSchedule(
 
   // Check if the calculation hit the maximum term limit
   if (month > termInMonths && balance > 0.01) {
-    console.warn(
-      `Warning: Loan not fully paid off after ${termInMonths} months. Remaining balance: $${balance.toFixed(2)}`,
+    logWarn(
+      "Calculation",
+      `Loan not fully paid off after ${termInMonths} months. Remaining balance: $${balance.toFixed(2)}`,
     );
   }
 

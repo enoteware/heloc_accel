@@ -37,11 +37,11 @@ const { chromium } = require("playwright");
     );
   });
 
-  console.log("🔍 Checking http://localhost:3000...\n");
+  console.log("🔍 Checking http://localhost:3001...\n");
 
   try {
     // Go to homepage
-    await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+    await page.goto("http://localhost:3001", { waitUntil: "networkidle" });
     console.log("✅ Homepage loaded");
 
     // Wait a bit to catch any delayed errors
@@ -49,7 +49,7 @@ const { chromium } = require("playwright");
 
     // Try to go to calculator
     console.log("\n🔍 Navigating to calculator...");
-    await page.goto("http://localhost:3000/calculator", {
+    await page.goto("http://localhost:3001/calculator", {
       waitUntil: "networkidle",
     });
     console.log("✅ Calculator page loaded");
@@ -68,7 +68,7 @@ const { chromium } = require("playwright");
 
     // Try scenarios page
     console.log("\n🔍 Navigating to scenarios...");
-    await page.goto("http://localhost:3000/scenarios", {
+    await page.goto("http://localhost:3001/scenarios", {
       waitUntil: "networkidle",
     });
     console.log("✅ Scenarios page loaded");

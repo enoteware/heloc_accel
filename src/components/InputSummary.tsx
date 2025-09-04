@@ -194,7 +194,7 @@ ${formData.description ? formData.description : ""}`;
                       <span className="text-sm text-muted-foreground">
                         {t("monthlyPayment")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatCurrency(formData.monthlyPayment)}
                       </span>
                     </div>
@@ -208,16 +208,16 @@ ${formData.description ? formData.description : ""}`;
                   formData.hoaFeesMonthly ||
                   formData.pmiMonthly) && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-2 pb-1 border-b border-gray-200">
+                    <h4 className="text-sm font-medium text-foreground mb-2 pb-1 border-b border-border">
                       {t("propertyInformation")}
                     </h4>
                     <div className="space-y-1.5">
                       {formData.propertyValue && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("propertyValue")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.propertyValue)}
                           </span>
                         </div>
@@ -225,10 +225,10 @@ ${formData.description ? formData.description : ""}`;
                       {formData.propertyValue &&
                         formData.currentMortgageBalance && (
                           <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-foreground-secondary">
                               {t("loanToValue")}
                             </span>
-                            <span className="text-sm font-medium text-gray-900">
+                            <span className="text-sm font-medium text-foreground">
                               {(
                                 (formData.currentMortgageBalance /
                                   formData.propertyValue) *
@@ -240,10 +240,10 @@ ${formData.description ? formData.description : ""}`;
                         )}
                       {formData.propertyTaxMonthly && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("propertyTax")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.propertyTaxMonthly)}/
                             {t("mo")}
                           </span>
@@ -251,10 +251,10 @@ ${formData.description ? formData.description : ""}`;
                       )}
                       {formData.insuranceMonthly && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("insurance")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.insuranceMonthly)}/
                             {t("mo")}
                           </span>
@@ -262,20 +262,20 @@ ${formData.description ? formData.description : ""}`;
                       )}
                       {formData.hoaFeesMonthly && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("hoaFees")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.hoaFeesMonthly)}/{t("mo")}
                           </span>
                         </div>
                       )}
                       {formData.pmiMonthly && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("mipPmi")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.pmiMonthly)}/{t("mo")}
                           </span>
                         </div>
@@ -287,32 +287,32 @@ ${formData.description ? formData.description : ""}`;
                 {/* HELOC Details */}
                 {(formData.helocLimit || formData.helocInterestRate) && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-2 pb-1 border-b border-gray-200">
+                    <h4 className="text-sm font-medium text-foreground mb-2 pb-1 border-b border-border">
                       {t("helocDetails")}
                     </h4>
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-foreground-secondary">
                           {t("creditLimit")}
                         </span>
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-foreground">
                           {formatCurrency(formData.helocLimit)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-foreground-secondary">
                           {t("interestRate")}
                         </span>
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-foreground">
                           {formatPercent(formData.helocInterestRate)}
                         </span>
                       </div>
                       {formData.helocAvailableCredit !== undefined && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-foreground-secondary">
                             {t("availableCredit")}
                           </span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {formatCurrency(formData.helocAvailableCredit)}
                           </span>
                         </div>
@@ -323,39 +323,39 @@ ${formData.description ? formData.description : ""}`;
 
                 {/* Income & Expenses */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2 pb-1 border-b border-gray-200">
+                  <h4 className="text-sm font-medium text-foreground mb-2 pb-1 border-b border-border">
                     {t("incomeExpenses")}
                   </h4>
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-foreground-secondary">
                         {t("grossIncome")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatCurrency(formData.monthlyGrossIncome)}/{t("mo")}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-foreground-secondary">
                         {t("netIncome")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatCurrency(formData.monthlyNetIncome)}/{t("mo")}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-foreground-secondary">
                         {t("monthlyExpenses")}
                       </span>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {formatCurrency(formData.monthlyExpenses)}/{t("mo")}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center pt-1 border-t border-gray-100">
-                      <span className="text-sm font-medium text-gray-700">
+                    <div className="flex justify-between items-center pt-1 border-t border-border">
+                      <span className="text-sm font-medium text-foreground">
                         {t("discretionaryIncome")}
                       </span>
-                      <span className="text-sm font-bold text-blue-600">
+                      <span className="text-sm font-bold text-info">
                         {formatCurrency(formData.monthlyDiscretionaryIncome)}/
                         {t("mo")}
                       </span>
@@ -365,17 +365,17 @@ ${formData.description ? formData.description : ""}`;
 
                 {/* Scenario Info */}
                 {formData.scenarioName && (
-                  <div className="pt-3 mt-3 border-t border-gray-200">
+                  <div className="pt-3 mt-3 border-t border-border">
                     <div className="text-sm">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-foreground">
                         Scenario:{" "}
                       </span>
-                      <span className="text-gray-900">
+                      <span className="text-foreground">
                         {formData.scenarioName}
                       </span>
                     </div>
                     {formData.description && (
-                      <p className="text-xs text-gray-600 mt-1">
+                      <p className="text-xs text-foreground-secondary mt-1">
                         {formData.description}
                       </p>
                     )}
@@ -383,11 +383,11 @@ ${formData.description ? formData.description : ""}`;
                 )}
 
                 {/* Copy Button */}
-                <div className="pt-3 mt-3 border-t border-gray-200">
+                <div className="pt-3 mt-3 border-t border-border">
                   <button
                     id="copy-summary-btn"
                     onClick={copyToClipboard}
-                    className="w-full px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
+                    className="w-full px-3 py-2 text-sm text-info hover:underline hover:bg-info-background rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <svg
                       className="w-4 h-4"

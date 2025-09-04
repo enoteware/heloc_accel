@@ -1,4 +1,5 @@
 // Error handling utilities for HELOC Accelerator
+import { logWarn, logError } from "./debug-logger";
 
 export class CalculationError extends Error {
   constructor(
@@ -105,7 +106,10 @@ export function validateHELOCInputs(inputs: any): void {
   // Check HELOC limit vs mortgage balance
   if (inputs.helocLimit && inputs.mortgageBalance) {
     if (inputs.helocLimit > inputs.mortgageBalance * 2) {
-      console.warn("HELOC limit is very high relative to mortgage balance");
+      logWarn(
+        "Validation",
+        "HELOC limit is very high relative to mortgage balance",
+      );
     }
   }
 
@@ -122,7 +126,8 @@ export function validateHELOCInputs(inputs: any): void {
   if (inputs.helocRate && inputs.mortgageRate) {
     if (inputs.helocRate > inputs.mortgageRate + 0.1) {
       // 10% higher
-      console.warn(
+      logWarn(
+        "Validation",
         "HELOC rate is significantly higher than mortgage rate - strategy may not be beneficial",
       );
     }
@@ -230,11 +235,11 @@ export function recoverFromCalculationError(
   error: Error,
   fallbackValue?: any,
 ): any {
-  console.error("Calculation error occurred:", error);
+  logError("Calculation", "Calculation error occurred", error);
 
   if (error instanceof CalculationError) {
     // Log specific calculation errors for debugging
-    console.error("Calculation Error Details:", {
+    logError("Calculation", "Calculation Error Details", {
       code: error.code,
       details: error.details,
       message: error.message,

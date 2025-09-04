@@ -89,52 +89,54 @@ export default function DocumentsPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <FileText className="h-6 w-6 text-gray-600" />
-          <h1 className="text-2xl font-bold text-gray-900">
+          <FileText className="h-6 w-6 text-foreground-secondary" />
+          <h1 className="text-2xl font-bold text-foreground">
             Documents & Data Export
           </h1>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-foreground-secondary">
           Export your data or manage company documents
         </p>
       </div>
 
       {/* Export Section */}
-      <div className="bg-white shadow rounded-lg mb-6">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Data Export</h2>
+      <div className="bg-card border border-border shadow rounded-lg mb-6">
+        <div className="px-6 py-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">Data Export</h2>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-border rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium text-gray-900">Agents</h3>
-                <FileText className="h-5 w-5 text-gray-400" />
+                <h3 className="font-medium text-foreground">Agents</h3>
+                <FileText className="h-5 w-5 text-foreground-muted" />
               </div>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-foreground-secondary mb-4">
                 Export all agent information including contact details and
                 specialties
               </p>
               <button
                 onClick={handleExportAgents}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 btn-primary rounded-md"
               >
                 <Download className="h-4 w-4" />
                 Export Agents CSV
               </button>
             </div>
 
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-border rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium text-gray-900">User Assignments</h3>
-                <FileText className="h-5 w-5 text-gray-400" />
+                <h3 className="font-medium text-foreground">
+                  User Assignments
+                </h3>
+                <FileText className="h-5 w-5 text-foreground-muted" />
               </div>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-foreground-secondary mb-4">
                 Export all user-agent assignments for record keeping
               </p>
               <button
                 onClick={handleExportAssignments}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 btn-primary rounded-md"
               >
                 <Download className="h-4 w-4" />
                 Export Assignments CSV
@@ -145,17 +147,17 @@ export default function DocumentsPage() {
       </div>
 
       {/* Import Section */}
-      <div className="bg-white shadow rounded-lg mb-6">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Data Import</h2>
+      <div className="bg-card border border-border shadow rounded-lg mb-6">
+        <div className="px-6 py-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">Data Import</h2>
         </div>
         <div className="p-6">
-          <div className="border border-gray-200 rounded-lg p-4">
+          <div className="border border-border rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-medium text-gray-900">Import Agents</h3>
-              <Upload className="h-5 w-5 text-gray-400" />
+              <h3 className="font-medium text-foreground">Import Agents</h3>
+              <Upload className="h-5 w-5 text-foreground-muted" />
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-foreground-secondary mb-4">
               Upload a CSV file to bulk import agents. The CSV should include
               columns for: First Name, Last Name, Title, Email, Phone, etc.
             </p>
@@ -169,7 +171,7 @@ export default function DocumentsPage() {
             />
             <label
               htmlFor="agent-import"
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 btn-primary rounded-md transition-colors cursor-pointer"
             >
               <Upload className="h-4 w-4" />
               {importing ? "Importing..." : "Import Agents CSV"}
@@ -179,22 +181,22 @@ export default function DocumentsPage() {
       </div>
 
       {/* Document Templates */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card border border-border shadow rounded-lg">
+        <div className="px-6 py-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">
             Document Templates
           </h2>
         </div>
         <div className="p-6">
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between p-3 border border-border rounded-lg">
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-gray-400" />
+                <FileText className="h-5 w-5 text-foreground-muted" />
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-foreground">
                     Agent Import Template
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-foreground-secondary">
                     CSV template for bulk agent import
                   </p>
                 </div>
@@ -214,59 +216,57 @@ export default function DocumentsPage() {
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                className="text-blue-600 hover:text-blue-700"
+                className="safe-link"
               >
                 Download
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between p-3 border border-border rounded-lg">
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-gray-400" />
+                <FileText className="h-5 w-5 text-foreground-muted" />
                 <div>
-                  <p className="font-medium text-gray-900">Privacy Policy</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">Privacy Policy</p>
+                  <p className="text-sm text-foreground-secondary">
                     Company privacy policy document
                   </p>
                 </div>
               </div>
-              <button className="text-blue-600 hover:text-blue-700">
-                Edit
-              </button>
+              <button className="safe-link">Edit</button>
             </div>
 
-            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between p-3 border border-border rounded-lg">
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-gray-400" />
+                <FileText className="h-5 w-5 text-foreground-muted" />
                 <div>
-                  <p className="font-medium text-gray-900">Terms of Service</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">
+                    Terms of Service
+                  </p>
+                  <p className="text-sm text-foreground-secondary">
                     Company terms and conditions
                   </p>
                 </div>
               </div>
-              <button className="text-blue-600 hover:text-blue-700">
-                Edit
-              </button>
+              <button className="safe-link">Edit</button>
             </div>
 
-            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between p-3 border border-border rounded-lg">
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-gray-400" />
+                <FileText className="h-5 w-5 text-foreground-muted" />
                 <div>
-                  <p className="font-medium text-gray-900">HELOC Disclosure</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">
+                    HELOC Disclosure
+                  </p>
+                  <p className="text-sm text-foreground-secondary">
                     Required HELOC disclosure statement
                   </p>
                 </div>
               </div>
-              <button className="text-blue-600 hover:text-blue-700">
-                Edit
-              </button>
+              <button className="safe-link">Edit</button>
             </div>
           </div>
 
-          <button className="mt-4 flex items-center gap-2 text-blue-600 hover:text-blue-700">
+          <button className="mt-4 flex items-center gap-2 safe-link">
             <Plus className="h-4 w-4" />
             Add New Document
           </button>

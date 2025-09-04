@@ -72,6 +72,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                 size="md"
                 showText={true}
                 clickable={true}
+                priority={true}
                 className="hover:opacity-80 transition-opacity duration-200"
               />
             </div>

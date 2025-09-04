@@ -4,11 +4,11 @@ import React from "react";
 
 export default function Disclaimer() {
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+    <div className="bg-card border border-border rounded-lg p-6">
       <div className="flex">
         <div className="flex-shrink-0">
           <svg
-            className="h-5 w-5 text-gray-400"
+            className="h-5 w-5 text-foreground-muted"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -20,10 +20,10 @@ export default function Disclaimer() {
           </svg>
         </div>
         <div className="ml-3 flex-1">
-          <h3 className="text-sm font-medium text-gray-700">
+          <h3 className="text-sm font-medium text-foreground">
             Important Disclaimer
           </h3>
-          <div className="mt-2 text-sm text-gray-600">
+          <div className="mt-2 text-sm text-foreground-secondary">
             <p>
               This calculator is for{" "}
               <strong>informational and educational purposes only</strong>. The
@@ -72,7 +72,7 @@ export default function Disclaimer() {
 
 export function CompactDisclaimer() {
   return (
-    <div className="text-xs text-gray-500 text-center mt-4">
+    <div className="text-xs text-foreground-muted text-center mt-4">
       <p>
         <svg
           className="inline h-3 w-3 mr-1"
@@ -86,7 +86,7 @@ export function CompactDisclaimer() {
           />
         </svg>
         For informational purposes only. Not financial advice.
-        <a href="#disclaimer" className="underline hover:text-gray-700">
+        <a href="#disclaimer" className="underline hover:text-foreground">
           See full disclaimer
         </a>
       </p>

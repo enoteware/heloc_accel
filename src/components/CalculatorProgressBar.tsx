@@ -9,8 +9,8 @@ const SectionCheckbox: React.FC<{ isComplete: boolean; color: string }> = ({
   <div
     className={`inline-flex items-center justify-center w-5 h-5 rounded-full border-2 transition-all duration-300 ${
       isComplete
-        ? `bg-white border-current ${color} shadow-sm`
-        : "bg-gray-100 border-gray-300"
+        ? `bg-card border-current ${color} shadow-sm`
+        : "bg-muted border-border"
     }`}
   >
     {isComplete && (
@@ -81,42 +81,42 @@ export const CalculatorProgressBar: React.FC<ProgressBarProps> = ({
     {
       name: "Mortgage Info",
       progress: mortgageProgress,
-      color: "bg-blue-500",
-      lightColor: "bg-blue-100",
-      checkColor: "text-blue-600",
+      color: "bg-info",
+      lightColor: "bg-[rgb(var(--color-info-background))]",
+      checkColor: "text-info",
       isComplete: mortgageProgress === 100,
     },
     {
       name: "HELOC Info",
       progress: helocProgress,
-      color: "bg-green-500",
-      lightColor: "bg-green-100",
-      checkColor: "text-green-600",
+      color: "bg-success",
+      lightColor: "bg-[rgb(var(--color-success-background))]",
+      checkColor: "text-success",
       isComplete: helocProgress === 100,
     },
     {
       name: "Income & Expenses",
       progress: incomeProgress,
-      color: "bg-purple-500",
-      lightColor: "bg-purple-100",
-      checkColor: "text-purple-600",
+      color: "bg-accent",
+      lightColor: "bg-[rgb(var(--color-accent-foreground))]/10",
+      checkColor: "text-accent",
       isComplete: incomeProgress === 100,
     },
   ];
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div className="bg-card p-4 rounded-lg shadow-sm border border-border mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-medium text-gray-700">Form Completion</h4>
-        <span className="text-sm font-semibold text-gray-900">
+        <h4 className="text-sm font-medium text-foreground">Form Completion</h4>
+        <span className="text-sm font-semibold text-foreground">
           {Math.round(overallProgress)}%
         </span>
       </div>
 
       {/* Overall Progress Bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+      <div className="w-full bg-muted rounded-full h-2 mb-4">
         <div
-          className="bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 h-2 rounded-full transition-all duration-300 ease-in-out"
+          className="bg-gradient-to-r from-info via-success to-accent h-2 rounded-full transition-all duration-300 ease-in-out"
           style={{ width: `${overallProgress}%` }}
         />
       </div>
@@ -140,7 +140,9 @@ export const CalculatorProgressBar: React.FC<ProgressBarProps> = ({
               />
               <div
                 className={`font-medium transition-colors duration-200 ${
-                  section.isComplete ? section.checkColor : "text-gray-600"
+                  section.isComplete
+                    ? section.checkColor
+                    : "text-foreground-secondary"
                 }`}
               >
                 {section.name}
@@ -148,7 +150,9 @@ export const CalculatorProgressBar: React.FC<ProgressBarProps> = ({
             </div>
             <div
               className={`transition-colors duration-200 ${
-                section.isComplete ? section.checkColor : "text-gray-500"
+                section.isComplete
+                  ? section.checkColor
+                  : "text-foreground-muted"
               }`}
             >
               {Math.round(section.progress)}%
@@ -159,7 +163,7 @@ export const CalculatorProgressBar: React.FC<ProgressBarProps> = ({
 
       {/* Helpful Message */}
       {overallProgress < 100 && (
-        <div className="mt-3 text-xs text-gray-500 text-center">
+        <div className="mt-3 text-xs text-foreground-muted text-center">
           {overallProgress < 50
             ? "Fill in the required fields to get started"
             : "You're almost ready to calculate your HELOC strategy!"}

@@ -133,7 +133,7 @@ export default function LiveDebugLogger() {
     return (
       <button
         onClick={() => setIsVisible(true)}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white px-3 py-2 rounded text-sm z-50"
+        className="fixed bottom-4 right-4 bg-info text-info-foreground px-3 py-2 rounded text-sm z-50 hover:bg-info/90"
       >
         Show Debug Logs
       </button>
@@ -141,12 +141,12 @@ export default function LiveDebugLogger() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-lg max-w-md w-80 max-h-96 overflow-hidden z-50">
+    <div className="fixed bottom-4 right-4 bg-card text-foreground border border-border p-4 rounded-lg max-w-md w-80 max-h-96 overflow-hidden z-50">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-sm font-bold">Live Debug Logs</h3>
         <button
           onClick={() => setIsVisible(false)}
-          className="text-gray-300 hover:text-white text-xs"
+          className="text-foreground-muted hover:text-foreground text-xs"
         >
           ✕
         </button>
@@ -154,20 +154,20 @@ export default function LiveDebugLogger() {
 
       <div className="space-y-1 text-xs font-mono overflow-y-auto max-h-80">
         {logs.length === 0 ? (
-          <div className="text-gray-400">No debug logs yet...</div>
+          <div className="text-foreground-muted">No debug logs yet...</div>
         ) : (
           logs.map((log) => (
             <div
               key={log.id}
               className={`p-1 rounded text-xs ${
                 log.level === "error"
-                  ? "bg-red-900 text-red-200"
+                  ? "bg-destructive/15 text-destructive"
                   : log.level === "warn"
-                    ? "bg-yellow-900 text-yellow-200"
-                    : "bg-gray-800 text-gray-200"
+                    ? "bg-warning/15 text-warning"
+                    : "bg-muted text-foreground"
               }`}
             >
-              <div className="text-gray-400">{log.timestamp}</div>
+              <div className="text-foreground-muted">{log.timestamp}</div>
               <div className="break-words">{log.message}</div>
             </div>
           ))
@@ -179,7 +179,7 @@ export default function LiveDebugLogger() {
           logs.length = 0; // Clear the global logs array
           setLogs([]); // Clear the component state
         }}
-        className="mt-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded"
+        className="mt-2 text-xs bg-muted hover:bg-muted/80 text-foreground px-2 py-1 rounded"
       >
         Clear Logs
       </button>

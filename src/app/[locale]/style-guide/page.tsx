@@ -56,7 +56,7 @@ export default function StyleGuidePage() {
         {showCode === title ? "Hide" : "Show"} Code
       </button>
       {showCode === title && (
-        <pre className="mt-2 p-4 bg-neutral-900 text-neutral-100 rounded-lg overflow-x-auto text-sm">
+        <pre className="mt-2 p-4 bg-popover text-popover-foreground rounded-lg overflow-x-auto text-sm">
           <code>{code}</code>
         </pre>
       )}
@@ -64,18 +64,16 @@ export default function StyleGuidePage() {
   );
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors">
+    <div className="min-h-screen bg-background transition-colors">
       {/* Header */}
-      <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Logo size="md" showText={false} clickable={false} />
               <div>
-                <h1 className="text-h1 text-neutral-900 dark:text-neutral-100">
-                  Design System
-                </h1>
-                <p className="text-body-lg text-neutral-600 dark:text-neutral-400 mt-2">
+                <h1 className="text-h1 text-foreground">Design System</h1>
+                <p className="text-body-lg text-foreground-secondary mt-2">
                   Comprehensive style guide and component library for HELOC
                   Accelerator
                 </p>
@@ -97,105 +95,99 @@ export default function StyleGuidePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <a
-                href="#logo"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-              >
+              <a href="#logo" className="text-primary hover:text-primary-hover">
                 Logo
               </a>
               <a
                 href="#colors"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Colors
               </a>
               <a
                 href="#typography"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Typography
               </a>
               <a
                 href="#spacing"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Spacing
               </a>
               <a
                 href="#buttons"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Buttons
               </a>
               <a
                 href="#forms"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Form Elements
               </a>
               <a
                 href="#advanced-forms"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Advanced Forms
               </a>
               <a
                 href="#cards"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Cards
               </a>
               <a
                 href="#badges"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Badges
               </a>
               <a
                 href="#alerts"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Alerts
               </a>
               <a
                 href="#modals"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Modals
               </a>
               <a
                 href="#dropdowns"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Dropdowns
               </a>
-              <a
-                href="#tabs"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-              >
+              <a href="#tabs" className="text-primary hover:text-primary-hover">
                 Tabs
               </a>
               <a
                 href="#progress"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Progress
               </a>
               <a
                 href="#tooltips"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Tooltips
               </a>
               <a
                 href="#animations"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Animations
               </a>
               <a
                 href="#theme"
-                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                className="text-primary hover:text-primary-hover"
               >
                 Dark Mode
               </a>
@@ -205,7 +197,7 @@ export default function StyleGuidePage() {
 
         {/* Logo Section */}
         <section id="logo" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Logo</h2>
+          <h2 className="text-h2 text-foreground mb-6">Logo</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Logo Variants */}
@@ -220,7 +212,7 @@ export default function StyleGuidePage() {
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-body font-medium mb-3">Default Logo</h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo
                         variant="default"
                         size="lg"
@@ -233,7 +225,7 @@ export default function StyleGuidePage() {
                     <h4 className="text-body font-medium mb-3">
                       Logo with Text
                     </h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo
                         variant="default"
                         size="md"
@@ -246,7 +238,7 @@ export default function StyleGuidePage() {
                     <h4 className="text-body font-medium mb-3">
                       White Logo (on dark background)
                     </h4>
-                    <div className="p-4 bg-neutral-800 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo
                         variant="white"
                         size="lg"
@@ -271,7 +263,7 @@ export default function StyleGuidePage() {
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-body font-medium mb-3">Small (32px)</h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo size="sm" showText={false} clickable={false} />
                     </div>
                   </div>
@@ -279,13 +271,13 @@ export default function StyleGuidePage() {
                     <h4 className="text-body font-medium mb-3">
                       Medium (48px)
                     </h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo size="md" showText={false} clickable={false} />
                     </div>
                   </div>
                   <div>
                     <h4 className="text-body font-medium mb-3">Large (64px)</h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo size="lg" showText={false} clickable={false} />
                     </div>
                   </div>
@@ -293,7 +285,7 @@ export default function StyleGuidePage() {
                     <h4 className="text-body font-medium mb-3">
                       Extra Large (96px)
                     </h4>
-                    <div className="p-4 bg-neutral-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <Logo size="xl" showText={false} clickable={false} />
                     </div>
                   </div>
@@ -331,7 +323,7 @@ export default function StyleGuidePage() {
 
         {/* Colors Section */}
         <section id="colors" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Colors</h2>
+          <h2 className="text-h2 text-foreground mb-6">Colors</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Primary Colors */}
@@ -401,13 +393,13 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border-neutral-200`}
+                        className={`w-8 h-8 rounded ${color.class} border border`}
                       ></div>
                       <div>
                         <div className="text-body-sm font-medium">
                           {color.name}
                         </div>
-                        <div className="text-caption text-neutral-500">
+                        <div className="text-caption text-muted-foreground">
                           {color.value}
                         </div>
                       </div>
@@ -482,13 +474,13 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border-neutral-200`}
+                        className={`w-8 h-8 rounded ${color.class} border border`}
                       ></div>
                       <div>
                         <div className="text-body-sm font-medium">
                           {color.name}
                         </div>
-                        <div className="text-caption text-neutral-500">
+                        <div className="text-caption text-muted-foreground">
                           {color.value}
                         </div>
                       </div>
@@ -512,52 +504,52 @@ export default function StyleGuidePage() {
                     {
                       name: "Neutral 50",
                       value: "#fffefe",
-                      class: "bg-neutral-50",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 100",
                       value: "#f7fafc",
-                      class: "bg-neutral-100",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 200",
                       value: "#edf2f7",
-                      class: "bg-neutral-200",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 300",
                       value: "#e2e8f0",
-                      class: "bg-neutral-300",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 400",
                       value: "#cbd5e0",
-                      class: "bg-neutral-400",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 500",
                       value: "#a0aec0",
-                      class: "bg-neutral-500",
+                      class: "bg-muted0",
                     },
                     {
                       name: "Neutral 600",
                       value: "#80828e",
-                      class: "bg-neutral-600",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 700",
                       value: "#4a5568",
-                      class: "bg-neutral-700",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 800",
                       value: "#2d3748",
-                      class: "bg-neutral-800",
+                      class: "bg-muted",
                     },
                     {
                       name: "Neutral 900",
                       value: "#1a202c",
-                      class: "bg-neutral-900",
+                      class: "bg-muted",
                     },
                   ].map((color) => (
                     <div
@@ -565,13 +557,13 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border-neutral-200`}
+                        className={`w-8 h-8 rounded ${color.class} border border`}
                       ></div>
                       <div>
                         <div className="text-body-sm font-medium">
                           {color.name}
                         </div>
-                        <div className="text-caption text-neutral-500">
+                        <div className="text-caption text-muted-foreground">
                           {color.value}
                         </div>
                       </div>
@@ -585,7 +577,7 @@ export default function StyleGuidePage() {
 
         {/* Typography Section */}
         <section id="typography" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Typography</h2>
+          <h2 className="text-h2 text-foreground mb-6">Typography</h2>
 
           <Card>
             <CardHeader>
@@ -597,76 +589,76 @@ export default function StyleGuidePage() {
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <div className="text-display text-neutral-900">
+                  <div className="text-display text-foreground">
                     Display Text
                   </div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-caption text-muted-foreground">
                     3.5rem (56px) / Line height: 1.1 / Weight: 700
                   </div>
                 </div>
                 <div>
-                  <div className="text-h1 text-neutral-900">Heading 1</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h1 text-foreground">Heading 1</div>
+                  <div className="text-caption text-muted-foreground">
                     3rem (48px) / Line height: 1.2 / Weight: 700
                   </div>
                 </div>
                 <div>
-                  <div className="text-h2 text-neutral-900">Heading 2</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h2 text-foreground">Heading 2</div>
+                  <div className="text-caption text-muted-foreground">
                     2.25rem (36px) / Line height: 1.3 / Weight: 600
                   </div>
                 </div>
                 <div>
-                  <div className="text-h3 text-neutral-900">Heading 3</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h3 text-foreground">Heading 3</div>
+                  <div className="text-caption text-muted-foreground">
                     1.875rem (30px) / Line height: 1.3 / Weight: 600
                   </div>
                 </div>
                 <div>
-                  <div className="text-h4 text-neutral-900">Heading 4</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h4 text-foreground">Heading 4</div>
+                  <div className="text-caption text-muted-foreground">
                     1.5rem (24px) / Line height: 1.4 / Weight: 600
                   </div>
                 </div>
                 <div>
-                  <div className="text-h5 text-neutral-900">Heading 5</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h5 text-foreground">Heading 5</div>
+                  <div className="text-caption text-muted-foreground">
                     1.25rem (20px) / Line height: 1.4 / Weight: 500
                   </div>
                 </div>
                 <div>
-                  <div className="text-h6 text-neutral-900">Heading 6</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-h6 text-foreground">Heading 6</div>
+                  <div className="text-caption text-muted-foreground">
                     1.125rem (18px) / Line height: 1.4 / Weight: 500
                   </div>
                 </div>
                 <div>
-                  <div className="text-body-lg text-neutral-900">
+                  <div className="text-body-lg text-foreground">
                     Body Large Text
                   </div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-caption text-muted-foreground">
                     1.125rem (18px) / Line height: 1.6 / Weight: 400
                   </div>
                 </div>
                 <div>
-                  <div className="text-body text-neutral-900">Body Text</div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-body text-foreground">Body Text</div>
+                  <div className="text-caption text-muted-foreground">
                     1rem (16px) / Line height: 1.6 / Weight: 400
                   </div>
                 </div>
                 <div>
-                  <div className="text-body-sm text-neutral-900">
+                  <div className="text-body-sm text-foreground">
                     Body Small Text
                   </div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-caption text-muted-foreground">
                     0.875rem (14px) / Line height: 1.5 / Weight: 400
                   </div>
                 </div>
                 <div>
-                  <div className="text-caption text-neutral-900">
+                  <div className="text-caption text-foreground">
                     Caption Text
                   </div>
-                  <div className="text-caption text-neutral-500">
+                  <div className="text-caption text-muted-foreground">
                     0.75rem (12px) / Line height: 1.4 / Weight: 400
                   </div>
                 </div>
@@ -722,7 +714,7 @@ export default function StyleGuidePage() {
 
         {/* Buttons Section */}
         <section id="buttons" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Buttons</h2>
+          <h2 className="text-h2 text-foreground mb-6">Buttons</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card>
@@ -791,7 +783,7 @@ export default function StyleGuidePage() {
 
         {/* Forms Section */}
         <section id="forms" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Form Elements</h2>
+          <h2 className="text-h2 text-foreground mb-6">Form Elements</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card>
@@ -958,7 +950,7 @@ export default function StyleGuidePage() {
 
         {/* Cards Section */}
         <section id="cards" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Cards</h2>
+          <h2 className="text-h2 text-foreground mb-6">Cards</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <Card variant="default">
@@ -969,7 +961,7 @@ export default function StyleGuidePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-body text-neutral-600">
+                <p className="text-body text-foreground-secondary">
                   This is the content area of the card. You can put any content
                   here.
                 </p>
@@ -985,7 +977,7 @@ export default function StyleGuidePage() {
                 <CardDescription>A card with shadow elevation</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-body text-neutral-600">
+                <p className="text-body text-foreground-secondary">
                   This card has a shadow to create depth and visual hierarchy.
                 </p>
               </CardContent>
@@ -1002,7 +994,7 @@ export default function StyleGuidePage() {
                 <CardDescription>A card with prominent border</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-body text-neutral-600">
+                <p className="text-body text-foreground-secondary">
                   This card uses a thicker border for emphasis.
                 </p>
               </CardContent>
@@ -1033,7 +1025,7 @@ export default function StyleGuidePage() {
 
         {/* Badges Section */}
         <section id="badges" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Badges</h2>
+          <h2 className="text-h2 text-foreground mb-6">Badges</h2>
 
           <Card>
             <CardHeader>
@@ -1043,7 +1035,7 @@ export default function StyleGuidePage() {
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-h6 text-neutral-900 mb-3">Variants</h4>
+                  <h4 className="text-h6 text-foreground mb-3">Variants</h4>
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="default">Default</Badge>
                     <Badge variant="primary">Primary</Badge>
@@ -1056,7 +1048,7 @@ export default function StyleGuidePage() {
                 </div>
 
                 <div>
-                  <h4 className="text-h6 text-neutral-900 mb-3">Sizes</h4>
+                  <h4 className="text-h6 text-foreground mb-3">Sizes</h4>
                   <div className="flex flex-wrap items-center gap-3">
                     <Badge size="sm" variant="primary">
                       Small
@@ -1084,7 +1076,7 @@ export default function StyleGuidePage() {
 
         {/* Alerts Section */}
         <section id="alerts" className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Alerts</h2>
+          <h2 className="text-h2 text-foreground mb-6">Alerts</h2>
 
           <div className="space-y-6">
             <Alert variant="info" title="Information">
@@ -1135,7 +1127,7 @@ export default function StyleGuidePage() {
 
         {/* Usage Guidelines */}
         <section className="mb-12">
-          <h2 className="text-h2 text-neutral-900 mb-6">Usage Guidelines</h2>
+          <h2 className="text-h2 text-foreground mb-6">Usage Guidelines</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card>
@@ -1146,7 +1138,7 @@ export default function StyleGuidePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-body text-neutral-700">
+                <ul className="space-y-2 text-body text-foreground-secondary">
                   <li>
                     • All colors meet WCAG AA contrast requirements (4.5:1
                     minimum)
@@ -1169,19 +1161,19 @@ export default function StyleGuidePage() {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <h5 className="text-h6 text-neutral-900 mb-2">
+                    <h5 className="text-h6 text-foreground mb-2">
                       Import Components
                     </h5>
-                    <pre className="p-3 bg-neutral-100 rounded text-body-sm">
+                    <pre className="p-3 bg-muted rounded text-body-sm">
                       <code>{`import { Button, Input, Card } from '@/components/design-system';`}</code>
                     </pre>
                   </div>
                   <div>
-                    <h5 className="text-h6 text-neutral-900 mb-2">
+                    <h5 className="text-h6 text-foreground mb-2">
                       Use Tailwind Classes
                     </h5>
-                    <pre className="p-3 bg-neutral-100 rounded text-body-sm">
-                      <code>{`className="text-primary-600 bg-neutral-50"`}</code>
+                    <pre className="p-3 bg-muted rounded text-body-sm">
+                      <code>{`className="text-primary-600 bg-muted"`}</code>
                     </pre>
                   </div>
                 </div>

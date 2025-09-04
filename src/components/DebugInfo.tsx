@@ -16,21 +16,33 @@ export default function DebugInfo() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 bg-black bg-opacity-80 text-white p-3 rounded-lg text-xs font-mono z-50 max-w-xs">
-      <div className="font-bold mb-2 text-green-400">🐛 Debug Info</div>
+    <div className="fixed bottom-4 left-4 bg-card text-foreground border border-border p-3 rounded-lg text-xs font-mono z-50 max-w-xs">
+      <div className="font-bold mb-2">🐛 Debug Info</div>
       <div className="space-y-1">
         <div>
-          <span className="text-blue-300">Locale:</span> {locale}
+          <span className="text-foreground-secondary">Locale:</span> {locale}
         </div>
         <div>
-          <span className="text-blue-300">Pathname:</span> {pathname}
+          <span className="text-foreground-secondary">Pathname:</span>{" "}
+          {pathname}
         </div>
         <div>
-          <span className="text-blue-300">URL:</span>{" "}
-          {typeof window !== "undefined" ? window.location.href : "SSR"}
+          <span className="text-foreground-secondary">URL:</span>{" "}
+          {typeof window !== "undefined" ? (
+            <a
+              className="safe-link"
+              href={window.location.href}
+              rel="noreferrer"
+            >
+              {window.location.href}
+            </a>
+          ) : (
+            "SSR"
+          )}
         </div>
         <div>
-          <span className="text-blue-300">Env:</span> {process.env.NODE_ENV}
+          <span className="text-foreground-secondary">Env:</span>{" "}
+          {process.env.NODE_ENV}
         </div>
       </div>
     </div>

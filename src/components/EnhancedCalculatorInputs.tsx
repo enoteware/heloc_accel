@@ -25,7 +25,7 @@ interface EnhancedInputProps {
 const InfoIcon = ({ tooltip }: { tooltip?: string }) => (
   <div className="group relative">
     <svg
-      className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help"
+      className="w-4 h-4 text-foreground-muted hover:text-foreground cursor-help"
       fill="currentColor"
       viewBox="0 0 20 20"
     >
@@ -36,9 +36,9 @@ const InfoIcon = ({ tooltip }: { tooltip?: string }) => (
       />
     </svg>
     {tooltip && (
-      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10 bg-[rgb(var(--color-foreground))] text-[rgb(var(--color-foreground-inverse))]">
         {tooltip}
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-[rgb(var(--color-foreground))]"></div>
       </div>
     )}
   </div>
@@ -98,13 +98,13 @@ export const EnhancedCurrencyInput: React.FC<EnhancedInputProps> = ({
   const isEmpty = !value || value === 0 || value === "";
   const labelClasses =
     priority === "high"
-      ? "text-lg font-semibold text-gray-800 mb-1.5"
-      : "text-sm font-medium text-gray-700 mb-1";
+      ? "text-lg font-semibold text-foreground mb-1.5"
+      : "text-sm font-medium text-foreground mb-1";
 
   const inputClasses =
     priority === "high"
-      ? `text-lg font-semibold text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`
-      : `text-base text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`;
+      ? `text-lg font-semibold text-center ${isEmpty ? "text-foreground-muted" : "text-foreground"}`
+      : `text-base text-center ${isEmpty ? "text-foreground-muted" : "text-foreground"}`;
 
   return (
     <div className="space-y-1">
@@ -190,13 +190,13 @@ export const EnhancedPercentageInput: React.FC<EnhancedInputProps> = ({
   const isEmpty = !value || value === 0 || value === "";
   const labelClasses =
     priority === "high"
-      ? "text-lg font-semibold text-gray-800 mb-1.5"
-      : "text-sm font-medium text-gray-700 mb-1";
+      ? "text-lg font-semibold text-foreground mb-1.5"
+      : "text-sm font-medium text-foreground mb-1";
 
   const inputClasses =
     priority === "high"
-      ? `text-lg font-semibold text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`
-      : `text-base text-center ${isEmpty ? "text-gray-400" : "text-gray-900"}`;
+      ? `text-lg font-semibold text-center ${isEmpty ? "text-foreground-muted" : "text-foreground"}`
+      : `text-base text-center ${isEmpty ? "text-foreground-muted" : "text-foreground"}`;
 
   return (
     <div className="space-y-1">
@@ -329,7 +329,7 @@ export const EnhancedNumberInput: React.FC<EnhancedInputProps> = ({
             : isEmpty
               ? "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-muted"
               : "border-input hover:border-border focus:border-ring focus:ring-2 focus:ring-ring/20 bg-background"
-        } focus:outline-none dark:!text-white dark:bg-neutral-800`}
+        } focus:outline-none`}
         placeholder={placeholder}
         aria-describedby={error ? `${field}-error` : `${field}-description`}
       />

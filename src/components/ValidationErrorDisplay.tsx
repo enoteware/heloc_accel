@@ -16,12 +16,12 @@ export function ValidationErrorDisplay({
 
   return (
     <div
-      className={`bg-red-50 border border-red-200 rounded-lg p-4 ${className}`}
+      className={`bg-destructive-background border border-destructive rounded-lg p-4 ${className}`}
     >
       <div className="flex">
         <div className="flex-shrink-0">
           <svg
-            className="h-5 w-5 text-red-400"
+            className="h-5 w-5 text-destructive"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -33,12 +33,12 @@ export function ValidationErrorDisplay({
           </svg>
         </div>
         <div className="ml-3 flex-1">
-          <h3 className="text-sm font-medium text-red-800">
+          <h3 className="text-sm font-medium text-destructive-foreground">
             {errors.length === 1
               ? "Validation Error"
               : `${errors.length} Validation Errors`}
           </h3>
-          <div className="mt-2 text-sm text-red-700">
+          <div className="mt-2 text-sm text-destructive-foreground">
             {errors.length === 1 ? (
               <p>{errors[0].message}</p>
             ) : (
@@ -70,7 +70,9 @@ interface FieldErrorProps {
 export function FieldError({ error, className = "" }: FieldErrorProps) {
   if (!error) return null;
 
-  return <p className={`mt-1 text-sm text-red-600 ${className}`}>{error}</p>;
+  return (
+    <p className={`mt-1 text-sm text-destructive ${className}`}>{error}</p>
+  );
 }
 
 // Helper function to format field names for display

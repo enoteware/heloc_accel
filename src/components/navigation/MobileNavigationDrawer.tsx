@@ -8,6 +8,7 @@ import NavigationLink from "./NavigationLink";
 import NavigationIcon from "./NavigationIcon";
 import { signOutAction } from "@/app/actions/auth";
 import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
+import { CompactThemeToggle } from "@/components/ThemeToggle";
 
 export interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -136,6 +137,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-h6 font-semibold text-foreground">Navigation</h2>
           <div className="flex items-center space-x-2">
+            <CompactThemeToggle />
             <SimpleLanguageSwitcher />
             <button
               type="button"

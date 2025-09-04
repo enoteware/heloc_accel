@@ -3,6 +3,8 @@
  * Documentation: https://www.pexels.com/api/documentation/
  */
 
+import { logError } from "./debug-logger";
+
 export interface PexelsPhoto {
   id: number;
   width: number;
@@ -94,7 +96,7 @@ export class PexelsClient {
 
       return data;
     } catch (error) {
-      console.error("Pexels API request failed:", error);
+      logError("Pexels", "API request failed", error);
       throw error;
     }
   }
@@ -248,7 +250,7 @@ export async function getRandomThemedPhoto(
     const randomIndex = Math.floor(Math.random() * result.photos.length);
     return result.photos[randomIndex];
   } catch (error) {
-    console.error(`Failed to get themed photo for ${theme}:`, error);
+    logError("Pexels", `Failed to get themed photo for ${theme}`, error);
     return null;
   }
 }

@@ -74,8 +74,8 @@ export default function AmortizationTable({
     <div className={cn("space-y-4", className)}>
       {/* Header with Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-          <Icon name="table" size="sm" className="text-gray-600" />
+        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+          <Icon name="table" size="sm" className="text-foreground-secondary" />
           Amortization Schedule with HELOC Acceleration
         </h3>
 
@@ -120,7 +120,7 @@ export default function AmortizationTable({
           {/* Expand/Collapse Button */}
           <button
             onClick={() => setExpandedView(!expandedView)}
-            className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex items-center gap-1 px-3 py-1.5 bg-info text-info-foreground rounded-lg hover:bg-info/90 transition-colors text-sm font-medium"
           >
             <Icon
               name={expandedView ? "chevron-up" : "chevron-down"}
@@ -135,42 +135,42 @@ export default function AmortizationTable({
       {showHighlights && <HighlightLegend />}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="min-w-full divide-y divide-border bg-card">
+          <thead className="bg-muted">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider">
                 Month
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider">
                 Total Payment
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider bg-secondary-50 text-secondary-700">
+              <th className="px-4 py-3 text-right text-xs font-medium text-secondary uppercase tracking-wider bg-secondary/10">
                 Extra Payment
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider">
                 HELOC Interest
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50 text-blue-700">
+              <th className="px-4 py-3 text-right text-xs font-medium text-info uppercase tracking-wider bg-info-background">
                 HELOC Balance
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider">
                 HELOC Payment
               </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-right text-xs font-medium text-foreground-muted uppercase tracking-wider">
                 Discretionary Used
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-card divide-y divide-border">
             {displaySchedule.map((payment: any, index) => {
               // Handle placeholder row for collapsed view
               if (payment.placeholder) {
                 return (
-                  <tr key="placeholder" className="bg-gray-50">
+                  <tr key="placeholder" className="bg-muted">
                     <td
                       colSpan={9}
-                      className="px-4 py-2 text-center text-sm text-gray-500"
+                      className="px-4 py-2 text-center text-sm text-foreground-muted"
                     >
                       <div className="flex items-center justify-center gap-2">
                         <Icon name="more-horizontal" size="sm" />
@@ -188,11 +188,11 @@ export default function AmortizationTable({
                 highlightMode === "all" || highlightMode === "savings";
 
               return (
-                <tr key={payment.month} className="hover:bg-gray-50 group">
-                  <td className="px-4 py-2 text-sm font-medium text-gray-900">
+                <tr key={payment.month} className="hover:bg-muted group">
+                  <td className="px-4 py-2 text-sm font-medium text-foreground">
                     {payment.month}
                   </td>
-                  <td className="px-4 py-2 text-sm text-right text-gray-700">
+                  <td className="px-4 py-2 text-sm text-right text-foreground">
                     {formatCurrency(payment.totalMonthlyPayment)}
                   </td>
 
@@ -206,12 +206,12 @@ export default function AmortizationTable({
                       className="font-semibold"
                     />
                   ) : (
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">
+                    <td className="px-4 py-2 text-sm text-right text-foreground">
                       {formatCurrency(extraPayment)}
                     </td>
                   )}
 
-                  <td className="px-4 py-2 text-sm text-right text-gray-700">
+                  <td className="px-4 py-2 text-sm text-right text-foreground">
                     {formatCurrency(payment.helocInterest)}
                   </td>
 
@@ -223,16 +223,16 @@ export default function AmortizationTable({
                       className="font-medium"
                     />
                   ) : (
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">
+                    <td className="px-4 py-2 text-sm text-right text-foreground">
                       {formatCurrency(payment.helocBalance)}
                     </td>
                   )}
 
-                  <td className="px-4 py-2 text-sm text-right text-gray-700">
+                  <td className="px-4 py-2 text-sm text-right text-foreground">
                     {formatCurrency(payment.helocPayment)}
                   </td>
 
-                  <td className="px-4 py-2 text-sm text-right text-gray-700">
+                  <td className="px-4 py-2 text-sm text-right text-foreground">
                     {formatCurrency(payment.discretionaryUsed)}
                   </td>
                 </tr>

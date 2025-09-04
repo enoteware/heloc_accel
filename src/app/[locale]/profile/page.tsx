@@ -14,6 +14,7 @@ import {
   SecondConfirmationModal,
   SuccessModal,
 } from "@/components/ConfirmationModals";
+import { logError } from "@/lib/debug-logger";
 
 interface UserProfile {
   id: string;
@@ -121,7 +122,7 @@ export default function ProfilePage() {
         throw new Error(data.error || t("errors.loadProfile"));
       }
     } catch (err) {
-      console.error("Error loading profile:", err);
+      logError("Profile", "Error loading profile", err);
       setError(t("errors.loadProfile"));
     } finally {
       setLoading(false);
@@ -160,7 +161,7 @@ export default function ProfilePage() {
         throw new Error(data.error || "Failed to update profile");
       }
     } catch (err) {
-      console.error("Error updating profile:", err);
+      logError("Profile", "Error updating profile", err);
       setError(err instanceof Error ? err.message : "Failed to update profile");
     } finally {
       setSaving(false);
@@ -197,7 +198,7 @@ export default function ProfilePage() {
         throw new Error(data.error || "Failed to change password");
       }
     } catch (err) {
-      console.error("Error changing password:", err);
+      logError("Profile", "Error changing password", err);
       setError(
         err instanceof Error ? err.message : "Failed to change password",
       );
@@ -238,7 +239,7 @@ export default function ProfilePage() {
         throw new Error("Failed to clear user data");
       }
     } catch (err) {
-      console.error("Error clearing data:", err);
+      logError("Profile", "Error clearing data", err);
       setError(
         err instanceof Error ? err.message : "Failed to clear user data",
       );

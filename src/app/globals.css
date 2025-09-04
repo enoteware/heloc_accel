@@ -1,184 +1,135 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Import Design System CSS */
+@import "tailwindcss";
+@import "../styles/themes.css";
 @import "../styles/design-system.css";
-@import "../styles/contrast-safe.css";
-@import "../styles/animations.css";
-@import "../styles/dark-mode.css";
-@import "../styles/stack-auth-overrides.css";
 
-/* Semantic design tokens (light) */
+/* Essential CSS Custom Properties */
 :root {
-  /* Base */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  /* Primary Colors */
+  --color-primary: 59 130 246; /* blue-500 */
+  --color-primary-foreground: 255 255 255; /* white */
 
-  /* Surfaces */
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
+  /* Background Colors */
+  --color-background: 255 255 255; /* white */
+  --color-surface: 255 255 255; /* white */
+  --color-surface-secondary: 248 250 252; /* slate-50 */
 
-  /* Brand */
-  --primary: 221 83% 53%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --accent: 45 95% 57%;
-  --accent-foreground: 0 0% 10%;
+  /* Text Colors */
+  --color-foreground: 15 23 42; /* slate-900 */
+  --color-foreground-secondary: 51 65 85; /* slate-700 */
+  --color-foreground-muted: 148 163 184; /* slate-400 */
 
-  /* Neutrals */
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  /* Border Colors */
+  --color-border: 226 232 240; /* slate-200 */
+  --color-border-focus: 59 130 246; /* blue-500 */
 
-  /* Status */
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
+  /* State Colors */
+  --color-success: 34 197 94; /* green-500 */
+  --color-success-foreground: 255 255 255; /* white */
+  --color-success-background: 240 253 244; /* green-50 */
+  --color-success-border: 34 197 94; /* green-500 */
 
-  /* Borders/inputs */
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221 83% 53%;
+  --color-warning: 245 158 11; /* amber-500 */
+  --color-warning-foreground: 255 255 255; /* white */
+  --color-warning-background: 255 251 235; /* amber-50 */
+  --color-warning-border: 245 158 11; /* amber-500 */
 
-  /* Radius */
-  --radius: 0.5rem;
+  --color-error: 239 68 68; /* red-500 */
+  --color-error-foreground: 255 255 255; /* white */
+
+  --color-info: 59 130 246; /* blue-500 */
+  --color-info-foreground: 255 255 255; /* white */
+  --color-info-background: 239 246 255; /* blue-50 */
+  --color-info-border: 59 130 246; /* blue-500 */
+
+  --color-accent: 16 185 129; /* emerald-500 */
+  --color-accent-foreground: 255 255 255; /* white */
+
+  /* Secondary Colors */
+  --color-secondary: 248 250 252; /* slate-50 */
+  --color-secondary-foreground: 15 23 42; /* slate-900 */
+
+  /* Interactive States */
+  --color-surface-hover: 241 245 249; /* slate-100 */
+
+  /* Legacy Tailwind/shadcn tokens */
+  --background: rgb(var(--color-background));
+  --foreground: rgb(var(--color-foreground));
+  --border: rgb(var(--color-border));
+  --primary: rgb(var(--color-primary));
+  --primary-foreground: rgb(var(--color-primary-foreground));
 }
 
-/* Semantic design tokens (dark) */
+/* Dark mode overrides */
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-
-  --primary: 221 83% 53%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --accent: 45 95% 57%;
-  --accent-foreground: 0 0% 10%;
-
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 85.7% 97.3%;
-
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 221 83% 53%;
+  --color-background: 15 23 42; /* slate-900 */
+  --color-surface: 30 41 59; /* slate-800 */
+  --color-surface-secondary: 51 65 85; /* slate-700 */
+  --color-foreground: 248 250 252; /* slate-50 */
+  --color-foreground-secondary: 226 232 240; /* slate-200 */
+  --color-foreground-muted: 148 163 184; /* slate-400 */
+  --color-border: 71 85 105; /* slate-600 */
+  --color-primary: 96 165 250; /* blue-400 */
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Base styles */
+* {
+  border-color: rgb(var(--color-border));
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+body {
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
 }
 
-/* Print Styles for Report Generation */
-@media print {
-  /* Hide everything except the printable report */
-  body > * {
-    display: none !important;
-  }
-
-  .print\:block {
-    display: block !important;
-  }
-
-  /* Remove margins and padding */
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  /* Ensure color printing */
-  * {
-    color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Page setup */
-  @page {
-    size: letter;
-    margin: 0.5in;
-  }
-
-  /* Prevent page breaks inside important elements */
-  .printable-report section {
-    page-break-inside: avoid;
-  }
-
-  /* Ensure backgrounds are printed */
-  .bg-gradient-to-r,
-  .bg-blue-50,
-  .bg-blue-100,
-  .bg-green-50,
-  .bg-green-100,
-  .bg-gray-50,
-  .bg-gray-100,
-  .bg-yellow-50,
-  .bg-purple-50,
-  .bg-purple-100 {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+/* Utility classes */
+.text-balance {
+  text-wrap: balance;
 }
 
-/* Critical fix for input text color visibility */
-body:not(.dark) input,
-body:not(.dark) textarea,
-body:not(.dark) select {
-  color: rgb(17 24 39) !important;
-  -webkit-text-fill-color: rgb(17 24 39) !important;
+/* Ensure proper styling for common elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: rgb(var(--color-foreground));
 }
 
-/* Ensure filled inputs are visible */
-body:not(.dark) input:not(:placeholder-shown),
-body:not(.dark) textarea:not(:placeholder-shown) {
-  color: rgb(17 24 39) !important;
-  -webkit-text-fill-color: rgb(17 24 39) !important;
+p {
+  color: rgb(var(--color-foreground));
 }
 
-/* Override for blue-gray text specifically in save scenario modal */
-body:not(.dark) .text-blue-gray-700 {
-  color: rgb(55 65 81) !important;
-  -webkit-text-fill-color: rgb(55 65 81) !important;
+/* Fix for input styling */
+input,
+textarea,
+select {
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border-color: rgb(var(--color-border));
 }
 
-/* Override for important blue-gray text */
-body:not(.dark) [class*="!text-blue-gray-700"] {
-  color: rgb(55 65 81) !important;
-  -webkit-text-fill-color: rgb(55 65 81) !important;
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgb(var(--color-border-focus));
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.2);
 }
 
-/* Dot pattern backgrounds for Hero Highlight */
-.bg-dot-thick-neutral-300 {
-  background-image: radial-gradient(
-    circle,
-    rgb(212 212 212) 1px,
-    transparent 1px
-  );
-  background-size: 20px 20px;
+/* Button base styling */
+button {
+  color: rgb(var(--color-foreground));
 }
 
-.dark .bg-dot-thick-neutral-800 {
-  background-image: radial-gradient(circle, rgb(38 38 38) 1px, transparent 1px);
-  background-size: 20px 20px;
+/* Link styling */
+a {
+  color: rgb(var(--color-primary));
+}
+
+a:hover {
+  opacity: 0.8;
 }

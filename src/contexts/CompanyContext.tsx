@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { useUser } from "@stackframe/stack";
 import { CompanySettings, Agent } from "@/lib/company-data";
+import { logError } from "@/lib/debug-logger";
 
 interface CompanyContextType {
   companySettings: CompanySettings | null;
@@ -75,7 +76,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch (err) {
-      console.error("Error fetching company data:", err);
+      logError("CompanyContext", "Error fetching company data", err);
       setError(
         err instanceof Error ? err.message : "Failed to load company data",
       );

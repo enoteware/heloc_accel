@@ -148,15 +148,15 @@ function PrintableReportContent({
       : 0;
 
   return (
-    <div className="printable-report bg-white p-8 max-w-[8.5in] mx-auto">
+    <div className="printable-report bg-card border border-border p-8 max-w-[8.5in] mx-auto">
       {/* Header with Company Branding */}
-      <header className="mb-6 border-b-2 border-gray-800 pb-4">
+      <header className="mb-6 border-b-2 border-border pb-4">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            <h1 className="text-2xl font-bold text-foreground mb-1">
               {t("title")}
             </h1>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-foreground-secondary">
               <span>
                 {t("generated")}: {formatDate(generatedDate)}
               </span>
@@ -167,13 +167,17 @@ function PrintableReportContent({
           </div>
           {companySettings && (
             <div className="text-right text-sm">
-              <h2 className="font-bold text-gray-900">
+              <h2 className="font-bold text-foreground">
                 {companySettings.companyName}
               </h2>
-              <p className="text-gray-600">{companySettings.companyPhone}</p>
-              <p className="text-gray-600">{companySettings.companyWebsite}</p>
+              <p className="text-foreground-secondary">
+                {companySettings.companyPhone}
+              </p>
+              <p className="text-foreground-secondary">
+                {companySettings.companyWebsite}
+              </p>
               {companySettings.companyNmlsNumber && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   NMLS #{companySettings.companyNmlsNumber}
                 </p>
               )}
@@ -183,28 +187,32 @@ function PrintableReportContent({
       </header>
 
       {/* Executive Summary */}
-      <section className="mb-6 bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-300">
-        <h2 className="text-lg font-bold text-blue-900 mb-3">
+      <section className="mb-6 p-4 rounded-lg border border-info bg-info-background">
+        <h2 className="text-lg font-bold text-info-foreground mb-3">
           {t("executiveSummary")}
         </h2>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-700">
+            <div className="text-2xl font-bold text-success-foreground">
               {results.comparison.timeSavedYears}
             </div>
-            <div className="text-xs text-gray-700">{t("yearsSaved")}</div>
+            <div className="text-xs text-foreground-secondary">
+              {t("yearsSaved")}
+            </div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-700">
+            <div className="text-2xl font-bold text-success-foreground">
               {formatCurrency(results.comparison.interestSaved)}
             </div>
-            <div className="text-xs text-gray-700">{t("interestSaved")}</div>
+            <div className="text-xs text-foreground-secondary">
+              {t("interestSaved")}
+            </div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-700">
+            <div className="text-2xl font-bold text-success-foreground">
               {formatPercentage(results.comparison.percentageInterestSaved)}
             </div>
-            <div className="text-xs text-gray-700">
+            <div className="text-xs text-foreground-secondary">
               {t("interestReduction")}
             </div>
           </div>
@@ -213,31 +221,39 @@ function PrintableReportContent({
 
       {/* Property & Loan Details */}
       <section className="mb-6 grid grid-cols-2 gap-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-2 text-sm">
+        <div className="bg-muted p-4 rounded-lg">
+          <h3 className="font-semibold text-foreground mb-2 text-sm">
             {t("propertyMortgageDetails")}
           </h3>
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("propertyValue")}:</span>
+              <span className="text-foreground-secondary">
+                {t("propertyValue")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.propertyValue || 0)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("currentBalance")}:</span>
+              <span className="text-foreground-secondary">
+                {t("currentBalance")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.currentMortgageBalance)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("interestRate")}:</span>
+              <span className="text-foreground-secondary">
+                {t("interestRate")}:
+              </span>
               <span className="font-medium">
                 {formatPercentage(inputs.currentInterestRate)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("monthlyPayment")}:</span>
+              <span className="text-foreground-secondary">
+                {t("monthlyPayment")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.monthlyPayment)}
               </span>
@@ -245,31 +261,39 @@ function PrintableReportContent({
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-2 text-sm">
+        <div className="bg-muted p-4 rounded-lg">
+          <h3 className="font-semibold text-foreground mb-2 text-sm">
             {t("financialCapacity")}
           </h3>
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("monthlyNetIncome")}:</span>
+              <span className="text-foreground-secondary">
+                {t("monthlyNetIncome")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.monthlyNetIncome)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("monthlyExpenses")}:</span>
+              <span className="text-foreground-secondary">
+                {t("monthlyExpenses")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.monthlyExpenses)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("discretionaryIncome")}:</span>
-              <span className="font-medium text-green-700">
+              <span className="text-foreground-secondary">
+                {t("discretionaryIncome")}:
+              </span>
+              <span className="font-medium text-success-foreground">
                 {formatCurrency(inputs.monthlyDiscretionaryIncome)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t("helocLimit")}:</span>
+              <span className="text-foreground-secondary">
+                {t("helocLimit")}:
+              </span>
               <span className="font-medium">
                 {formatCurrency(inputs.helocLimit || 0)}
               </span>
@@ -280,30 +304,36 @@ function PrintableReportContent({
 
       {/* Strategy Comparison */}
       <section className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">
+        <h2 className="text-lg font-bold text-foreground mb-3">
           {t("strategyComparison")}
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          <div className="border border-gray-300 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-700 mb-2 flex items-center">
-              <span className="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
+          <div className="border border-border rounded-lg p-4">
+            <h3 className="font-semibold text-foreground mb-2 flex items-center">
+              <span className="w-2 h-2 bg-foreground rounded-full mr-2"></span>
               {t("traditionalMortgage")}
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("payoffTime")}:</span>
+                <span className="text-foreground-secondary">
+                  {t("payoffTime")}:
+                </span>
                 <span className="font-medium">
                   {formatMonths(results.traditional.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("totalInterest")}:</span>
+                <span className="text-foreground-secondary">
+                  {t("totalInterest")}:
+                </span>
                 <span className="font-medium">
                   {formatCurrency(results.traditional.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("totalPayments")}:</span>
+                <span className="text-foreground-secondary">
+                  {t("totalPayments")}:
+                </span>
                 <span className="font-medium">
                   {formatCurrency(results.traditional.totalPayments)}
                 </span>
@@ -311,26 +341,32 @@ function PrintableReportContent({
             </div>
           </div>
 
-          <div className="border border-blue-300 rounded-lg p-4 bg-blue-50">
-            <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
-              <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
+          <div className="border border-info rounded-lg p-4 bg-info-background">
+            <h3 className="font-semibold text-info-foreground mb-2 flex items-center">
+              <span className="w-2 h-2 bg-info rounded-full mr-2"></span>
               {t("helocAcceleration")}
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("payoffTime")}:</span>
-                <span className="font-semibold text-green-700">
+                <span className="text-foreground-secondary">
+                  {t("payoffTime")}:
+                </span>
+                <span className="font-semibold text-success-foreground">
                   {formatMonths(results.heloc.payoffMonths)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("totalInterest")}:</span>
-                <span className="font-semibold text-green-700">
+                <span className="text-foreground-secondary">
+                  {t("totalInterest")}:
+                </span>
+                <span className="font-semibold text-success-foreground">
                   {formatCurrency(results.heloc.totalInterest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">{t("maxHelocUsed")}:</span>
+                <span className="text-foreground-secondary">
+                  {t("maxHelocUsed")}:
+                </span>
                 <span className="font-medium">
                   {formatCurrency(results.heloc.maxHelocUsed)}
                 </span>
@@ -341,18 +377,18 @@ function PrintableReportContent({
       </section>
 
       {/* Key Recommendations */}
-      <section className="mb-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-300">
-        <h2 className="text-lg font-bold text-green-900 mb-3">
+      <section className="mb-6 p-4 rounded-lg border border-success bg-success-background">
+        <h2 className="text-lg font-bold text-success-foreground mb-3">
           {t("implementationStrategy")}
         </h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <h4 className="font-semibold text-gray-900 mb-1">
+            <h4 className="font-semibold text-foreground mb-1">
               {t("monthlyPaymentPlan")}
             </h4>
             <ul className="space-y-1 text-xs">
               <li className="flex justify-between">
-                <span className="text-gray-700">
+                <span className="text-foreground-secondary">
                   {t("continueMortgagePayment")}:
                 </span>
                 <span className="font-medium">
@@ -360,31 +396,35 @@ function PrintableReportContent({
                 </span>
               </li>
               <li className="flex justify-between">
-                <span className="text-gray-700">{t("avgHelocInterest")}:</span>
+                <span className="text-foreground-secondary">
+                  {t("avgHelocInterest")}:
+                </span>
                 <span className="font-medium">
                   {formatCurrency(avgHelocInterest)}
                 </span>
               </li>
               <li className="flex justify-between">
-                <span className="text-gray-700">
+                <span className="text-foreground-secondary">
                   {t("applyDiscretionaryIncome")}:
                 </span>
-                <span className="font-medium text-green-700">
+                <span className="font-medium text-success-foreground">
                   {formatCurrency(inputs.monthlyDiscretionaryIncome)}
                 </span>
               </li>
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900 mb-1">
+            <h4 className="font-semibold text-foreground mb-1">
               {t("keyMilestones")}
             </h4>
             <ul className="space-y-1 text-xs">
-              <li className="text-gray-700">• {t("beginHelocDraws")}</li>
-              <li className="text-gray-700">
+              <li className="text-foreground-secondary">
+                • {t("beginHelocDraws")}
+              </li>
+              <li className="text-foreground-secondary">
                 • {t("peakHeloc")}: {formatCurrency(results.heloc.maxHelocUsed)}
               </li>
-              <li className="text-gray-700">
+              <li className="text-foreground-secondary">
                 • {t("fullPayoff")} {formatMonths(results.heloc.payoffMonths)}
               </li>
             </ul>
@@ -394,24 +434,24 @@ function PrintableReportContent({
 
       {/* Visual Timeline */}
       <section className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-2 text-sm">
+        <h3 className="font-semibold text-foreground mb-2 text-sm">
           {t("payoffTimelineComparison")}
         </h3>
-        <div className="relative h-16 bg-gray-100 rounded-lg p-2">
+        <div className="relative h-16 rounded-lg p-2 bg-muted">
           {/* Traditional timeline */}
-          <div className="absolute top-2 left-2 right-2 h-5 bg-gray-300 rounded-full">
+          <div className="absolute top-2 left-2 right-2 h-5 rounded-full bg-border">
             <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-xs font-medium pr-2">
               {results.traditional.payoffMonths} mo
             </div>
           </div>
           {/* HELOC timeline */}
           <div
-            className="absolute bottom-2 left-2 h-5 bg-green-500 rounded-full"
+            className="absolute bottom-2 left-2 h-5 rounded-full bg-success"
             style={{
               width: `${(results.heloc.payoffMonths / results.traditional.payoffMonths) * 100}%`,
             }}
           >
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-xs font-medium pr-2 text-white">
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-xs font-medium pr-2 text-success-foreground">
               {results.heloc.payoffMonths} mo
             </div>
           </div>
@@ -420,28 +460,30 @@ function PrintableReportContent({
 
       {/* Contact Information Section */}
       {assignedAgent && (
-        <section className="mt-6 mb-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-300">
-          <h2 className="text-lg font-bold text-green-900 mb-3">
+        <section className="mt-6 mb-6 p-4 rounded-lg border border-success bg-success-background">
+          <h2 className="text-lg font-bold text-success-foreground mb-3">
             {t("yourHelocSpecialist")}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-foreground">
                 {getAgentFullName(assignedAgent)}
               </h3>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-foreground-secondary">
                 {assignedAgent.title || t("mortgageAdvisor")}
               </p>
               {assignedAgent.nmlsNumber && (
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   NMLS #{assignedAgent.nmlsNumber}
                 </p>
               )}
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-700">{assignedAgent.email}</p>
+              <p className="text-sm text-foreground-secondary">
+                {assignedAgent.email}
+              </p>
               {assignedAgent.phone && (
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-foreground-secondary">
                   Office:{" "}
                   {formatPhoneNumber(
                     assignedAgent.phone,
@@ -450,22 +492,22 @@ function PrintableReportContent({
                 </p>
               )}
               {assignedAgent.mobilePhone && (
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-foreground-secondary">
                   Mobile: {formatPhoneNumber(assignedAgent.mobilePhone)}
                 </p>
               )}
             </div>
           </div>
           {assignedAgent.bio && (
-            <p className="mt-3 text-sm text-gray-700 italic">
+            <p className="mt-3 text-sm text-foreground-secondary italic">
               {assignedAgent.bio}
             </p>
           )}
-          <div className="mt-4 p-3 bg-green-200 rounded-lg">
-            <p className="text-sm font-semibold text-green-900">
+          <div className="mt-4 p-3 rounded-lg bg-success-background">
+            <p className="text-sm font-semibold text-success-foreground">
               Ready to get started?
             </p>
-            <p className="text-sm text-green-800 mt-1">
+            <p className="text-sm text-success-foreground mt-1">
               Contact {assignedAgent.firstName} today to discuss how a HELOC can
               help you achieve your financial goals faster.
             </p>
@@ -474,11 +516,11 @@ function PrintableReportContent({
       )}
 
       {/* Disclaimer */}
-      <footer className="mt-6 pt-4 border-t border-gray-300 text-xs text-gray-600">
+      <footer className="mt-6 pt-4 border-t border-border text-xs text-muted-foreground">
         <div className="mb-3">
           {companySettings && (
             <div className="text-center mb-2">
-              <p className="font-semibold text-gray-700">
+              <p className="font-semibold text-foreground">
                 {companySettings.companyName}
               </p>
               {companySettings.companyAddress && (

@@ -141,10 +141,13 @@ function ComparePageContent() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading scenarios...</p>
+          <div
+            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto"
+            style={{ borderColor: "rgb(var(--color-primary))" }}
+          ></div>
+          <p className="mt-4 text-foreground-secondary">Loading scenarios...</p>
         </div>
       </div>
     );
@@ -157,14 +160,14 @@ function ComparePageContent() {
   const selectedScenarioData = getSelectedScenarioData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Compare Scenarios
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto">
             Select up to 3 scenarios to compare their HELOC acceleration
             strategies side-by-side
           </p>
@@ -174,7 +177,7 @@ function ComparePageContent() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+            className="inline-flex items-center safe-link font-medium"
           >
             <svg
               className="w-4 h-4 mr-2"
@@ -201,8 +204,8 @@ function ComparePageContent() {
 
         {scenarios.length === 0 ? (
           <div className="text-center py-12">
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <div className="text-gray-400 mb-4">
+            <div className="bg-card border border-border rounded-lg shadow-md p-8">
+              <div className="text-foreground-muted mb-4">
                 <svg
                   className="w-16 h-16 mx-auto"
                   fill="none"
@@ -217,15 +220,15 @@ function ComparePageContent() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-foreground mb-2">
                 No scenarios to compare
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-foreground-secondary mb-4">
                 You need at least 2 scenarios to use the comparison feature.
               </p>
               <Link
                 href="/calculator"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
+                className="btn-primary px-6 py-3 rounded-md font-medium"
               >
                 Create Your First Scenario
               </Link>
@@ -234,8 +237,8 @@ function ComparePageContent() {
         ) : (
           <div className="space-y-8">
             {/* Scenario Selection */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="bg-card border border-border rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
                 Select Scenarios to Compare ({selectedScenarios.length}/3)
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -244,20 +247,20 @@ function ComparePageContent() {
                     key={scenario.id}
                     className={`border-2 rounded-lg p-4 cursor-pointer transition duration-200 ${
                       selectedScenarios.includes(scenario.id)
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-info-border bg-[rgb(var(--color-info-background))]"
+                        : "border-border hover:border-foreground/30"
                     }`}
                     onClick={() => handleScenarioToggle(scenario.id)}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900 truncate">
+                      <h3 className="font-semibold text-foreground truncate">
                         {scenario.name}
                       </h3>
                       <div
                         className={`w-4 h-4 rounded border-2 ${
                           selectedScenarios.includes(scenario.id)
-                            ? "bg-blue-500 border-blue-500"
-                            : "border-gray-300"
+                            ? "bg-primary border-primary"
+                            : "border-border"
                         }`}
                       >
                         {selectedScenarios.includes(scenario.id) && (
@@ -276,11 +279,11 @@ function ComparePageContent() {
                       </div>
                     </div>
                     {scenario.description && (
-                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                      <p className="text-sm text-foreground-secondary mb-2 line-clamp-2">
                         {scenario.description}
                       </p>
                     )}
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-foreground-muted">
                       <p>
                         Balance:{" "}
                         {formatCurrency(scenario.current_mortgage_balance)}
@@ -299,71 +302,71 @@ function ComparePageContent() {
 
             {/* Comparison Table */}
             {selectedScenarioData.length >= 2 && (
-              <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h2 className="text-xl font-semibold text-gray-900">
+              <div className="bg-card border border-border rounded-lg shadow-md overflow-hidden">
+                <div className="px-6 py-4 border-b border-border">
+                  <h2 className="text-xl font-semibold text-foreground">
                     Comparison Results
                   </h2>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-border">
+                    <thead className="bg-muted">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider">
                           Metric
                         </th>
                         {selectedScenarioData.map((scenario) => (
                           <th
                             key={scenario.id}
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase tracking-wider"
                           >
                             {scenario.name}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-card divide-y divide-border">
                       <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           Mortgage Balance
                         </td>
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                           >
                             {formatCurrency(scenario.current_mortgage_balance)}
                           </td>
                         ))}
                       </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr className="bg-muted">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           Interest Rate
                         </td>
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                           >
                             {(scenario.current_interest_rate * 100).toFixed(2)}%
                           </td>
                         ))}
                       </tr>
                       <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           Monthly Payment
                         </td>
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                           >
                             {formatCurrency(scenario.monthly_payment)}
                           </td>
                         ))}
                       </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr className="bg-muted">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           HELOC Limit
                         </td>
                         {selectedScenarioData.map((scenario) => (
@@ -392,14 +395,14 @@ function ComparePageContent() {
                           </td>
                         ))}
                       </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr className="bg-muted">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           HELOC Payoff Time
                         </td>
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                           >
                             {scenario.heloc_payoff_months
                               ? formatMonths(scenario.heloc_payoff_months)
@@ -422,14 +425,14 @@ function ComparePageContent() {
                           </td>
                         ))}
                       </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr className="bg-muted">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                           Interest Saved
                         </td>
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-success font-medium"
                           >
                             {scenario.interest_saved
                               ? formatCurrency(scenario.interest_saved)
@@ -444,7 +447,7 @@ function ComparePageContent() {
                         {selectedScenarioData.map((scenario) => (
                           <td
                             key={scenario.id}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                           >
                             {formatCurrency(
                               scenario.monthly_discretionary_income,
@@ -459,8 +462,8 @@ function ComparePageContent() {
             )}
 
             {selectedScenarioData.length < 2 && (
-              <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                <div className="text-gray-400 mb-4">
+              <div className="bg-card border border-border rounded-lg shadow-md p-8 text-center">
+                <div className="text-foreground-muted mb-4">
                   <svg
                     className="w-16 h-16 mx-auto"
                     fill="none"
@@ -475,10 +478,10 @@ function ComparePageContent() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Select scenarios to compare
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-foreground-secondary">
                   Choose at least 2 scenarios from the list above to see a
                   detailed comparison.
                 </p>

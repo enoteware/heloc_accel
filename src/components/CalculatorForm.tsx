@@ -198,8 +198,8 @@ export default function CalculatorForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Mortgage Information Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+      <div className="bg-card border border-border p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">
           <Icon name="home" size="sm" />
           Current Mortgage Information
         </h3>
@@ -207,12 +207,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="currentMortgageBalance"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Current Mortgage Balance *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -225,13 +225,13 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.currentMortgageBalance && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.currentMortgageBalance}
               </p>
             )}
@@ -240,7 +240,7 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="currentInterestRate"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Current Interest Rate * (%)
             </label>
@@ -255,19 +255,19 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full rounded-md"
                 placeholder=""
                 step="0.01"
                 min="0"
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 %
               </span>
             </div>
             {errors.currentInterestRate && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.currentInterestRate}
               </p>
             )}
@@ -276,7 +276,7 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="remainingTermMonths"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Remaining Term (months) *
             </label>
@@ -290,18 +290,18 @@ export default function CalculatorForm({
                   parseInt(e.target.value) || 0,
                 )
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+              className="input-default w-full rounded-md"
               placeholder=""
               min="1"
               max="480"
               required
             />
             {errors.remainingTermMonths && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.remainingTermMonths}
               </p>
             )}
-            <p className="mt-1 text-xs text-gray-700">
+            <p className="mt-1 text-xs text-foreground-secondary">
               {formData.remainingTermMonths
                 ? `${Math.round((formData.remainingTermMonths / 12) * 10) / 10} years`
                 : ""}
@@ -311,12 +311,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="monthlyPayment"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Current Monthly Payment *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -329,13 +329,13 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyPayment && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.monthlyPayment}
               </p>
             )}
@@ -344,8 +344,8 @@ export default function CalculatorForm({
       </div>
 
       {/* HELOC Information Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+      <div className="bg-card border border-border p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">
           <Icon name="credit-card" size="sm" />
           HELOC Information
         </h3>
@@ -353,12 +353,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="helocLimit"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               HELOC Credit Limit *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -371,20 +371,22 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.helocLimit && (
-              <p className="mt-1 text-sm text-red-600">{errors.helocLimit}</p>
+              <p className="mt-1 text-sm text-destructive">
+                {errors.helocLimit}
+              </p>
             )}
           </div>
 
           <div>
             <label
               htmlFor="helocInterestRate"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               HELOC Interest Rate * (%)
             </label>
@@ -399,19 +401,19 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full rounded-md"
                 placeholder=""
                 step="0.01"
                 min="0"
                 max="30"
                 required
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 %
               </span>
             </div>
             {errors.helocInterestRate && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.helocInterestRate}
               </p>
             )}
@@ -420,8 +422,8 @@ export default function CalculatorForm({
       </div>
 
       {/* Income and Expenses Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+      <div className="bg-card border border-border p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">
           <Icon name="dollar" size="sm" />
           Monthly Income & Expenses
         </h3>
@@ -429,12 +431,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="monthlyGrossIncome"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Gross Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -447,13 +449,13 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyGrossIncome && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.monthlyGrossIncome}
               </p>
             )}
@@ -462,12 +464,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="monthlyNetIncome"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Net Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -480,13 +482,13 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyNetIncome && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.monthlyNetIncome}
               </p>
             )}
@@ -495,12 +497,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="monthlyExpenses"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Expenses *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -513,13 +515,13 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyExpenses && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.monthlyExpenses}
               </p>
             )}
@@ -528,12 +530,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="monthlyDiscretionaryIncome"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Discretionary Income *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -546,17 +548,17 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
                 required
               />
             </div>
             {errors.monthlyDiscretionaryIncome && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.monthlyDiscretionaryIncome}
               </p>
             )}
-            <p className="mt-1 text-xs text-gray-700">
+            <p className="mt-1 text-xs text-foreground-secondary">
               Available for HELOC acceleration strategy
             </p>
           </div>
@@ -564,8 +566,8 @@ export default function CalculatorForm({
       </div>
 
       {/* Optional Property Information Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4 pb-2 border-b border-blue-200 dark:border-blue-700 flex items-center gap-2">
+      <div className="bg-card border border-border p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">
           <Icon name="building" size="sm" />
           Property Information (Optional)
         </h3>
@@ -573,12 +575,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="propertyValue"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Original Purchase Price
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -591,7 +593,7 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
               />
             </div>
@@ -600,12 +602,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="propertyTaxMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Property Tax
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -618,7 +620,7 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
               />
             </div>
@@ -627,12 +629,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="insuranceMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly Insurance
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -645,7 +647,7 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
               />
             </div>
@@ -654,12 +656,12 @@ export default function CalculatorForm({
           <div>
             <label
               htmlFor="hoaFeesMonthly"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground-secondary mb-1"
             >
               Monthly HOA Fees
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary">
                 $
               </span>
               <input
@@ -672,7 +674,7 @@ export default function CalculatorForm({
                     parseFloat(e.target.value) || 0,
                   )
                 }
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-gray-900 dark:!text-white bg-white dark:bg-neutral-800"
+                className="input-default w-full pl-8 rounded-md"
                 placeholder=""
               />
             </div>
@@ -681,24 +683,24 @@ export default function CalculatorForm({
 
         {/* LTV Analysis */}
         {ltvInfo.canCalculateLTV && (
-          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="mt-4 bg-info-background border border-info rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-medium text-blue-900">
+              <h4 className="text-sm font-medium text-info-foreground">
                 Loan-to-Value Analysis
               </h4>
               <span
                 className={`text-sm font-semibold px-2 py-1 rounded ${
                   ltvInfo.isMIPRequired
-                    ? "bg-orange-100 text-orange-800"
-                    : "bg-green-100 text-green-800"
+                    ? "bg-warning text-warning-foreground"
+                    : "bg-success text-success-foreground"
                 }`}
               >
                 LTV: {ltvInfo.ltvRatio.toFixed(1)}%
               </span>
             </div>
-            <p className="text-xs text-blue-700 mb-2">
+            <p className="text-xs text-info-foreground mb-2">
               {ltvInfo.ltvRatio > 80
-                ? `MIP/PMI is required when LTV exceeds 80%. Suggested: $${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
+                ? `MIP/PMI is required when LTV exceeds 80%. Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}/month.`
                 : ltvInfo.ltvRatio > 78
                   ? "MIP/PMI may still be required (LTV between 78-80%). Check with your lender."
                   : "MIP/PMI is automatically removed when LTV reaches 78% or below."}
@@ -709,7 +711,7 @@ export default function CalculatorForm({
                 onClick={() => {
                   handleInputChange("pmiMonthly", ltvInfo.suggestedMonthlyPMI);
                 }}
-                className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                className="btn btn-primary"
               >
                 Use Suggested: ${formatWithCommas(ltvInfo.suggestedMonthlyPMI)}
                 /mo
@@ -723,7 +725,9 @@ export default function CalculatorForm({
           <label
             htmlFor="pmiMonthly"
             className={`block text-sm font-medium mb-1 ${
-              ltvInfo.isMIPRequired ? "text-orange-700" : "text-gray-700"
+              ltvInfo.isMIPRequired
+                ? "text-warning-foreground"
+                : "text-foreground-secondary"
             }`}
           >
             {ltvInfo.isMIPRequired ? "Monthly MIP/PMI *" : "Monthly MIP/PMI"}
@@ -767,7 +771,7 @@ export default function CalculatorForm({
         <button
           type="button"
           onClick={handlePrefillDemo}
-          className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center space-x-2"
+          className="btn btn-success"
         >
           <Icon name="file-text" size="sm" />
           <span>Fill Demo Data</span>
@@ -777,18 +781,14 @@ export default function CalculatorForm({
         <button
           type="button"
           onClick={handleClearForm}
-          className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center space-x-2"
+          className="btn btn-secondary"
         >
           <Icon name="x" size="sm" />
           <span>Clear Form</span>
         </button>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-8 rounded-lg transition duration-200 flex items-center space-x-2"
-        >
+        <button type="submit" disabled={loading} className="btn btn-primary">
           {loading ? (
             <Icon name="refresh" size="sm" className="animate-spin" />
           ) : (

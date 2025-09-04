@@ -309,10 +309,13 @@ export default function BudgetingPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">
+          <div
+            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto"
+            style={{ borderColor: "rgb(var(--color-primary))" }}
+          ></div>
+          <p className="mt-4 text-foreground-secondary">
             {authLoading
               ? "Checking authentication..."
               : loading
@@ -325,16 +328,16 @@ export default function BudgetingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-foreground">
                 Budgeting Tool
               </h1>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-foreground-secondary">
                 Analyze your income and expenses to optimize HELOC acceleration
                 strategy
               </p>
@@ -385,7 +388,7 @@ export default function BudgetingPage() {
         {currentScenario ? (
           <div className="space-y-6">
             {/* Tab Navigation */}
-            <div className="border-b border-gray-200">
+            <div className="border-b border-border">
               <nav className="-mb-px flex space-x-8">
                 {[
                   {
@@ -401,8 +404,8 @@ export default function BudgetingPage() {
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
                       activeTab === tab.id
-                        ? "border-blue-500 text-blue-600"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        ? "border-info text-info"
+                        : "border-transparent text-foreground-muted hover:text-foreground hover:border-border"
                     }`}
                   >
                     <Icon name={tab.icon as any} size="sm" />
@@ -428,7 +431,7 @@ export default function BudgetingPage() {
                   </CardHeader>
                   <CardContent>
                     {(currentScenario.income_sources?.length || 0) === 0 ? (
-                      <p className="text-gray-500 text-center py-4">
+                      <p className="text-foreground-muted text-center py-4">
                         No income sources added yet
                       </p>
                     ) : (
@@ -436,11 +439,11 @@ export default function BudgetingPage() {
                         {currentScenario.income_sources?.map((income) => (
                           <div
                             key={income.id}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-muted rounded-lg"
                           >
                             <div>
                               <div className="font-medium">{income.name}</div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-foreground-secondary">
                                 {formatCurrency(income.amount)}{" "}
                                 {income.frequency}
                                 {income.is_primary && (
@@ -451,7 +454,7 @@ export default function BudgetingPage() {
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="font-semibold text-green-600">
+                              <div className="font-semibold text-success">
                                 {formatCurrency(
                                   calculateMonthlyAmount(
                                     income.amount,
@@ -459,7 +462,7 @@ export default function BudgetingPage() {
                                   ),
                                 )}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-foreground-muted">
                                 monthly
                               </div>
                             </div>
@@ -487,7 +490,7 @@ export default function BudgetingPage() {
                   </CardHeader>
                   <CardContent>
                     {(currentScenario.expense_categories?.length || 0) === 0 ? (
-                      <p className="text-gray-500 text-center py-4">
+                      <p className="text-foreground-muted text-center py-4">
                         No expenses added yet
                       </p>
                     ) : (
@@ -495,11 +498,11 @@ export default function BudgetingPage() {
                         {currentScenario.expense_categories?.map((expense) => (
                           <div
                             key={expense.id}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-muted rounded-lg"
                           >
                             <div>
                               <div className="font-medium">{expense.name}</div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-foreground-secondary">
                                 {formatCurrency(expense.amount)}{" "}
                                 {expense.frequency}
                                 <Badge
@@ -519,7 +522,7 @@ export default function BudgetingPage() {
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="font-semibold text-red-600">
+                              <div className="font-semibold text-destructive">
                                 {formatCurrency(
                                   calculateMonthlyAmount(
                                     expense.amount,
@@ -527,7 +530,7 @@ export default function BudgetingPage() {
                                   ),
                                 )}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-foreground-muted">
                                 monthly
                               </div>
                             </div>
@@ -551,16 +554,16 @@ export default function BudgetingPage() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
+          <div className="bg-card border border-border rounded-lg shadow-md p-12 text-center">
             <Icon
               name="calculator"
               size="lg"
-              className="text-gray-400 mx-auto mb-4"
+              className="text-foreground-muted mx-auto mb-4"
             />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               No budgeting scenarios yet
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-foreground-secondary mb-6">
               Create your first budgeting scenario to analyze your income and
               expenses for HELOC acceleration.
             </p>

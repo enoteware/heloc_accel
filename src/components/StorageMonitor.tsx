@@ -24,15 +24,17 @@ export default function StorageMonitor({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const getStatusColor = () => {
-    if (usage.isCritical) return "text-red-600 bg-red-50";
-    if (usage.isNearLimit) return "text-yellow-600 bg-yellow-50";
-    return "text-green-600 bg-green-50";
+    if (usage.isCritical)
+      return "text-destructive bg-[rgb(var(--color-error-background))]";
+    if (usage.isNearLimit)
+      return "text-warning bg-[rgb(var(--color-warning-background))]";
+    return "text-success bg-[rgb(var(--color-success-background))]";
   };
 
   const getProgressBarColor = () => {
-    if (usage.isCritical) return "bg-red-500";
-    if (usage.isNearLimit) return "bg-yellow-500";
-    return "bg-green-500";
+    if (usage.isCritical) return "bg-destructive";
+    if (usage.isNearLimit) return "bg-warning";
+    return "bg-success";
   };
 
   const formatEventTime = (timestamp: Date) => {
@@ -88,13 +90,13 @@ export default function StorageMonitor({
 
       {/* Expanded Details */}
       {isExpanded && (
-        <div className="mt-2 p-4 bg-white border rounded-lg shadow-sm">
+        <div className="mt-2 p-4 bg-card border border-border rounded-lg shadow-sm">
           {/* Usage Details */}
           <div className="mb-4">
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">
+            <h4 className="text-sm font-semibold text-foreground mb-2">
               Storage Usage
             </h4>
-            <div className="space-y-1 text-sm text-gray-600">
+            <div className="space-y-1 text-sm text-foreground-secondary">
               <div>Used: {(usage.used / 1024).toFixed(1)} KB</div>
               <div>Available: {(usage.available / 1024).toFixed(1)} KB</div>
               <div>Total: {(usage.total / 1024).toFixed(1)} KB</div>
@@ -104,25 +106,51 @@ export default function StorageMonitor({
 
           {/* Status Indicators */}
           <div className="mb-4">
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">Status</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-2">
+              Status
+            </h4>
             <div className="flex flex-wrap gap-2">
               {usage.isCritical && (
-                <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded">
+                <span
+                  className="px-2 py-1 text-xs rounded"
+                  style={{
+                    backgroundColor: "rgb(var(--color-error-background))",
+                    color: "rgb(var(--color-error))",
+                  }}
+                >
                   Critical Usage
                 </span>
               )}
               {usage.isNearLimit && !usage.isCritical && (
-                <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded">
+                <span
+                  className="px-2 py-1 text-xs rounded"
+                  style={{
+                    backgroundColor: "rgb(var(--color-warning-background))",
+                    color: "rgb(var(--color-warning))",
+                  }}
+                >
                   Near Limit
                 </span>
               )}
               {!usage.isNearLimit && (
-                <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">
+                <span
+                  className="px-2 py-1 text-xs rounded"
+                  style={{
+                    backgroundColor: "rgb(var(--color-success-background))",
+                    color: "rgb(var(--color-success))",
+                  }}
+                >
                   Healthy
                 </span>
               )}
               {isMonitoring && (
-                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
+                <span
+                  className="px-2 py-1 text-xs rounded"
+                  style={{
+                    backgroundColor: "rgb(var(--color-info-background))",
+                    color: "rgb(var(--color-info))",
+                  }}
+                >
                   Monitoring Active
                 </span>
               )}
@@ -133,12 +161,12 @@ export default function StorageMonitor({
           {events.length > 0 && (
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-semibold text-gray-700">
+                <h4 className="text-sm font-semibold text-foreground">
                   Recent Events
                 </h4>
                 <button
                   onClick={clearEvents}
-                  className="text-xs text-gray-500 hover:text-gray-700"
+                  className="text-xs text-foreground-muted hover:text-foreground"
                 >
                   Clear
                 </button>
@@ -154,8 +182,10 @@ export default function StorageMonitor({
                     >
                       <span>{getEventIcon(event.type)}</span>
                       <div className="flex-1">
-                        <div className="text-gray-600">{event.message}</div>
-                        <div className="text-gray-400">
+                        <div className="text-foreground-secondary">
+                          {event.message}
+                        </div>
+                        <div className="text-foreground-muted">
                           {formatEventTime(event.timestamp)}
                         </div>
                       </div>
@@ -184,7 +214,7 @@ export default function StorageMonitor({
                   alert(`Cleaned up ${debugKeys.length} temporary items`);
                 }
               }}
-              className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-3 py-1 text-xs bg-info text-info-foreground rounded hover:bg-info/90"
             >
               Clean Temp Data
             </button>
@@ -197,7 +227,7 @@ export default function StorageMonitor({
                   alert("Storage info copied to clipboard");
                 }
               }}
-              className="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+              className="px-3 py-1 text-xs bg-muted text-foreground rounded hover:bg-muted/80"
             >
               Copy Info
             </button>
@@ -205,11 +235,17 @@ export default function StorageMonitor({
 
           {/* Recommendations */}
           {(usage.isNearLimit || usage.isCritical) && (
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-              <h5 className="text-sm font-medium text-yellow-800 mb-1">
+            <div
+              className="mt-4 p-3 rounded border"
+              style={{
+                backgroundColor: "rgb(var(--color-warning-background))",
+                borderColor: "rgb(var(--color-warning-border))",
+              }}
+            >
+              <h5 className="text-sm font-medium text-warning mb-1">
                 Recommendations
               </h5>
-              <ul className="text-xs text-yellow-700 space-y-1">
+              <ul className="text-xs text-warning space-y-1">
                 {usage.isCritical && (
                   <li>
                     • Storage is critically full. Automatic cleanup has been
@@ -243,7 +279,7 @@ export function StorageStatusIndicator({
 
   if (!usage.isNearLimit) return null;
 
-  const color = usage.isCritical ? "text-red-500" : "text-yellow-500";
+  const color = usage.isCritical ? "text-destructive" : "text-warning";
   const icon = usage.isCritical ? "🚨" : "⚠️";
 
   return (

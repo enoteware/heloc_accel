@@ -30,7 +30,7 @@ async function testApp() {
   try {
     // Test 1: Navigate to homepage
     console.log("1. Testing homepage...");
-    await page.goto("http://localhost:3000", {
+    await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",
       timeout: 30000,
     });
@@ -38,7 +38,7 @@ async function testApp() {
 
     // Test 2: Navigate to calculator
     console.log("2. Testing calculator page...");
-    await page.goto("http://localhost:3000/calculator", {
+    await page.goto("http://localhost:3001/calculator", {
       waitUntil: "domcontentloaded",
       timeout: 30000,
     });
@@ -54,7 +54,7 @@ async function testApp() {
 
     // Test 4: Navigate to scenarios
     console.log("4. Testing scenarios page...");
-    await page.goto("http://localhost:3000/scenarios", {
+    await page.goto("http://localhost:3001/scenarios", {
       waitUntil: "domcontentloaded",
       timeout: 30000,
     });

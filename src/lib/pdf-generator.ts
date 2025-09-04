@@ -1,5 +1,4 @@
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+// Heavy libs are loaded on demand to keep initial client bundles small
 
 export interface PDFGenerationOptions {
   filename?: string;
@@ -16,6 +15,11 @@ export async function generatePDFFromHTML(
   htmlContent: string,
   options: PDFGenerationOptions = {},
 ): Promise<void> {
+  // Dynamically import heavy dependencies to avoid bloating common client chunks
+  const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+    import("jspdf"),
+    import("html2canvas"),
+  ]);
   const {
     filename = "HELOC-Report.pdf",
     format = "a4",

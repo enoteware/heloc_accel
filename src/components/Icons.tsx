@@ -41,6 +41,10 @@ import {
   MinusCircle,
   Heart,
   Target,
+  Zap,
+  Sun,
+  Moon,
+  Monitor,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -90,7 +94,11 @@ export type IconName =
   | "arrow-left"
   | "more-horizontal"
   | "heart"
-  | "target";
+  | "target"
+  | "zap"
+  | "sun"
+  | "moon"
+  | "monitor";
 
 const iconMap: Record<IconName, LucideIcon> = {
   calculator: Calculator,
@@ -137,6 +145,10 @@ const iconMap: Record<IconName, LucideIcon> = {
   "more-horizontal": MoreHorizontal,
   heart: Heart,
   target: Target,
+  zap: Zap,
+  sun: Sun,
+  moon: Moon,
+  monitor: Monitor,
 };
 
 export interface IconProps extends Omit<LucideProps, "ref"> {

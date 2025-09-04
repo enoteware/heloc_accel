@@ -20,33 +20,33 @@ interface HighlightConfig {
 
 const highlightConfigs: Record<HighlightType, HighlightConfig> = {
   heloc: {
-    bgColor: "bg-secondary-50",
-    textColor: "text-secondary-700",
-    borderColor: "border-secondary-200",
+    bgColor: "bg-secondary",
+    textColor: "text-secondary-foreground",
+    borderColor: "border-secondary",
     icon: "trending-up",
     pulseAnimation: true,
   },
   traditional: {
-    bgColor: "bg-gray-50",
-    textColor: "text-gray-600",
-    borderColor: "border-gray-200",
+    bgColor: "bg-muted",
+    textColor: "text-muted-foreground",
+    borderColor: "border",
   },
   savings: {
-    bgColor: "bg-green-50",
-    textColor: "text-green-700",
-    borderColor: "border-green-200",
+    bgColor: "bg-success",
+    textColor: "text-success-foreground",
+    borderColor: "border-success",
     icon: "dollar",
   },
   payment: {
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-700",
-    borderColor: "border-blue-200",
+    bgColor: "bg-info",
+    textColor: "text-info-foreground",
+    borderColor: "border-info",
     icon: "arrow-right",
   },
   neutral: {
-    bgColor: "bg-gray-50",
-    textColor: "text-gray-700",
-    borderColor: "border-gray-200",
+    bgColor: "bg-muted",
+    textColor: "text-muted-foreground",
+    borderColor: "border",
   },
 };
 
@@ -68,13 +68,22 @@ export function PaymentBadge({
 }: PaymentBadgeProps) {
   const config = highlightConfigs[type];
 
+  const containerClass =
+    type === "savings"
+      ? "badge-success"
+      : type === "payment"
+        ? "badge-info"
+        : type === "heloc"
+          ? "badge-secondary"
+          : type === "neutral" || type === "traditional"
+            ? "badge-default"
+            : "badge-default";
+
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border",
-        config.bgColor,
-        config.textColor,
-        config.borderColor,
+        "badge-md gap-1.5",
+        containerClass,
         config.pulseAnimation && "animate-pulse-subtle",
         className,
       )}
@@ -120,10 +129,10 @@ export function HighlightedCell({
       {children || value}
       {showTooltip && tooltipContent && (
         <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-          <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+          <div className="bg-popover text-popover-foreground text-xs rounded py-1 px-2 whitespace-nowrap">
             {tooltipContent}
             <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-              <div className="border-4 border-transparent border-t-gray-900"></div>
+              <div className="border-4 border-transparent border-t-popover"></div>
             </div>
           </div>
         </div>
@@ -148,13 +157,13 @@ export function FlowIndicator({
 }: FlowIndicatorProps) {
   return (
     <div className={cn("flex items-center gap-2 text-sm", className)}>
-      <span className="font-medium text-gray-700">{from}</span>
-      <div className="flex items-center gap-1 text-secondary-600">
+      <span className="font-medium text-foreground">{from}</span>
+      <div className="flex items-center gap-1 text-secondary-foreground">
         <Icon name="arrow-right" size="xs" />
         <span className="font-semibold">{amount}</span>
         <Icon name="arrow-right" size="xs" />
       </div>
-      <span className="font-medium text-gray-700">{to}</span>
+      <span className="font-medium text-foreground">{to}</span>
     </div>
   );
 }
@@ -211,7 +220,7 @@ export function AnimatedCounter({
 // Highlight Legend Component
 export function HighlightLegend() {
   return (
-    <div className="flex flex-wrap gap-3 p-3 bg-gray-50 rounded-lg text-xs">
+    <div className="flex flex-wrap gap-3 p-3 bg-muted rounded-lg text-xs">
       <div className="flex items-center gap-1.5">
         <div
           className={cn(
@@ -220,7 +229,7 @@ export function HighlightLegend() {
             highlightConfigs.heloc.borderColor,
           )}
         ></div>
-        <span className="text-gray-600">HELOC Acceleration</span>
+        <span className="text-muted-foreground">HELOC Acceleration</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div
@@ -230,7 +239,7 @@ export function HighlightLegend() {
             highlightConfigs.traditional.borderColor,
           )}
         ></div>
-        <span className="text-gray-600">Traditional Payment</span>
+        <span className="text-muted-foreground">Traditional Payment</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div
@@ -240,7 +249,7 @@ export function HighlightLegend() {
             highlightConfigs.savings.borderColor,
           )}
         ></div>
-        <span className="text-gray-600">Savings/Benefits</span>
+        <span className="text-muted-foreground">Savings/Benefits</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div
@@ -250,7 +259,7 @@ export function HighlightLegend() {
             highlightConfigs.payment.borderColor,
           )}
         ></div>
-        <span className="text-gray-600">Payment Flow</span>
+        <span className="text-muted-foreground">Payment Flow</span>
       </div>
     </div>
   );

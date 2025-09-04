@@ -137,10 +137,15 @@ export default function SharedScenarioPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading shared scenario...</p>
+          <div
+            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto"
+            style={{ borderColor: "rgb(var(--color-primary))" }}
+          ></div>
+          <p className="mt-4 text-foreground-secondary">
+            Loading shared scenario...
+          </p>
         </div>
       </div>
     );
@@ -148,15 +153,22 @@ export default function SharedScenarioPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div
+            className="px-4 py-3 rounded mb-4 border"
+            style={{
+              backgroundColor: "rgb(var(--color-error-background))",
+              borderColor: "rgb(var(--color-error-border))",
+              color: "rgb(var(--color-error))",
+            }}
+          >
             <h3 className="font-bold">Error</h3>
             <p>{error}</p>
           </div>
           <Link
             href="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
+            className="btn-primary px-6 py-3 rounded-md font-medium"
           >
             Go to Home Page
           </Link>
@@ -172,73 +184,75 @@ export default function SharedScenarioPage() {
   const results = getResultsFromScenario();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Shared HELOC Analysis
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto">
             This scenario has been shared with you to demonstrate HELOC
             acceleration strategy benefits
           </p>
         </div>
 
         {/* Scenario Info */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-card rounded-lg shadow-md p-6 mb-8 border border-border">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-foreground">
                 {scenario.name}
               </h2>
               {scenario.description && (
-                <p className="text-gray-600 mt-2">{scenario.description}</p>
+                <p className="text-foreground-secondary mt-2">
+                  {scenario.description}
+                </p>
               )}
             </div>
-            <div className="text-right text-sm text-gray-500">
+            <div className="text-right text-sm text-foreground-muted">
               <p>Shared by: {scenario.shared_by}</p>
               <p>Created: {formatDate(scenario.created_at)}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="bg-muted p-4 rounded-lg">
+              <h3 className="font-semibold text-foreground mb-2">
                 Mortgage Details
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Balance: {formatCurrency(scenario.current_mortgage_balance)}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Rate: {(scenario.current_interest_rate * 100).toFixed(2)}%
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Payment: {formatCurrency(scenario.monthly_payment)}
               </p>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="bg-muted p-4 rounded-lg">
+              <h3 className="font-semibold text-foreground mb-2">
                 HELOC Details
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Limit: {formatCurrency(scenario.heloc_limit || 0)}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Rate: {((scenario.heloc_interest_rate || 0) * 100).toFixed(2)}%
               </p>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="bg-muted p-4 rounded-lg">
+              <h3 className="font-semibold text-foreground mb-2">
                 Monthly Income
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Gross: {formatCurrency(scenario.monthly_gross_income)}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Net: {formatCurrency(scenario.monthly_net_income)}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground-secondary">
                 Discretionary:{" "}
                 {formatCurrency(scenario.monthly_discretionary_income)}
               </p>
@@ -257,24 +271,24 @@ export default function SharedScenarioPage() {
         )}
 
         {/* Call to Action */}
-        <div className="bg-white rounded-lg shadow-md p-6 mt-8 text-center">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-card rounded-lg shadow-md p-6 mt-8 text-center border border-border">
+          <h3 className="text-xl font-bold text-foreground mb-4">
             Want to create your own HELOC analysis?
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-foreground-secondary mb-6">
             Use our calculator to analyze your own mortgage and see how much you
             could save with a HELOC acceleration strategy.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/calculator"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
+              className="btn-primary px-6 py-3 rounded-md font-medium"
             >
               Try the Calculator
             </Link>
             <Link
               href="/"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-medium transition duration-200"
+              className="btn-outline px-6 py-3 rounded-md font-medium"
             >
               Learn More
             </Link>
