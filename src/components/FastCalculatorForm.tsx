@@ -14,6 +14,7 @@ import {
 import { CalculatorProgressBar } from "./CalculatorProgressBar";
 import { SectionCompletionIndicator } from "./SectionCompletionIndicator";
 import { Card, CardHeader, CardTitle, CardContent } from "./design-system/Card";
+import { Button } from "./design-system/Button";
 import {
   safeLTVCalculation,
   isMIPRequired,
@@ -157,16 +158,6 @@ export default function FastCalculatorForm({
       setErrors(errorMap);
     }
   }, [validationErrors]);
-  const [debugLogs, setDebugLogs] = useState<string[]>([]);
-
-  // Debug logging function
-  const addDebugLog = useCallback((message: string, data?: any) => {
-    const timestamp = new Date().toLocaleTimeString();
-    const logMessage = `[${timestamp}] ${message}${data ? ": " + JSON.stringify(data, null, 2) : ""}`;
-    console.log(logMessage);
-    // Always log to state for debugging
-    setDebugLogs((prev) => [...prev.slice(-10), logMessage]); // Keep last 10 logs
-  }, []);
 
   // Calculate LTV ratio and determine if MIP/PMI is required
   const ltvInfo = useMemo(() => {
@@ -203,7 +194,6 @@ export default function FastCalculatorForm({
   // Update form data when initialData changes
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
-      addDebugLog("Updating form data with initialData", initialData);
       setFormData({
         currentMortgageBalance: initialData.currentMortgageBalance || 0,
         currentInterestRate: initialData.currentInterestRate || 0,
@@ -236,7 +226,7 @@ export default function FastCalculatorForm({
       setErrors({});
       setTouched({});
     }
-  }, [initialData, addDebugLog]);
+  }, [initialData]);
 
   const validateField = useCallback(
     (
@@ -274,7 +264,6 @@ export default function FastCalculatorForm({
       }),
       value: string | number,
     ) => {
-      addDebugLog(`Input change for ${field}`, { value, type: typeof value });
       debugLogger.log(
         "debug",
         "form",
@@ -295,11 +284,6 @@ export default function FastCalculatorForm({
           processedValue = isNaN(numericValue) ? "" : numericValue;
         }
       }
-
-      addDebugLog(`Processed value for ${field}`, {
-        processedValue,
-        type: typeof processedValue,
-      });
 
       setFormData((prev) => {
         const newData = {
@@ -342,7 +326,6 @@ export default function FastCalculatorForm({
           }
         }
 
-        addDebugLog("Updated form data", newData);
         return newData;
       });
 
@@ -354,7 +337,7 @@ export default function FastCalculatorForm({
         }));
       }
     },
-    [errors, addDebugLog],
+    [errors],
   );
 
   // Automatically update PMI when LTV changes
@@ -370,17 +353,9 @@ export default function FastCalculatorForm({
           ...prev,
           pmiMonthly: 0,
         }));
-        addDebugLog("Auto-zeroed PMI due to LTV <= 78%", {
-          ltv: ltvInfo.ltvRatio,
-        });
       }
     }
-  }, [
-    ltvInfo.ltvRatio,
-    ltvInfo.canCalculateLTV,
-    formData.pmiMonthly,
-    addDebugLog,
-  ]);
+  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV, formData.pmiMonthly]);
 
   const handleBlur = useCallback(
     (
@@ -422,8 +397,6 @@ export default function FastCalculatorForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    addDebugLog("Form submission started", formData);
 
     try {
       // Convert all form data to proper types and validate
@@ -481,8 +454,6 @@ export default function FastCalculatorForm({
           }),
       };
 
-      addDebugLog("Processed form data for submission", processedData);
-
       const newErrors: Record<string, string> = {};
       const requiredFields = Object.keys(validationRules) as Array<
         keyof typeof validationRules
@@ -504,7 +475,6 @@ export default function FastCalculatorForm({
         );
         if (error) {
           newErrors[field] = error;
-          addDebugLog(`Validation error for ${field}`, { value, error });
         }
       });
 
@@ -518,10 +488,6 @@ export default function FastCalculatorForm({
       ) {
         newErrors.helocAvailableCredit =
           "HELOC available credit cannot exceed HELOC limit";
-        addDebugLog("Business logic validation failed: HELOC credit > limit", {
-          credit: processedData.helocAvailableCredit,
-          limit: processedData.helocLimit,
-        });
       }
 
       // HELOC limit cannot equal initial draw
@@ -532,9 +498,6 @@ export default function FastCalculatorForm({
       ) {
         newErrors.helocAvailableCredit =
           "HELOC limit cannot be the same as initial draw amount";
-        addDebugLog(
-          "Business logic validation failed: HELOC limit equals initial draw",
-        );
       }
 
       // Income validation
@@ -544,7 +507,6 @@ export default function FastCalculatorForm({
         processedData.monthlyNetIncome > processedData.monthlyGrossIncome
       ) {
         newErrors.monthlyNetIncome = "Net income cannot exceed gross income";
-        addDebugLog("Business logic validation failed: net > gross income");
       }
 
       // Discretionary income validation
@@ -562,21 +524,8 @@ export default function FastCalculatorForm({
           ) > tolerance
         ) {
           newErrors.monthlyDiscretionaryIncome = `Discretionary income should equal net income minus expenses ($${calculatedDiscretionary.toLocaleString()})`;
-          addDebugLog(
-            "Business logic validation failed: discretionary income mismatch",
-            {
-              provided: processedData.monthlyDiscretionaryIncome,
-              calculated: calculatedDiscretionary,
-              difference: Math.abs(
-                processedData.monthlyDiscretionaryIncome -
-                  calculatedDiscretionary,
-              ),
-            },
-          );
         }
       }
-
-      addDebugLog("Final validation errors", newErrors);
 
       setErrors(newErrors);
       setTouched(
@@ -584,20 +533,13 @@ export default function FastCalculatorForm({
       );
 
       if (Object.keys(newErrors).length === 0) {
-        addDebugLog("Submitting valid data to onSubmit callback");
-        addDebugLog("About to call onSubmit with data", processedData);
         try {
           onSubmit(processedData);
-          addDebugLog("onSubmit callback completed successfully");
-        } catch (error) {
-          addDebugLog("Error in onSubmit callback", error);
-        }
+        } catch (error) {}
       } else {
-        addDebugLog("Form submission blocked due to validation errors");
       }
     } catch (error) {
-      addDebugLog("Error during form submission", error);
-      console.error("Form submission error:", error);
+      console.error("FastCalculatorForm form submission error", error);
     }
   };
 
@@ -679,8 +621,6 @@ export default function FastCalculatorForm({
   const handlePrefillDemo = (scenarioIndex = 0) => {
     const scenarios = getDemoScenarios();
     const demoData = scenarios[scenarioIndex].data;
-
-    addDebugLog("Loading demo data with proper values", demoData);
 
     setFormData(demoData);
     setErrors({});
@@ -820,59 +760,6 @@ export default function FastCalculatorForm({
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Progress Bar */}
       <CalculatorProgressBar formData={formData} />
-      {/* Debug Console */}
-      {debugLogs.length > 0 && (
-        <div className="bg-card text-foreground border border-border p-4 rounded-lg font-mono text-xs">
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-foreground font-bold">Debug Console</h4>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  const logText = debugLogs.join("\n");
-                  navigator.clipboard
-                    .writeText(logText)
-                    .then(() => {
-                      // Temporarily show copied feedback
-                      const btn = document.activeElement as HTMLButtonElement;
-                      const originalText = btn.textContent;
-                      btn.textContent = "Copied!";
-                      setTimeout(() => {
-                        btn.textContent = originalText;
-                      }, 1000);
-                    })
-                    .catch(() => {
-                      // Fallback for browsers that don't support clipboard API
-                      const textArea = document.createElement("textarea");
-                      textArea.value = logText;
-                      document.body.appendChild(textArea);
-                      textArea.select();
-                      document.execCommand("copy");
-                      document.body.removeChild(textArea);
-                    });
-                }}
-                className="btn-outline btn-sm"
-              >
-                Copy
-              </button>
-              <button
-                type="button"
-                onClick={() => setDebugLogs([])}
-                className="btn-outline btn-sm"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-          <div className="max-h-40 overflow-y-auto space-y-1">
-            {debugLogs.map((log, index) => (
-              <div key={index} className="whitespace-pre-wrap break-all">
-                {log}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Demo Fill Buttons */}
       <div className="flex justify-end items-center mb-6 space-x-2">
@@ -1442,41 +1329,19 @@ export default function FastCalculatorForm({
 
       {/* Submit Button */}
       <div className="flex justify-center pt-4">
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          size="lg"
+          loading={loading}
           disabled={loading}
-          className="btn-primary btn-lg w-full sm:w-auto max-w-sm sm:max-w-none font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none transition-all duration-200 flex items-center space-x-3 min-h-[44px] group"
+          icon="calculator"
+          className="w-full sm:w-auto max-w-sm sm:max-w-none font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none transition-all duration-200 min-h-[44px]"
         >
-          {loading && (
-            <svg
-              className="animate-spin h-6 w-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-          )}
-          <span className="relative">
-            {loading
-              ? "Calculating Your Strategy..."
-              : "🚀 Calculate HELOC Strategy"}
-          </span>
-          {!loading && (
-            <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-200" />
-          )}
-        </button>
+          {loading
+            ? "Calculating Your Strategy..."
+            : "🚀 Calculate HELOC Strategy"}
+        </Button>
       </div>
     </form>
   );

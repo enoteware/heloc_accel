@@ -1,0 +1,1410 @@
+{
+  "timestamp": "2025-09-05T05:57:51.556Z",
+  "environment": {
+    "NODE_ENV": "production"
+  },
+  "debugCode": {
+    "totalFiles": 85,
+    "totalMatches": 200,
+    "files": [
+      {
+        "file": "src/app/[locale]/budgeting/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 9,
+        "lines": [
+          {
+            "line": 106,
+            "content": "console.log"
+          },
+          {
+            "line": 109,
+            "content": "console.error"
+          },
+          {
+            "line": 112,
+            "content": "console.error"
+          },
+          {
+            "line": 131,
+            "content": "console.log"
+          },
+          {
+            "line": 140,
+            "content": "console.log"
+          },
+          {
+            "line": 227,
+            "content": "console.error"
+          },
+          {
+            "line": 231,
+            "content": "console.error"
+          },
+          {
+            "line": 256,
+            "content": "console.error"
+          },
+          {
+            "line": 281,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/build-status/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 48,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/compare/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 82,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/scenarios/[id]/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 52,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/scenarios/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 50,
+            "content": "console.error"
+          },
+          {
+            "line": 77,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/sign-out/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 22,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/[locale]/style-guide/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 1100,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/agents/[id]/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 30,
+            "content": "console.error"
+          },
+          {
+            "line": 63,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/agents/new/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 34,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/agents/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 29,
+            "content": "console.error"
+          },
+          {
+            "line": 81,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/assignments/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 53,
+            "content": "console.error"
+          },
+          {
+            "line": 130,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/company/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 64,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/documents/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 3,
+        "lines": [
+          {
+            "line": 25,
+            "content": "console.error"
+          },
+          {
+            "line": 41,
+            "content": "console.error"
+          },
+          {
+            "line": 80,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 45,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/admin/photos/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 97,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/agents/[id]/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 3,
+        "lines": [
+          {
+            "line": 62,
+            "content": "console.error"
+          },
+          {
+            "line": 162,
+            "content": "console.error"
+          },
+          {
+            "line": 240,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/agents/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 47,
+            "content": "console.error"
+          },
+          {
+            "line": 135,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/auth/login/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 21,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/auth/me/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 17,
+            "content": "console.error"
+          },
+          {
+            "line": 35,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/auth/register/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 100,
+            "content": "console.log"
+          },
+          {
+            "line": 121,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/auth/simple-login/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 11,
+            "content": "console.log"
+          },
+          {
+            "line": 67,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/budgeting/calculate-live/route.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 23,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 39,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/build-log/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 32,
+            "content": "console.error"
+          },
+          {
+            "line": 277,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/company/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 3,
+        "lines": [
+          {
+            "line": 53,
+            "content": "console.error"
+          },
+          {
+            "line": 84,
+            "content": "console.error"
+          },
+          {
+            "line": 156,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/pexels/search/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 83,
+            "content": "console.error"
+          },
+          {
+            "line": 155,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/profile/clear-data/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 88,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/profile/password/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 36,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/profile/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 93,
+            "content": "console.error"
+          },
+          {
+            "line": 217,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/scenario/[id]/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 3,
+        "lines": [
+          {
+            "line": 85,
+            "content": "console.error"
+          },
+          {
+            "line": 143,
+            "content": "console.error"
+          },
+          {
+            "line": 277,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/scenario/[id]/share/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 86,
+            "content": "console.error"
+          },
+          {
+            "line": 154,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/scenario/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 83,
+            "content": "console.error"
+          },
+          {
+            "line": 320,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/scenarios/[id]/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 3,
+        "lines": [
+          {
+            "line": 49,
+            "content": "console.error"
+          },
+          {
+            "line": 88,
+            "content": "console.error"
+          },
+          {
+            "line": 131,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/shared/[token]/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 90,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/api/users/[id]/agent/route.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 5,
+        "lines": [
+          {
+            "line": 42,
+            "content": "console.error"
+          },
+          {
+            "line": 87,
+            "content": "console.warn"
+          },
+          {
+            "line": 95,
+            "content": "console.error"
+          },
+          {
+            "line": 104,
+            "content": "console.error"
+          },
+          {
+            "line": 182,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/confetti-demo/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 11,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/app/error.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 15,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/error.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 18,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/app/global-error.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 14,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/app/global-error.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 13,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 24,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/app/shared/[token]/page.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 69,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/auth.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 5,
+        "lines": [
+          {
+            "line": 26,
+            "content": "console.log"
+          },
+          {
+            "line": 32,
+            "content": "console.log"
+          },
+          {
+            "line": 59,
+            "content": "console.log"
+          },
+          {
+            "line": 68,
+            "content": "console.log"
+          },
+          {
+            "line": 82,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/ErrorDisplay.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 107,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/components/FastCalculatorForm.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 174,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/components/Footer.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 66,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/components/Icons.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 171,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/components/InputSummary.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 101,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/LiveDebugLogger.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 6,
+        "lines": [
+          {
+            "line": 19,
+            "content": "console.log"
+          },
+          {
+            "line": 20,
+            "content": "console.error"
+          },
+          {
+            "line": 21,
+            "content": "console.warn"
+          },
+          {
+            "line": 50,
+            "content": "console.log"
+          },
+          {
+            "line": 73,
+            "content": "console.error"
+          },
+          {
+            "line": 97,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/components/LiveResultsPanel.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 4,
+        "lines": [
+          {
+            "line": 50,
+            "content": "console.log"
+          },
+          {
+            "line": 63,
+            "content": "console.log"
+          },
+          {
+            "line": 71,
+            "content": "console.log"
+          },
+          {
+            "line": 485,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/SaveScenarioModal.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 13,
+        "lines": [
+          {
+            "line": 45,
+            "content": "console.log"
+          },
+          {
+            "line": 46,
+            "content": "console.log"
+          },
+          {
+            "line": 47,
+            "content": "console.log"
+          },
+          {
+            "line": 50,
+            "content": "console.log"
+          },
+          {
+            "line": 56,
+            "content": "console.log"
+          },
+          {
+            "line": 64,
+            "content": "console.log"
+          },
+          {
+            "line": 67,
+            "content": "console.log"
+          },
+          {
+            "line": 74,
+            "content": "console.error"
+          },
+          {
+            "line": 75,
+            "content": "console.error"
+          },
+          {
+            "line": 82,
+            "content": "console.log"
+          },
+          {
+            "line": 88,
+            "content": "console.log"
+          },
+          {
+            "line": 96,
+            "content": "console.log"
+          },
+          {
+            "line": 99,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/components/SimpleLanguageSwitcher.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 19,
+            "content": "console.error"
+          },
+          {
+            "line": 39,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/SimpleLanguageSwitcher.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 18,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 38,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/components/budgeting/BudgetDashboard.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 150,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/budgeting/BudgetForm.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 132,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/design-system/FinancialAceternityCard.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 43,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/components/navigation/NavigationContext.tsx",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 119,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/components/navigation/NavigationIcon.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 177,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/contexts/ThemeContext.tsx",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 78,
+            "content": "console.warn"
+          },
+          {
+            "line": 99,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/hooks/useCalculatorForm.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 144,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/hooks/useConfetti.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 14,
+            "content": "console.log"
+          },
+          {
+            "line": 125,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/hooks/useContrastValidation.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 6,
+        "lines": [
+          {
+            "line": 90,
+            "content": "console.error"
+          },
+          {
+            "line": 101,
+            "content": "console.warn"
+          },
+          {
+            "line": 137,
+            "content": "console.warn"
+          },
+          {
+            "line": 223,
+            "content": "console.warn"
+          },
+          {
+            "line": 224,
+            "content": "console.warn"
+          },
+          {
+            "line": 225,
+            "content": "console.info"
+          }
+        ]
+      },
+      {
+        "file": "src/hooks/useContrastValidation.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 71,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 171,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/auth-utils.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 12,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/console-interceptor.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 10,
+        "lines": [
+          {
+            "line": 16,
+            "content": "console.error"
+          },
+          {
+            "line": 17,
+            "content": "console.warn"
+          },
+          {
+            "line": 18,
+            "content": "console.log"
+          },
+          {
+            "line": 19,
+            "content": "console.info"
+          },
+          {
+            "line": 22,
+            "content": "console.error"
+          },
+          {
+            "line": 23,
+            "content": "console.error"
+          },
+          {
+            "line": 24,
+            "content": "console.error"
+          },
+          {
+            "line": 37,
+            "content": "console.warn"
+          },
+          {
+            "line": 38,
+            "content": "console.warn"
+          },
+          {
+            "line": 39,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/contrast-validation.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 335,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/contrast-validation.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 332,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/database.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 4,
+        "lines": [
+          {
+            "line": 17,
+            "content": "console.error"
+          },
+          {
+            "line": 28,
+            "content": "console.error"
+          },
+          {
+            "line": 47,
+            "content": "console.error"
+          },
+          {
+            "line": 60,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/debug-config.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 176,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/debug-logger.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 41,
+            "content": "console.error"
+          },
+          {
+            "line": 54,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/debug-logger.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 93,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/debug-utils.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 6,
+        "lines": [
+          {
+            "line": 98,
+            "content": "console.error"
+          },
+          {
+            "line": 101,
+            "content": "console.warn"
+          },
+          {
+            "line": 104,
+            "content": "console.debug"
+          },
+          {
+            "line": 107,
+            "content": "console.log"
+          },
+          {
+            "line": 338,
+            "content": "console.log"
+          },
+          {
+            "line": 341,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/debug-utils.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 40,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/error-monitoring.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 107,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/error-monitoring.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 106,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/error-tracking.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 227,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/form-validation.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 262,
+            "content": "console.warn"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/logger.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 5,
+        "lines": [
+          {
+            "line": 95,
+            "content": "console.error"
+          },
+          {
+            "line": 130,
+            "content": "console.debug"
+          },
+          {
+            "line": 133,
+            "content": "console.info"
+          },
+          {
+            "line": 136,
+            "content": "console.warn"
+          },
+          {
+            "line": 140,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/logger.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 259,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/optimized-logger.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 35,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/pdf-generator.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 241,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/performance.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 10,
+        "lines": [
+          {
+            "line": 19,
+            "content": "console.log"
+          },
+          {
+            "line": 23,
+            "content": "console.log"
+          },
+          {
+            "line": 136,
+            "content": "console.log"
+          },
+          {
+            "line": 142,
+            "content": "console.log"
+          },
+          {
+            "line": 147,
+            "content": "console.log"
+          },
+          {
+            "line": 184,
+            "content": "console.log"
+          },
+          {
+            "line": 187,
+            "content": "console.log"
+          },
+          {
+            "line": 202,
+            "content": "console.log"
+          },
+          {
+            "line": 205,
+            "content": "console.log"
+          },
+          {
+            "line": 220,
+            "content": "console.log"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/performance.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 126,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 214,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/print-utils.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 1,
+        "lines": [
+          {
+            "line": 39,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/safe-console.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 8,
+        "lines": [
+          {
+            "line": 30,
+            "content": "console.error"
+          },
+          {
+            "line": 43,
+            "content": "console.log"
+          },
+          {
+            "line": 44,
+            "content": "console.info"
+          },
+          {
+            "line": 45,
+            "content": "console.warn"
+          },
+          {
+            "line": 46,
+            "content": "console.error"
+          },
+          {
+            "line": 47,
+            "content": "console.debug"
+          },
+          {
+            "line": 90,
+            "content": "console.error"
+          },
+          {
+            "line": 132,
+            "content": "console.error"
+          }
+        ]
+      },
+      {
+        "file": "src/lib/security-headers.ts",
+        "pattern": "process\\.env\\.NODE_ENV\\s*===\\s*['\"]development['\"]",
+        "matches": 2,
+        "lines": [
+          {
+            "line": 234,
+            "content": "process.env.NODE_ENV === \"development\""
+          },
+          {
+            "line": 352,
+            "content": "process.env.NODE_ENV === \"development\""
+          }
+        ]
+      },
+      {
+        "file": "src/lib/storage-monitor.ts",
+        "pattern": "console\\.(log|debug|info|warn|error)",
+        "matches": 5,
+        "lines": [
+          {
+            "line": 82,
+            "content": "console.error"
+          },
+          {
+            "line": 287,
+            "content": "console.error"
+          },
+          {
+            "line": 304,
+            "content": "console.log"
+          },
+          {
+            "line": 308,
+            "content": "console.error"
+          },
+          {
+            "line": 446,
+            "content": "console.error"
+          }
+        ]
+      }
+    ]
+  },
+  "recommendations": [
+    "Consider removing debug code from production build"
+  ]
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardHeader,
@@ -94,7 +94,7 @@ export default function BudgetDashboard({
   const suggestedHelocPayment =
     (availableForHeloc * helocPaymentPercentage) / 100;
 
-  const runLiveCalculation = async () => {
+  const runLiveCalculation = useCallback(async () => {
     if (availableForHeloc <= 0) return;
 
     setLoading(true);
@@ -151,13 +151,18 @@ export default function BudgetDashboard({
     } finally {
       setLoading(false);
     }
-  };
+  }, [availableForHeloc, scenario, totalMonthlyIncome, totalMonthlyExpenses]);
 
   useEffect(() => {
     if (discretionaryIncome > 500) {
       runLiveCalculation();
     }
-  }, [scenario, helocPaymentPercentage]);
+  }, [
+    scenario,
+    helocPaymentPercentage,
+    discretionaryIncome,
+    runLiveCalculation,
+  ]);
 
   const getFinancialHealthScore = () => {
     let score = 0;

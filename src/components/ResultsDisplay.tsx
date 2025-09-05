@@ -7,8 +7,9 @@ import { generateReportFilename } from "@/lib/print-utils";
 import { renderToString } from "react-dom/server";
 import type { CalculatorValidationInput } from "@/lib/validation";
 import { Icon } from "@/components/Icons";
+import { Button } from "@/components/design-system/Button";
 import { useConfetti } from "@/hooks/useConfetti";
-import InputSummary from "./InputSummary";
+
 import { useCompany } from "@/contexts/CompanyContext";
 import { useTranslations, useLocale } from "next-intl";
 import PexelsImage from "./PexelsImage";
@@ -67,6 +68,7 @@ export default function ResultsDisplay({
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const { triggerConfetti } = useConfetti();
   const { companySettings, assignedAgent } = useCompany();
   const tResults = useTranslations("results");
@@ -101,15 +103,8 @@ export default function ResultsDisplay({
 
   return (
     <div className="space-y-8">
-      {/* Input Summary - Only on larger screens */}
-      {inputs && (
-        <div className="hidden lg:block">
-          <InputSummary formData={inputs} className="max-w-2xl mx-auto" />
-        </div>
-      )}
-
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div id="summary" className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Time Saved Card */}
         <div className="bg-card p-6 rounded-lg border border-border relative overflow-hidden">
           <div className="absolute top-2 right-2">
@@ -181,7 +176,10 @@ export default function ResultsDisplay({
       </div>
 
       {/* Detailed Comparison */}
-      <div className="bg-card rounded-lg shadow-md overflow-hidden">
+      <div
+        id="comparison"
+        className="bg-card rounded-lg shadow-md overflow-hidden"
+      >
         <div className="px-6 py-4 bg-card border-b border-border">
           <h3 className="text-lg font-semibold text-foreground">
             {tResults("strategyComparison")}
@@ -323,41 +321,50 @@ export default function ResultsDisplay({
       />
 
       {/* Payment Flow Diagram */}
-      {inputs && (
-        <PaymentFlowDiagram
-          monthlyIncome={inputs.monthlyNetIncome}
-          monthlyExpenses={inputs.monthlyExpenses}
-          discretionaryIncome={inputs.monthlyDiscretionaryIncome}
-          mortgagePayment={results.traditional.monthlyPayment}
-          helocBalance={results.heloc.averageHelocBalance}
-          extraPayment={results.heloc.schedule[0]?.discretionaryUsed || 0}
-        />
-      )}
+      <section id="payment-flow">
+        {inputs && (
+          <PaymentFlowDiagram
+            monthlyIncome={inputs.monthlyNetIncome}
+            monthlyExpenses={inputs.monthlyExpenses}
+            discretionaryIncome={inputs.monthlyDiscretionaryIncome}
+            mortgagePayment={results.traditional.monthlyPayment}
+            helocBalance={results.heloc.averageHelocBalance}
+            extraPayment={results.heloc.schedule[0]?.discretionaryUsed || 0}
+          />
+        )}
+      </section>
 
       {/* Detailed Amortization Schedule with Highlighting */}
-      <AmortizationTable
-        schedule={results.heloc.schedule}
-        showHighlights={true}
-      />
+      <section id="amortization">
+        <AmortizationTable
+          schedule={results.heloc.schedule}
+          showHighlights={true}
+        />
+      </section>
 
       {/* Full Excel-Style Amortization Table */}
-      {inputs && (
-        <FullAmortizationTable
-          schedule={results.heloc.schedule}
-          inputs={{
-            propertyValue: inputs.propertyValue || 0,
-            monthlyNetIncome: inputs.monthlyNetIncome,
-            monthlyExpenses: inputs.monthlyExpenses,
-            discretionaryIncome: inputs.monthlyDiscretionaryIncome,
-            helocLimit: inputs.helocLimit || 0,
-            helocRate: inputs.helocInterestRate || 0,
-            pmiMonthly: inputs.pmiMonthly,
-          }}
-        />
-      )}
+      <section id="full-schedule">
+        {inputs && (
+          <FullAmortizationTable
+            schedule={results.heloc.schedule}
+            inputs={{
+              propertyValue: inputs.propertyValue || 0,
+              monthlyNetIncome: inputs.monthlyNetIncome,
+              monthlyExpenses: inputs.monthlyExpenses,
+              discretionaryIncome: inputs.monthlyDiscretionaryIncome,
+              helocLimit: inputs.helocLimit || 0,
+              helocRate: inputs.helocInterestRate || 0,
+              pmiMonthly: inputs.pmiMonthly,
+            }}
+          />
+        )}
+      </section>
 
       {/* Monthly HELOC Payment Strategy */}
-      <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+      <div
+        id="strategy"
+        className="bg-card rounded-lg shadow-md overflow-hidden border border-border"
+      >
         <div
           className="px-6 py-4 border-b border-info-border"
           style={{ backgroundColor: "rgb(var(--color-info-background))" }}
@@ -586,9 +593,16 @@ export default function ResultsDisplay({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <div
+        id="actions"
+        className="flex flex-col sm:flex-row gap-4 justify-center"
+      >
         {onSaveScenario && (
-          <button
+          <Button
+            variant="success"
+            loading={isSaving}
+            disabled={isSaving}
+            icon="save"
             onClick={async () => {
               setIsSaving(true);
               setSaveError(null);
@@ -632,26 +646,19 @@ export default function ResultsDisplay({
                 setIsSaving(false);
               }
             }}
-            disabled={isSaving}
-            className="bg-success hover:bg-success/90 disabled:bg-muted text-success-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
           >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Icon name="save" size="sm" />
-                <span>Save Scenario</span>
-              </>
-            )}
-          </button>
+            {isSaving ? "Saving..." : "Save Scenario"}
+          </Button>
         )}
 
-        <button
+        <Button
+          variant="outline"
+          loading={isGeneratingPDF}
+          disabled={isGeneratingPDF || !inputs}
+          icon="print"
           onClick={async () => {
             if (inputs) {
+              setIsGeneratingPDF(true);
               try {
                 // Prepare translations for PDF generation
                 const pdfTranslations = {
@@ -721,36 +728,36 @@ export default function ResultsDisplay({
               } catch (error) {
                 console.error("Error generating PDF:", error);
                 alert("Failed to generate PDF. Please try again.");
+              } finally {
+                setIsGeneratingPDF(false);
               }
             }
           }}
-          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
         >
-          <Icon name="print" size="sm" />
-          <span>{tResults("printReport")}</span>
-        </button>
+          {isGeneratingPDF ? "Generating PDF..." : tResults("printReport")}
+        </Button>
 
         {onNewCalculation && (
-          <button
+          <Button
+            variant="primary"
             onClick={onNewCalculation}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+            icon="calculator"
           >
-            <Icon name="calculator" size="sm" />
-            <span>New Calculation</span>
-          </button>
+            New Calculation
+          </Button>
         )}
 
-        <button
+        <Button
+          variant="secondary"
           onClick={() => triggerConfetti({ type: "celebration" })}
-          className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
         >
-          <span>🎉</span>
-          <span>Celebrate Savings!</span>
-        </button>
+          🎉 Celebrate Savings!
+        </Button>
       </div>
 
       {/* Key Insights with Success Image */}
       <div
+        id="insights"
         className="p-6 rounded-lg border border-info-border"
         style={{ backgroundColor: "rgb(var(--color-info-background))" }}
       >
@@ -820,6 +827,7 @@ export default function ResultsDisplay({
 
       {/* Disclaimer */}
       <div
+        id="disclaimer"
         className="rounded-lg p-4 border border-warning-border"
         style={{ backgroundColor: "rgb(var(--color-warning-background))" }}
       >

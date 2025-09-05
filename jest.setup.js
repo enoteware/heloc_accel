@@ -10,6 +10,15 @@ expect.extend(matchers);
 const { toHaveNoViolations } = require("jest-axe");
 expect.extend(toHaveNoViolations);
 
+// Mock next-intl to avoid ESM parsing in Jest and simplify i18n usage in tests
+jest.mock("next-intl", () => {
+  return {
+    useTranslations: () => (key) => key,
+    useFormatter: () => ({ number: (v) => v, dateTime: (d) => String(d) }),
+    NextIntlClientProvider: ({ children }) => children,
+  };
+});
+
 // Mock environment variables for testing
 process.env.NEXTAUTH_SECRET = "test-secret";
 process.env.NEXTAUTH_URL = "http://localhost:3000";

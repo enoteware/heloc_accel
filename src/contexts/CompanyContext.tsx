@@ -5,6 +5,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 import { useUser } from "@stackframe/stack";
@@ -30,7 +31,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCompanyData = async () => {
+  const fetchCompanyData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -83,12 +84,12 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session?.user?.id]);
 
   // Fetch data on mount and when session changes
   useEffect(() => {
     fetchCompanyData();
-  }, [session?.user?.id]);
+  }, [fetchCompanyData]);
 
   const refreshCompanyData = async () => {
     await fetchCompanyData();

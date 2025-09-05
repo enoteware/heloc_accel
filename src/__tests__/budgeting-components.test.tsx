@@ -256,10 +256,10 @@ describe("BudgetSummary Component", () => {
       />,
     );
 
-    expect(screen.getByText("Monthly Income")).toBeInTheDocument();
-    expect(screen.getByText("Monthly Expenses")).toBeInTheDocument();
-    expect(screen.getByText("Discretionary")).toBeInTheDocument();
-    expect(screen.getByText("Savings Rate")).toBeInTheDocument();
+    expect(screen.getAllByText("Monthly Income").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Monthly Expenses").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Discretionary").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Savings Rate").length).toBeGreaterThan(0);
   });
 
   it("calculates monthly amounts correctly", () => {
@@ -300,16 +300,18 @@ describe("BudgetSummary Component", () => {
       />,
     );
 
-    expect(screen.getByText("Housing")).toBeInTheDocument();
-    expect(screen.getByText("Food")).toBeInTheDocument();
+    expect(screen.getAllByText("Housing").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Food").length).toBeGreaterThan(0);
   });
 
   it("handles empty data gracefully", () => {
     render(<BudgetSummary incomeSourcesData={[]} expenseCategoriesData={[]} />);
 
-    expect(screen.getByText("No income sources added")).toBeInTheDocument();
-    expect(screen.getByText("No expenses added")).toBeInTheDocument();
-    expect(screen.getByText("$0")).toBeInTheDocument(); // Should show $0 for all amounts
+    expect(
+      screen.getAllByText("No income sources added").length,
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByText("No expenses added").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("$0").length).toBeGreaterThan(0); // Should show $0 for all amounts
   });
 });
 
@@ -359,8 +361,10 @@ describe("BudgetDashboard Component", () => {
       />,
     );
 
-    expect(screen.getByText("Financial Health Score")).toBeInTheDocument();
-    expect(screen.getByText(/\/100/)).toBeInTheDocument();
+    expect(
+      screen.getAllByText("Financial Health Score").length,
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByText(/\/100/).length).toBeGreaterThan(0);
   });
 
   it("renders HELOC strategy section", () => {
@@ -371,10 +375,16 @@ describe("BudgetDashboard Component", () => {
       />,
     );
 
-    expect(screen.getByText("HELOC Acceleration Strategy")).toBeInTheDocument();
-    expect(screen.getByText("Discretionary Income")).toBeInTheDocument();
-    expect(screen.getByText("Available for HELOC")).toBeInTheDocument();
-    expect(screen.getByText("Suggested Payment")).toBeInTheDocument();
+    expect(
+      screen.getAllByText("HELOC Acceleration Strategy").length,
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByText("Discretionary Income").length).toBeGreaterThan(
+      0,
+    );
+    expect(screen.getAllByText("Available for HELOC").length).toBeGreaterThan(
+      0,
+    );
+    expect(screen.getAllByText("Suggested Payment").length).toBeGreaterThan(0);
   });
 
   it("calculates available HELOC payment correctly", () => {

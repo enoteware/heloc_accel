@@ -196,12 +196,19 @@ export function debugLTVCalculation(
   );
 
   // Validate inputs
-  if (loanAmount == null || propertyValue == null) {
+  if (
+    loanAmount == null ||
+    propertyValue == null ||
+    loanAmount === "" ||
+    propertyValue === ""
+  ) {
     const missingFields = [];
-    if (loanAmount == null) missingFields.push("loan amount");
-    if (propertyValue == null) missingFields.push("property value");
+    if (loanAmount == null || loanAmount === "")
+      missingFields.push("loan amount");
+    if (propertyValue == null || propertyValue === "")
+      missingFields.push("property value");
     errors.push(
-      `Missing required inputs: ${missingFields.join(" and ")} is null/undefined`,
+      `Missing required inputs: ${missingFields.join(" and ")} is null/undefined/empty`,
     );
     steps.push("❌ Validation failed: Missing inputs");
   } else {
@@ -272,14 +279,23 @@ export function debugLTVCalculation(
   };
 
   // Use warning level for missing inputs (expected on form load), error for other failures
-  const logLevel =
-    loanAmount == null || propertyValue == null ? "warn" : "error";
-  const logMessage =
-    loanAmount == null || propertyValue == null
-      ? "LTV calculation failed: missing inputs"
-      : "LTV calculation failed";
+  const isMissingInputs =
+    loanAmount == null ||
+    propertyValue == null ||
+    loanAmount === "" ||
+    propertyValue === "";
+  const logLevel = isMissingInputs ? "warn" : "error";
+  const logMessage = isMissingInputs
+    ? "LTV calculation failed: missing inputs"
+    : "LTV calculation failed";
 
-  debugLogger.log(logLevel, "ltv", logMessage, debugInfo);
+  // Only log if debug is enabled and it's not just missing inputs on form load
+  if (debugLogger.isDebugEnabled()) {
+    // Don't log missing inputs as errors - this is expected on form load
+    if (!isMissingInputs) {
+      debugLogger.log(logLevel, "ltv", logMessage, debugInfo);
+    }
+  }
   return debugInfo;
 }
 

@@ -3,7 +3,7 @@
 // Force dynamic rendering to avoid SSG issues with Stack Auth
 export const dynamic = "force-dynamic";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const user = useUser();
-  const session = user ? { user } : null;
+  const session = useMemo(() => (user ? { user } : null), [user]);
   const status = user ? "authenticated" : "unauthenticated";
   const t = useTranslations("auth");
 

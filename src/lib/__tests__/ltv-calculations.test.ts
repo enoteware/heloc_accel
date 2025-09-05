@@ -208,7 +208,7 @@ describe("LTV Calculation Functions", () => {
       const result = safeLTVCalculation("", "");
       expect(result.success).toBe(false);
       expect(result.canCalculate).toBe(false);
-      expect(result.error).toContain("positive"); // Empty strings convert to 0, which triggers the "positive values" error
+      expect(result.error).toContain("required"); // Empty strings are treated as missing inputs
     });
 
     it("should handle mixed valid/invalid inputs", () => {

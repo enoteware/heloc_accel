@@ -46,6 +46,16 @@ next-env.d.ts
 *.db
 *.sqlite
 *.sqlite3
+*.db-journal
+
+# SQL dumps (keep migrations tracked)
+*.sql
+*.psql
+*.dump
+*.dmp
+!prisma/migrations/**/*.sql
+!drizzle/**/*.sql
+!migrations/**/*.sql
 
 # Logs
 logs
@@ -59,6 +69,7 @@ temp/
 *.zip
 *.tar.gz
 *.rar
+*.tar
 
 # Backup files
 *.bak
@@ -85,6 +96,19 @@ sentry.*.config.js
 /scripts/setup-*.js
 /scripts/remove-*.js
 /scripts/seed-*.js
+
+# Env and secrets
+.env
+.env.development
+.env.staging
+.env.test
+.env.preview
+.envrc
+.env.secrets
+.secrets/
+*.key
+*.crt
+*.pfx
 
 # Test and example directories
 **/test-forms/
@@ -134,6 +158,13 @@ jspm_packages/
 
 # Optional eslint cache
 .eslintcache
+
+# Build caches and outputs
+.turbo/
+dist/
+storybook-static/
+cypress/videos/
+cypress/screenshots/
 
 # Microbundle cache
 .rpt2_cache/

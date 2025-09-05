@@ -246,7 +246,7 @@ export default function HomePageContent() {
                   Build Equity
                 </h4>
                 <p className="text-muted-foreground">
-                  Leverage your home's equity to accelerate wealth building
+                  Leverage your home&apos;s equity to accelerate wealth building
                 </p>
               </div>
             </div>

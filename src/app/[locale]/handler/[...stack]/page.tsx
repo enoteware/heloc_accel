@@ -1,6 +1,7 @@
 import { CredentialSignIn, CredentialSignUp } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function Handler(props: {
   params: Promise<{ stack?: string[] }>;
@@ -35,22 +36,22 @@ export default async function Handler(props: {
               {route === "sign-up" ? (
                 <>
                   Already have an account?{" "}
-                  <a
+                  <Link
                     href="/en/handler/sign-in"
                     className="font-medium text-primary hover:underline"
                   >
                     Sign in
-                  </a>
+                  </Link>
                 </>
               ) : (
                 <>
                   {"Don't have an account?"}{" "}
-                  <a
+                  <Link
                     href="/en/handler/sign-up"
                     className="font-medium text-primary hover:underline"
                   >
                     Sign up
-                  </a>
+                  </Link>
                 </>
               )}
             </p>

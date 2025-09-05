@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import type { PexelsPhoto } from "@/lib/pexels";
 
@@ -204,7 +204,7 @@ export function usePexelsImage(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPhoto = async () => {
+  const fetchPhoto = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -244,7 +244,7 @@ export function usePexelsImage(
     } finally {
       setLoading(false);
     }
-  };
+  }, [theme, query, options.size, options.orientation]);
 
   useEffect(() => {
     if (options.autoFetch !== false) {

@@ -3,7 +3,14 @@
 // Force dynamic rendering to avoid SSG issues with Stack Auth
 export const dynamic = "force-dynamic";
 
-import React, { useState, useEffect, useCallback, Suspense, lazy } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  Suspense,
+  lazy,
+} from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -36,11 +43,19 @@ interface Scenario {
 
 function ComparePageContent() {
   const user = useUser();
-  const session = user
-    ? {
-        user: { email: user.primaryEmail, name: user.displayName, id: user.id },
-      }
-    : null;
+  const session = useMemo(
+    () =>
+      user
+        ? {
+            user: {
+              email: user.primaryEmail,
+              name: user.displayName,
+              id: user.id,
+            },
+          }
+        : null,
+    [user],
+  );
   const status =
     user === undefined ? "loading" : user ? "authenticated" : "unauthenticated";
   const router = useRouter();
@@ -84,7 +99,7 @@ function ComparePageContent() {
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, []);
 
   // Load scenarios and pre-select from URL params
   useEffect(() => {

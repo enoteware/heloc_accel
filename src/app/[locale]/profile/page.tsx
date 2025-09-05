@@ -3,7 +3,7 @@
 // Force dynamic rendering to avoid SSG issues with Stack Auth
 export const dynamic = "force-dynamic";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -30,11 +30,19 @@ interface UserProfile {
 
 export default function ProfilePage() {
   const user = useUser();
-  const session = user
-    ? {
-        user: { email: user.primaryEmail, name: user.displayName, id: user.id },
-      }
-    : null;
+  const session = useMemo(
+    () =>
+      user
+        ? {
+            user: {
+              email: user.primaryEmail,
+              name: user.displayName,
+              id: user.id,
+            },
+          }
+        : null,
+    [user],
+  );
   const status =
     user === undefined ? "loading" : user ? "authenticated" : "unauthenticated";
   const router = useRouter();
@@ -85,7 +93,7 @@ export default function ProfilePage() {
     if (!session) {
       router.push(`/${locale}/login?callbackUrl=/${locale}/profile`);
     }
-  }, [session, status, router]);
+  }, [session, status, router, locale]);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -127,7 +135,7 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  }, [session?.user]);
+  }, [t]);
 
   // Load profile data
   useEffect(() => {

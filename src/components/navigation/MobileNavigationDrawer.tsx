@@ -113,7 +113,10 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
+        className={cn(
+          "fixed inset-0 bg-background/80 backdrop-blur-sm z-40",
+          "transition-opacity duration-300",
+        )}
         onClick={onClose}
         aria-hidden="true"
       />
@@ -122,8 +125,8 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
       <div
         id="mobile-navigation-menu"
         className={cn(
-          "fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-card",
-          "shadow-xl border-l border-neutral-200 dark:border-neutral-800",
+          "fixed top-0 right-0 h-full w-80 max-w-[85vw]",
+          "bg-background shadow-xl border-l border-border",
           "z-50 transform transition-transform duration-300 ease-in-out",
           "flex flex-col",
           isOpen ? "translate-x-0" : "translate-x-full",
@@ -134,7 +137,12 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         aria-label="Navigation menu"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
+        <div
+          className={cn(
+            "flex items-center justify-between p-4",
+            "border-b border-border bg-background",
+          )}
+        >
           <h2 className="text-h6 font-semibold text-foreground">Navigation</h2>
           <div className="flex items-center space-x-2">
             <CompactThemeToggle />
@@ -143,20 +151,20 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               type="button"
               onClick={onClose}
               className={cn(
-                "p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted",
-                "focus:outline-none focus:ring-2 focus:ring-ring",
-                "transition-colors duration-200",
+                "p-2 rounded-lg transition-colors duration-200",
+                "text-muted-foreground hover:text-foreground hover:bg-muted",
+                "focus:outline-none focus:ring-2 focus:ring-primary/20",
               )}
               aria-label="Close navigation menu"
             >
-              <NavigationIcon name="close" size="md" aria-hidden={true} />
+              <NavigationIcon name="x" size="md" aria-hidden={true} />
             </button>
           </div>
         </div>
 
         {/* User info (if authenticated) */}
         {session?.user && (
-          <div className="p-4 border-b border-border">
+          <div className={cn("p-4 border-b border-border bg-muted/30")}>
             <div className="flex items-center space-x-3">
               <div
                 className={cn(
@@ -186,7 +194,11 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             href="/"
             label="Home"
             icon="home"
-            className="w-full justify-start"
+            variant="default"
+            className={cn(
+              "w-full justify-start px-3 py-3 rounded-lg",
+              "text-foreground hover:bg-muted/80 transition-colors duration-200",
+            )}
             onClick={handleLinkClick}
           />
 
@@ -196,43 +208,117 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 href="/calculator"
                 label="Calculator"
                 icon="calculator"
-                className="w-full justify-start"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
+                onClick={handleLinkClick}
+              />
+              <NavigationLink
+                href="/budgeting"
+                label="Budgeting"
+                icon="dollar-sign"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
                 onClick={handleLinkClick}
               />
               <NavigationLink
                 href="/dashboard"
                 label="Dashboard"
                 icon="dashboard"
-                className="w-full justify-start"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
                 onClick={handleLinkClick}
               />
               <NavigationLink
                 href="/scenarios"
                 label="Scenarios"
                 icon="save"
-                className="w-full justify-start"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
                 onClick={handleLinkClick}
               />
               <NavigationLink
                 href="/compare"
                 label="Compare"
                 icon="compare"
-                className="w-full justify-start"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
                 onClick={handleLinkClick}
               />
               <NavigationLink
                 href="/profile"
                 label="Profile"
                 icon="user"
-                className="w-full justify-start"
+                variant="default"
+                className={cn(
+                  "w-full justify-start px-3 py-3 rounded-lg",
+                  "text-foreground hover:bg-muted/80 transition-colors duration-200",
+                )}
                 onClick={handleLinkClick}
               />
             </>
           )}
+
+          {/* Resources Section */}
+          <div className="pt-4">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-2 px-3">
+              Resources
+            </h3>
+            <NavigationLink
+              href="/formulas"
+              label="Formulas"
+              icon="book"
+              variant="ghost"
+              className={cn(
+                "w-full justify-start px-3 py-3 rounded-lg",
+                "text-muted-foreground hover:text-foreground hover:bg-muted/80",
+                "transition-colors duration-200",
+              )}
+              onClick={handleLinkClick}
+            />
+            <NavigationLink
+              href="/guides"
+              label="Guides"
+              icon="help"
+              variant="ghost"
+              className={cn(
+                "w-full justify-start px-3 py-3 rounded-lg",
+                "text-muted-foreground hover:text-foreground hover:bg-muted/80",
+                "transition-colors duration-200",
+              )}
+              onClick={handleLinkClick}
+            />
+            <NavigationLink
+              href="/support"
+              label="Support"
+              icon="support"
+              variant="ghost"
+              className={cn(
+                "w-full justify-start px-3 py-3 rounded-lg",
+                "text-muted-foreground hover:text-foreground hover:bg-muted/80",
+                "transition-colors duration-200",
+              )}
+              onClick={handleLinkClick}
+            />
+          </div>
         </nav>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-border space-y-2">
+        <div className={cn("p-4 border-t border-border bg-muted/30 space-y-2")}>
           {session?.user ? (
             <button
               type="button"
@@ -240,11 +326,16 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className={cn(
                 "flex items-center space-x-2 w-full px-3 py-2 rounded-lg",
                 "text-destructive hover:bg-destructive/10",
-                "focus:outline-none focus:ring-2 focus:ring-destructive",
+                "focus:outline-none focus:ring-2 focus:ring-destructive/20",
                 "transition-colors duration-200",
               )}
             >
-              <NavigationIcon name="logout" size="md" aria-hidden={true} />
+              <NavigationIcon
+                name="logout"
+                size="md"
+                variant="error"
+                aria-hidden={true}
+              />
               <span className="text-body font-medium">Sign Out</span>
             </button>
           ) : (
@@ -252,7 +343,13 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               href="/handler/sign-in"
               label="Sign In"
               icon="login"
-              className="w-full justify-start bg-primary text-primary-foreground hover:bg-primary/90"
+              variant="primary"
+              className={cn(
+                "w-full justify-center px-4 py-3 rounded-lg",
+                "bg-primary text-primary-foreground hover:bg-primary/90",
+                "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                "transition-colors duration-200",
+              )}
               onClick={handleLinkClick}
             />
           )}

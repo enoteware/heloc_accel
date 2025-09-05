@@ -1,14 +1,12 @@
 import { setRequestLocale } from "next-intl/server";
-import HomePageContent from "./HomePageContentV2";
+import AboutPageContent from "./AboutPageContent";
 
-export default async function HomePage({
+export default async function AboutPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  // Enable static rendering
   setRequestLocale(locale);
-
-  return <HomePageContent />;
+  return <AboutPageContent />;
 }

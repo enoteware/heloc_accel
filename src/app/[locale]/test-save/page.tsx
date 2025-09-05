@@ -191,9 +191,12 @@ export default function TestSavePage() {
         <div className="mt-6 bg-blue-50 rounded-lg p-6">
           <h3 className="font-semibold mb-2">How to Debug:</h3>
           <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Make sure you're logged in (check user status above)</li>
+            <li>Make sure you&apos;re logged in (check user status above)</li>
             <li>Open browser console (F12) before testing</li>
-            <li>Click "Test Save Scenario" to test the save functionality</li>
+            <li>
+              Click &quot;Test Save Scenario&quot; to test the save
+              functionality
+            </li>
             <li>Check console logs for detailed information</li>
             <li>Check server logs in the terminal for backend details</li>
             <li>After saving, go to dashboard to see if scenario appears</li>

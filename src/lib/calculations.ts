@@ -119,19 +119,20 @@ export function safeLTVCalculation(
   // Debug the calculation process
   const debugInfo = debugLTVCalculation(loanAmount, propertyValue);
 
-  // Handle null/undefined inputs
-  if (loanAmount == null || propertyValue == null) {
+  // Handle null/undefined/empty inputs (common on form load)
+  if (
+    loanAmount == null ||
+    propertyValue == null ||
+    loanAmount === "" ||
+    propertyValue === ""
+  ) {
     const result = {
       success: false,
       ltvRatio: 0,
       error: "Both loan amount and original purchase price are required",
       canCalculate: false,
     };
-    debugLogger.log("warn", "ltv", "LTV calculation failed: missing inputs", {
-      loanAmount,
-      propertyValue,
-      result,
-    });
+    // Don't log missing inputs as this is expected on form load
     return result;
   }
 
@@ -147,13 +148,7 @@ export function safeLTVCalculation(
       error: "Loan amount and original purchase price must be valid numbers",
       canCalculate: false,
     };
-    debugLogger.log("warn", "ltv", "LTV calculation failed: invalid numbers", {
-      loanAmount,
-      propertyValue,
-      loan,
-      value,
-      result,
-    });
+    // Don't log invalid numbers as this is common during form input
     return result;
   }
 

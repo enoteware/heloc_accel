@@ -26,31 +26,32 @@ const config: Config = {
           foreground: "rgb(var(--color-foreground) / <alpha-value>)",
         },
         primary: {
-          // Brand colors from logo analysis + semantic DEFAULT/foreground
-          50: "#f0f4f8",
-          100: "#d9e2ec",
-          200: "#bcccdc",
-          300: "#9fb3c8",
-          400: "#829ab1",
-          500: "#8095af", // Brand primary from logo
-          600: "#627d98",
-          700: "#486581",
-          800: "#334e68",
-          900: "#00193f", // Dark navy from logo
+          // Brand colors from style guide - Blue-Gray palette
+          50: "#f0f4f8", // primary-50
+          100: "#d9e2ec", // primary-100
+          200: "#bcccdc", // primary-200
+          300: "#9fb3c8", // primary-300
+          400: "#829ab1", // primary-400
+          500: "#8095af", // primary-500 - Brand primary color
+          600: "#627d98", // primary-600
+          700: "#486581", // primary-700
+          800: "#334e68", // primary-800
+          900: "#00193f", // primary-900 - Navy headers
           DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
           foreground: "rgb(var(--color-primary-foreground) / <alpha-value>)",
         },
         secondary: {
-          50: "#fff4f1",
-          100: "#ffe4dc",
-          200: "#ffc9b9",
-          300: "#ffac89", // Coral from logo
-          400: "#ff8f66",
-          500: "#ff7043",
-          600: "#e55a2b",
-          700: "#cc4125",
-          800: "#b8321f",
-          900: "#7f433a", // Brown from logo
+          // Brand colors from style guide - Coral/Orange palette
+          50: "#fff5f0", // secondary-50
+          100: "#ffe4d9", // secondary-100
+          200: "#ffc9b4", // secondary-200
+          300: "#ffac89", // secondary-300 - Primary accent color
+          400: "#ff8b66", // secondary-400
+          500: "#ff6b42", // secondary-500
+          600: "#d94f2a", // secondary-600
+          700: "#b33818", // secondary-700
+          800: "#8c2a0f", // secondary-800
+          900: "#7f433a", // secondary-900 - Deep brown accent
           DEFAULT: "rgb(var(--color-secondary) / <alpha-value>)",
           foreground: "rgb(var(--color-secondary-foreground) / <alpha-value>)",
         },
@@ -86,20 +87,30 @@ const config: Config = {
           border: "rgb(var(--color-info-border) / <alpha-value>)",
         },
         neutral: {
-          50: "#fffefe", // Off-white from logo
-          100: "#f7fafc",
-          200: "#edf2f7",
-          300: "#e2e8f0",
-          400: "#cbd5e0",
-          500: "#a0aec0",
-          600: "#80828e", // Medium gray from logo
-          700: "#4a5568",
-          800: "#2d3748",
-          900: "#1a202c",
+          // Brand neutral colors from style guide
+          50: "#fffefe", // neutral-50 - Off-white
+          100: "#f8f9fa", // neutral-100 - Light gray
+          200: "#e9ecef", // neutral-200 - Borders
+          300: "#dee2e6", // neutral-300 - Dividers
+          400: "#ced4da", // neutral-400 - Disabled states
+          500: "#adb5bd", // neutral-500 - Placeholder text
+          600: "#80828e", // neutral-600 - Secondary text
+          700: "#495057", // neutral-700 - Body text
+          800: "#343a40", // neutral-800 - Headers
+          900: "#212529", // neutral-900 - Primary text
         },
-        brandAccent: {
-          blue: "#85a6cc", // Light blue from logo
-          navy: "#053d7d", // Medium blue from logo
+        // Financial semantic colors
+        income: "rgb(var(--color-income) / <alpha-value>)",
+        expense: "rgb(var(--color-expense) / <alpha-value>)",
+        savings: "rgb(var(--color-savings) / <alpha-value>)",
+        debt: "rgb(var(--color-debt) / <alpha-value>)",
+        // Chart colors
+        chart: {
+          primary: "rgb(var(--color-chart-primary) / <alpha-value>)",
+          secondary: "rgb(var(--color-chart-secondary) / <alpha-value>)",
+          tertiary: "rgb(var(--color-chart-tertiary) / <alpha-value>)",
+          quaternary: "rgb(var(--color-chart-quaternary) / <alpha-value>)",
+          quinary: "rgb(var(--color-chart-quinary) / <alpha-value>)",
         },
       },
       fontFamily: {
@@ -109,24 +120,28 @@ const config: Config = {
           "BlinkMacSystemFont",
           "Segoe UI",
           "Roboto",
+          "Helvetica Neue",
+          "Arial",
           "sans-serif",
         ],
         mono: ["JetBrains Mono", "Fira Code", "Consolas", "monospace"],
       },
       fontSize: {
-        display: ["3.5rem", { lineHeight: "1.1", fontWeight: "700" }],
-        h1: ["3rem", { lineHeight: "1.2", fontWeight: "700" }],
-        h2: ["2.25rem", { lineHeight: "1.3", fontWeight: "600" }],
-        h3: ["1.875rem", { lineHeight: "1.3", fontWeight: "600" }],
-        h4: ["1.5rem", { lineHeight: "1.4", fontWeight: "600" }],
-        h5: ["1.25rem", { lineHeight: "1.4", fontWeight: "500" }],
-        h6: ["1.125rem", { lineHeight: "1.4", fontWeight: "500" }],
-        "body-lg": ["1.125rem", { lineHeight: "1.6", fontWeight: "400" }],
-        body: ["1rem", { lineHeight: "1.6", fontWeight: "400" }],
-        "body-sm": ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
-        caption: ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }],
+        // Typography scale from style guide
+        display: ["3.5rem", { lineHeight: "1.1", fontWeight: "700" }], // 56px
+        h1: ["3rem", { lineHeight: "1.2", fontWeight: "700" }], // 48px
+        h2: ["2.25rem", { lineHeight: "1.3", fontWeight: "600" }], // 36px
+        h3: ["1.875rem", { lineHeight: "1.3", fontWeight: "600" }], // 30px
+        h4: ["1.5rem", { lineHeight: "1.4", fontWeight: "600" }], // 24px
+        h5: ["1.25rem", { lineHeight: "1.4", fontWeight: "500" }], // 20px
+        h6: ["1.125rem", { lineHeight: "1.4", fontWeight: "500" }], // 18px
+        "body-lg": ["1.125rem", { lineHeight: "1.6", fontWeight: "400" }], // 18px
+        body: ["1rem", { lineHeight: "1.6", fontWeight: "400" }], // 16px
+        "body-sm": ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }], // 14px
+        caption: ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }], // 12px
       },
       spacing: {
+        // 8px grid system from style guide
         xs: "0.25rem", // 4px
         sm: "0.5rem", // 8px
         md: "1rem", // 16px
@@ -146,17 +161,39 @@ const config: Config = {
         "container-2xl": "1536px",
       },
       borderRadius: {
-        sm: "0.25rem",
-        md: "0.375rem",
-        lg: "0.5rem",
-        xl: "0.75rem",
-        "2xl": "1rem",
+        // Border radius from style guide
+        sm: "0.25rem", // 4px
+        md: "0.375rem", // 6px - Default for buttons/inputs
+        lg: "0.5rem", // 8px - Default for cards
+        xl: "0.75rem", // 12px
+        "2xl": "1rem", // 16px
       },
       boxShadow: {
-        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        // Shadow system from style guide
+        sm: "0 1px 3px rgba(0, 0, 0, 0.1)",
         md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
         lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
         xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      },
+      animation: {
+        // Animation utilities
+        "fade-in": "fadeIn 0.2s ease-in-out",
+        "slide-up": "slideUp 0.3s ease-out",
+        "slide-down": "slideDown 0.3s ease-out",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { transform: "translateY(10px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        slideDown: {
+          "0%": { transform: "translateY(-10px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
       },
     },
   },

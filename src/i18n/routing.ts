@@ -33,6 +33,9 @@ export const routing = defineRouting({
     "/handler/[...stack]": "/handler/[...stack]",
     "/sign-out": "/sign-out",
     "/demo-setup": "/demo-setup",
+    "/privacy": "/privacy",
+    "/terms": "/terms",
+    "/contact": "/contact",
   },
 });
 

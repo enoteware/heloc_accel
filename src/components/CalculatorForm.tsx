@@ -6,6 +6,7 @@ import type {
   ValidationError,
 } from "@/lib/validation";
 import { Icon } from "@/components/Icons";
+import { Button } from "@/components/design-system/Button";
 import {
   safeLTVCalculation,
   isMIPRequired,
@@ -49,6 +50,8 @@ export default function CalculatorForm({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [demoLoading, setDemoLoading] = useState(false);
+  const [clearLoading, setClearLoading] = useState(false);
 
   // Update errors when validation errors are passed from parent
   useEffect(() => {
@@ -126,7 +129,7 @@ export default function CalculatorForm({
         }));
       }
     }
-  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV]);
+  }, [ltvInfo.ltvRatio, ltvInfo.canCalculateLTV, formData.pmiMonthly]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,7 +137,12 @@ export default function CalculatorForm({
     onSubmit(formData);
   };
 
-  const handlePrefillDemo = () => {
+  const handlePrefillDemo = async () => {
+    setDemoLoading(true);
+
+    // Simulate loading time for better UX
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     const demoData: CalculatorValidationInput = {
       currentMortgageBalance: 350000,
       currentInterestRate: 6.5,
@@ -158,9 +166,15 @@ export default function CalculatorForm({
 
     setFormData(demoData);
     setErrors({});
+    setDemoLoading(false);
   };
 
-  const handleClearForm = () => {
+  const handleClearForm = async () => {
+    setClearLoading(true);
+
+    // Simulate loading time for better UX
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const emptyData: CalculatorValidationInput = {
       currentMortgageBalance: 0,
       currentInterestRate: 0,
@@ -184,6 +198,7 @@ export default function CalculatorForm({
 
     setFormData(emptyData);
     setErrors({});
+    setClearLoading(false);
   };
 
   const formatCurrency = (value: number) => {
@@ -768,34 +783,39 @@ export default function CalculatorForm({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
         {/* Prefill Demo Button */}
-        <button
+        <Button
           type="button"
+          variant="success"
           onClick={handlePrefillDemo}
-          className="btn btn-success"
+          loading={demoLoading}
+          disabled={loading || demoLoading || clearLoading}
+          icon="file-text"
         >
-          <Icon name="file-text" size="sm" />
-          <span>Fill Demo Data</span>
-        </button>
+          {demoLoading ? "Loading Demo..." : "Fill Demo Data"}
+        </Button>
 
         {/* Clear Form Button */}
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={handleClearForm}
-          className="btn btn-secondary"
+          loading={clearLoading}
+          disabled={loading || demoLoading || clearLoading}
+          icon="x"
         >
-          <Icon name="x" size="sm" />
-          <span>Clear Form</span>
-        </button>
+          {clearLoading ? "Clearing..." : "Clear Form"}
+        </Button>
 
         {/* Submit Button */}
-        <button type="submit" disabled={loading} className="btn btn-primary">
-          {loading ? (
-            <Icon name="refresh" size="sm" className="animate-spin" />
-          ) : (
-            <Icon name="calculator" size="sm" />
-          )}
-          <span>{loading ? "Calculating..." : "Calculate HELOC Strategy"}</span>
-        </button>
+        <Button
+          type="submit"
+          variant="primary"
+          loading={loading}
+          disabled={loading || demoLoading || clearLoading}
+          icon="calculator"
+        >
+          {loading ? "Calculating..." : "Calculate HELOC Strategy"}
+        </Button>
       </div>
     </form>
   );

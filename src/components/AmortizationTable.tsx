@@ -56,9 +56,10 @@ export default function AmortizationTable({
   };
 
   // Calculate extra payment amount (like Excel column R)
-  const getExtraPayment = (payment: SchedulePayment) => {
+  const getExtraPayment = (payment?: SchedulePayment) => {
     // Extra payment is the discretionary income used for mortgage principal
-    return payment.discretionaryUsed > 0 ? payment.discretionaryUsed : 0;
+    const value = payment?.discretionaryUsed ?? 0;
+    return value > 0 ? value : 0;
   };
 
   // Show first 6 months and last 3 months by default

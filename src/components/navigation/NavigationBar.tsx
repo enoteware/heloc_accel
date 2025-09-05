@@ -6,11 +6,15 @@ import { usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/Logo";
 import NavigationLink from "./NavigationLink";
-import UserMenu from "./UserMenu";
 import HamburgerButton from "./HamburgerButton";
 import MobileNavigationDrawer from "./MobileNavigationDrawer";
 import SimpleLanguageSwitcher from "@/components/SimpleLanguageSwitcher";
 import { CompactThemeToggle } from "@/components/ThemeToggle";
+import {
+  ToolsFlyoutMenu,
+  ResourcesFlyoutMenu,
+  UserFlyoutMenu,
+} from "./FlyoutMenu";
 
 export interface NavigationBarProps {
   className?: string;
@@ -46,9 +50,12 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
     setIsMobileMenuOpen(false);
   };
 
-  // Navigation variant styles
+  // Navigation variant styles using semantic tokens
   const variantStyles = {
-    default: "bg-background/95 backdrop-blur-sm border-b border-border",
+    default: cn(
+      "bg-background/95 backdrop-blur-sm border-b border-border",
+      "supports-[backdrop-filter]:bg-background/60",
+    ),
     transparent: "bg-transparent",
     solid: "bg-background border-b border-border",
   };
@@ -64,8 +71,8 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Logo
@@ -77,77 +84,85 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
               />
             </div>
 
-            {/* Desktop Navigation Links */}
-            <div className="hidden md:flex items-center space-x-1">
-              {/* Always show home */}
+            {/* Desktop Navigation - Flyout Menus */}
+            <div className="hidden lg:flex lg:items-center lg:gap-x-8">
+              {/* Home Link */}
               <NavigationLink
                 href="/"
                 label="Home"
                 icon="home"
-                className="hidden lg:flex"
+                showIcon={false}
+                className={cn(
+                  "text-sm/6 font-semibold text-foreground hover:text-foreground/80",
+                  "transition-colors duration-200 px-3 py-2 rounded-md",
+                  "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                )}
               />
 
-              {/* Authenticated user links */}
-              {isAuthenticated && (
-                <>
-                  <NavigationLink
-                    href="/calculator"
-                    label="Calculator"
-                    icon="calculator"
-                  />
-                  <NavigationLink
-                    href="/budgeting"
-                    label="Budgeting"
-                    icon="dollar-sign"
-                  />
-                  <NavigationLink
-                    href="/dashboard"
-                    label="Dashboard"
-                    icon="dashboard"
-                  />
-                  <NavigationLink
-                    href="/scenarios"
-                    label="Scenarios"
-                    icon="save"
-                  />
-                  <NavigationLink
-                    href="/compare"
-                    label="Compare"
-                    icon="compare"
-                    className="hidden lg:flex"
-                  />
-                </>
-              )}
+              {/* Tools Flyout Menu - Only for authenticated users */}
+              {isAuthenticated && <ToolsFlyoutMenu />}
+
+              {/* Resources Flyout Menu - Always visible */}
+              <ResourcesFlyoutMenu />
+
+              {/* About Link */}
+              <NavigationLink
+                href="/about"
+                label="About"
+                showIcon={false}
+                className={cn(
+                  "text-sm/6 font-semibold text-foreground hover:text-foreground/80",
+                  "transition-colors duration-200 px-3 py-2 rounded-md",
+                  "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                )}
+              />
             </div>
 
             {/* Right side actions */}
-            <div className="flex items-center space-x-2">
-              {/* Theme Toggle */}
+            <div className="flex items-center gap-x-4">
+              {/* Theme Toggle - Desktop */}
               <div className="hidden md:block">
                 <CompactThemeToggle />
               </div>
 
-              {/* Language Switcher */}
+              {/* Language Switcher - Desktop */}
               <div className="hidden md:block">
                 <SimpleLanguageSwitcher />
               </div>
 
-              {/* Desktop User Menu or Sign In */}
-              <div className="hidden md:flex items-center">
-                {user ? (
-                  <UserMenu />
+              {/* Desktop Authentication */}
+              <div className="hidden lg:flex lg:items-center">
+                {isAuthenticated ? (
+                  <UserFlyoutMenu />
                 ) : (
-                  <NavigationLink
-                    href="/handler/sign-in"
-                    label="Sign In"
-                    icon="login"
-                    className="btn-primary"
-                  />
+                  <div className="flex items-center gap-x-4">
+                    <NavigationLink
+                      href="/handler/sign-in"
+                      label="Sign In"
+                      showIcon={false}
+                      className={cn(
+                        "text-sm/6 font-semibold text-foreground hover:text-foreground/80",
+                        "transition-colors duration-200 px-3 py-2 rounded-md",
+                        "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                      )}
+                    />
+                    <NavigationLink
+                      href="/handler/sign-up"
+                      label="Get Started"
+                      showIcon={false}
+                      className={cn(
+                        "rounded-md bg-primary px-3 py-2 text-sm font-semibold",
+                        "text-primary-foreground shadow-sm hover:bg-primary/90",
+                        "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                        "transition-colors duration-200",
+                      )}
+                    />
+                  </div>
                 )}
               </div>
 
               {/* Mobile menu button */}
-              <div className="md:hidden">
+              <div className="lg:hidden">
                 <HamburgerButton
                   isOpen={isMobileMenuOpen}
                   onClick={handleMobileMenuToggle}

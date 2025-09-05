@@ -23,7 +23,26 @@ const nextConfig = {
   // Reduce compilation overhead
   experimental: {
     // Optimize package imports
-    optimizePackageImports: ["lucide-react", "recharts"],
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "@radix-ui/react-icons",
+      "react-hook-form",
+    ],
+    // Faster builds
+    webVitalsAttribution: ["CLS", "LCP"],
+    // Reduce memory usage
+    memoryBasedWorkersCount: true,
+  },
+
+  // Turbopack configuration (moved from experimental)
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
   // Turbopack configuration (stable in Next.js 15)
   turbopack: {
@@ -88,10 +107,25 @@ const nextConfig = {
       config.optimization.removeEmptyChunks = false;
       config.optimization.splitChunks = false;
 
+      // Disable source maps for faster builds (enable only when debugging)
+      config.devtool =
+        process.env.ENABLE_SOURCE_MAPS === "true" ? "eval-source-map" : false;
+
       // Reduce file watching overhead
       config.watchOptions = {
         poll: false,
-        ignored: /node_modules/,
+        ignored: [/node_modules/, /.next/, /.git/, /coverage/, /\.turbo/],
+        aggregateTimeout: 300,
+      };
+
+      // Faster module resolution
+      config.resolve.symlinks = false;
+      config.resolve.cacheWithContext = false;
+
+      // Reduce memory usage
+      config.cache = {
+        type: "memory",
+        maxGenerations: 1,
       };
     }
 

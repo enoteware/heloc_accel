@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { usePexelsImage } from "@/components/PexelsImage";
 import type { PexelsPhoto } from "@/lib/pexels";
 import { FINANCIAL_THEMES } from "@/lib/pexels";
 
@@ -15,8 +14,6 @@ interface PhotoCollection {
 
 export default function PhotosAdminPage() {
   const [collections, setCollections] = useState<PhotoCollection[]>([]);
-  const [selectedTheme, setSelectedTheme] =
-    useState<keyof typeof FINANCIAL_THEMES>("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<PexelsPhoto[]>([]);
@@ -135,7 +132,7 @@ export default function PhotosAdminPage() {
       return (
         <div className="text-center py-8">
           <p className="text-gray-500">
-            No photos loaded. Click "Load Photos" to fetch images.
+            No photos loaded. Click &quot;Load Photos&quot; to fetch images.
           </p>
         </div>
       );
@@ -190,7 +187,7 @@ export default function PhotosAdminPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for photos..."
               className="input-default flex-1 rounded-lg"
-              onKeyPress={(e) => e.key === "Enter" && searchPhotos()}
+              onKeyDown={(e) => e.key === "Enter" && searchPhotos()}
             />
             <button
               onClick={searchPhotos}

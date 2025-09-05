@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -28,20 +34,23 @@ export function ThemeProvider({
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
   // Get system preference
-  const getSystemTheme = (): "light" | "dark" => {
+  const getSystemTheme = useCallback((): "light" | "dark" => {
     if (typeof window === "undefined") return "light";
     return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
-  };
+  }, []);
 
   // Resolve the actual theme to apply
-  const resolveTheme = (currentTheme: Theme): "light" | "dark" => {
-    if (currentTheme === "system") {
-      return getSystemTheme();
-    }
-    return currentTheme;
-  };
+  const resolveTheme = useCallback(
+    (currentTheme: Theme): "light" | "dark" => {
+      if (currentTheme === "system") {
+        return getSystemTheme();
+      }
+      return currentTheme;
+    },
+    [getSystemTheme],
+  );
 
   // Apply theme to document
   const applyTheme = (resolvedTheme: "light" | "dark") => {
@@ -105,7 +114,7 @@ export function ThemeProvider({
     const newResolvedTheme = resolveTheme(theme);
     setResolvedTheme(newResolvedTheme);
     applyTheme(newResolvedTheme);
-  }, [theme]);
+  }, [theme, resolveTheme]);
 
   // Listen for system theme changes
   useEffect(() => {
@@ -139,7 +148,7 @@ export function ThemeProvider({
     // Apply theme immediately on mount to prevent flash
     const initialResolvedTheme = resolveTheme(theme);
     applyTheme(initialResolvedTheme);
-  }, []);
+  }, [resolveTheme, theme]);
 
   const value: ThemeContextType = {
     theme,

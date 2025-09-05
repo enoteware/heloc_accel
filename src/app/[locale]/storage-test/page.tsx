@@ -261,15 +261,17 @@ export default function StorageTestPage() {
               Testing Instructions
             </h3>
             <ul className="text-sm text-info-foreground space-y-1">
-              <li>• Use the "Add Data" buttons to simulate storage usage</li>
+              <li>
+                • Use the &quot;Add Data&quot; buttons to simulate storage usage
+              </li>
               <li>• Watch the storage monitor component update in real-time</li>
               <li>
                 • Try adding enough data to trigger warning (80%) and critical
                 (90%) thresholds
               </li>
               <li>
-                • The "Add Debug Data" button creates data that should be
-                automatically cleaned up
+                • The &quot;Add Debug Data&quot; button creates data that should
+                be automatically cleaned up
               </li>
               <li>
                 • Monitor the events section to see automatic cleanup actions

@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
                   href="/formulas"
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 flex items-center space-x-2"
                 >
-                  <NavigationIcon name="formulas" size="sm" />
+                  <NavigationIcon name="calculator" size="sm" />
                   <span>Formulas</span>
                 </Link>
               </li>
@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
                     href="/style-guide"
                     className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 flex items-center space-x-2"
                   >
-                    <NavigationIcon name="styleGuide" size="sm" />
+                    <NavigationIcon name="settings" size="sm" />
                     <span>Style Guide</span>
                   </Link>
                 </li>
@@ -84,20 +84,20 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
+                <Link
                   href="/privacy"
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/terms"
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

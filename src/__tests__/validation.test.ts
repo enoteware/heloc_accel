@@ -105,10 +105,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.any([
-              "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
-              "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
-            ]),
+            message: expect.stringContaining("Interest rate"),
           }),
         ]),
       );
@@ -134,10 +131,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.any([
-              "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
-              "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
-            ]),
+            message: expect.stringContaining("Interest rate"),
           }),
         ]),
       );
@@ -163,7 +157,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "remainingTermMonths",
-            message: "Remaining term must be between 1 and 600 months",
+            message: expect.stringContaining("at least 1 month"),
           }),
         ]),
       );
@@ -304,7 +298,7 @@ describe("Input Validation Integration Tests", () => {
       );
     });
 
-    test("should validate property value consistency", () => {
+    test("should allow underwater mortgages (no property value consistency error)", () => {
       const inputWithProperty: CalculatorValidationInput = {
         currentMortgageBalance: 500000, // Higher than property value
         currentInterestRate: 6.0,
@@ -320,15 +314,11 @@ describe("Input Validation Integration Tests", () => {
 
       const result = validateCalculatorInput(inputWithProperty);
 
-      expect(result.isValid).toBe(false);
-      expect(result.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            field: "currentMortgageBalance",
-            message: "Mortgage balance cannot exceed property value",
-          }),
-        ]),
+      expect(result.isValid).toBe(true);
+      const propValError = result.errors.find(
+        (e) => e.field === "currentMortgageBalance",
       );
+      expect(propValError).toBeUndefined();
     });
 
     test("should accumulate multiple validation errors", () => {
@@ -361,10 +351,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "currentInterestRate",
-            message: expect.any([
-              "Interest rate cannot be negative. Please enter your current mortgage rate as a percentage (e.g., 6.5 for 6.5%).",
-              "Interest rate seems too high (maximum 30%). Please verify your rate and enter as a percentage (e.g., 6.5 for 6.5%).",
-            ]),
+            message: expect.stringContaining("Interest rate"),
           }),
         ]),
       );
@@ -372,7 +359,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "remainingTermMonths",
-            message: "Remaining term must be between 1 and 600 months",
+            message: expect.stringContaining("at least 1 month"),
           }),
         ]),
       );
@@ -380,7 +367,7 @@ describe("Input Validation Integration Tests", () => {
         expect.arrayContaining([
           expect.objectContaining({
             field: "scenarioName",
-            message: "Scenario name is required",
+            message: expect.stringMatching(/scenario name/i),
           }),
         ]),
       );

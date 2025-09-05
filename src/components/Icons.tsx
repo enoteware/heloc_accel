@@ -45,6 +45,45 @@ import {
   Sun,
   Moon,
   Monitor,
+  BookOpen,
+  HelpCircle,
+  MessageCircle,
+  Phone,
+  Mail,
+  ExternalLink,
+  Play,
+  Pause,
+  BarChart,
+  PieChart,
+  Activity,
+  Briefcase,
+  Globe,
+  Shield,
+  Lock,
+  Unlock,
+  Key,
+  Database,
+  Server,
+  Cloud,
+  Wifi,
+  WifiOff,
+  Search,
+  Filter,
+  SortAsc,
+  SortDesc,
+  Edit,
+  Edit2,
+  Trash,
+  Trash2,
+  Copy,
+  Share,
+  Share2,
+  Link,
+  Bookmark,
+  Flag,
+  Tag,
+  Clock,
+  Timer,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -67,6 +106,8 @@ export type IconName =
   | "save"
   | "print"
   | "bar-chart"
+  | "pie-chart"
+  | "activity"
   | "users"
   | "settings"
   | "logout"
@@ -98,7 +139,52 @@ export type IconName =
   | "zap"
   | "sun"
   | "moon"
-  | "monitor";
+  | "monitor"
+  | "book"
+  | "book-open"
+  | "help"
+  | "help-circle"
+  | "question"
+  | "support"
+  | "message"
+  | "phone"
+  | "mail"
+  | "external-link"
+  | "play"
+  | "pause"
+  | "briefcase"
+  | "globe"
+  | "shield"
+  | "lock"
+  | "unlock"
+  | "key"
+  | "database"
+  | "server"
+  | "cloud"
+  | "wifi"
+  | "wifi-off"
+  | "search"
+  | "filter"
+  | "sort-asc"
+  | "sort-desc"
+  | "edit"
+  | "edit-2"
+  | "trash"
+  | "trash-2"
+  | "copy"
+  | "share"
+  | "share-2"
+  | "link"
+  | "bookmark"
+  | "flag"
+  | "tag"
+  | "clock"
+  | "timer"
+  | "stopwatch"
+  | "compare"
+  | "dashboard"
+  | "user"
+  | "login";
 
 const iconMap: Record<IconName, LucideIcon> = {
   calculator: Calculator,
@@ -117,6 +203,8 @@ const iconMap: Record<IconName, LucideIcon> = {
   save: Save,
   print: Printer,
   "bar-chart": BarChart3,
+  "pie-chart": PieChart,
+  activity: Activity,
   users: Users,
   settings: Settings,
   logout: LogOut,
@@ -149,11 +237,64 @@ const iconMap: Record<IconName, LucideIcon> = {
   sun: Sun,
   moon: Moon,
   monitor: Monitor,
+  book: BookOpen,
+  "book-open": BookOpen,
+  help: HelpCircle,
+  "help-circle": HelpCircle,
+  question: HelpCircle,
+  support: MessageCircle,
+  message: MessageCircle,
+  phone: Phone,
+  mail: Mail,
+  "external-link": ExternalLink,
+  play: Play,
+  pause: Pause,
+  briefcase: Briefcase,
+  globe: Globe,
+  shield: Shield,
+  lock: Lock,
+  unlock: Unlock,
+  key: Key,
+  database: Database,
+  server: Server,
+  cloud: Cloud,
+  wifi: Wifi,
+  "wifi-off": WifiOff,
+  search: Search,
+  filter: Filter,
+  "sort-asc": SortAsc,
+  "sort-desc": SortDesc,
+  edit: Edit,
+  "edit-2": Edit2,
+  trash: Trash,
+  "trash-2": Trash2,
+  copy: Copy,
+  share: Share,
+  "share-2": Share2,
+  link: Link,
+  bookmark: Bookmark,
+  flag: Flag,
+  tag: Tag,
+  clock: Clock,
+  timer: Timer,
+  stopwatch: Timer, // Use Timer as fallback for Stopwatch
+  compare: BarChart,
+  dashboard: BarChart3,
+  user: Users,
+  login: LogOut,
 };
 
 export interface IconProps extends Omit<LucideProps, "ref"> {
   name: IconName;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  variant?:
+    | "default"
+    | "muted"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "error";
 }
 
 const sizeClasses = {
@@ -164,7 +305,24 @@ const sizeClasses = {
   xl: "w-8 h-8",
 };
 
-export function Icon({ name, size = "md", className, ...props }: IconProps) {
+// Semantic color variants using CSS custom properties for Tailwind v4
+const variantClasses = {
+  default: "text-foreground",
+  muted: "text-muted-foreground",
+  primary: "text-primary",
+  secondary: "text-secondary",
+  success: "text-success",
+  warning: "text-warning",
+  error: "text-destructive",
+};
+
+export function Icon({
+  name,
+  size = "md",
+  variant = "default",
+  className,
+  ...props
+}: IconProps) {
   const IconComponent = iconMap[name];
 
   if (!IconComponent) {
@@ -173,7 +331,15 @@ export function Icon({ name, size = "md", className, ...props }: IconProps) {
   }
 
   return (
-    <IconComponent className={cn(sizeClasses[size], className)} {...props} />
+    <IconComponent
+      className={cn(
+        sizeClasses[size],
+        variantClasses[variant],
+        "transition-colors duration-200", // Smooth color transitions
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
@@ -203,4 +369,22 @@ export {
   Minus as MinusIcon,
   RefreshCw as RefreshIcon,
   FileText as FileTextIcon,
+  BookOpen as BookIcon,
+  HelpCircle as HelpIcon,
+  MessageCircle as SupportIcon,
+  Phone as PhoneIcon,
+  Mail as MailIcon,
+  ExternalLink as ExternalLinkIcon,
+  Play as PlayIcon,
+  Pause as PauseIcon,
+  Shield as ShieldIcon,
+  Globe as GlobeIcon,
+  Database as DatabaseIcon,
+  Search as SearchIcon,
+  Edit as EditIcon,
+  Trash as TrashIcon,
+  Copy as CopyIcon,
+  Share as ShareIcon,
+  Link as LinkIcon,
+  Clock as ClockIcon,
 };

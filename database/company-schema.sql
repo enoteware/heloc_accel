@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS company_settings (
 -- Stores information about individual agents
 CREATE TABLE IF NOT EXISTS agents (
     id SERIAL PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL, -- Link to user account if applicable
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL, -- Link to user account if applicable
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     title VARCHAR(100), -- e.g., "Senior Loan Officer", "Mortgage Specialist"
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS company_documents (
 -- Links users to their assigned agents
 CREATE TABLE IF NOT EXISTS user_agent_assignments (
     id SERIAL PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     agent_id INTEGER REFERENCES agents(id) ON DELETE SET NULL,
     assigned_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     assignment_type VARCHAR(50) DEFAULT 'primary', -- 'primary', 'secondary', 'temporary'
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS user_agent_assignments (
 -- Tracks which agent helped with which scenario
 CREATE TABLE IF NOT EXISTS scenario_agent_tracking (
     id SERIAL PRIMARY KEY,
-    scenario_id INTEGER REFERENCES scenarios(id) ON DELETE CASCADE,
+    scenario_id UUID REFERENCES scenarios(id) ON DELETE CASCADE,
     agent_id INTEGER REFERENCES agents(id) ON DELETE SET NULL,
     interaction_type VARCHAR(50), -- 'created', 'reviewed', 'modified'
     notes TEXT,

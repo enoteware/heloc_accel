@@ -2,56 +2,56 @@
 @import "../styles/themes.css";
 @import "../styles/design-system.css";
 
-/* Essential CSS Custom Properties */
+/* Essential CSS Custom Properties - Updated for Brand Alignment */
 :root {
-  /* Primary Colors */
-  --color-primary: 59 130 246; /* blue-500 */
+  /* Primary Colors - Brand Blue-Gray */
+  --color-primary: 128 149 175; /* primary-500: #8095af - Brand primary */
   --color-primary-foreground: 255 255 255; /* white */
 
-  /* Background Colors */
-  --color-background: 255 255 255; /* white */
-  --color-surface: 255 255 255; /* white */
-  --color-surface-secondary: 248 250 252; /* slate-50 */
+  /* Background Colors - Brand Neutrals */
+  --color-background: 255 254 254; /* neutral-50: #fffefe - Off-white */
+  --color-surface: 255 254 254; /* neutral-50: #fffefe */
+  --color-surface-secondary: 248 249 250; /* neutral-100: #f8f9fa */
 
-  /* Text Colors */
-  --color-foreground: 15 23 42; /* slate-900 */
-  --color-foreground-secondary: 51 65 85; /* slate-700 */
-  --color-foreground-muted: 148 163 184; /* slate-400 */
+  /* Text Colors - Brand Neutrals */
+  --color-foreground: 33 37 41; /* neutral-800: #212529 - Primary text */
+  --color-foreground-secondary: 73 80 87; /* neutral-700: #495057 - Body text */
+  --color-foreground-muted: 173 181 189; /* neutral-500: #adb5bd - Placeholder text */
 
-  /* Border Colors */
-  --color-border: 226 232 240; /* slate-200 */
-  --color-border-focus: 59 130 246; /* blue-500 */
+  /* Border Colors - Brand Neutrals */
+  --color-border: 222 226 230; /* neutral-300: #dee2e6 - Dividers */
+  --color-border-focus: 128 149 175; /* primary-500: #8095af - Brand primary */
 
-  /* State Colors */
-  --color-success: 34 197 94; /* green-500 */
+  /* State Colors - Semantic Brand Colors */
+  --color-success: 16 185 129; /* success: #10b981 - Positive outcomes */
   --color-success-foreground: 255 255 255; /* white */
   --color-success-background: 240 253 244; /* green-50 */
-  --color-success-border: 34 197 94; /* green-500 */
+  --color-success-border: 16 185 129; /* success: #10b981 */
 
-  --color-warning: 245 158 11; /* amber-500 */
+  --color-warning: 245 158 11; /* warning: #f59e0b - Cautions */
   --color-warning-foreground: 255 255 255; /* white */
   --color-warning-background: 255 251 235; /* amber-50 */
-  --color-warning-border: 245 158 11; /* amber-500 */
+  --color-warning-border: 245 158 11; /* warning: #f59e0b */
 
-  --color-error: 239 68 68; /* red-500 */
+  --color-error: 239 68 68; /* error: #ef4444 - Errors */
   --color-error-foreground: 255 255 255; /* white */
 
-  --color-info: 59 130 246; /* blue-500 */
+  --color-info: 59 130 246; /* info: #3b82f6 - Information */
   --color-info-foreground: 255 255 255; /* white */
   --color-info-background: 239 246 255; /* blue-50 */
-  --color-info-border: 59 130 246; /* blue-500 */
+  --color-info-border: 59 130 246; /* info: #3b82f6 */
 
-  --color-accent: 16 185 129; /* emerald-500 */
+  --color-accent: 16 185 129; /* emerald-500 - Success/positive actions */
   --color-accent-foreground: 255 255 255; /* white */
 
-  /* Secondary Colors */
-  --color-secondary: 248 250 252; /* slate-50 */
-  --color-secondary-foreground: 15 23 42; /* slate-900 */
+  /* Secondary Colors - Brand Coral/Orange */
+  --color-secondary: 255 172 137; /* secondary-300: #ffac89 - Primary accent */
+  --color-secondary-foreground: 0 25 63; /* primary-900: #00193f */
 
   /* Interactive States */
-  --color-surface-hover: 241 245 249; /* slate-100 */
+  --color-surface-hover: 233 236 239; /* neutral-200: #e9ecef */
 
-  /* Legacy Tailwind/shadcn tokens */
+  /* Legacy Tailwind/shadcn tokens for compatibility */
   --background: rgb(var(--color-background));
   --foreground: rgb(var(--color-foreground));
   --border: rgb(var(--color-border));
@@ -61,17 +61,17 @@
 
 /* Dark mode overrides */
 .dark {
-  --color-background: 15 23 42; /* slate-900 */
-  --color-surface: 30 41 59; /* slate-800 */
-  --color-surface-secondary: 51 65 85; /* slate-700 */
-  --color-foreground: 248 250 252; /* slate-50 */
-  --color-foreground-secondary: 226 232 240; /* slate-200 */
-  --color-foreground-muted: 148 163 184; /* slate-400 */
-  --color-border: 71 85 105; /* slate-600 */
-  --color-primary: 96 165 250; /* blue-400 */
+  --color-background: 0 25 63; /* primary-900: #00193f - Navy background */
+  --color-surface: 51 78 129; /* primary-800: #334e68 */
+  --color-surface-secondary: 72 101 129; /* primary-700: #486581 */
+  --color-foreground: 255 254 254; /* neutral-50: #fffefe */
+  --color-foreground-secondary: 248 249 250; /* neutral-100: #f8f9fa */
+  --color-foreground-muted: 173 181 189; /* neutral-500: #adb5bd */
+  --color-border: 98 125 152; /* primary-600: #627d98 */
+  --color-primary: 159 179 200; /* primary-300: #9fb3c8 - Lighter for dark */
 }
 
-/* Base styles */
+/* Base styles with brand alignment */
 * {
   border-color: rgb(var(--color-border));
 }
@@ -82,14 +82,18 @@ body {
   font-feature-settings:
     "rlig" 1,
     "calt" 1;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
-/* Utility classes */
-.text-balance {
-  text-wrap: balance;
-}
-
-/* Ensure proper styling for common elements */
+/* Typography with brand colors */
 h1,
 h2,
 h3,
@@ -97,19 +101,21 @@ h4,
 h5,
 h6 {
   color: rgb(var(--color-foreground));
+  font-weight: 600;
 }
 
 p {
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground-secondary));
 }
 
-/* Fix for input styling */
+/* Form elements with brand styling */
 input,
 textarea,
 select {
   background-color: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
   border-color: rgb(var(--color-border));
+  border-radius: 0.375rem; /* 6px - Brand standard */
 }
 
 input:focus,
@@ -120,16 +126,134 @@ select:focus {
   box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.2);
 }
 
-/* Button base styling */
+/* Button base styling with brand colors */
 button {
   color: rgb(var(--color-foreground));
+  border-radius: 0.375rem; /* 6px - Brand standard */
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
-/* Link styling */
+/* Link styling with brand primary */
 a {
   color: rgb(var(--color-primary));
+  transition: opacity 0.2s ease;
 }
 
 a:hover {
   opacity: 0.8;
+}
+
+/* Utility classes for brand consistency */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Financial data styling */
+.currency-positive {
+  color: rgb(var(--color-success));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.currency-negative {
+  color: rgb(var(--color-error));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.currency-neutral {
+  color: rgb(var(--color-foreground));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring for accessibility */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-border-focus) / 0.4);
+}
+
+/* Brand-specific component overrides */
+.btn-brand-primary {
+  background-color: rgb(var(--color-primary));
+  color: rgb(var(--color-primary-foreground));
+  border: 1px solid transparent;
+}
+
+.btn-brand-primary:hover {
+  background-color: rgb(var(--color-primary) / 0.9);
+}
+
+.btn-brand-secondary {
+  background-color: rgb(var(--color-secondary));
+  color: rgb(var(--color-secondary-foreground));
+  border: 1px solid transparent;
+}
+
+.btn-brand-secondary:hover {
+  background-color: rgb(var(--color-secondary) / 0.9);
+}
+
+/* Card styling with brand colors */
+.card-brand {
+  background-color: rgb(var(--color-surface));
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 0.5rem; /* 8px - Brand standard for cards */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Alert styling with semantic colors */
+.alert-brand-success {
+  background-color: rgb(var(--color-success-background));
+  border: 1px solid rgb(var(--color-success-border));
+  color: rgb(var(--color-success));
+}
+
+.alert-brand-warning {
+  background-color: rgb(var(--color-warning-background));
+  border: 1px solid rgb(var(--color-warning-border));
+  color: rgb(var(--color-warning));
+}
+
+.alert-brand-error {
+  background-color: rgb(var(--color-error-background));
+  border: 1px solid rgb(var(--color-error-border));
+  color: rgb(var(--color-error));
+}
+
+.alert-brand-info {
+  background-color: rgb(var(--color-info-background));
+  border: 1px solid rgb(var(--color-info-border));
+  color: rgb(var(--color-info));
+}
+
+/* Ensure proper contrast for accessibility */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: 128 130 142; /* Increase contrast */
+    --color-foreground-muted: 73 80 87; /* Increase contrast */
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Logo styling for all themes */
+.logo {
+  height: 2.5rem; /* 40px */
+  padding: 0.25rem;
+  border-radius: 0.375rem; /* Tailwind rounded-md */
+  background-color: transparent;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+.dark .logo {
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.25));
 }

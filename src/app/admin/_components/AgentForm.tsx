@@ -327,7 +327,7 @@ export default function AgentForm({
                 Active Status
               </label>
               <p className="text-xs text-foreground-muted">
-                Inactive agents won't be assigned to new users
+                Inactive agents won&apos;t be assigned to new users
               </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">

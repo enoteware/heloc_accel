@@ -20,11 +20,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const helperId = helperText && !error ? `${inputId}-helper` : undefined;
 
     return (
-      <div className="w-full form-field">
+      <div className="w-full">
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-body-sm font-medium text-neutral-700 mb-1"
+            className="block text-body-sm font-medium text-foreground-secondary mb-1"
           >
             {label}
           </label>
@@ -35,7 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
               aria-hidden="true"
             >
-              <div className="text-neutral-600 input-icon-left">{leftIcon}</div>
+              <div className="text-muted-foreground">{leftIcon}</div>
             </div>
           )}
           <input
@@ -45,21 +45,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               [errorId, helperId].filter(Boolean).join(" ") || undefined
             }
             className={cn(
-              // Base styles
-              "block w-full rounded-lg border transition-all duration-200",
+              // Base styles with brand alignment
+              "block w-full rounded-md border transition-all duration-200",
               "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
               "disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-60",
-              "placeholder-muted-foreground",
-              // Background and text colors
-              "!bg-background !text-foreground",
+              "placeholder:text-muted-foreground",
+              // Background and text colors using semantic tokens
+              "bg-background text-foreground",
               // Padding adjustments for icons
               leftIcon ? "pl-10" : "pl-3",
               rightIcon ? "pr-10" : "pr-3",
-              "py-2",
+              "py-3", // 12px padding - brand standard
               // Error state
               error
-                ? "border-destructive focus:border-destructive focus:ring-destructive"
-                : "border-input hover:border-border",
+                ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                : "border-border hover:border-border-secondary",
               className,
             )}
             ref={ref}
@@ -70,9 +70,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
               aria-hidden="true"
             >
-              <div className="text-neutral-600 input-icon-right">
-                {rightIcon}
-              </div>
+              <div className="text-muted-foreground">{rightIcon}</div>
             </div>
           )}
         </div>
@@ -80,16 +78,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <p
             id={errorId}
             role="alert"
-            className="mt-1 text-body-sm text-red-600 error-message"
+            className="mt-1 text-body-sm text-destructive"
           >
             {error}
           </p>
         )}
         {helperText && !error && (
-          <p
-            id={helperId}
-            className="mt-1 text-body-sm text-neutral-600 helper-text"
-          >
+          <p id={helperId} className="mt-1 text-body-sm text-muted-foreground">
             {helperText}
           </p>
         )}

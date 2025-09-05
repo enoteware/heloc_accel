@@ -220,12 +220,16 @@ export default function DebugTestPage() {
         </div>
       </div>
 
-      {/* Debug Tools */}
-      <DebugPanel
-        isVisible={debugPanelVisible}
-        onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
-      />
-      <DebugLogViewer />
+      {/* Debug Tools - Disabled in production builds */}
+      {process.env.NODE_ENV === "development" && (
+        <>
+          <DebugPanel
+            isVisible={debugPanelVisible}
+            onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
+          />
+          <DebugLogViewer />
+        </>
+      )}
     </div>
   );
 }

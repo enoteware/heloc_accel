@@ -1,10 +1,15 @@
 import { logError, logWarn, logInfo } from "./debug-logger";
+import { isDebugFeatureEnabled } from "./debug-config";
 
 /**
  * Intercepts console methods to capture logs in our debug logger
+ * Only runs when debug mode is enabled
  */
 export function setupConsoleInterceptor() {
   if (typeof window === "undefined") return;
+
+  // Only intercept console in debug mode
+  if (!isDebugFeatureEnabled("consoleInterceptor")) return;
 
   // Store original console methods
   const originalConsole = {

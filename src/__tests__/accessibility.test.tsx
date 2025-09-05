@@ -7,6 +7,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import Link from "next/link";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { Button } from "@/components/design-system/Button";
 import {
@@ -320,9 +321,9 @@ describe("Screen Reader Tests", () => {
           <span aria-hidden="true">👍</span>
           <span className="sr-only">Like this post</span>
         </button>
-        <a href="/help" aria-label="Get help with using the calculator">
+        <Link href="/help" aria-label="Get help with using the calculator">
           ?
-        </a>
+        </Link>
       </div>,
     );
 
@@ -360,9 +361,9 @@ describe("Focus Management Tests", () => {
       <div>
         <Button variant="primary">Focusable Button</Button>
         <input type="text" className="safe-input" />
-        <a href="/test" className="safe-link">
+        <Link href="/test" className="safe-link">
           Test Link
-        </a>
+        </Link>
       </div>,
     );
 

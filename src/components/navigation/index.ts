@@ -1,28 +1,31 @@
-// Export all navigation components
-export { NavigationBar } from "./NavigationBar";
-export type { NavigationBarProps } from "./NavigationBar";
-
-export { NavigationLink } from "./NavigationLink";
-export type { NavigationLinkProps } from "./NavigationLink";
-
-export { NavigationIcon } from "./NavigationIcon";
-export type { NavigationIconProps } from "./NavigationIcon";
-
-export { UserMenu } from "./UserMenu";
-export type { UserMenuProps } from "./UserMenu";
-
-export { HamburgerButton } from "./HamburgerButton";
-export type { HamburgerButtonProps } from "./HamburgerButton";
-
-export { MobileNavigationDrawer } from "./MobileNavigationDrawer";
-export type { MobileNavigationDrawerProps } from "./MobileNavigationDrawer";
-
-export { NavigationProvider, useNavigation } from "./NavigationContext";
-export type {
-  NavigationContextType,
-  NavigationItem,
-  NavigationProviderProps,
+// Navigation Components
+export { default as NavigationBar } from "./NavigationBar";
+export { default as NavigationLink } from "./NavigationLink";
+export { default as NavigationIcon } from "./NavigationIcon";
+export { default as UserMenu } from "./UserMenu";
+export { default as HamburgerButton } from "./HamburgerButton";
+export { default as MobileNavigationDrawer } from "./MobileNavigationDrawer";
+export {
+  default as NavigationContext,
+  NavigationProvider,
+  useNavigation,
 } from "./NavigationContext";
 
-// Default export for convenience
-export { NavigationBar as default } from "./NavigationBar";
+// Flyout Menu Components
+export {
+  default as FlyoutMenu,
+  ToolsFlyoutMenu,
+  ResourcesFlyoutMenu,
+  UserFlyoutMenu,
+} from "./FlyoutMenu";
+
+// Types
+export type { NavigationBarProps } from "./NavigationBar";
+export type { NavigationLinkProps } from "./NavigationLink";
+export type { UserMenuProps } from "./UserMenu";
+export type { MobileNavigationDrawerProps } from "./MobileNavigationDrawer";
+export type {
+  NavigationProviderProps,
+  NavigationContextType,
+  NavigationItem,
+} from "./NavigationContext";

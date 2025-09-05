@@ -286,7 +286,9 @@ export default function BudgetForm({
                   • Include all sources: salary, freelance, investments, etc.
                 </li>
                 <li>• Use gross (before tax) amounts for salary</li>
-                <li>• Mark your main job as "primary income source"</li>
+                <li>
+                  • Mark your main job as &quot;primary income source&quot;
+                </li>
               </>
             ) : (
               <>
@@ -294,7 +296,7 @@ export default function BudgetForm({
                 <li>• Fixed expenses stay the same (rent, insurance)</li>
                 <li>• Variable expenses change monthly (groceries, gas)</li>
                 <li>
-                  • Don't forget annual expenses (insurance, subscriptions)
+                  • Don&apos;t forget annual expenses (insurance, subscriptions)
                 </li>
               </>
             )}

@@ -113,7 +113,7 @@ export default function BudgetingPage() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, []);
 
   // Handle authentication state with better Stack Auth integration
   useEffect(() => {

@@ -50,6 +50,14 @@ const addLog = (message: string, level: "info" | "error" | "warn") => {
 console.log = (...args) => {
   if (isProcessingLog) return originalLog(...args);
 
+  // Only intercept if debug mode is enabled (check localStorage directly to avoid hook issues)
+  if (
+    typeof window !== "undefined" &&
+    localStorage.getItem("debug-mode") !== "true"
+  ) {
+    return originalLog(...args);
+  }
+
   isProcessingLog = true;
   const message = args
     .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
@@ -67,6 +75,14 @@ console.log = (...args) => {
 
 console.error = (...args) => {
   if (isProcessingLog) return originalError(...args);
+
+  // Only intercept if debug mode is enabled (check localStorage directly to avoid hook issues)
+  if (
+    typeof window !== "undefined" &&
+    localStorage.getItem("debug-mode") !== "true"
+  ) {
+    return originalError(...args);
+  }
 
   isProcessingLog = true;
   const message = args
@@ -87,6 +103,14 @@ console.error = (...args) => {
 console.warn = (...args) => {
   if (isProcessingLog) return originalWarn(...args);
 
+  // Only intercept if debug mode is enabled (check localStorage directly to avoid hook issues)
+  if (
+    typeof window !== "undefined" &&
+    localStorage.getItem("debug-mode") !== "true"
+  ) {
+    return originalWarn(...args);
+  }
+
   isProcessingLog = true;
   const message = args
     .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
@@ -104,19 +128,19 @@ console.warn = (...args) => {
 };
 
 export default function LiveDebugLogger() {
-  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [isVisible, setIsVisible] = useState(true);
   const isDebugMode = useDebugFlag();
 
   useEffect(() => {
     const listener = (newLogs: LogEntry[]) => {
       // Use functional update to avoid stale closure issues
-      setLogs((prevLogs) => newLogs);
+      setLogEntries((prevLogs) => newLogs);
     };
     logListeners.push(listener);
 
-    // Set initial logs
-    setLogs([...logs]);
+    // Set initial logs from global logs array
+    setLogEntries(() => [...logs]);
 
     return () => {
       const index = logListeners.indexOf(listener);
@@ -153,10 +177,10 @@ export default function LiveDebugLogger() {
       </div>
 
       <div className="space-y-1 text-xs font-mono overflow-y-auto max-h-80">
-        {logs.length === 0 ? (
+        {logEntries.length === 0 ? (
           <div className="text-foreground-muted">No debug logs yet...</div>
         ) : (
-          logs.map((log) => (
+          logEntries.map((log) => (
             <div
               key={log.id}
               className={`p-1 rounded text-xs ${
@@ -177,7 +201,7 @@ export default function LiveDebugLogger() {
       <button
         onClick={() => {
           logs.length = 0; // Clear the global logs array
-          setLogs([]); // Clear the component state
+          setLogEntries([]); // Clear the component state
         }}
         className="mt-2 text-xs bg-muted hover:bg-muted/80 text-foreground px-2 py-1 rounded"
       >

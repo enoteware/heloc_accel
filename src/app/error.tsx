@@ -41,7 +41,7 @@ export default function Error({ error, reset }: ErrorProps) {
             Something went wrong
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            We're sorry for the inconvenience. Please try again or contact
+            We&apos;re sorry for the inconvenience. Please try again or contact
             support if the problem persists.
           </p>
         </div>

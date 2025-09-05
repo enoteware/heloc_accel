@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useUser } from "@stackframe/stack";
 import { Icon } from "@/components/Icons";
 import Link from "next/link";
@@ -10,11 +10,7 @@ import ResultsDisplay from "@/components/ResultsDisplay";
 import InputSummary from "@/components/InputSummary";
 import type { DbScenario } from "@/lib/db";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
-
-export default function ScenarioDetailPage({ params }: PageProps) {
+export default function ScenarioDetailPage() {
   const user = useUser();
   const router = useRouter();
   const [scenario, setScenario] = useState<DbScenario | null>(null);
@@ -22,31 +18,33 @@ export default function ScenarioDetailPage({ params }: PageProps) {
   const [error, setError] = useState<string | null>(null);
   const [scenarioId, setScenarioId] = useState<string | null>(null);
 
-  // Table of Contents sections - moved to top to avoid hook order issues
-  const tocSections = [
-    { id: "summary", label: "Summary" },
-    { id: "comparison", label: "Comparison" },
-    { id: "highlights", label: "Highlights" },
-    { id: "payment-flow", label: "Payment Flow" },
-    { id: "amortization", label: "Amortization" },
-    { id: "full-schedule", label: "Full Schedule" },
-    { id: "strategy", label: "Strategy" },
-    { id: "actions", label: "Actions" },
-    { id: "insights", label: "Insights" },
-    { id: "disclaimer", label: "Disclaimer" },
-  ];
+  // Table of Contents sections - memoized for stable reference
+  const tocSections = useMemo(
+    () => [
+      { id: "summary", label: "Summary" },
+      { id: "comparison", label: "Comparison" },
+      { id: "highlights", label: "Highlights" },
+      { id: "payment-flow", label: "Payment Flow" },
+      { id: "amortization", label: "Amortization" },
+      { id: "full-schedule", label: "Full Schedule" },
+      { id: "strategy", label: "Strategy" },
+      { id: "actions", label: "Actions" },
+      { id: "insights", label: "Insights" },
+      { id: "disclaimer", label: "Disclaimer" },
+    ],
+    [],
+  );
 
   const [activeSection, setActiveSection] = useState<string>(tocSections[0].id);
   const [availableToc, setAvailableToc] = useState(tocSections);
   const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
+  const routeParams = useParams<{ locale: string; id: string }>();
+  const locale = (routeParams?.locale as string) || "en";
+
   useEffect(() => {
-    const loadParams = async () => {
-      const { id } = await params;
-      setScenarioId(id);
-    };
-    loadParams();
-  }, [params]);
+    setScenarioId((routeParams?.id as string) || null);
+  }, [routeParams?.id]);
 
   useEffect(() => {
     if (!user) {
@@ -54,11 +52,14 @@ export default function ScenarioDetailPage({ params }: PageProps) {
       return;
     }
 
+    const ac = new AbortController();
     const fetchScenario = async () => {
       if (!scenarioId) return;
 
       try {
-        const response = await fetch(`/api/scenarios/${scenarioId}`);
+        const response = await fetch(`/api/scenarios/${scenarioId}`, {
+          signal: ac.signal,
+        });
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error("Scenario not found");
@@ -68,6 +69,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
         const data = await response.json();
         setScenario(data.scenario);
       } catch (error) {
+        if ((error as any)?.name === "AbortError") return;
         console.error("Error fetching scenario:", error);
         setError(
           error instanceof Error ? error.message : "Failed to load scenario",
@@ -80,10 +82,14 @@ export default function ScenarioDetailPage({ params }: PageProps) {
     if (scenarioId) {
       fetchScenario();
     }
+
+    return () => ac.abort();
   }, [user, router, scenarioId]);
 
   // Scrollspy: observe sections and update activeSection + availableToc
   useEffect(() => {
+    if (loading) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -103,24 +109,22 @@ export default function ScenarioDetailPage({ params }: PageProps) {
       },
     );
 
-    const present = tocSections.filter(
-      ({ id }) => !!document.getElementById(id),
+    const els = tocSections
+      .map(({ id }) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+    const present = tocSections.filter(({ id }) =>
+      els.some((el) => el.id === id),
     );
     setAvailableToc(present.length > 0 ? present : tocSections);
-
-    (present.length > 0 ? present : tocSections).forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    els.forEach((el) => observer.observe(el!));
 
     return () => observer.disconnect();
-  }, []);
+  }, [loading, scenarioId, tocSections]);
 
   if (loading) {
     return (
       <main
         className="min-h-screen bg-background flex items-center justify-center"
-        role="main"
         aria-busy="true"
       >
         <div className="text-center" role="status" aria-live="polite">
@@ -137,7 +141,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
 
   if (error || !scenario) {
     return (
-      <main className="min-h-screen bg-background py-8" role="main">
+      <main className="min-h-screen bg-background py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <section
             className={cn(
@@ -151,6 +155,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
               size="lg"
               variant="error"
               className="mx-auto mb-4 text-destructive"
+              aria-hidden="true"
             />
             <h2
               id="scenario-error-title"
@@ -159,7 +164,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
               {error || "Scenario not found"}
             </h2>
             <Link
-              href="/scenarios"
+              href={`/${locale}/scenarios`}
               className={cn(
                 "inline-flex items-center space-x-2",
                 "text-primary hover:text-primary/80 font-medium",
@@ -225,7 +230,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
   const showBackToTop = activeSection !== "summary";
 
   return (
-    <main className="min-h-screen bg-background py-8 scroll-smooth" role="main">
+    <main className="min-h-screen bg-background py-8 scroll-smooth">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-8" aria-labelledby="scenario-title">
@@ -233,7 +238,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
             <div className="min-w-0">
               <nav aria-label="Breadcrumb" className="mb-3">
                 <Link
-                  href="/scenarios"
+                  href={`/${locale}/scenarios`}
                   className={cn(
                     "inline-flex items-center",
                     "text-muted-foreground hover:text-foreground",
@@ -275,7 +280,7 @@ export default function ScenarioDetailPage({ params }: PageProps) {
             </div>
             <div className="flex shrink-0 items-center gap-3">
               <Link
-                href={`/calculator?load=${scenario.id}`}
+                href={`/${locale}/calculator?load=${scenario.id}`}
                 className={cn(
                   "bg-primary hover:bg-primary/90 text-primary-foreground",
                   "font-semibold py-2 px-4 rounded-lg shadow-sm",
@@ -344,7 +349,6 @@ export default function ScenarioDetailPage({ params }: PageProps) {
                 <button
                   type="button"
                   onClick={() => setIsMobileTocOpen((v) => !v)}
-                  aria-haspopup="listbox"
                   aria-expanded={isMobileTocOpen}
                   className={cn(
                     "w-full flex items-center justify-between rounded-md border border-border bg-card px-3 py-2",
@@ -371,7 +375,6 @@ export default function ScenarioDetailPage({ params }: PageProps) {
                 {isMobileTocOpen && (
                   <div className="absolute z-20 mt-2 w-full rounded-md border border-border bg-card shadow-lg">
                     <ul
-                      role="listbox"
                       aria-label="In-page sections"
                       className="max-h-64 overflow-auto py-1"
                     >

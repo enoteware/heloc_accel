@@ -5,17 +5,19 @@ import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import NavigationIcon from "./NavigationIcon";
+import type { IconName } from "@/components/Icons";
 
 export interface NavigationLinkProps {
   href: string;
   label: string;
-  icon?: string;
+  icon?: IconName;
   className?: string;
   activeClassName?: string;
   children?: React.ReactNode;
   external?: boolean;
   showIcon?: boolean;
   iconSize?: "sm" | "md" | "lg";
+  variant?: "default" | "primary" | "secondary" | "ghost" | "outline";
   onClick?: () => void;
 }
 
@@ -29,34 +31,95 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
   external = false,
   showIcon = true,
   iconSize = "md",
+  variant = "default",
   onClick,
 }) => {
   const pathname = usePathname();
   const isActive =
     pathname === href || (href !== "/" && pathname.startsWith(href));
 
-  const baseClasses = cn(
-    "flex items-center space-x-2 px-3 py-2 rounded-lg text-body font-medium transition-all duration-200",
-    "hover:bg-muted hover:text-foreground",
-    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-    "dark:hover:bg-muted dark:hover:text-foreground",
-    isActive
-      ? cn("bg-card text-primary border border-border", activeClassName)
-      : "text-foreground",
-    className,
-  );
+  // Check if this is a flyout menu item based on className
+  const isFlyoutItem = className?.includes("group relative flex");
 
-  const content = (
+  // Variant styles using semantic tokens
+  const variantStyles = {
+    default: cn(
+      "text-foreground hover:text-foreground/80 hover:bg-muted/50",
+      "focus:outline-none focus:ring-2 focus:ring-primary/20",
+    ),
+    primary: cn(
+      "bg-primary text-primary-foreground hover:bg-primary/90",
+      "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+    ),
+    secondary: cn(
+      "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+      "focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2",
+    ),
+    ghost: cn(
+      "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+      "focus:outline-none focus:ring-2 focus:ring-primary/20",
+    ),
+    outline: cn(
+      "border border-border text-foreground hover:bg-muted/50",
+      "focus:outline-none focus:ring-2 focus:ring-primary/20",
+    ),
+  };
+
+  const baseClasses = isFlyoutItem
+    ? className // Use provided flyout menu classes as-is
+    : cn(
+        "flex items-center space-x-2 px-3 py-2 rounded-md font-medium transition-all duration-200",
+        // Active state styles using semantic tokens
+        isActive &&
+          cn(
+            "bg-muted text-primary border border-border shadow-sm",
+            activeClassName,
+          ),
+        // Apply variant styles only if not active
+        !isActive && variantStyles[variant],
+        className,
+      );
+
+  const content = isFlyoutItem ? (
+    // Flyout menu item content structure (preserve existing structure)
+    children || (
+      <>
+        <div
+          className={cn(
+            "flex h-11 w-11 flex-none items-center justify-center rounded-lg",
+            "bg-muted group-hover:bg-background transition-colors duration-200",
+          )}
+        >
+          {icon && showIcon && (
+            <NavigationIcon
+              name={icon}
+              size={iconSize}
+              variant="muted"
+              className={cn(
+                "h-6 w-6 group-hover:text-primary transition-colors duration-200",
+              )}
+              aria-hidden={true}
+            />
+          )}
+        </div>
+        <div className="flex-auto">
+          <span className="block font-semibold text-foreground">
+            {label}
+            <span className="absolute inset-0" />
+          </span>
+        </div>
+      </>
+    )
+  ) : (
+    // Regular navigation link content
     <>
       {icon && showIcon && (
         <NavigationIcon
           name={icon}
           size={iconSize}
+          variant={isActive ? "primary" : "muted"}
+          className="flex-shrink-0"
           aria-hidden={true}
-          className={cn(
-            "flex-shrink-0",
-            isActive ? "text-primary" : "text-muted-foreground",
-          )}
         />
       )}
       <span className="truncate">{children || label}</span>

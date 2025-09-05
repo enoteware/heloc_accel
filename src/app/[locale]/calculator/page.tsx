@@ -3,12 +3,15 @@
 import React, { useState, useEffect, useCallback, Suspense, lazy } from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import FastCalculatorForm from "@/components/FastCalculatorForm";
 import LiveCalculatorForm from "@/components/LiveCalculatorForm";
 import LiveResultsPanel from "@/components/LiveResultsPanel";
 import SaveScenarioModal from "@/components/SaveScenarioModal";
 import ErrorDisplay from "@/components/ErrorDisplay";
 import Disclaimer from "@/components/Disclaimer";
+import CalculationLoader from "@/components/design-system/CalculationLoader";
+import { Button } from "@/components/design-system/Button";
 import type {
   CalculatorValidationInput,
   ValidationError,
@@ -16,9 +19,7 @@ import type {
 import { ValidationErrorDisplay } from "@/components/ValidationErrorDisplay";
 import { getApiUrl } from "@/lib/api-url";
 import Logo from "@/components/Logo";
-import DebugPanel from "@/components/DebugPanel";
-import { logInfo, logError, logDebug } from "@/lib/debug-logger";
-import DebugLogViewer from "@/components/DebugLogViewer";
+import { logError, logInfo } from "@/lib/debug-logger";
 
 // Lazy load heavy components that are only shown after calculation
 const ResultsDisplay = lazy(() => import("@/components/ResultsDisplay"));
@@ -75,7 +76,6 @@ function CalculatorPageContent() {
   const [liveMode, setLiveMode] = useState(true); // Toggle between live and traditional mode
   const [liveLoading, setLiveLoading] = useState(false);
   const [liveError, setLiveError] = useState<string | null>(null);
-  const [showDebugPanel, setShowDebugPanel] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -158,11 +158,6 @@ function CalculatorPageContent() {
     setValidationErrors([]);
     setCurrentFormData(formData); // Store form data for saving
 
-    logDebug("Calculator", "Starting calculation request", {
-      apiUrl: getApiUrl("api/calculate"),
-      hasFormData: !!formData,
-    });
-
     try {
       const response = await fetch(getApiUrl("api/calculate"), {
         method: "POST",
@@ -173,11 +168,6 @@ function CalculatorPageContent() {
       });
 
       const data = await response.json();
-
-      logDebug("Calculator", "API response received", {
-        status: response.status,
-        success: data.success,
-      });
 
       if (!response.ok) {
         logError("Calculator", "API Error Response", data);
@@ -217,7 +207,6 @@ function CalculatorPageContent() {
       setError(errorMessage);
     } finally {
       setLoading(false);
-      logDebug("Calculator", "Calculation request completed");
     }
   };
 
@@ -269,13 +258,7 @@ function CalculatorPageContent() {
   );
 
   const handleSaveScenario = async () => {
-    logDebug("Calculator", "Save scenario button clicked", {
-      hasResults: !!results,
-      hasFormData: !!currentFormData,
-    });
-
     if (!results || !currentFormData) {
-      logDebug("Calculator", "Cannot save: Missing results or form data");
       return;
     }
 
@@ -312,9 +295,6 @@ function CalculatorPageContent() {
         results: results,
       };
 
-      logDebug("SaveScenario", "API payload prepared", payload);
-      logInfo("SaveScenario", "Making POST request to /api/scenarios");
-
       const response = await fetch("/api/scenarios", {
         method: "POST",
         headers: {
@@ -324,29 +304,16 @@ function CalculatorPageContent() {
         body: JSON.stringify(payload),
       });
 
-      logInfo("SaveScenario", `API response received: ${response.status}`);
-
       const data = await response.json();
-      logDebug("SaveScenario", "API response data", data);
 
       if (!response.ok) {
-        logError(
-          "SaveScenario",
-          `API request failed with status: ${response.status}`,
-          {
-            status: response.status,
-            error: data.error || "Unknown error",
-            data: data,
-          },
-        );
+        console.error(`Save scenario API error: ${response.status}`, {
+          status: response.status,
+          error: data.error || "Unknown error",
+          data: data,
+        });
         throw new Error(data.error || "Failed to save scenario");
       }
-
-      logInfo("SaveScenario", "Scenario saved successfully", {
-        scenarioId: data.id,
-      });
-      logDebug("SaveScenario", "Full API response", data);
-      logInfo("SaveScenario", "Redirecting to dashboard");
 
       // Redirect to dashboard to see saved scenarios
       router.push("/en/dashboard");
@@ -528,12 +495,15 @@ function CalculatorPageContent() {
               {/* Save Button */}
               {results && (
                 <div className="mt-6 text-center">
-                  <button
+                  <Button
+                    variant="primary"
                     onClick={handleSaveScenario}
-                    className="btn-primary font-medium py-2 px-6 rounded-lg"
+                    loading={isSaving}
+                    disabled={isSaving}
+                    icon="save"
                   >
-                    Save This Scenario
-                  </button>
+                    {isSaving ? "Saving..." : "Save This Scenario"}
+                  </Button>
                 </div>
               )}
             </div>
@@ -595,6 +565,13 @@ function CalculatorPageContent() {
           onSave={handleSaveConfirm}
           isLoading={isSaving}
         />
+
+        {/* Calculation Loading Overlay */}
+        <CalculationLoader
+          isVisible={loading}
+          title="Calculating Your HELOC Strategy"
+          description="Analyzing your mortgage details and optimizing payment strategies..."
+        />
       </div>
 
       {/* Footer */}
@@ -606,29 +583,20 @@ function CalculatorPageContent() {
             reserved.
           </p>
           <p className="mt-2">
-            <a href="/terms" className="safe-link">
+            <Link href="/terms" className="safe-link">
               Terms of Service
-            </a>
+            </Link>
             <span className="mx-2">•</span>
-            <a href="/privacy" className="safe-link">
+            <Link href="/privacy" className="safe-link">
               Privacy Policy
-            </a>
+            </Link>
             <span className="mx-2">•</span>
-            <a href="/contact" className="safe-link">
+            <Link href="/contact" className="safe-link">
               Contact Us
-            </a>
+            </Link>
           </p>
         </div>
       </footer>
-
-      {/* Debug Panel */}
-      <DebugPanel
-        isVisible={showDebugPanel}
-        onToggle={() => setShowDebugPanel(!showDebugPanel)}
-      />
-
-      {/* Debug Log Viewer */}
-      <DebugLogViewer />
     </div>
   );
 }

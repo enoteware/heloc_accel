@@ -16,8 +16,15 @@ services:
       - NEXTAUTH_SECRET=dev-secret-key-change-in-production
       - JWT_SECRET=dev-jwt-secret-change-in-production
       - CORS_ORIGIN="http://${DOMAIN:-heloc.localhost:3000}"
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
+      # Performance optimizations
+      - TURBOPACK=1
+      - NEXT_TELEMETRY_DISABLED=1
+      - ENABLE_SOURCE_MAPS=false
+      - FAST_REFRESH=true
+      - NODE_OPTIONS=--max-old-space-size=4096
+      # File watching optimizations
+      - CHOKIDAR_USEPOLLING=false
+      - WATCHPACK_POLLING=false
     ports:
       # Expose app on heloc.local:3000 (host:container)
       - "3000:3001"
@@ -30,6 +37,7 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
+      - turbo_cache:/app/.turbo
     # Use Turbopack for faster dev in Docker
     command: sh -c "npx next dev --port 3001 --hostname 0.0.0.0 --turbo"
     stdin_open: true
@@ -75,6 +83,7 @@ services:
 volumes:
   postgres_dev_data:
   pgadmin_dev_data:
+  turbo_cache:
 
 networks:
   default:

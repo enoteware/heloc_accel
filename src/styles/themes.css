@@ -1,72 +1,72 @@
 /**
  * HELOC Accelerator Theme System
- * Semantic design tokens for light and dark themes
+ * Semantic design tokens aligned with brand style guide
  * Uses CSS custom properties for consistent theming
  */
 
 /* Base theme variables - Light theme (default) */
 :root {
-  /* Primary Colors */
-  --color-primary: 59 130 246; /* blue-500 */
+  /* Primary Colors - Blue-Gray Brand Palette */
+  --color-primary: 128 149 175; /* primary-500: #8095af - Brand primary */
   --color-primary-foreground: 255 255 255; /* white */
-  --color-primary-hover: 37 99 235; /* blue-600 */
-  --color-primary-active: 29 78 216; /* blue-700 */
+  --color-primary-hover: 98 125 152; /* primary-600: #627d98 */
+  --color-primary-active: 72 101 129; /* primary-700: #486581 */
 
-  /* Secondary Colors */
-  --color-secondary: 100 116 139; /* slate-500 */
-  --color-secondary-foreground: 255 255 255; /* white */
-  --color-secondary-hover: 71 85 105; /* slate-600 */
-  --color-secondary-active: 51 65 85; /* slate-700 */
+  /* Secondary Colors - Coral/Orange Brand Palette */
+  --color-secondary: 255 172 137; /* secondary-300: #ffac89 - Primary accent */
+  --color-secondary-foreground: 0 25 63; /* primary-900: #00193f */
+  --color-secondary-hover: 255 139 102; /* secondary-400: #ff8b66 */
+  --color-secondary-active: 255 107 66; /* secondary-500: #ff6b42 */
 
-  /* Accent Colors */
-  --color-accent: 16 185 129; /* emerald-500 */
+  /* Accent Colors - Success/Action */
+  --color-accent: 16 185 129; /* emerald-500 - Keep for positive actions */
   --color-accent-foreground: 255 255 255; /* white */
   --color-accent-hover: 5 150 105; /* emerald-600 */
   --color-accent-active: 4 120 87; /* emerald-700 */
 
-  /* Background Colors */
-  --color-background: 255 255 255; /* white */
-  --color-background-secondary: 248 250 252; /* slate-50 */
-  --color-background-tertiary: 241 245 249; /* slate-100 */
+  /* Background Colors - Neutral Brand Palette */
+  --color-background: 255 254 254; /* neutral-50: #fffefe - Off-white */
+  --color-background-secondary: 248 249 250; /* neutral-100: #f8f9fa */
+  --color-background-tertiary: 233 236 239; /* neutral-200: #e9ecef */
   --color-background-overlay: 0 0 0; /* black with opacity */
 
   /* Surface Colors */
-  --color-surface: 255 255 255; /* white */
-  --color-surface-secondary: 248 250 252; /* slate-50 */
-  --color-surface-tertiary: 241 245 249; /* slate-100 */
-  --color-surface-hover: 241 245 249; /* slate-100 */
-  --color-surface-active: 226 232 240; /* slate-200 */
+  --color-surface: 255 254 254; /* neutral-50: #fffefe */
+  --color-surface-secondary: 248 249 250; /* neutral-100: #f8f9fa */
+  --color-surface-tertiary: 233 236 239; /* neutral-200: #e9ecef */
+  --color-surface-hover: 233 236 239; /* neutral-200: #e9ecef */
+  --color-surface-active: 222 226 230; /* neutral-300: #dee2e6 */
 
-  /* Text Colors */
-  --color-foreground: 15 23 42; /* slate-900 */
-  --color-foreground-secondary: 51 65 85; /* slate-700 */
-  --color-foreground-tertiary: 100 116 139; /* slate-500 */
-  --color-foreground-muted: 148 163 184; /* slate-400 */
+  /* Text Colors - Neutral Brand Palette */
+  --color-foreground: 33 37 41; /* neutral-800: #212529 - Primary text */
+  --color-foreground-secondary: 73 80 87; /* neutral-700: #495057 - Body text */
+  --color-foreground-tertiary: 128 130 142; /* neutral-600: #80828e - Secondary text */
+  --color-foreground-muted: 173 181 189; /* neutral-500: #adb5bd - Placeholder text */
   --color-foreground-inverse: 255 255 255; /* white */
 
   /* Border Colors */
-  --color-border: 226 232 240; /* slate-200 */
-  --color-border-secondary: 203 213 225; /* slate-300 */
-  --color-border-tertiary: 148 163 184; /* slate-400 */
-  --color-border-focus: 59 130 246; /* blue-500 */
+  --color-border: 222 226 230; /* neutral-300: #dee2e6 - Dividers */
+  --color-border-secondary: 206 212 218; /* neutral-400: #ced4da - Disabled states */
+  --color-border-tertiary: 173 181 189; /* neutral-500: #adb5bd */
+  --color-border-focus: 128 149 175; /* primary-500: #8095af - Brand primary */
 
-  /* State Colors */
-  --color-success: 34 197 94; /* green-500 */
+  /* State Colors - Semantic Brand Colors */
+  --color-success: 16 185 129; /* success: #10b981 - Positive outcomes */
   --color-success-foreground: 255 255 255; /* white */
   --color-success-background: 240 253 244; /* green-50 */
   --color-success-border: 187 247 208; /* green-200 */
 
-  --color-warning: 245 158 11; /* amber-500 */
+  --color-warning: 245 158 11; /* warning: #f59e0b - Cautions */
   --color-warning-foreground: 255 255 255; /* white */
   --color-warning-background: 255 251 235; /* amber-50 */
   --color-warning-border: 252 211 77; /* amber-300 */
 
-  --color-error: 239 68 68; /* red-500 */
+  --color-error: 239 68 68; /* error: #ef4444 - Errors */
   --color-error-foreground: 255 255 255; /* white */
   --color-error-background: 254 242 242; /* red-50 */
   --color-error-border: 252 165 165; /* red-300 */
 
-  --color-info: 59 130 246; /* blue-500 */
+  --color-info: 59 130 246; /* info: #3b82f6 - Information */
   --color-info-foreground: 255 255 255; /* white */
   --color-info-background: 239 246 255; /* blue-50 */
   --color-info-border: 147 197 253; /* blue-300 */
@@ -84,18 +84,18 @@
     0 20px 25px -5px rgb(var(--color-shadow) / 0.1),
     0 8px 10px -6px rgb(var(--color-shadow) / 0.1);
 
-  /* Chart Colors */
-  --color-chart-primary: 59 130 246; /* blue-500 */
-  --color-chart-secondary: 16 185 129; /* emerald-500 */
-  --color-chart-tertiary: 245 158 11; /* amber-500 */
-  --color-chart-quaternary: 139 92 246; /* violet-500 */
+  /* Chart Colors - Brand Aligned */
+  --color-chart-primary: 128 149 175; /* primary-500: #8095af */
+  --color-chart-secondary: 255 172 137; /* secondary-300: #ffac89 */
+  --color-chart-tertiary: 245 158 11; /* warning: #f59e0b */
+  --color-chart-quaternary: 59 130 246; /* info: #3b82f6 */
   --color-chart-quinary: 236 72 153; /* pink-500 */
 
-  /* Financial Colors */
-  --color-income: 34 197 94; /* green-500 */
-  --color-expense: 239 68 68; /* red-500 */
-  --color-savings: 59 130 246; /* blue-500 */
-  --color-debt: 245 158 11; /* amber-500 */
+  /* Financial Colors - Semantic */
+  --color-income: 16 185 129; /* success: #10b981 - Positive outcomes */
+  --color-expense: 239 68 68; /* error: #ef4444 - Negative values */
+  --color-savings: 128 149 175; /* primary-500: #8095af - Brand primary */
+  --color-debt: 245 158 11; /* warning: #f59e0b - Cautions */
 
   /* Opacity Values */
   --opacity-overlay: 0.5;
@@ -106,49 +106,49 @@
 
 /* Dark theme overrides */
 [data-theme="dark"] {
-  /* Primary Colors */
-  --color-primary: 96 165 250; /* blue-400 */
-  --color-primary-foreground: 15 23 42; /* slate-900 */
-  --color-primary-hover: 59 130 246; /* blue-500 */
-  --color-primary-active: 37 99 235; /* blue-600 */
+  /* Primary Colors - Adjusted for dark theme */
+  --color-primary: 159 179 200; /* primary-300: #9fb3c8 - Lighter for dark */
+  --color-primary-foreground: 0 25 63; /* primary-900: #00193f */
+  --color-primary-hover: 128 149 175; /* primary-500: #8095af */
+  --color-primary-active: 98 125 152; /* primary-600: #627d98 */
 
-  /* Secondary Colors */
-  --color-secondary: 148 163 184; /* slate-400 */
-  --color-secondary-foreground: 15 23 42; /* slate-900 */
-  --color-secondary-hover: 100 116 139; /* slate-500 */
-  --color-secondary-active: 71 85 105; /* slate-600 */
+  /* Secondary Colors - Adjusted for dark theme */
+  --color-secondary: 255 172 137; /* secondary-300: #ffac89 - Keep vibrant */
+  --color-secondary-foreground: 0 25 63; /* primary-900: #00193f */
+  --color-secondary-hover: 255 139 102; /* secondary-400: #ff8b66 */
+  --color-secondary-active: 255 107 66; /* secondary-500: #ff6b42 */
 
-  /* Accent Colors */
+  /* Accent Colors - Adjusted for dark theme */
   --color-accent: 52 211 153; /* emerald-400 */
-  --color-accent-foreground: 15 23 42; /* slate-900 */
+  --color-accent-foreground: 0 25 63; /* primary-900: #00193f */
   --color-accent-hover: 16 185 129; /* emerald-500 */
   --color-accent-active: 5 150 105; /* emerald-600 */
 
-  /* Background Colors */
-  --color-background: 15 23 42; /* slate-900 */
-  --color-background-secondary: 30 41 59; /* slate-800 */
-  --color-background-tertiary: 51 65 85; /* slate-700 */
+  /* Background Colors - Dark theme */
+  --color-background: 0 25 63; /* primary-900: #00193f - Navy background */
+  --color-background-secondary: 51 78 129; /* primary-800: #334e68 */
+  --color-background-tertiary: 72 101 129; /* primary-700: #486581 */
   --color-background-overlay: 255 255 255; /* white with opacity */
 
-  /* Surface Colors */
-  --color-surface: 30 41 59; /* slate-800 */
-  --color-surface-secondary: 51 65 85; /* slate-700 */
-  --color-surface-tertiary: 71 85 105; /* slate-600 */
-  --color-surface-hover: 51 65 85; /* slate-700 */
-  --color-surface-active: 71 85 105; /* slate-600 */
+  /* Surface Colors - Dark theme */
+  --color-surface: 51 78 129; /* primary-800: #334e68 */
+  --color-surface-secondary: 72 101 129; /* primary-700: #486581 */
+  --color-surface-tertiary: 98 125 152; /* primary-600: #627d98 */
+  --color-surface-hover: 72 101 129; /* primary-700: #486581 */
+  --color-surface-active: 98 125 152; /* primary-600: #627d98 */
 
-  /* Text Colors */
-  --color-foreground: 248 250 252; /* slate-50 */
-  --color-foreground-secondary: 226 232 240; /* slate-200 */
-  --color-foreground-tertiary: 148 163 184; /* slate-400 */
-  --color-foreground-muted: 100 116 139; /* slate-500 */
-  --color-foreground-inverse: 15 23 42; /* slate-900 */
+  /* Text Colors - Dark theme */
+  --color-foreground: 255 254 254; /* neutral-50: #fffefe */
+  --color-foreground-secondary: 248 249 250; /* neutral-100: #f8f9fa */
+  --color-foreground-tertiary: 173 181 189; /* neutral-500: #adb5bd */
+  --color-foreground-muted: 128 130 142; /* neutral-600: #80828e */
+  --color-foreground-inverse: 0 25 63; /* primary-900: #00193f */
 
-  /* Border Colors */
-  --color-border: 71 85 105; /* slate-600 */
-  --color-border-secondary: 100 116 139; /* slate-500 */
-  --color-border-tertiary: 148 163 184; /* slate-400 */
-  --color-border-focus: 96 165 250; /* blue-400 */
+  /* Border Colors - Dark theme */
+  --color-border: 98 125 152; /* primary-600: #627d98 */
+  --color-border-secondary: 128 149 175; /* primary-500: #8095af */
+  --color-border-tertiary: 159 179 200; /* primary-300: #9fb3c8 */
+  --color-border-focus: 159 179 200; /* primary-300: #9fb3c8 */
 
   /* State Colors - Adjusted for dark theme */
   --color-success: 52 211 153; /* emerald-400 */
@@ -168,16 +168,16 @@
   --color-info-border: 59 130 246; /* blue-500 */
 
   /* Chart Colors - Adjusted for dark theme */
-  --color-chart-primary: 96 165 250; /* blue-400 */
-  --color-chart-secondary: 52 211 153; /* emerald-400 */
+  --color-chart-primary: 159 179 200; /* primary-300: #9fb3c8 */
+  --color-chart-secondary: 255 172 137; /* secondary-300: #ffac89 */
   --color-chart-tertiary: 251 191 36; /* amber-400 */
-  --color-chart-quaternary: 167 139 250; /* violet-400 */
+  --color-chart-quaternary: 96 165 250; /* blue-400 */
   --color-chart-quinary: 244 114 182; /* pink-400 */
 
   /* Financial Colors - Adjusted for dark theme */
   --color-income: 52 211 153; /* emerald-400 */
   --color-expense: 248 113 113; /* red-400 */
-  --color-savings: 96 165 250; /* blue-400 */
+  --color-savings: 159 179 200; /* primary-300: #9fb3c8 */
   --color-debt: 251 191 36; /* amber-400 */
 }
 

@@ -121,7 +121,11 @@ export const FlyoutMenu: React.FC<FlyoutMenuProps> = ({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div className="fixed inset-0 z-10" aria-hidden="true" />
+          <div
+            className="fixed inset-0 z-10 bg-black/20"
+            aria-hidden="true"
+            onClick={() => setIsOpen(false)}
+          />
 
           {/* Menu Panel */}
           <div

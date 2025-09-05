@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center">
           <h2 className="mt-6 text-2xl font-semibold">Reset your password</h2>
           <p className="mt-2 text-sm opacity-80">
-            Enter your email and we'll send you reset instructions.
+            Enter your email and we&apos;ll send you reset instructions.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export default function ForgotPasswordPage() {
           {submitted ? (
             <div className="space-y-4 text-sm">
               <p>
-                If an account exists for <strong>{email}</strong>, you'll
+                If an account exists for <strong>{email}</strong>, you&apos;ll
                 receive an email with password reset instructions.
               </p>
               {hostedResetUrl ? (
