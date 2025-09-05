@@ -105,7 +105,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
           {getUserDisplayName()}
         </span>
         <NavigationIcon
-          name="chevronDown"
+          name="chevron-down"
           size="sm"
           aria-hidden={true}
           className="text-muted-foreground"

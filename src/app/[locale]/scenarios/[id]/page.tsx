@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@stackframe/stack";
 import { Icon } from "@/components/Icons";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import InputSummary from "@/components/InputSummary";
 import type { DbScenario } from "@/lib/db";
@@ -20,6 +21,24 @@ export default function ScenarioDetailPage({ params }: PageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [scenarioId, setScenarioId] = useState<string | null>(null);
+
+  // Table of Contents sections - moved to top to avoid hook order issues
+  const tocSections = [
+    { id: "summary", label: "Summary" },
+    { id: "comparison", label: "Comparison" },
+    { id: "highlights", label: "Highlights" },
+    { id: "payment-flow", label: "Payment Flow" },
+    { id: "amortization", label: "Amortization" },
+    { id: "full-schedule", label: "Full Schedule" },
+    { id: "strategy", label: "Strategy" },
+    { id: "actions", label: "Actions" },
+    { id: "insights", label: "Insights" },
+    { id: "disclaimer", label: "Disclaimer" },
+  ];
+
+  const [activeSection, setActiveSection] = useState<string>(tocSections[0].id);
+  const [availableToc, setAvailableToc] = useState(tocSections);
+  const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
   useEffect(() => {
     const loadParams = async () => {
@@ -63,40 +82,96 @@ export default function ScenarioDetailPage({ params }: PageProps) {
     }
   }, [user, router, scenarioId]);
 
+  // Scrollspy: observe sections and update activeSection + availableToc
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) =>
+            a.boundingClientRect.top > b.boundingClientRect.top ? 1 : -1,
+          );
+        if (visible.length > 0) {
+          const id = visible[0].target.getAttribute("id");
+          if (id) setActiveSection(id);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -65% 0px",
+        threshold: 0.1,
+      },
+    );
+
+    const present = tocSections.filter(
+      ({ id }) => !!document.getElementById(id),
+    );
+    setAvailableToc(present.length > 0 ? present : tocSections);
+
+    (present.length > 0 ? present : tocSections).forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading scenario...</p>
+      <main
+        className="min-h-screen bg-background flex items-center justify-center"
+        role="main"
+        aria-busy="true"
+      >
+        <div className="text-center" role="status" aria-live="polite">
+          <div
+            className={cn(
+              "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto",
+            )}
+          />
+          <p className="mt-4 text-muted-foreground">Loading scenario...</p>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (error || !scenario) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <main className="min-h-screen bg-background py-8" role="main">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <section
+            className={cn(
+              "bg-card border border-destructive/30 rounded-lg p-6 text-center",
+            )}
+            role="alert"
+            aria-labelledby="scenario-error-title"
+          >
             <Icon
               name="alert"
               size="lg"
-              className="text-red-600 mx-auto mb-4"
+              variant="error"
+              className="mx-auto mb-4 text-destructive"
             />
-            <h2 className="text-lg font-semibold text-red-900 mb-2">
+            <h2
+              id="scenario-error-title"
+              className="text-lg font-semibold text-destructive mb-2"
+            >
               {error || "Scenario not found"}
             </h2>
             <Link
               href="/scenarios"
-              className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
+              className={cn(
+                "inline-flex items-center space-x-2",
+                "text-primary hover:text-primary/80 font-medium",
+                "transition-colors duration-200",
+              )}
             >
               <Icon name="arrow-left" size="sm" />
               <span>Back to scenarios</span>
             </Link>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -147,47 +222,226 @@ export default function ScenarioDetailPage({ params }: PageProps) {
     },
   };
 
+  const showBackToTop = activeSection !== "summary";
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <main className="min-h-screen bg-background py-8 scroll-smooth" role="main">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <Link
-                href="/scenarios"
-                className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
+        <header className="mb-8" aria-labelledby="scenario-title">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <nav aria-label="Breadcrumb" className="mb-3">
+                <Link
+                  href="/scenarios"
+                  className={cn(
+                    "inline-flex items-center",
+                    "text-muted-foreground hover:text-foreground",
+                    "transition-colors duration-200",
+                  )}
+                >
+                  <Icon name="arrow-left" size="sm" className="mr-2" />
+                  Back to scenarios
+                </Link>
+              </nav>
+              <h1
+                id="scenario-title"
+                className="text-3xl font-bold text-foreground"
               >
-                <Icon name="arrow-left" size="sm" className="mr-2" />
-                Back to scenarios
-              </Link>
-              <h1 className="text-3xl font-bold text-gray-900">
                 {scenario.name}
               </h1>
               {scenario.description && (
-                <p className="mt-2 text-gray-600">{scenario.description}</p>
+                <p className="mt-2 text-muted-foreground max-w-prose">
+                  {scenario.description}
+                </p>
               )}
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Icon name="calendar" size="sm" />
+                  <span>
+                    Created {new Date(scenario.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                {scenario.updated_at !== scenario.created_at && (
+                  <div className="flex items-center gap-1">
+                    <Icon name="clock" size="sm" />
+                    <span>
+                      Updated{" "}
+                      {new Date(scenario.updated_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex shrink-0 items-center gap-3">
               <Link
                 href={`/calculator?load=${scenario.id}`}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center space-x-2"
+                className={cn(
+                  "bg-primary hover:bg-primary/90 text-primary-foreground",
+                  "font-semibold py-2 px-4 rounded-lg shadow-sm",
+                  "transition-colors duration-200 flex items-center gap-2",
+                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                )}
               >
                 <Icon name="calculator" size="sm" />
                 <span>Load in Calculator</span>
               </Link>
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Input Summary */}
-        <div className="mb-8">
-          <InputSummary formData={inputs} />
-        </div>
+        {/* Content Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left sticky TOC */}
+          <aside
+            className="hidden lg:block lg:col-span-2"
+            role="complementary"
+            aria-labelledby="on-this-page"
+          >
+            <div className="lg:sticky lg:top-20">
+              <nav
+                aria-labelledby="on-this-page"
+                className="bg-card border border-border rounded-lg p-3"
+              >
+                <h2
+                  id="on-this-page"
+                  className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                >
+                  On this page
+                </h2>
+                <ul className="mt-2 space-y-1">
+                  {availableToc.map(({ id, label }) => (
+                    <li key={id}>
+                      <a
+                        href={`#${id}`}
+                        className={cn(
+                          "block rounded-md px-2 py-1 text-sm transition-colors",
+                          activeSection === id
+                            ? "text-primary bg-muted font-medium"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                        )}
+                        aria-current={
+                          activeSection === id ? "location" : undefined
+                        }
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </aside>
 
-        {/* Results Display */}
-        <ResultsDisplay results={results} inputs={inputs} />
+          {/* Main results */}
+          <section className="lg:col-span-7" aria-labelledby="results-heading">
+            <h2 id="results-heading" className="sr-only">
+              Scenario Results
+            </h2>
+            {/* Mobile TOC dropdown */}
+            <div className="mb-4 lg:hidden">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileTocOpen((v) => !v)}
+                  aria-haspopup="listbox"
+                  aria-expanded={isMobileTocOpen}
+                  className={cn(
+                    "w-full flex items-center justify-between rounded-md border border-border bg-card px-3 py-2",
+                    "text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                  )}
+                >
+                  <span>
+                    {
+                      (
+                        availableToc.find((t) => t.id === activeSection) ||
+                        availableToc[0]
+                      )?.label
+                    }
+                  </span>
+                  <Icon
+                    name="chevron-down"
+                    size="xs"
+                    className={cn(
+                      "transition-transform",
+                      isMobileTocOpen ? "rotate-180" : "",
+                    )}
+                  />
+                </button>
+                {isMobileTocOpen && (
+                  <div className="absolute z-20 mt-2 w-full rounded-md border border-border bg-card shadow-lg">
+                    <ul
+                      role="listbox"
+                      aria-label="In-page sections"
+                      className="max-h-64 overflow-auto py-1"
+                    >
+                      {availableToc.map(({ id, label }) => (
+                        <li key={id}>
+                          <a
+                            href={`#${id}`}
+                            onClick={() => setIsMobileTocOpen(false)}
+                            className={cn(
+                              "block px-3 py-2 text-sm",
+                              activeSection === id
+                                ? "bg-muted text-primary"
+                                : "text-foreground hover:bg-muted",
+                            )}
+                            aria-current={
+                              activeSection === id ? "location" : undefined
+                            }
+                          >
+                            {label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+            <ResultsDisplay results={results} inputs={inputs} />
+          </section>
+
+          {/* Summary sidebar */}
+          <aside
+            className="lg:col-span-3"
+            aria-labelledby="summary-heading"
+            role="complementary"
+          >
+            <h2 id="summary-heading" className="sr-only">
+              Input Summary
+            </h2>
+            <div className="lg:sticky lg:top-20 space-y-6">
+              {/* On small screens, keep summary visible above the fold */}
+              <div className="block lg:hidden">
+                <InputSummary formData={inputs} />
+              </div>
+              {/* On large screens, use a compact max width for readability */}
+              <div className="hidden lg:block">
+                <InputSummary formData={inputs} className="max-w-none" />
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+
+      {/* Back to top button */}
+      {showBackToTop && (
+        <button
+          onClick={() => {
+            const el = document.getElementById("scenario-title");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          className="fixed bottom-4 right-4 z-40 rounded-full border border-border bg-card text-foreground shadow-md hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 p-2"
+          aria-label="Back to top"
+        >
+          <Icon name="chevron-up" size="sm" />
+        </button>
+      )}
+    </main>
   );
 }
