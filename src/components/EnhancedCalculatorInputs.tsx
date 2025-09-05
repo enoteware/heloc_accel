@@ -202,7 +202,7 @@ export const EnhancedPercentageInput: React.FC<EnhancedInputProps> = ({
     <div className="space-y-1">
       <div className="flex items-center gap-2">
         <label htmlFor={field} className={`block ${labelClasses}`}>
-          {label} {required && <span className="text-red-500">*</span>}
+          {label} {required && <span className="text-destructive">*</span>}
         </label>
         {tooltip && <InfoIcon tooltip={tooltip} />}
       </div>

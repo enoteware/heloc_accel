@@ -84,10 +84,10 @@ export default function EnhancedCalculatorForm({
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-foreground">
               Form Progress
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-foreground-muted">
               {progress.completed}/{progress.total} fields
             </span>
           </div>
@@ -214,8 +214,8 @@ export default function EnhancedCalculatorForm({
               />
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
+            <div className="rounded-lg p-4 border border-info-border bg-[rgb(var(--color-info-background))]">
+              <p className="text-sm text-info">
                 <strong>Discretionary Income</strong> is automatically
                 calculated as: Monthly Income - Monthly Expenses - Mortgage
                 Payment. This amount will be used for HELOC acceleration.
@@ -257,8 +257,8 @@ export default function EnhancedCalculatorForm({
             </div>
 
             {!isValid && Object.keys(touchedFields).length > 0 && (
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">
+              <div className="mt-4 p-3 rounded-lg border border-warning-border bg-[rgb(var(--color-warning-background))]">
+                <p className="text-sm text-warning">
                   Please complete all required fields and fix any validation
                   errors before calculating.
                 </p>

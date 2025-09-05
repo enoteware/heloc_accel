@@ -572,16 +572,16 @@ export default function ResultsDisplay({
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
-                    <h5 className="text-sm font-semibold text-orange-800 mb-2 flex items-center">
+                  <div className="p-4 rounded-lg border border-warning-border bg-[rgb(var(--color-warning-background))]">
+                    <h5 className="text-sm font-semibold text-warning mb-2 flex items-center">
                       <Icon
                         name="info"
                         size="xs"
-                        className="text-orange-600 mr-1"
+                        className="text-warning mr-1"
                       />
                       {tResults("paymentStrategyTip")}
                     </h5>
-                    <p className="text-xs text-orange-700">
+                    <p className="text-xs text-warning">
                       {tResults("paymentStrategyDescription")}
                     </p>
                   </div>

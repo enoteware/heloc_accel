@@ -90,11 +90,11 @@ ${formData.description ? formData.description : ""}`;
       if (button) {
         const originalText = button.textContent;
         button.textContent = t("copied");
-        button.classList.add("bg-green-50", "text-green-600");
+        button.classList.add("bg-success-background", "text-success");
 
         setTimeout(() => {
           button.textContent = originalText || t("copySummary");
-          button.classList.remove("bg-green-50", "text-green-600");
+          button.classList.remove("bg-success-background", "text-success");
         }, 2000);
       }
     } catch (err) {
@@ -131,12 +131,12 @@ ${formData.description ? formData.description : ""}`;
             {t("title")}
           </h3>
           {timestamp && (
-            <span className="text-xs text-gray-500 ml-2">
+            <span className="text-xs text-foreground-muted ml-2">
               {t("asOf")} {new Date(timestamp).toLocaleTimeString()}
             </span>
           )}
           <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+            className={`w-5 h-5 text-foreground-muted transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

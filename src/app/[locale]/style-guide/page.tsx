@@ -341,51 +341,61 @@ export default function StyleGuidePage() {
                       name: "Primary 50",
                       value: "#f0f4f8",
                       class: "bg-primary-50",
+                      rgb: "240, 244, 248",
                     },
                     {
                       name: "Primary 100",
                       value: "#d9e2ec",
                       class: "bg-primary-100",
+                      rgb: "217, 226, 236",
                     },
                     {
                       name: "Primary 200",
                       value: "#bcccdc",
                       class: "bg-primary-200",
+                      rgb: "188, 204, 220",
                     },
                     {
                       name: "Primary 300",
                       value: "#9fb3c8",
                       class: "bg-primary-300",
+                      rgb: "159, 179, 200",
                     },
                     {
                       name: "Primary 400",
                       value: "#829ab1",
                       class: "bg-primary-400",
+                      rgb: "130, 154, 177",
                     },
                     {
-                      name: "Primary 500",
+                      name: "Primary 500 (Brand)",
                       value: "#8095af",
                       class: "bg-primary-500",
+                      rgb: "128, 149, 175",
                     },
                     {
                       name: "Primary 600",
                       value: "#627d98",
                       class: "bg-primary-600",
+                      rgb: "98, 125, 152",
                     },
                     {
                       name: "Primary 700",
                       value: "#486581",
                       class: "bg-primary-700",
+                      rgb: "72, 101, 129",
                     },
                     {
                       name: "Primary 800",
                       value: "#334e68",
                       class: "bg-primary-800",
+                      rgb: "51, 78, 104",
                     },
                     {
-                      name: "Primary 900",
+                      name: "Primary 900 (Navy)",
                       value: "#00193f",
                       class: "bg-primary-900",
+                      rgb: "0, 25, 63",
                     },
                   ].map((color) => (
                     <div
@@ -393,14 +403,18 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border`}
+                        className={`w-12 h-12 rounded-lg border border-border shadow-sm`}
+                        style={{ backgroundColor: color.value }}
                       ></div>
-                      <div>
-                        <div className="text-body-sm font-medium">
+                      <div className="flex-1">
+                        <div className="text-body-sm font-medium text-foreground">
                           {color.name}
                         </div>
-                        <div className="text-caption text-muted-foreground">
+                        <div className="text-caption text-foreground-muted">
                           {color.value}
+                        </div>
+                        <div className="text-caption text-foreground-tertiary">
+                          RGB: {color.rgb}
                         </div>
                       </div>
                     </div>
@@ -420,53 +434,63 @@ export default function StyleGuidePage() {
                   {[
                     {
                       name: "Secondary 50",
-                      value: "#fff4f1",
+                      value: "#fff5f0",
                       class: "bg-secondary-50",
+                      rgb: "255, 245, 240",
                     },
                     {
                       name: "Secondary 100",
-                      value: "#ffe4dc",
+                      value: "#ffe4d9",
                       class: "bg-secondary-100",
+                      rgb: "255, 228, 217",
                     },
                     {
                       name: "Secondary 200",
-                      value: "#ffc9b9",
+                      value: "#ffc9b4",
                       class: "bg-secondary-200",
+                      rgb: "255, 201, 180",
                     },
                     {
-                      name: "Secondary 300",
+                      name: "Secondary 300 (Primary Accent)",
                       value: "#ffac89",
                       class: "bg-secondary-300",
+                      rgb: "255, 172, 137",
                     },
                     {
                       name: "Secondary 400",
-                      value: "#ff8f66",
+                      value: "#ff8b66",
                       class: "bg-secondary-400",
+                      rgb: "255, 139, 102",
                     },
                     {
                       name: "Secondary 500",
-                      value: "#ff7043",
+                      value: "#ff6b42",
                       class: "bg-secondary-500",
+                      rgb: "255, 107, 66",
                     },
                     {
                       name: "Secondary 600",
-                      value: "#e55a2b",
+                      value: "#d94f2a",
                       class: "bg-secondary-600",
+                      rgb: "217, 79, 42",
                     },
                     {
                       name: "Secondary 700",
-                      value: "#cc4125",
+                      value: "#b33818",
                       class: "bg-secondary-700",
+                      rgb: "179, 56, 24",
                     },
                     {
                       name: "Secondary 800",
-                      value: "#b8321f",
+                      value: "#8c2a0f",
                       class: "bg-secondary-800",
+                      rgb: "140, 42, 15",
                     },
                     {
-                      name: "Secondary 900",
+                      name: "Secondary 900 (Deep Brown)",
                       value: "#7f433a",
                       class: "bg-secondary-900",
+                      rgb: "127, 67, 58",
                     },
                   ].map((color) => (
                     <div
@@ -474,14 +498,18 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border`}
+                        className={`w-12 h-12 rounded-lg border border-border shadow-sm`}
+                        style={{ backgroundColor: color.value }}
                       ></div>
-                      <div>
-                        <div className="text-body-sm font-medium">
+                      <div className="flex-1">
+                        <div className="text-body-sm font-medium text-foreground">
                           {color.name}
                         </div>
-                        <div className="text-caption text-muted-foreground">
+                        <div className="text-caption text-foreground-muted">
                           {color.value}
+                        </div>
+                        <div className="text-caption text-foreground-tertiary">
+                          RGB: {color.rgb}
                         </div>
                       </div>
                     </div>
@@ -502,54 +530,64 @@ export default function StyleGuidePage() {
                 <div className="space-y-2">
                   {[
                     {
-                      name: "Neutral 50",
+                      name: "Neutral 50 (Off-white)",
                       value: "#fffefe",
-                      class: "bg-muted",
+                      class: "bg-neutral-50",
+                      rgb: "255, 254, 254",
                     },
                     {
-                      name: "Neutral 100",
-                      value: "#f7fafc",
-                      class: "bg-muted",
+                      name: "Neutral 100 (Light Gray)",
+                      value: "#f8f9fa",
+                      class: "bg-neutral-100",
+                      rgb: "248, 249, 250",
                     },
                     {
-                      name: "Neutral 200",
-                      value: "#edf2f7",
-                      class: "bg-muted",
+                      name: "Neutral 200 (Borders)",
+                      value: "#e9ecef",
+                      class: "bg-neutral-200",
+                      rgb: "233, 236, 239",
                     },
                     {
-                      name: "Neutral 300",
-                      value: "#e2e8f0",
-                      class: "bg-muted",
+                      name: "Neutral 300 (Dividers)",
+                      value: "#dee2e6",
+                      class: "bg-neutral-300",
+                      rgb: "222, 226, 230",
                     },
                     {
-                      name: "Neutral 400",
-                      value: "#cbd5e0",
-                      class: "bg-muted",
+                      name: "Neutral 400 (Disabled)",
+                      value: "#ced4da",
+                      class: "bg-neutral-400",
+                      rgb: "206, 212, 218",
                     },
                     {
-                      name: "Neutral 500",
-                      value: "#a0aec0",
-                      class: "bg-muted0",
+                      name: "Neutral 500 (Placeholder)",
+                      value: "#adb5bd",
+                      class: "bg-neutral-500",
+                      rgb: "173, 181, 189",
                     },
                     {
-                      name: "Neutral 600",
+                      name: "Neutral 600 (Secondary Text)",
                       value: "#80828e",
-                      class: "bg-muted",
+                      class: "bg-neutral-600",
+                      rgb: "128, 130, 142",
                     },
                     {
-                      name: "Neutral 700",
-                      value: "#4a5568",
-                      class: "bg-muted",
+                      name: "Neutral 700 (Body Text)",
+                      value: "#495057",
+                      class: "bg-neutral-700",
+                      rgb: "73, 80, 87",
                     },
                     {
-                      name: "Neutral 800",
-                      value: "#2d3748",
-                      class: "bg-muted",
+                      name: "Neutral 800 (Headers)",
+                      value: "#343a40",
+                      class: "bg-neutral-800",
+                      rgb: "52, 58, 64",
                     },
                     {
-                      name: "Neutral 900",
-                      value: "#1a202c",
-                      class: "bg-muted",
+                      name: "Neutral 900 (Primary Text)",
+                      value: "#212529",
+                      class: "bg-neutral-900",
+                      rgb: "33, 37, 41",
                     },
                   ].map((color) => (
                     <div
@@ -557,18 +595,280 @@ export default function StyleGuidePage() {
                       className="flex items-center space-x-3"
                     >
                       <div
-                        className={`w-8 h-8 rounded ${color.class} border border`}
+                        className={`w-12 h-12 rounded-lg border border-border shadow-sm`}
+                        style={{ backgroundColor: color.value }}
                       ></div>
-                      <div>
-                        <div className="text-body-sm font-medium">
+                      <div className="flex-1">
+                        <div className="text-body-sm font-medium text-foreground">
                           {color.name}
                         </div>
-                        <div className="text-caption text-muted-foreground">
+                        <div className="text-caption text-foreground-muted">
                           {color.value}
+                        </div>
+                        <div className="text-caption text-foreground-tertiary">
+                          RGB: {color.rgb}
                         </div>
                       </div>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Semantic Colors */}
+          <div className="mt-8">
+            <h3 className="text-h3 text-foreground mb-6">Semantic Colors</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* State Colors */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>State Colors</CardTitle>
+                  <CardDescription>
+                    Colors for success, warning, error, and info states
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        name: "Success",
+                        value: "#10b981",
+                        description: "Positive outcomes, confirmations",
+                        rgb: "16, 185, 129",
+                      },
+                      {
+                        name: "Warning",
+                        value: "#f59e0b",
+                        description: "Cautions, important notices",
+                        rgb: "245, 158, 11",
+                      },
+                      {
+                        name: "Error",
+                        value: "#ef4444",
+                        description: "Errors, destructive actions",
+                        rgb: "239, 68, 68",
+                      },
+                      {
+                        name: "Info",
+                        value: "#3b82f6",
+                        description: "Information, neutral notices",
+                        rgb: "59, 130, 246",
+                      },
+                    ].map((color) => (
+                      <div
+                        key={color.name}
+                        className="flex items-center space-x-4"
+                      >
+                        <div
+                          className={`w-16 h-12 rounded-lg border border-border shadow-sm`}
+                          style={{ backgroundColor: color.value }}
+                        ></div>
+                        <div className="flex-1">
+                          <div className="text-body font-medium text-foreground">
+                            {color.name}
+                          </div>
+                          <div className="text-body-sm text-foreground-secondary">
+                            {color.description}
+                          </div>
+                          <div className="text-caption text-foreground-muted">
+                            {color.value} • RGB: {color.rgb}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Financial Colors */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Financial Colors</CardTitle>
+                  <CardDescription>
+                    Colors for financial data visualization
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        name: "Income",
+                        value: "#10b981",
+                        description: "Positive cash flow, earnings",
+                        rgb: "16, 185, 129",
+                      },
+                      {
+                        name: "Expense",
+                        value: "#ef4444",
+                        description: "Outgoing payments, costs",
+                        rgb: "239, 68, 68",
+                      },
+                      {
+                        name: "Savings",
+                        value: "#8095af",
+                        description: "Accumulated funds, investments",
+                        rgb: "128, 149, 175",
+                      },
+                      {
+                        name: "Debt",
+                        value: "#f59e0b",
+                        description: "Outstanding balances, loans",
+                        rgb: "245, 158, 11",
+                      },
+                    ].map((color) => (
+                      <div
+                        key={color.name}
+                        className="flex items-center space-x-4"
+                      >
+                        <div
+                          className={`w-16 h-12 rounded-lg border border-border shadow-sm`}
+                          style={{ backgroundColor: color.value }}
+                        ></div>
+                        <div className="flex-1">
+                          <div className="text-body font-medium text-foreground">
+                            {color.name}
+                          </div>
+                          <div className="text-body-sm text-foreground-secondary">
+                            {color.description}
+                          </div>
+                          <div className="text-caption text-foreground-muted">
+                            {color.value} • RGB: {color.rgb}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Chart Colors */}
+          <div className="mt-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Chart Colors</CardTitle>
+                <CardDescription>
+                  Color palette for data visualization and charts
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-4">
+                  {[
+                    {
+                      name: "Chart Primary",
+                      value: "#8095af",
+                      rgb: "128, 149, 175",
+                    },
+                    {
+                      name: "Chart Secondary",
+                      value: "#ffac89",
+                      rgb: "255, 172, 137",
+                    },
+                    {
+                      name: "Chart Tertiary",
+                      value: "#f59e0b",
+                      rgb: "245, 158, 11",
+                    },
+                    {
+                      name: "Chart Quaternary",
+                      value: "#3b82f6",
+                      rgb: "59, 130, 246",
+                    },
+                    {
+                      name: "Chart Quinary",
+                      value: "#ec4899",
+                      rgb: "236, 72, 153",
+                    },
+                  ].map((color) => (
+                    <div key={color.name} className="text-center">
+                      <div
+                        className="w-20 h-20 rounded-lg border border-border shadow-sm mb-2"
+                        style={{ backgroundColor: color.value }}
+                      ></div>
+                      <div className="text-body-sm font-medium text-foreground">
+                        {color.name}
+                      </div>
+                      <div className="text-caption text-foreground-muted">
+                        {color.value}
+                      </div>
+                      <div className="text-caption text-foreground-tertiary">
+                        RGB: {color.rgb}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Usage Examples */}
+          <div className="mt-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Color Usage Examples</CardTitle>
+                <CardDescription>
+                  How to use brand colors in your components
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-h6 text-foreground mb-3">
+                      CSS Custom Properties
+                    </h4>
+                    <pre className="p-4 bg-muted rounded-lg text-body-sm overflow-x-auto">
+                      <code>{`/* Use semantic tokens for theming */
+background-color: rgb(var(--color-primary) / <alpha-value>);
+color: rgb(var(--color-foreground) / <alpha-value>);
+
+/* Direct brand colors */
+background-color: rgb(128 149 175); /* primary-500 */
+color: rgb(255 172 137); /* secondary-300 */`}</code>
+                    </pre>
+                  </div>
+
+                  <div>
+                    <h4 className="text-h6 text-foreground mb-3">
+                      Tailwind Classes
+                    </h4>
+                    <pre className="p-4 bg-muted rounded-lg text-body-sm overflow-x-auto">
+                      <code>{`/* Semantic classes (recommended) */
+className="bg-primary text-primary-foreground"
+className="text-foreground bg-background
+
+/* Brand color classes */
+className="bg-primary-500 text-white"
+className="text-secondary-300 bg-neutral-50`}</code>
+                    </pre>
+                  </div>
+
+                  <div>
+                    <h4 className="text-h6 text-foreground mb-3">
+                      Component Examples
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-primary text-primary-foreground rounded-lg">
+                        <div className="font-medium">Primary Button</div>
+                        <div className="text-sm opacity-90">
+                          Using semantic primary color
+                        </div>
+                      </div>
+                      <div className="p-4 bg-secondary text-secondary-foreground rounded-lg">
+                        <div className="font-medium">Secondary Button</div>
+                        <div className="text-sm opacity-90">
+                          Using semantic secondary color
+                        </div>
+                      </div>
+                      <div className="p-4 bg-success text-success-foreground rounded-lg">
+                        <div className="font-medium">Success State</div>
+                        <div className="text-sm opacity-90">
+                          Using semantic success color
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -1175,6 +1475,158 @@ export default function StyleGuidePage() {
                     <pre className="p-3 bg-muted rounded text-body-sm">
                       <code>{`className="text-primary-600 bg-muted"`}</code>
                     </pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Tailwind v4 Migration Status */}
+        <section className="mb-12">
+          <h2 className="text-h2 text-foreground mb-6">
+            Tailwind CSS v4 Migration Status
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card variant="elevated">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-success rounded-full"></div>
+                  Migration Complete
+                </CardTitle>
+                <CardDescription>
+                  Successfully updated to Tailwind CSS v4.1.12
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2">
+                      ✅ Completed Updates
+                    </h5>
+                    <ul className="space-y-1 text-body-sm text-foreground-secondary">
+                      <li>• Updated to Tailwind CSS v4.1.12</li>
+                      <li>• Configured @tailwindcss/postcss plugin</li>
+                      <li>• Migrated to CSS custom properties</li>
+                      <li>• Updated PostCSS configuration</li>
+                      <li>• Semantic design tokens implemented</li>
+                      <li>• Dark mode theming with CSS variables</li>
+                      <li>• Brand color palette fully defined</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2">
+                      🎨 Brand Colors Available
+                    </h5>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="primary">Primary (Blue-Gray)</Badge>
+                      <Badge variant="secondary">Secondary (Coral)</Badge>
+                      <Badge variant="info">Neutral Palette</Badge>
+                      <Badge variant="success">Semantic Colors</Badge>
+                      <Badge variant="warning">Financial Colors</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Configuration Details</CardTitle>
+                <CardDescription>
+                  Technical implementation details
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2">
+                      Package Versions
+                    </h5>
+                    <pre className="p-3 bg-muted rounded text-body-sm">
+                      <code>{`"tailwindcss": "^4.1.12"
+"@tailwindcss/postcss": "^4.1.12"
+"postcss": "^8"`}</code>
+                    </pre>
+                  </div>
+
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2">
+                      PostCSS Config
+                    </h5>
+                    <pre className="p-3 bg-muted rounded text-body-sm">
+                      <code>{`export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+}`}</code>
+                    </pre>
+                  </div>
+
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2">
+                      CSS Custom Properties
+                    </h5>
+                    <pre className="p-3 bg-muted rounded text-body-sm">
+                      <code>{`:root {
+  --color-primary: 128 149 175;
+  --color-secondary: 255 172 137;
+  --color-foreground: 33 37 41;
+  /* ... more variables */
+}`}</code>
+                    </pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Migration Benefits</CardTitle>
+                <CardDescription>
+                  Advantages of Tailwind CSS v4 implementation
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      Performance
+                    </h5>
+                    <ul className="space-y-1 text-body-sm text-foreground-secondary">
+                      <li>• Faster build times</li>
+                      <li>• Smaller bundle size</li>
+                      <li>• Improved CSS generation</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-secondary rounded-full"></div>
+                      Theming
+                    </h5>
+                    <ul className="space-y-1 text-body-sm text-foreground-secondary">
+                      <li>• CSS custom properties</li>
+                      <li>• Dynamic theme switching</li>
+                      <li>• Better dark mode support</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5 className="text-h6 text-foreground mb-2 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-success rounded-full"></div>
+                      Developer Experience
+                    </h5>
+                    <ul className="space-y-1 text-body-sm text-foreground-secondary">
+                      <li>• Better IntelliSense</li>
+                      <li>• Improved error messages</li>
+                      <li>• Modern CSS features</li>
+                    </ul>
                   </div>
                 </div>
               </CardContent>

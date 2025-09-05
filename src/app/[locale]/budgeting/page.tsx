@@ -157,6 +157,10 @@ export default function BudgetingPage() {
         }
       } else if (existingScenariosResponse.status === 503) {
         throw new Error("Database not configured. Please contact support.");
+      } else if (existingScenariosResponse.status === 401) {
+        throw new Error(
+          "Authentication failed. Please sign out and sign in again.",
+        );
       }
 
       // If no parent scenario exists, create one
@@ -185,6 +189,10 @@ export default function BudgetingPage() {
           }
         } else if (createParentResponse.status === 503) {
           throw new Error("Database not configured. Please contact support.");
+        } else if (createParentResponse.status === 401) {
+          throw new Error(
+            "Authentication failed. Please sign out and sign in again.",
+          );
         }
       }
 

@@ -253,66 +253,38 @@ export default function LiveCalculatorForm({
     }
   };
 
+  // External utility controls via custom events (for TOC buttons)
+  useEffect(() => {
+    const handlePrefill = (e: Event) => {
+      // @ts-ignore - CustomEvent detail
+      const idx = (e as CustomEvent)?.detail?.index ?? 0;
+      handlePrefillDemo(idx);
+    };
+    const handleClear = () => handleClearForm();
+
+    window.addEventListener(
+      "calculator:prefill",
+      handlePrefill as EventListener,
+    );
+    window.addEventListener("calculator:clear", handleClear as EventListener);
+
+    return () => {
+      window.removeEventListener(
+        "calculator:prefill",
+        handlePrefill as EventListener,
+      );
+      window.removeEventListener(
+        "calculator:clear",
+        handleClear as EventListener,
+      );
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
-      {/* Top Actions Bar */}
+      {/* Title */}
       <div className="bg-card p-4 rounded-lg shadow-sm border border-border">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-foreground">
-            {t("title")}
-          </h2>
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-foreground-secondary">
-                Quick Fill:
-              </span>
-              {getDemoScenarios().map((scenario, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => handlePrefillDemo(index)}
-                  className="flex items-center space-x-1 px-3 py-1 text-xs bg-success text-success-foreground rounded-md transition duration-200"
-                  title={scenario.data.description}
-                >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                  <span>{scenario.name}</span>
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={handleClearForm}
-              className="flex items-center space-x-2 btn-outline px-4 py-2 rounded-md"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-              <span>{t("clearForm")}</span>
-            </button>
-          </div>
-        </div>
+        <h2 className="text-xl font-semibold text-foreground">{t("title")}</h2>
       </div>
 
       {/* Mortgage Information Section */}

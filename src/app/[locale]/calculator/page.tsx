@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, Suspense, lazy } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  Suspense,
+  lazy,
+} from "react";
 import { useUser } from "@stackframe/stack";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -77,6 +84,22 @@ function CalculatorPageContent() {
   const [liveLoading, setLiveLoading] = useState(false);
   const [liveError, setLiveError] = useState<string | null>(null);
 
+  // TOC sections (similar approach to scenarios page)
+  const tocSections = useMemo(
+    () => [
+      { id: "summary", label: "Summary" },
+      { id: "input-form", label: "Input Form" },
+      { id: "live-results", label: "Live Results" },
+      { id: "results", label: "Results" },
+      { id: "chart", label: "Payoff Chart" },
+      { id: "disclaimer", label: "Disclaimer" },
+    ],
+    [],
+  );
+  const [activeSection, setActiveSection] = useState<string>(tocSections[0].id);
+  const [availableToc, setAvailableToc] = useState(tocSections);
+  const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (user === undefined) return; // Still loading
@@ -151,6 +174,39 @@ function CalculatorPageContent() {
       }
     }
   }, [searchParams, loadScenarioData]);
+
+  // Scrollspy: observe sections and update activeSection + availableToc
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) =>
+            a.boundingClientRect.top > b.boundingClientRect.top ? 1 : -1,
+          );
+        if (visible.length > 0) {
+          const id = visible[0].target.getAttribute("id");
+          if (id) setActiveSection(id);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -65% 0px",
+        threshold: 0.1,
+      },
+    );
+
+    const els = tocSections
+      .map(({ id }) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+    const present = tocSections.filter(({ id }) =>
+      els.some((el) => el.id === id),
+    );
+    setAvailableToc(present.length > 0 ? present : tocSections);
+    els.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [tocSections, liveMode, results]);
 
   const handleCalculation = async (formData: CalculatorValidationInput) => {
     setLoading(true);
@@ -380,7 +436,7 @@ function CalculatorPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div id="summary" className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <Logo
               size="lg"
@@ -401,181 +457,295 @@ function CalculatorPageContent() {
               : "Compare traditional mortgage payments with HELOC acceleration strategy to see potential savings"}
           </p>
         </div>
-
-        {/* User Welcome */}
-        <div className="bg-card border border-border rounded-lg shadow-md p-4 mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-foreground-secondary">Welcome back,</p>
-              <p className="text-lg font-semibold text-foreground">
-                {user?.displayName || user?.primaryEmail}
-              </p>
+        {/* Grid layout with left TOC and main content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left sticky TOC */}
+          <aside
+            className="hidden lg:block lg:col-span-2"
+            aria-labelledby="on-this-page"
+          >
+            <div className="lg:sticky lg:top-20">
+              <nav
+                aria-labelledby="on-this-page"
+                className="bg-card border border-border rounded-lg p-3"
+              >
+                <h2
+                  id="on-this-page"
+                  className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-foreground-muted"
+                >
+                  On this page
+                </h2>
+                <ul className="mt-2 space-y-1">
+                  {availableToc.map(({ id, label }) => (
+                    <li key={id}>
+                      <a
+                        href={`#${id}`}
+                        className={`block rounded-md px-2 py-1 text-sm transition-colors ${
+                          activeSection === id
+                            ? "text-primary bg-muted font-medium"
+                            : "text-foreground-muted hover:text-foreground hover:bg-muted"
+                        }`}
+                        aria-current={
+                          activeSection === id ? "location" : undefined
+                        }
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="safe-link font-medium"
-            >
-              View Dashboard
-            </button>
-          </div>
-        </div>
+          </aside>
 
-        {/* Error Display */}
-        {(error || validationErrors.length > 0) && (
-          <div className="mb-8">
-            {validationErrors.length > 0 ? (
-              <ValidationErrorDisplay
-                errors={validationErrors}
-                showFieldNames={true}
-              />
-            ) : error ? (
-              <div className="safe-alert-danger">
-                <div className="flex">
-                  <div className="ml-1">
-                    <h3 className="text-sm font-medium">Calculation Error</h3>
-                    <div className="mt-2 text-sm">
-                      <p>{error}</p>
+          {/* Main content */}
+          <section
+            className="lg:col-span-10"
+            aria-labelledby="calculator-content"
+          >
+            <h2 id="calculator-content" className="sr-only">
+              Calculator Content
+            </h2>
+
+            {/* Mobile TOC dropdown */}
+            <div className="mb-4 lg:hidden">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileTocOpen((v) => !v)}
+                  aria-expanded={isMobileTocOpen}
+                  className={`w-full flex items-center justify-between rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`}
+                >
+                  <span>
+                    {
+                      (
+                        availableToc.find((t) => t.id === activeSection) ||
+                        availableToc[0]
+                      )?.label
+                    }
+                  </span>
+                  <span
+                    className={`transition-transform ${isMobileTocOpen ? "rotate-180" : ""}`}
+                  >
+                    ⌄
+                  </span>
+                </button>
+                {isMobileTocOpen && (
+                  <div className="absolute z-20 mt-2 w-full rounded-md border border-border bg-card shadow-lg">
+                    <ul
+                      aria-label="In-page sections"
+                      className="max-h-64 overflow-auto py-1"
+                    >
+                      {availableToc.map(({ id, label }) => (
+                        <li key={id}>
+                          <a
+                            href={`#${id}`}
+                            onClick={() => setIsMobileTocOpen(false)}
+                            className={`block px-3 py-2 text-sm ${
+                              activeSection === id
+                                ? "bg-muted text-primary"
+                                : "text-foreground hover:bg-muted"
+                            }`}
+                            aria-current={
+                              activeSection === id ? "location" : undefined
+                            }
+                          >
+                            {label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* User Welcome */}
+            <div className="bg-card border border-border rounded-lg shadow-md p-4 mb-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-foreground-secondary">
+                    Welcome back,
+                  </p>
+                  <p className="text-lg font-semibold text-foreground">
+                    {user?.displayName || user?.primaryEmail}
+                  </p>
+                </div>
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="safe-link font-medium"
+                >
+                  View Dashboard
+                </button>
+              </div>
+            </div>
+
+            {/* Error Display */}
+            {(error || validationErrors.length > 0) && (
+              <div className="mb-8">
+                {validationErrors.length > 0 ? (
+                  <ValidationErrorDisplay
+                    errors={validationErrors}
+                    showFieldNames={true}
+                  />
+                ) : error ? (
+                  <div className="safe-alert-danger">
+                    <div className="flex">
+                      <div className="ml-1">
+                        <h3 className="text-sm font-medium">
+                          Calculation Error
+                        </h3>
+                        <div className="mt-2 text-sm">
+                          <p>{error}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ) : null}
+              </div>
+            )}
+
+            {/* Mode Toggle */}
+            <div className="flex justify-center mb-6">
+              <div className="bg-card rounded-lg shadow-sm border border-border p-1 inline-flex">
+                <button
+                  onClick={() => setLiveMode(true)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    liveMode
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground-muted hover:text-foreground"
+                  }`}
+                >
+                  Live Mode (Two-Column)
+                </button>
+                <button
+                  onClick={() => setLiveMode(false)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    !liveMode
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground-muted hover:text-foreground"
+                  }`}
+                >
+                  Traditional Mode
+                </button>
+              </div>
+            </div>
+
+            {/* Main Content */}
+            {liveMode ? (
+              // Live Mode - Two Column Layout
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left Column - Form */}
+                <div id="input-form">
+                  <LiveCalculatorForm
+                    onCalculate={handleLiveCalculation}
+                    onClear={() => setResults(null)}
+                    initialData={initialData}
+                    validationErrors={validationErrors}
+                  />
+                </div>
+
+                {/* Right Column - Live Results */}
+                <div id="live-results" className="lg:sticky lg:top-8 lg:h-fit">
+                  <LiveResultsPanel
+                    results={results}
+                    loading={liveLoading}
+                    error={liveError}
+                    currentFormData={currentFormData}
+                  />
+
+                  {/* Save Button */}
+                  {results && (
+                    <div className="mt-6 text-center">
+                      <Button
+                        variant="primary"
+                        onClick={handleSaveScenario}
+                        loading={isSaving}
+                        disabled={isSaving}
+                        icon="save"
+                      >
+                        {isSaving ? "Saving..." : "Save This Scenario"}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
-            ) : null}
-          </div>
-        )}
-
-        {/* Mode Toggle */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-card rounded-lg shadow-sm border border-border p-1 inline-flex">
-            <button
-              onClick={() => setLiveMode(true)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                liveMode
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Live Mode (Two-Column)
-            </button>
-            <button
-              onClick={() => setLiveMode(false)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                !liveMode
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Traditional Mode
-            </button>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        {liveMode ? (
-          // Live Mode - Two Column Layout
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left Column - Form */}
-            <div>
-              <LiveCalculatorForm
-                onCalculate={handleLiveCalculation}
-                onClear={() => setResults(null)}
-                initialData={initialData}
-                validationErrors={validationErrors}
-              />
-            </div>
-
-            {/* Right Column - Live Results */}
-            <div className="lg:sticky lg:top-8 lg:h-fit">
-              <LiveResultsPanel
-                results={results}
-                loading={liveLoading}
-                error={liveError}
-                currentFormData={currentFormData}
-              />
-
-              {/* Save Button */}
-              {results && (
-                <div className="mt-6 text-center">
-                  <Button
-                    variant="primary"
-                    onClick={handleSaveScenario}
-                    loading={isSaving}
-                    disabled={isSaving}
-                    icon="save"
+            ) : // Traditional Mode
+            !results ? (
+              <div id="input-form">
+                <FastCalculatorForm
+                  onSubmit={handleCalculation}
+                  loading={loading}
+                  initialData={initialData}
+                  validationErrors={validationErrors}
+                />
+              </div>
+            ) : (
+              <div className="space-y-8">
+                <section id="results">
+                  <Suspense
+                    fallback={
+                      <div className="bg-card rounded-lg shadow-md p-6">
+                        <div className="animate-pulse">
+                          <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
+                          <div className="space-y-3">
+                            <div className="h-4 bg-muted rounded"></div>
+                            <div className="h-4 bg-muted rounded w-5/6"></div>
+                            <div className="h-4 bg-muted rounded w-4/6"></div>
+                          </div>
+                        </div>
+                      </div>
+                    }
                   >
-                    {isSaving ? "Saving..." : "Save This Scenario"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : // Traditional Mode
-        !results ? (
-          <FastCalculatorForm
-            onSubmit={handleCalculation}
-            loading={loading}
-            initialData={initialData}
-            validationErrors={validationErrors}
-          />
-        ) : (
-          <div className="space-y-8">
-            <Suspense
-              fallback={
-                <div className="bg-card rounded-lg shadow-md p-6">
-                  <div className="animate-pulse">
-                    <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
-                    <div className="space-y-3">
-                      <div className="h-4 bg-muted rounded"></div>
-                      <div className="h-4 bg-muted rounded w-5/6"></div>
-                      <div className="h-4 bg-muted rounded w-4/6"></div>
-                    </div>
-                  </div>
-                </div>
-              }
-            >
-              <ResultsDisplay
-                results={results}
-                inputs={currentFormData || undefined}
-                onSaveScenario={handleSaveScenario}
-                onNewCalculation={handleNewCalculation}
-              />
-            </Suspense>
+                    <ResultsDisplay
+                      results={results}
+                      inputs={currentFormData || undefined}
+                      onSaveScenario={handleSaveScenario}
+                      onNewCalculation={handleNewCalculation}
+                    />
+                  </Suspense>
+                </section>
 
-            <Suspense
-              fallback={
-                <div className="bg-card border border-border rounded-lg shadow-md p-6">
-                  <div className="animate-pulse">
-                    <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
-                    <div className="h-64 bg-muted rounded"></div>
-                  </div>
-                </div>
-              }
-            >
-              <PayoffChart
-                data={prepareChartData()}
-                title="Mortgage Balance Over Time"
-              />
-            </Suspense>
-          </div>
-        )}
+                <section id="chart">
+                  <Suspense
+                    fallback={
+                      <div className="bg-card border border-border rounded-lg shadow-md p-6">
+                        <div className="animate-pulse">
+                          <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
+                          <div className="h-64 bg-muted rounded"></div>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <PayoffChart
+                      data={prepareChartData()}
+                      title="Mortgage Balance Over Time"
+                    />
+                  </Suspense>
+                </section>
+              </div>
+            )}
 
-        {/* Save Scenario Modal */}
-        <SaveScenarioModal
-          isOpen={showSaveModal}
-          onClose={() => setShowSaveModal(false)}
-          onSave={handleSaveConfirm}
-          isLoading={isSaving}
-        />
+            {/* Save Scenario Modal */}
+            <SaveScenarioModal
+              isOpen={showSaveModal}
+              onClose={() => setShowSaveModal(false)}
+              onSave={handleSaveConfirm}
+              isLoading={isSaving}
+            />
 
-        {/* Calculation Loading Overlay */}
-        <CalculationLoader
-          isVisible={loading}
-          title="Calculating Your HELOC Strategy"
-          description="Analyzing your mortgage details and optimizing payment strategies..."
-        />
+            {/* Calculation Loading Overlay */}
+            <CalculationLoader
+              isVisible={loading}
+              title="Calculating Your HELOC Strategy"
+              description="Analyzing your mortgage details and optimizing payment strategies..."
+            />
+          </section>
+        </div>
       </div>
 
       {/* Footer */}
-      <footer className="mt-12 pt-8 border-t border-border">
+      <footer id="disclaimer" className="mt-12 pt-8 border-t border-border">
         <Disclaimer />
         <div className="mt-8 text-center text-sm text-foreground-muted">
           <p>

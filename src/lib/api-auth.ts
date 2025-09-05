@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stackServerApp } from "@/stack";
 import { logger } from "@/lib/logger";
+import pool from "@/lib/db";
 import {
   getOrCreateLocalUser,
   updateLastLogin,
@@ -36,12 +37,47 @@ export async function authenticateApiRequest(
   request: NextRequest,
 ): Promise<AuthResult | AuthError> {
   try {
-    const stackUser = await stackServerApp.getUser({ tokenStore: request });
+    // Debug logging for production issues
+    const cookies = request.cookies.getAll();
+    const hasStackCookies = cookies.some(
+      (cookie) =>
+        cookie.name.includes("stack-") || cookie.name.includes("auth"),
+    );
+
+    logger.info("API authentication attempt", {
+      path: request.nextUrl.pathname,
+      method: request.method,
+      hasCookies: cookies.length > 0,
+      hasStackCookies,
+      userAgent: request.headers.get("user-agent")?.substring(0, 100),
+      origin: request.headers.get("origin"),
+      referer: request.headers.get("referer"),
+      host: request.headers.get("host"),
+      protocol: request.nextUrl.protocol,
+    });
+
+    // Try to get user with better error handling
+    let stackUser;
+    try {
+      stackUser = await stackServerApp.getUser({ tokenStore: request });
+    } catch (stackError) {
+      console.error("Stack Auth error:", stackError);
+
+      return {
+        success: false,
+        error: "Authentication service error",
+        status: 401,
+      };
+    }
 
     if (!stackUser) {
       logger.warn("API authentication failed: No user found", {
         path: request.nextUrl.pathname,
         method: request.method,
+        cookieCount: cookies.length,
+        hasStackCookies,
+        cookieNames: cookies.map((c) => c.name).join(", "),
+        host: request.headers.get("host"),
       });
 
       return {
@@ -51,11 +87,43 @@ export async function authenticateApiRequest(
       };
     }
 
-    // Get or create local database user
-    const localUser = await getOrCreateLocalUser(stackUser);
+    // Get or create local database user with error handling
+    let localUser;
+    try {
+      localUser = await getOrCreateLocalUser(stackUser);
+      // Update last login timestamp
+      await updateLastLogin(localUser.id);
+    } catch (dbError) {
+      console.error("Database error during authentication:", dbError);
 
-    // Update last login timestamp
-    await updateLastLogin(localUser.id);
+      // Try to find existing user by Stack Auth ID directly
+      try {
+        const client = await pool.connect();
+        try {
+          const result = await client.query(
+            "SELECT id, email, stack_auth_id, first_name, last_name, created_at, updated_at FROM users WHERE stack_auth_id = $1",
+            [stackUser.id],
+          );
+
+          if (result.rows.length > 0) {
+            localUser = result.rows[0];
+            console.log("Found existing user by Stack Auth ID:", localUser.id);
+          } else {
+            throw new Error("User not found in database");
+          }
+        } finally {
+          client.release();
+        }
+      } catch (fallbackError) {
+        console.error("Fallback user lookup failed:", fallbackError);
+
+        return {
+          success: false,
+          error: "Database connection error",
+          status: 503,
+        };
+      }
+    }
 
     logger.info("API authentication successful", {
       stackUserId: stackUser.id,

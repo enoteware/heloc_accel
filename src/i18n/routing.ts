@@ -16,6 +16,7 @@ export const routing = defineRouting({
     // external path can be provided for all locales
     "/": "/",
     "/calculator": "/calculator",
+    "/calculator/traditional": "/calculator/traditional",
     "/budgeting": "/budgeting",
     "/scenarios": "/scenarios",
     "/reports": "/reports",

@@ -57,11 +57,12 @@ export const CalculationLoader: React.FC<CalculationLoaderProps> = ({
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4",
+        "fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center p-4",
         className,
       )}
+      style={{ backgroundColor: "rgba(var(--color-background-overlay), 0.5)" }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center">
+      <div className="bg-card border border-border text-foreground rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center">
         {/* Loading Animation */}
         <div className="mb-6">
           <div className="relative">
@@ -77,10 +78,10 @@ export const CalculationLoader: React.FC<CalculationLoaderProps> = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">{title}</h3>
 
         {/* Current Step Message */}
-        <p className="text-gray-600 mb-4 min-h-[1.5rem]">
+        <p className="text-foreground-secondary mb-4 min-h-[1.5rem]">
           {steps[currentMessage]}
           {dots}
         </p>
@@ -88,13 +89,13 @@ export const CalculationLoader: React.FC<CalculationLoaderProps> = ({
         {/* Progress Bar */}
         {progress !== undefined && (
           <div className="mb-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-muted rounded-full h-2">
               <div
                 className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
               />
             </div>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-foreground-muted mt-2">
               {Math.round(progress)}% complete
             </p>
           </div>
@@ -112,7 +113,7 @@ export const CalculationLoader: React.FC<CalculationLoaderProps> = ({
                     ? "bg-primary"
                     : index === currentStep + 1
                       ? "bg-primary/50 animate-pulse"
-                      : "bg-gray-300",
+                      : "bg-muted",
                 )}
               />
             ))}
@@ -120,7 +121,9 @@ export const CalculationLoader: React.FC<CalculationLoaderProps> = ({
         )}
 
         {/* Description */}
-        {description && <p className="text-sm text-gray-500">{description}</p>}
+        {description && (
+          <p className="text-sm text-foreground-muted">{description}</p>
+        )}
 
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
