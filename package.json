@@ -101,6 +101,7 @@
     "next-intl": "^4.3.4",
     "pg": "^8.11.3",
     "postcss": "^8",
+    "@tailwindcss/postcss": "^4.1.12",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.61.1",
@@ -112,7 +113,6 @@
     "zod": "^4.0.8"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.12",
     "@axe-core/react": "^4.10.0",
     "@next/bundle-analyzer": "^15.5.2",
     "@playwright/test": "^1.54.1",
